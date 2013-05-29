@@ -1,0 +1,27 @@
+//
+//  YTViewHelper.h
+//  YouTellMobile
+//
+//  Copyright (c) 2013 Backdoor LLC. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface YTViewHelper : NSObject
+
++ (void)setup;
++ (void)refreshViews;
++ (void)endRefreshing;
+
++ (void)showLogin;
++ (void)hideLogin;
++ (void)showTerms;
++ (void)showPrivacy;
++ (void)showGabWithId:(NSNumber*)gabId;
++ (void)showGabWithReceiver:(NSDictionary*)receiver;
++ (void)showGab;
++ (void)showFeedback;
++ (void)showGabs;
++ (void)showSettings;
++ (void)loadSettingsController:(UIViewController*)controller;
+@end

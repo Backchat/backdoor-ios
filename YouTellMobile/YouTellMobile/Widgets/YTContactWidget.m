@@ -1,0 +1,233 @@
+//
+//  YTContactWidget.m
+//  YouTellMobile
+//
+//  Copyright (c) 2013 Backdoor LLC. All rights reserved.
+//
+
+#import "YTContactWidget.h"
+#import "YTContactHelper.h"
+
+#import "YTContactsViewController.h"
+
+#define HEIGHT 30.0f
+#define PADDING 12.0f
+
+ 
+@implementation YTContactWidget
+
+- (id)initWithFrame:(CGRect)frame tableView:(UITableView*)tableView
+{
+    self = [super initWithFrame:frame];
+    if (!self) {
+        return self;
+    }
+    
+    self.backgroundColor = [UIColor whiteColor];
+    
+    self.textField = [[UITextField alloc] init];
+    self.label = [[UILabel alloc] init];
+    
+    self.label.text = NSLocalizedString(@"To:", nil);
+    self.label.font = [UIFont systemFontOfSize:15];
+    self.label.textColor = [UIColor grayColor];
+    [self.label sizeToFit];
+    
+    CGFloat frameX = frame.origin.x + PADDING;
+    CGFloat frameY = frame.origin.y + (frame.size.height - self.label.frame.size.height) / 2;
+    self.label.frame = CGRectMake(frameX, frameY, self.label.frame.size.width, self.label.frame.size.height);
+    
+    CGFloat receiverFieldX = frame.origin.x + self.label.frame.origin.x + self.label.frame.size.width + 5;
+    CGFloat receiverFieldY = frame.origin.y + (frame.size.height - HEIGHT) / 2;
+    CGFloat receiverFieldW = frame.size.width - self.label.frame.size.width - 5 - (2 * PADDING);
+    CGFloat receiverFieldH = HEIGHT;
+    
+    self.textField.frame = CGRectMake(receiverFieldX, receiverFieldY, receiverFieldW, receiverFieldH);
+    self.textField.backgroundColor = [UIColor whiteColor];
+    self.textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    
+    self.textField.text = @"";
+    self.textField.delegate = self;
+    self.textField.clearButtonMode = UITextFieldViewModeNever;
+    self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+    
+    self.addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    self.addButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    CGRect buttonFrame = self.addButton.frame;
+    buttonFrame.origin.y = self.frame.origin.y + (self.frame.size.height - buttonFrame.size.height) / 2;
+    buttonFrame.origin.x = self.textField.frame.origin.x + self.textField.frame.size.width - buttonFrame.size.width - 5;
+    self.addButton.frame = buttonFrame;
+    [self.addButton addTarget:self action:@selector(addButtonWasPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+   
+    self.tableView = tableView;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.scrollEnabled = YES;
+    
+    self.selectedContact = nil;
+    
+    [self updateButtons];
+    
+    [self addSubview:self.label];
+    [self addSubview:self.textField];
+    [self addSubview:self.addButton];
+    
+    return self;
+}
+
+- (void)textDidChange:(NSString*)text
+{
+    self.tableView.hidden = [text isEqualToString:@""];
+
+    self.selectedContact = nil;
+    self.contacts = [YTContactHelper findContactsWithString:text grouped:NO];
+    [self.tableView reloadData];
+    [self updateButtons];
+
+    [self.delegate changedSelectedContact:nil];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *text = [self.textField.text stringByReplacingCharactersInRange:range withString:string];
+
+    [self textDidChange:text];
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField
+{
+    [self textDidChange:@""];
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    self.contacts = [YTContactHelper findContactsWithString:textField.text grouped:NO];
+    self.textField.textColor = [UIColor blackColor];
+    [self.tableView reloadData];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.tableView.hidden = YES;
+    self.contacts = nil;
+    self.textField.textColor = self.selectedContact ? [UIColor blackColor] : [UIColor redColor];
+    [self.tableView reloadData];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
+    return contacts ? [contacts count] : 0;
+}
+
+- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
+    return contacts[section][0];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
+    return [contacts[section][1] count];
+}
+
+- (NSArray*)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    NSMutableArray *result = [NSMutableArray new];
+    NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
+    for (NSArray *section in contacts) {
+        [result addObject:section[0]];
+    }
+    return result;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
+
+    NSDictionary *record = contacts[indexPath.section][1][indexPath.row][0];
+    UITableViewCell *cell = [self cellWithTable:tableView ident:@"cell"];
+    
+    cell.textLabel.text = record[@"name"];
+    
+/*
+    if ([record[@"type"] isEqualToString:@"facebook"]) {
+        cell.detailTextLabel.text = record[@"title"];
+    } else {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@: %@", record[@"title"], record[@"value"]];
+    }
+*/
+    return cell;
+}
+
+- (UITableViewCell *)cellWithTable:(UITableView*)table ident:(NSString*)ident
+{
+    UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:ident];
+    
+    if (cell) {
+        return cell;
+    }
+    
+    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ident];
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    
+    return cell;
+}
+
+- (void)selectContact:(NSDictionary *)contact
+{
+    self.selectedContact = contact;
+    self.textField.text = contact[@"name"];
+    
+
+    self.textField.textColor = [UIColor blackColor];
+    
+    [self updateButtons];
+    [self.delegate changedSelectedContact:contact];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
+    
+    if (tableView != self.tableView) {
+        [self.delegate hideContactViewController];
+    }
+    
+    NSDictionary *record = contacts[indexPath.section][1][indexPath.row][0];
+    [self selectContact:record];
+    [self.textField resignFirstResponder];
+
+}
+
+- (void)updateButtons
+{
+    self.addButton.hidden = !!self.selectedContact;
+    self.textField.clearButtonMode = self.selectedContact ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
+}
+
+- (void)addButtonWasPressed:(id)sender
+{
+    [self.textField resignFirstResponder];
+    self.allContacts = [YTContactHelper findContactsWithString:@"" grouped:NO];
+    self.contactsView = [YTContactsViewController new];
+    self.contactsView.tableView.dataSource = self;
+    self.contactsView.tableView.delegate = self;
+    self.contactsView.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.contactsView.tableView reloadData];
+    
+    self.contactsView.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleDone target:self.delegate action:@selector(hideContactViewController)];
+    [self.delegate showContactViewController:self.contactsView];
+
+}
+
+
+
+@end
+

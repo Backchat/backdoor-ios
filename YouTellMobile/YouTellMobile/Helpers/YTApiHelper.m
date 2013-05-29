@@ -1,0 +1,399 @@
+//
+//  YTApiHelper.m
+//  YouTellMobile
+//
+//  Copyright (c) 2013 Backdoor LLC. All rights reserved.
+//
+
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+
+#import <AFNetworking/AFJSONRequestOperation.h>
+#import <AFNetworking/AFHTTPClient.h>
+#import <Facebook-iOS-SDK/FacebookSDK/Facebook.h>
+#import <SVProgressHUD/SVProgressHUD.h>
+#import <Flurry.h>
+
+#import "YTConfig.h"
+#import "YTAppDelegate.h"
+#import "YTHelper.h"
+#import "YTApiHelper.h"
+#import "YTModelHelper.h"
+#import "YTViewHelper.h"
+#import "YTContactHelper.h"
+
+@implementation YTApiHelper
+
++ (void)setup
+{
+    [YTAppDelegate current].autoSyncLock = [NSLock new];
+    [YTApiHelper resetUserInfo];
+    [YTAppDelegate current].deliveredMessages = [NSMutableDictionary new];
+}
+
++ (void)resetUserInfo
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    
+    NSString *deviceToken = delegate.userInfo ? delegate.userInfo[@"device_token"] : @"";
+    delegate.sentInfo = [NSMutableDictionary new];
+    delegate.userInfo = [NSMutableDictionary new];
+    delegate.userInfo[@"device_token"] = deviceToken;
+    delegate.userInfo[@"fb_data"] = [NSMutableDictionary new];
+    delegate.userInfo[@"gpp_data"] = [NSMutableDictionary new];
+    delegate.userInfo[@"settings"] = [NSMutableDictionary new];
+}
+
++ (void)updateUserInfo:(NSDictionary*)params
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    NSMutableDictionary *sentInfo = delegate.sentInfo;
+    
+    /*
+    if (params[@"fb_data"]) {
+        sentInfo[@"fb_data"] = params[@"fb_data"];
+    }
+    
+    if (params[@"gpp_data"]) {
+        sentInfo[@"gpp_data"] = params[@"gpp_data"];
+    }
+    */
+    if (params[@"device_token"]) {
+        sentInfo[@"device_token"] = params[@"device_token"];
+    }
+}
+
++ (NSDictionary*)userParams
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    NSMutableDictionary *userInfo = delegate.userInfo;
+    NSMutableDictionary *sentInfo = delegate.sentInfo;
+    NSMutableDictionary *result = [NSMutableDictionary new];
+    NSData *data;
+    if (!userInfo[@"access_token"]) {
+        return nil;
+    }
+    result[@"access_token"] = userInfo[@"access_token"];
+    result[@"provider"] = userInfo[@"provider"];
+    //if (userInfo[@"fb_data"] && ![userInfo[@"fb_data"] isEqual:sentInfo[@"fb_data"]]) {
+        data = [NSJSONSerialization dataWithJSONObject:[NSDictionary dictionaryWithDictionary:userInfo[@"fb_data"]] options:NSJSONWritingPrettyPrinted error:nil];
+        result[@"fb_data"] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        
+    //}
+    //if (userInfo[@"gpp_data"] && ![userInfo[@"gpp_data"] isEqual:sentInfo[@"gpp_data"]]) {
+        data = [NSJSONSerialization dataWithJSONObject:[NSDictionary dictionaryWithDictionary:userInfo[@"gpp_data"]] options:NSJSONWritingPrettyPrinted error:nil];
+        result[@"gpp_data"] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    //}
+    
+    if (userInfo[@"device_token"] && ![userInfo[@"device_token"] isEqual:sentInfo[@"device_token"]]) {
+        result[@"device_token"] = userInfo[@"device_token"];
+    }
+    return result;
+}
+
++ (NSURL*)baseUrl
+{
+    return [NSURL URLWithString:CONFIG_URL];
+}
+
++ (void)toggleNetworkActivityIndicatorVisible:(BOOL)visible
+{
+    static int count = 0;
+    @synchronized(self) {
+        visible ? count++ : count--;
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:(count > 0)];
+    }
+}
+
++ (void) sendJSONRequestWithMessage:(NSString*)message path:(NSString*)path method:(NSString*)method params:(NSDictionary*)params success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure quiet:(BOOL)quiet
+{
+
+    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[YTApiHelper baseUrl]];
+    BOOL showHUD = ![message isEqualToString:@""];
+    NSMutableDictionary *myParams = [[NSMutableDictionary alloc] initWithDictionary:params];
+    NSDictionary *userParams = [YTApiHelper userParams];
+    if (!userParams) {
+        if (failure != nil) {
+            failure(nil);
+        }
+        return;
+    }
+    
+    [myParams addEntriesFromDictionary:userParams];
+  
+    myParams[@"sync_time"] = [YTModelHelper settingsForKey:@"sync_time"];
+    myParams[@"sync_uid"] = [YTModelHelper settingsForKey:@"sync_uid"];
+    NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
+    [request setTimeoutInterval:CONFIG_TIMEOUT];
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
+        
+        if (showHUD) {
+            [SVProgressHUD dismiss];
+        }
+
+        [YTApiHelper updateUserInfo:userParams];
+
+        if(![JSON[@"status"] isEqualToString:@"ok"]) {
+            if (failure != nil) {
+                failure(JSON);
+            }
+            return;
+        }
+        
+        [Flurry setUserID:JSON[@"response"][@"sync_data"][@"sync_uid"]];
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            NSDictionary *sync_data = JSON[@"response"][@"sync_data"];
+            if (sync_data != nil) {
+                [YTModelHelper loadSyncData:sync_data];
+            }
+
+            if (success != nil) {
+                success(JSON[@"response"]);
+            } else {
+                [YTViewHelper refreshViews];
+
+            }
+
+        }];
+
+
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+
+            [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
+        
+            if (showHUD) {
+                [SVProgressHUD dismiss];
+            }
+        
+            if (!quiet) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Network error", nil) message:NSLocalizedString(@"Unable to connect with Backdoor server. Please check your data connection", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
+                [alert show];
+            }
+        
+            if (failure != nil) {
+                failure(JSON);
+            }
+        }];
+    }];
+
+    [YTApiHelper toggleNetworkActivityIndicatorVisible:YES];
+    
+    if (showHUD) {
+        [SVProgressHUD showWithStatus:message maskType:SVProgressHUDMaskTypeClear];
+    }
+    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        
+        if (showHUD) {
+            CGFloat progress = (CGFloat) totalBytesWritten / (CGFloat) totalBytesExpectedToWrite * 0.667f;
+            [SVProgressHUD showProgress:progress status:message maskType:SVProgressHUDMaskTypeClear];
+        }
+    }];
+    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        
+        if (showHUD) {
+            CGFloat progress = 0.667f + (CGFloat) totalBytesRead / (CGFloat) totalBytesExpectedToRead * 0.333f;
+            [SVProgressHUD showProgress:progress status:NSLocalizedString(@"Synchronizing", nil) maskType:SVProgressHUDMaskTypeClear];
+        }
+    }];
+    
+    [operation start];
+}
+
++ (void)sendFeedback:(NSString*)content rating:(NSNumber*)rating success:(void(^)(id JSON))success
+{
+    NSDictionary *params = @{
+        @"rating": rating,
+        @"content": content
+    };
+    
+    [YTApiHelper sendJSONRequestWithMessage:NSLocalizedString(@"Delivering feedback", nil) path:@"/feedbacks" method:@"POST" params:params success:success failure:nil quiet:NO];
+    [Flurry logEvent:@"Sent_Feedback"];
+}
+
+
++ (void)sendAbuseReport:(NSString*)content success:(void(^)(id JSON))success
+{
+    NSDictionary *params = @{@"content": content};
+    
+    [YTApiHelper sendJSONRequestWithMessage:NSLocalizedString(@"Delivering report", nil) path:@"/report-abuse" method:@"POST" params:params success:success failure:nil quiet:NO];
+    [Flurry logEvent:@"Sent_Abuse_Report"];
+}
+
+
++ (void)autoSync:(BOOL)quiet
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    
+    if ([delegate.autoSyncLock tryLock] == NO) {
+        return;
+    }
+    
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    
+    if (delegate.currentMainViewController && delegate.currentMainViewController.selectedGabId) {
+        params[@"gab_id"] = delegate.currentMainViewController.selectedGabId;
+    }
+    
+    [YTApiHelper sendJSONRequestWithMessage:@"" path:@"/sync" method:@"POST" params:params success:^(id JSON) {
+        [delegate.autoSyncLock unlock];
+        [YTViewHelper refreshViews];
+        [YTViewHelper endRefreshing];
+        
+        YTAppDelegate *delegate = [YTAppDelegate current];
+        if (delegate.autoSyncGabId) {
+            [YTViewHelper showGabWithId:delegate.autoSyncGabId];
+            delegate.autoSyncGabId = nil;
+        }
+        
+    } failure:^(id JSON) {
+        [delegate.autoSyncLock unlock];
+        [YTViewHelper endRefreshing];
+    } quiet:quiet];
+}
+
++ (void)sendMessage:(NSString*)content kind:(NSNumber*)kind receiverData:(NSDictionary*)receiverData success:(void(^)(id JSON))success
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+
+        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:receiverData];
+        
+        BOOL hasGab = !!params[@"gab_id"];
+        NSString *msg;
+        NSString *key = [YTHelper randString:8];
+        
+        params[@"content"] = content;
+        params[@"kind"] = kind;
+        params[@"key"] = key;
+    
+        
+        if (hasGab) {
+            [YTModelHelper createMessage:params];
+            [YTViewHelper refreshViews];
+            msg = @"";
+        } else {
+            msg = NSLocalizedString(@"Delivering message", nil);
+        }
+        
+        [YTApiHelper sendJSONRequestWithMessage:msg path:@"/create-message" method:@"POST" params:params success:^(id JSON) {
+            
+            if (hasGab) {
+                [YTAppDelegate current].deliveredMessages[key] = [NSDate date];
+            }
+            
+            if (success != nil) {
+                success(JSON);
+            }
+            
+        } failure:^(id JSON) {
+        
+        
+            if (hasGab) {
+                [YTModelHelper failMessage:key];
+                [YTViewHelper refreshViews];
+            }
+        
+        } quiet:hasGab];
+    
+        [Flurry logEvent:@"Sent_Message" withParameters:@{@"kind":kind}];
+        
+    }];
+    
+}
+
++ (void)checkUid:(NSString*)uid success:(void(^)(id JSON))success
+{
+    [YTApiHelper sendJSONRequestWithMessage:NSLocalizedString(@"Delivering message", nil) path:@"/check-uid" method:@"POST" params:@{@"uid": uid} success:success failure:nil quiet:NO];
+}
+
+
++ (void)deleteGab:(NSNumber*)gabId success:(void(^)(id JSON))success
+{
+    [YTApiHelper sendJSONRequestWithMessage:NSLocalizedString(@"Deleting messages", nil) path:@"/clear-gab" method:@"POST" params:@{@"id": gabId} success:success failure:nil quiet:NO];
+    
+    [Flurry logEvent:@"Deleted_Thread"];
+}
+
++ (void)tagGab:(NSNumber*)gabId tag:(NSString*)tag success:(void(^)(id JSON))success
+{
+    [YTApiHelper sendJSONRequestWithMessage:NSLocalizedString(@"Updating thread", nil) path:@"/tag-gab" method:@"POST" params:@{@"id": gabId, @"tag": tag} success:success failure:nil quiet:NO];
+    [Flurry logEvent:@"Tagged_Thread"];
+}
+
++ (void)requestClue:(NSNumber*)gabId number:(NSNumber*)number success:(void(^)(id JSON))success;
+{
+    [YTApiHelper sendJSONRequestWithMessage:@"" path:@"/request-clue" method:@"POST" params:@{@"gab_id": gabId, @"number": number} success:success failure:nil quiet:NO];
+    
+    [Flurry logEvent:@"Requested_Clue"];
+}
+
++ (void)buyCluesWithReceipt:(NSString *)receipt success:(void(^)(id JSON))success
+{
+    [YTApiHelper sendJSONRequestWithMessage:NSLocalizedString(@"Verifying transaction", nil) path:@"/buy-clues" method:@"POST" params:@{@"receipt": receipt} success:success failure:nil quiet:NO];
+}
+
++ (void)getFreeCluesWithReason:(NSString *)reason
+{
+    [YTApiHelper sendJSONRequestWithMessage:@"" path:@"/free-clues" method:@"POST" params:@{@"reason":reason} success:^(id JSON) {
+        
+        NSInteger count = [JSON[@"count"] integerValue];
+        NSInteger total = [YTModelHelper userAvailableClues];
+        
+        if (count == 0) {
+            return;
+        }
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:NSLocalizedString(@"You received %d free clues! Now you have %d available clues to use in all incoming threads", nil), count, total] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil];
+        [alert show];
+        
+    } failure:nil quiet:NO];
+}
+
++ (void)getFeaturedUsers
+{
+    if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"] && !CONFIG_DEBUG_FEATURED) {
+        [YTAppDelegate current].featuredUsers = @[];
+        return;
+    }
+
+    [YTApiHelper sendJSONRequestWithMessage:@"" path:@"/featured-users" method:@"POST" params:@{} success:^(id JSON) {
+        
+        [YTAppDelegate current].featuredUsers = JSON[@"users"];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [YTViewHelper refreshViews];
+        }];
+
+    } failure:nil quiet:YES];
+}
+
++ (void)updateSettingsWithKey:(NSString*)key value:(id)value
+{
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"value":value} options:0 error:&error];
+    NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    [YTApiHelper sendJSONRequestWithMessage:@"" path:@"/update-settings" method:@"POST" params:@{@"key":key,@"value":json} success:nil failure:nil quiet:YES];
+}
+
++ (void)checkUpdates
+{
+    
+    [YTApiHelper sendJSONRequestWithMessage:NSLocalizedString(@"Checking for updates", nil) path:@"/check-updates" method:@"POST" params:@{} success:^(id JSON) {
+        
+        NSString *my_version = [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
+        NSString *current_version = JSON[@"current_version"];
+        if ([my_version isEqualToString:current_version]) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Update not available", nil) message:NSLocalizedString(@"You are running the current version of Backdoor. Good job!", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+        
+        NSString *urlS = [NSString stringWithFormat:@"itms://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftwareUpdate?id=%@&mt=8", CONFIG_APPLE_ID];
+        NSURL *url = [NSURL URLWithString:urlS];
+        [[UIApplication sharedApplication] openURL:url];
+    } failure:nil quiet:NO];
+}
+
+@end

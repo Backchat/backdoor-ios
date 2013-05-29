@@ -1,0 +1,39 @@
+PODS:
+  - AFNetworking (1.1.0)
+  - Base64 (1.0.1)
+  - CKRefreshControl (1.1.0)
+  - Facebook-iOS-SDK (3.2.0)
+  - FlurrySDK (4.1.0)
+  - google-plus-ios-sdk (1.2.1)
+  - HockeySDK (3.0.0)
+  - SDWebImage (3.2):
+    - SDWebImage/MapKit
+  - SDWebImage/MapKit (3.2)
+  - SVProgressHUD (0.9)
+  - UIImage-Categories (0.0.1)
+
+DEPENDENCIES:
+  - AFNetworking
+  - Base64
+  - CKRefreshControl
+  - Facebook-iOS-SDK
+  - FlurrySDK
+  - google-plus-ios-sdk
+  - HockeySDK
+  - SDWebImage
+  - SVProgressHUD
+  - UIImage-Categories
+
+SPEC CHECKSUMS:
+  AFNetworking: 761a418233d280c1e0580bcb76ff9cb4c3073d17
+  Base64: eaac9f2088ba659c5db1db960576eb0f2969ebaf
+  CKRefreshControl: d90d7fe773e2cb0f54d9f917bc78e3a23e6cdc1b
+  Facebook-iOS-SDK: a9893c9ad7cf2ce35cb6297e2859eaee654bd6b0
+  FlurrySDK: 52245ae8c6fa31825dc74a6afb94b861da2435fa
+  google-plus-ios-sdk: fd312bf0eed88cfc708fe2cdcb9c1084598af99e
+  HockeySDK: ffb5d1bc7b6fef6a2ffd7a614504665c377607e8
+  SDWebImage: 4e2b2287a54c052cb0d717bcdf37387b9c4751ae
+  SVProgressHUD: 03d4845ec8e64591726428a08236c6a5489d45f8
+  UIImage-Categories: d9f10e0afb9b281b35a3c2b0c7d16d1ca251d824
+
+COCOAPODS: 0.19.1
