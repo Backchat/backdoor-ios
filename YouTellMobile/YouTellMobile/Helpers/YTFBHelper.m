@@ -169,7 +169,9 @@
 
 + (void)openSession
 {
-    NSArray *perms = @[@"email", @"user_education_history", @"user_work_history", @"user_location", @"user_relationships", @"user_likes", @"user_interests"];
+    NSArray *perms = @[@"email", @"user_birthday", @"user_education_history", @"user_work_history", @"user_location", @"user_relationships", @"user_likes", @"user_interests"];
+
+
     
    FBSession *session = [[FBSession alloc] initWithPermissions:perms];
    [FBSession setActiveSession:session];

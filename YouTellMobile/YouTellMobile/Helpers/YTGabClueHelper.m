@@ -299,7 +299,6 @@
     if (scale == 1.0) {
         url = [url stringByReplacingOccurrencesOfString:@"@2x" withString:@""];
     }
-    NSLog(@"%@", url);
 
     label.text = parsed[@"text"];
     [button setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"clue_hidden2"]];
@@ -332,6 +331,10 @@
     
     if ([field isEqualToString:@"gender"] && [ret[@"text"] isEqualToString:@"female"]) {
         ret[@"text"] = NSLocalizedString(@"Female", nil);
+    }
+
+    if ([field isEqualToString:@"age"]) {
+        ret[@"text"] = [NSString stringWithFormat:NSLocalizedString(@"Age: %@", nil), ret[@"text"]];
     }
     
     return ret;

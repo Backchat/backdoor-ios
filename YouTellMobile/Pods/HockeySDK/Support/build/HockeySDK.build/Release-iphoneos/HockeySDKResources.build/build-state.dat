@@ -3,45 +3,45 @@ v5
 r1
 cCheck dependencies
 cProcessInfoPlistFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/Info.plist ../Resources/HockeySDK-Info.plist
-cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_request.png ../Resources/authorize_request.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_denied.png ../Resources/authorize_denied.png
-cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_request@2x.png ../Resources/authorize_request@2x.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_denied@2x.png ../Resources/authorize_denied@2x.png
-cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonHighlight.png ../Resources/buttonHighlight.png
+cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_request.png ../Resources/authorize_request.png
+cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_request@2x.png ../Resources/authorize_request@2x.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/bg.png ../Resources/bg.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonHighlight@2x.png ../Resources/buttonHighlight@2x.png
+cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonHighlight.png ../Resources/buttonHighlight.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/IconGradient.png ../Resources/IconGradient.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/IconGradient@2x.png ../Resources/IconGradient@2x.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/feedbackActivity@2x~ipad.png ../Resources/feedbackActivity@2x~ipad.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/feedbackActivity~ipad.png ../Resources/feedbackActivity~ipad.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/feedbackActiviy.png ../Resources/feedbackActiviy.png
-cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/feedbackActiviy@2x.png ../Resources/feedbackActiviy@2x.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedDelete.png ../Resources/buttonRoundedDelete.png
+cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/feedbackActiviy@2x.png ../Resources/feedbackActiviy@2x.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedDelete@2x.png ../Resources/buttonRoundedDelete@2x.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedDeleteHighlighted.png ../Resources/buttonRoundedDeleteHighlighted.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedDeleteHighlighted@2x.png ../Resources/buttonRoundedDeleteHighlighted@2x.png
-cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedRegular.png ../Resources/buttonRoundedRegular.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedRegular@2x.png ../Resources/buttonRoundedRegular@2x.png
+cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedRegular.png ../Resources/buttonRoundedRegular.png
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedRegularHighlighted.png ../Resources/buttonRoundedRegularHighlighted.png
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/de.lproj/HockeySDK.strings ../Resources/de.lproj/HockeySDK.strings
+cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/fr.lproj/HockeySDK.strings ../Resources/fr.lproj/HockeySDK.strings
 cCopyPNGFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedRegularHighlighted@2x.png ../Resources/buttonRoundedRegularHighlighted@2x.png
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/es.lproj/HockeySDK.strings ../Resources/es.lproj/HockeySDK.strings
-cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/fr.lproj/HockeySDK.strings ../Resources/fr.lproj/HockeySDK.strings
-cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/it.lproj/HockeySDK.strings ../Resources/it.lproj/HockeySDK.strings
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/ja.lproj/HockeySDK.strings ../Resources/ja.lproj/HockeySDK.strings
+cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/it.lproj/HockeySDK.strings ../Resources/it.lproj/HockeySDK.strings
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/pt.lproj/HockeySDK.strings ../Resources/pt.lproj/HockeySDK.strings
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/ru.lproj/HockeySDK.strings ../Resources/ru.lproj/HockeySDK.strings
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/hr.lproj/HockeySDK.strings ../Resources/hr.lproj/HockeySDK.strings
+cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/pt-PT.lproj/HockeySDK.strings ../Resources/pt-PT.lproj/HockeySDK.strings
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/en.lproj/HockeySDK.strings ../Resources/en.lproj/HockeySDK.strings
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/zh-Hans.lproj/HockeySDK.strings ../Resources/zh-Hans.lproj/HockeySDK.strings
-cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/pt-PT.lproj/HockeySDK.strings ../Resources/pt-PT.lproj/HockeySDK.strings
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/hu.lproj/HockeySDK.strings ../Resources/hu.lproj/HockeySDK.strings
 cCopyStringsFile /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/ro.lproj/HockeySDK.strings ../Resources/ro.lproj/HockeySDK.strings
 cTouch /Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle
 
 N../Resources/HockeySDK-Info.plist
-c0000000051532EA700000000000003D2
-t1364405927
+c0000000051A799CD00000000000003D2
+t1369938381
 s978
 
 N/Users/lukasz/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle
@@ -359,322 +359,322 @@ t1364377070
 s5884
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle
-t1364405927
+t1369938381
 s1258
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/IconGradient.png
-t1364405927
+t1369938381
 s3063
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/IconGradient@2x.png
-t1364405927
+t1369938381
 s4089
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/Info.plist
-t1364405927
+t1369938381
 s913
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_denied.png
-t1364405927
+t1369938381
 s2652
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_denied@2x.png
-t1364405927
+t1369938381
 s4561
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_request.png
-t1364405927
+t1369938381
 s2809
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/authorize_request@2x.png
-t1364405927
+t1369938381
 s5133
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/bg.png
-t1364405927
+t1369938381
 s1253
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonHighlight.png
-t1364405927
+t1369938381
 s1061
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonHighlight@2x.png
-t1364405927
+t1369938381
 s1119
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedDelete.png
-t1364405927
+t1369938381
 s3323
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedDelete@2x.png
-t1364405927
+t1369938381
 s3881
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedDeleteHighlighted.png
-t1364405927
+t1369938381
 s3428
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedDeleteHighlighted@2x.png
-t1364405927
+t1369938381
 s4404
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedRegular.png
-t1364405927
+t1369938381
 s3391
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedRegular@2x.png
-t1364405927
+t1369938381
 s3980
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedRegularHighlighted.png
-t1364405927
+t1369938381
 s3661
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/buttonRoundedRegularHighlighted@2x.png
-t1364405927
+t1369938381
 s4838
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/de.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4488
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/en.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s3562
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/es.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4496
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/feedbackActivity@2x~ipad.png
-t1364405927
+t1369938381
 s2346
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/feedbackActivity~ipad.png
-t1364405927
+t1369938381
 s1661
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/feedbackActiviy.png
-t1364405927
+t1369938381
 s1537
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/feedbackActiviy@2x.png
-t1364405927
+t1369938381
 s2220
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/fr.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4787
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/hr.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4436
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/hu.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4928
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/it.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4141
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/ja.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s3630
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/pt-PT.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4668
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/pt.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4496
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/ro.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4655
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/ru.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s4730
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/zh-Hans.lproj/HockeySDK.strings
-t1364405927
+t1369938381
 s3266
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/IconGradient.png
-c0000000051532EA70000000000000AE6
-t1364405927
+c0000000051A799CD0000000000000AE6
+t1369938381
 s2790
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/IconGradient@2x.png
-c0000000051532EA70000000000000E2C
-t1364405927
+c0000000051A799CD0000000000000E2C
+t1369938381
 s3628
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/authorize_denied.png
-c0000000051532EA70000000000000924
-t1364405927
+c0000000051A799CD0000000000000924
+t1369938381
 s2340
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/authorize_denied@2x.png
-c0000000051532EA70000000000001120
-t1364405927
+c0000000051A799CD0000000000001120
+t1369938381
 s4384
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/authorize_request.png
-c0000000051532EA70000000000000990
-t1364405927
+c0000000051A799CD0000000000000990
+t1369938381
 s2448
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/authorize_request@2x.png
-c0000000051532EA700000000000012B9
-t1364405927
+c0000000051A799CD00000000000012B9
+t1369938381
 s4793
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/bg.png
-c0000000051532EA70000000000000628
-t1364405927
+c0000000051A799CD0000000000000628
+t1369938381
 s1576
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonHighlight.png
-c0000000051532EA700000000000003FD
-t1364405927
+c0000000051A799CD00000000000003FD
+t1369938381
 s1021
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonHighlight@2x.png
-c0000000051532EA7000000000000044D
-t1364405927
+c0000000051A799CD000000000000044D
+t1369938381
 s1101
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonRoundedDelete.png
-c0000000051532EA70000000000000D58
-t1364405927
+c0000000051A799CD0000000000000D58
+t1369938381
 s3416
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonRoundedDelete@2x.png
-c0000000051532EA7000000000000104B
-t1364405927
+c0000000051A799CD000000000000104B
+t1369938381
 s4171
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonRoundedDeleteHighlighted.png
-c0000000051532EA70000000000000DD2
-t1364405927
+c0000000051A799CD0000000000000DD2
+t1369938381
 s3538
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonRoundedDeleteHighlighted@2x.png
-c0000000051532EA7000000000000125B
-t1364405927
+c0000000051A799CD000000000000125B
+t1369938381
 s4699
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonRoundedRegular.png
-c0000000051532EA70000000000000D1B
-t1364405927
+c0000000051A799CD0000000000000D1B
+t1369938381
 s3355
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonRoundedRegular@2x.png
-c0000000051532EA7000000000000100C
-t1364405927
+c0000000051A799CD000000000000100C
+t1369938381
 s4108
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonRoundedRegularHighlighted.png
-c0000000051532EA70000000000000E15
-t1364405927
+c0000000051A799CD0000000000000E15
+t1369938381
 s3605
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/buttonRoundedRegularHighlighted@2x.png
-c0000000051532EA7000000000000126D
-t1364405927
+c0000000051A799CD000000000000126D
+t1369938381
 s4717
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/de.lproj/HockeySDK.strings
-c0000000051532EA700000000000017FF
-t1364405927
+c0000000051A799CD00000000000017FF
+t1369938381
 s6143
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/en.lproj/HockeySDK.strings
-c0000000051532EA700000000000016E4
-t1364405927
+c0000000051A799CD00000000000016E4
+t1369938381
 s5860
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/es.lproj/HockeySDK.strings
-c0000000051532EA700000000000017BB
-t1364405927
+c0000000051A799CD00000000000017BB
+t1369938381
 s6075
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/feedbackActivity@2x~ipad.png
-c0000000051532EA700000000000009CE
-t1364405927
+c0000000051A799CD00000000000009CE
+t1369938381
 s2510
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/feedbackActivity~ipad.png
-c0000000051532EA700000000000006C4
-t1364405927
+c0000000051A799CD00000000000006C4
+t1369938381
 s1732
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/feedbackActiviy.png
-c0000000051532EA7000000000000064E
-t1364405927
+c0000000051A799CD000000000000064E
+t1369938381
 s1614
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/feedbackActiviy@2x.png
-c0000000051532EA70000000000000932
-t1364405927
+c0000000051A799CD0000000000000932
+t1369938381
 s2354
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/fr.lproj/HockeySDK.strings
-c0000000051532EA7000000000000180D
-t1364405927
+c0000000051A799CD000000000000180D
+t1369938381
 s6157
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/hr.lproj/HockeySDK.strings
-c0000000051532EA7000000000000174E
-t1364405927
+c0000000051A799CD000000000000174E
+t1369938381
 s5966
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/hu.lproj/HockeySDK.strings
-c0000000051532EA70000000000001806
-t1364405927
+c0000000051A799CD0000000000001806
+t1369938381
 s6150
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/it.lproj/HockeySDK.strings
-c0000000051532EA700000000000017B5
-t1364405927
+c0000000051A799CD00000000000017B5
+t1369938381
 s6069
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/ja.lproj/HockeySDK.strings
-c0000000051532EA7000000000000192F
-t1364405927
+c0000000051A799CD000000000000192F
+t1369938381
 s6447
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/pt-PT.lproj/HockeySDK.strings
-c0000000051532EA700000000000017BB
-t1364405927
+c0000000051A799CD00000000000017BB
+t1369938381
 s6075
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/pt.lproj/HockeySDK.strings
-c0000000051532EA700000000000017A5
-t1364405927
+c0000000051A799CD00000000000017A5
+t1369938381
 s6053
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/ro.lproj/HockeySDK.strings
-c0000000051532EA70000000000001754
-t1364405927
+c0000000051A799CD0000000000001754
+t1369938381
 s5972
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/ru.lproj/HockeySDK.strings
-c0000000051532EA70000000000001AE1
-t1364405927
+c0000000051A799CD0000000000001AE1
+t1369938381
 s6881
 
 N/Users/lukasz/backdoor-ios/YouTellMobile/Pods/HockeySDK/Support/../Resources/zh-Hans.lproj/HockeySDK.strings
-c0000000051532EA700000000000016FC
-t1364405927
+c0000000051A799CD00000000000016FC
+t1369938381
 s5884
 
 CCheck dependencies
 r0
-lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies9352f8929050b741^027e05939050b741^---0#1#0#--18"Check dependencies36"90F85EE1-9CC6-41E3-A356-47AD16817DAF-
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependenciescb491856d357b741^b7d33656d357b741^---0#1#0#--18"Check dependencies36"FE14AA33-DEE9-4D23-898F-C528F696C91F-
 
 CCopyPNGFile /Users/lukasz/YouTellMobile/Pods/HockeySDK/Support/../Resources/HockeySDKResources.bundle/IconGradient.png ../Resources/IconGradient.png
 s386069873.113473
