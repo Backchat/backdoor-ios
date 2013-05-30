@@ -263,6 +263,12 @@
     return [YTModelHelper objectCount:@"Gabs" predicate:pred];
 }
 
++ (void)clearGab:(NSNumber*)gabId
+{
+    NSManagedObject *gab = [YTModelHelper gabForId:gabId];
+    [gab setValue:@0 forKey:@"total_count"];
+}
+
 + (NSManagedObject*)gabForId:(NSNumber*)gabId 
 {
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"(id = %@)", gabId];

@@ -311,7 +311,12 @@
 
 + (void)deleteGab:(NSNumber*)gabId success:(void(^)(id JSON))success
 {
-    [YTApiHelper sendJSONRequestWithMessage:NSLocalizedString(@"Deleting messages", nil) path:@"/clear-gab" method:@"POST" params:@{@"id": gabId} success:success failure:nil quiet:NO];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [YTModelHelper clearGab:gabId];
+        [YTViewHelper refreshViews];
+        [YTApiHelper sendJSONRequestWithMessage:@"" path:@"/clear-gab" method:@"POST" params:@{@"id": gabId} success:success failure:nil quiet:YES];
+    }];
+        
     
     [Flurry logEvent:@"Deleted_Thread"];
 }
