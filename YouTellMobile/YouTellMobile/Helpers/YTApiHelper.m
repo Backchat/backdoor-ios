@@ -123,6 +123,7 @@
   
     myParams[@"sync_time"] = [YTModelHelper settingsForKey:@"sync_time"];
     myParams[@"sync_uid"] = [YTModelHelper settingsForKey:@"sync_uid"];
+    myParams[@"db_timestamp"] = [YTModelHelper settingsForKey:@"db_timestamp"];
     NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
     [request setTimeoutInterval:CONFIG_TIMEOUT];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {

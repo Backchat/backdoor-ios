@@ -389,10 +389,40 @@
     return ret;
 }
 
++ (void)clearDataWithEntityName:(NSString*)entityName
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    NSManagedObjectContext *context = delegate.managedObjectContext;
+
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
+    fetchRequest.includesPropertyValues = NO;
+    
+    NSError *error = nil;
+    
+    for (NSManagedObject *obj in [context executeFetchRequest:fetchRequest error:&error]) {
+        [context deleteObject:obj];
+    }
+}
+
++ (void)clearData
+{
+    NSArray *names = @[@"Clues", @"Gabs", @"Messages", @"Settings"];
+    for (NSString *name in names) {
+        [YTModelHelper clearDataWithEntityName:name];
+    }
+}
+
 + (void)loadSyncData:(id)data
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
     NSManagedObjectContext *context = delegate.managedObjectContext;
+    
+    NSString *oldDbTimestamp = [YTModelHelper settingsForKey:@"db_timestamp"];
+    NSString *newDbTimestamp = data[@"db_timestamp"];
+    if (![oldDbTimestamp isEqualToString:newDbTimestamp]) {
+        [YTModelHelper clearData];
+        NSLog(@"clearing data");
+    }
 
     NSString *prevSyncTimeStr = [YTModelHelper settingsForKey:@"sync_time"];
     if (![prevSyncTimeStr isEqualToString:@""]) {
@@ -419,6 +449,7 @@
 
     [YTModelHelper setSettingsForKey:@"sync_time" value:data[@"sync_time"]];
     [YTModelHelper setSettingsForKey:@"sync_uid" value:data[@"sync_uid"]];
+    [YTModelHelper setSettingsForKey:@"db_timestamp" value:data[@"db_timestamp"]];
     [YTModelHelper setSettingsForKey:@"available_clues" value:data[@"available_clues"]];
     
     NSMutableDictionary *settings = delegate.userInfo[@"settings"];
