@@ -110,6 +110,12 @@
     if (delegate.usesSplitView) {
         [YTViewHelper loadDetailsController:controller];
     } else {
+        if ([delegate.navController.topViewController isKindOfClass:[YTGabViewController class]]) {
+            YTGabViewController *gabView = (YTGabViewController*)delegate.navController.topViewController;
+            if ([gabView.gabId isEqualToNumber:gabId]) {
+                return;
+            }
+        }
         
         if (![delegate.navController.topViewController isKindOfClass:[YTMainViewController class]]) {
             [delegate.navController popToRootViewControllerAnimated:NO];

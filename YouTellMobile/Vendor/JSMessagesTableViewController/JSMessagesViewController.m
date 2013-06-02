@@ -305,9 +305,9 @@
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          CGFloat keyboardY = [self.view convertRect:keyboardRect fromView:nil].origin.y;
-                         
                          if (hide) {
-                             keyboardY += keyboardRect.size.height;
+                             keyboardY = self.view.frame.size.height;
+                           //  keyboardY += keyboardRect.size.height;
                          }
                          
                          CGRect inputViewFrame = self.inputView.frame;

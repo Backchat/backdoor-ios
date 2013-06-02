@@ -34,11 +34,13 @@
 {
     if ([YTNotifHelper vibrationEnabled]) {
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        NSLog(@"vibrating");
     }
     
     // FIXME: Use custom sound instead
     if ([YTNotifHelper soundEnabled]) {
         AudioServicesPlaySystemSound(1003);
+        NSLog(@"playing sound");
     }
 }
 @end
