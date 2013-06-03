@@ -28,9 +28,10 @@
 
     
     self.tableData = @[
+//        @[
+//            @[@"", NSLocalizedString(@"Help", nil), @"showHelp"]
+//        ],
         @[
-            @[@"", NSLocalizedString(@"Help", nil), @"showHelp"]
-        ], @[
             @[@"", NSLocalizedString(@"Update Backdoor", nil), @"showUpdate"],
             @[@"", NSLocalizedString(@"Licenses", nil), @"showLicenses"],
             @[@"", NSLocalizedString(@"Legal", nil), @"showLegal"],
