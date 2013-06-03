@@ -32,15 +32,25 @@
 
 + (void)handleNotification:(NSDictionary*)userInfo;
 {
-    if ([YTNotifHelper vibrationEnabled]) {
-        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-        NSLog(@"vibrating");
-    }
+
     
     // FIXME: Use custom sound instead
     if ([YTNotifHelper soundEnabled]) {
         AudioServicesPlaySystemSound(1003);
         NSLog(@"playing sound");
     }
+    
+    if ([YTNotifHelper vibrationEnabled]) {
+        
+        double delayInSeconds = 1.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+            NSLog(@"vibrating");
+        });
+        
+    }
+
+
 }
 @end
