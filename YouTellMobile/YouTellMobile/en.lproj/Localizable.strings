@@ -32,7 +32,7 @@
 "Buy" = "Buy";
 
 /* No comment provided by engineer. */
-"Buy clues" = "Buy clues";
+"Buy clues" = "Get Clues";
 
 /* No comment provided by engineer. */
 "Cancel" = "Cancel";
@@ -83,7 +83,7 @@
 "Delivered" = "Delivered";
 
 /* No comment provided by engineer. */
-"Delivering" = "Delivering";
+"Delivering" = "Pending";
 
 /* No comment provided by engineer. */
 "Delivering feedback" = "Delivering feedback";
