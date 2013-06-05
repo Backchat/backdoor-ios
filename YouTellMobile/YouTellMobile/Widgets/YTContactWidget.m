@@ -9,6 +9,8 @@
 #import "YTContactHelper.h"
 
 #import "YTContactsViewController.h"
+#import "YTSocialHelper.h"
+#import "YTGPPHelper.h"
 
 #define HEIGHT 30.0f
 #define PADDING 12.0f
@@ -122,19 +124,30 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
-    return contacts ? [contacts count] : 0;
+    NSInteger socialSection = ([[YTSocialHelper sharedInstance] isGPP]) ? 1 : 0;
+    return contacts ? [contacts count] + socialSection : socialSection;
 }
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
-    return contacts[section][0];
+    
+    if (section == contacts.count && [[YTSocialHelper sharedInstance] isGPP]) {
+        return nil;
+    } else {
+        return contacts[section][0];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
-    return [contacts[section][1] count];
+
+    if (section == contacts.count && [[YTSocialHelper sharedInstance] isGPP]) {
+        return 1;
+    } else {
+        return [contacts[section][1] count];
+    }
 }
 
 - (NSArray*)sectionIndexTitlesForTableView:(UITableView *)tableView
@@ -151,10 +164,17 @@
 {
     NSArray *contacts = (tableView == self.tableView) ? self.contacts : self.allContacts;
 
-    NSDictionary *record = contacts[indexPath.section][1][indexPath.row][0];
-    UITableViewCell *cell = [self cellWithTable:tableView ident:@"cell"];
+    UITableViewCell *cell;
     
-    cell.textLabel.text = record[@"name"];
+    if (indexPath.section == contacts.count && [[YTSocialHelper sharedInstance] isGPP]) {
+        cell = [self cellWithTable:tableView ident:@"cell_social"];
+
+    } else {
+        NSDictionary *record = contacts[indexPath.section][1][indexPath.row][0];
+
+        cell = [self cellWithTable:tableView ident:@"cell"];
+        cell.textLabel.text = record[@"name"];
+    }
     
 /*
     if ([record[@"type"] isEqualToString:@"facebook"]) {
@@ -176,6 +196,25 @@
     
     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ident];
     cell.accessoryType = UITableViewCellAccessoryNone;
+    
+    if ([ident isEqualToString:@"cell_social"]) {
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gpp_tableitem2"]];
+        
+        UILabel *label = [UILabel new];
+        
+        label.textColor = [UIColor whiteColor];
+        label.text = NSLocalizedString(@"Want friends on Backdoor?\nNo worries, Share on Google+", nil);
+        label.numberOfLines = 2;
+        label.font = [UIFont systemFontOfSize:14];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.frame = CGRectMake(0, 0, 320, 44);
+        label.backgroundColor = [UIColor clearColor];
+        
+        [cell addSubview:imageView];
+        [cell addSubview:label];
+        
+    }
     
     return cell;
 }
@@ -200,9 +239,13 @@
         [self.delegate hideContactViewController];
     }
     
-    NSDictionary *record = contacts[indexPath.section][1][indexPath.row][0];
-    [self selectContact:record];
-    [self.textField resignFirstResponder];
+    if (indexPath.section == contacts.count && [[YTSocialHelper sharedInstance] isGPP]) {
+        [[YTGPPHelper sharedInstance] presentShareDialog];
+    } else {
+        NSDictionary *record = contacts[indexPath.section][1][indexPath.row][0];
+        [self selectContact:record];
+        [self.textField resignFirstResponder];
+    }
 
 }
 

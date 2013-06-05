@@ -209,6 +209,9 @@
 		B2D83FF91752978600FAB33C /* tour12_pt.png in Resources */ = {isa = PBXBuildFile; fileRef = B2D83FF11752978600FAB33C /* tour12_pt.png */; };
 		B2D83FFA1752978600FAB33C /* tour12_pt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2D83FF21752978600FAB33C /* tour12_pt@2x.png */; };
 		B2D83FFE1752A89D00FAB33C /* YTNotifHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D83FFD1752A89D00FAB33C /* YTNotifHelper.m */; };
+		B2D8400E175F410000FAB33C /* YTSocialHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D8400D175F410000FAB33C /* YTSocialHelper.m */; };
+		B2D84016175F44E000FAB33C /* gpp_tableitem2.png in Resources */ = {isa = PBXBuildFile; fileRef = B2D84014175F44E000FAB33C /* gpp_tableitem2.png */; };
+		B2D84017175F44E000FAB33C /* gpp_tableitem2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2D84015175F44E000FAB33C /* gpp_tableitem2@2x.png */; };
 		B2DBF9C616FB1BDE00FFC967 /* YTContactWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DBF9C516FB1BDE00FFC967 /* YTContactWidget.m */; };
 		B2DBF9C916FB2F4E00FFC967 /* YTContactHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DBF9C816FB2F4E00FFC967 /* YTContactHelper.m */; };
 		B2E68F2017266DFF00914B40 /* tour32.png in Resources */ = {isa = PBXBuildFile; fileRef = B2E68F1C17266DFF00914B40 /* tour32.png */; };
@@ -550,6 +553,10 @@
 		B2D83FF21752978600FAB33C /* tour12_pt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tour12_pt@2x.png"; sourceTree = "<group>"; };
 		B2D83FFC1752A89C00FAB33C /* YTNotifHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTNotifHelper.h; path = Helpers/YTNotifHelper.h; sourceTree = "<group>"; };
 		B2D83FFD1752A89D00FAB33C /* YTNotifHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTNotifHelper.m; path = Helpers/YTNotifHelper.m; sourceTree = "<group>"; };
+		B2D8400C175F410000FAB33C /* YTSocialHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTSocialHelper.h; path = Helpers/YTSocialHelper.h; sourceTree = "<group>"; };
+		B2D8400D175F410000FAB33C /* YTSocialHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTSocialHelper.m; path = Helpers/YTSocialHelper.m; sourceTree = "<group>"; };
+		B2D84014175F44E000FAB33C /* gpp_tableitem2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gpp_tableitem2.png; sourceTree = "<group>"; };
+		B2D84015175F44E000FAB33C /* gpp_tableitem2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gpp_tableitem2@2x.png"; sourceTree = "<group>"; };
 		B2DBF9C416FB1BDE00FFC967 /* YTContactWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTContactWidget.h; path = Widgets/YTContactWidget.h; sourceTree = "<group>"; };
 		B2DBF9C516FB1BDE00FFC967 /* YTContactWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTContactWidget.m; path = Widgets/YTContactWidget.m; sourceTree = "<group>"; };
 		B2DBF9C716FB2F4E00FFC967 /* YTContactHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTContactHelper.h; path = Helpers/YTContactHelper.h; sourceTree = "<group>"; };
@@ -869,6 +876,8 @@
 		B2A75AD516F1ED7E00F0CAB4 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				B2D84014175F44E000FAB33C /* gpp_tableitem2.png */,
+				B2D84015175F44E000FAB33C /* gpp_tableitem2@2x.png */,
 				B2D83FEB1752978600FAB33C /* tour32_gpp_pt.png */,
 				B2D83FEC1752978600FAB33C /* tour32_gpp_pt@2x.png */,
 				B2D83FED1752978600FAB33C /* tour32_pt.png */,
@@ -1055,6 +1064,8 @@
 				B2E68F5F172CE13A00914B40 /* YTTwitterHelper.m */,
 				B2D83FFC1752A89C00FAB33C /* YTNotifHelper.h */,
 				B2D83FFD1752A89D00FAB33C /* YTNotifHelper.m */,
+				B2D8400C175F410000FAB33C /* YTSocialHelper.h */,
+				B2D8400D175F410000FAB33C /* YTSocialHelper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1481,6 +1492,8 @@
 				B2D83FF81752978600FAB33C /* tour23_pt@2x.png in Resources */,
 				B2D83FF91752978600FAB33C /* tour12_pt.png in Resources */,
 				B2D83FFA1752978600FAB33C /* tour12_pt@2x.png in Resources */,
+				B2D84016175F44E000FAB33C /* gpp_tableitem2.png in Resources */,
+				B2D84017175F44E000FAB33C /* gpp_tableitem2@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1581,6 +1594,7 @@
 				B2A37BAA174BB311006EAA5B /* YTSheetViewController.m in Sources */,
 				B2A37BB5174FE8CB006EAA5B /* YTNotificationSettingsViewController.m in Sources */,
 				B2D83FFE1752A89D00FAB33C /* YTNotifHelper.m in Sources */,
+				B2D8400E175F410000FAB33C /* YTSocialHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
