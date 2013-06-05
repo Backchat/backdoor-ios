@@ -227,10 +227,10 @@
         
         if ([dict[@"last_name"] length] == 0 && [dict[@"first_name"] length] == 0) {
             key = @" ";
-        } else if ([dict[@"last_name"] length] > 0) {
-            key = [[dict[@"last_name"] substringToIndex:1] uppercaseString];
-        } else {
+        } else if ([dict[@"first_name"] length] > 0) {
             key = [[dict[@"first_name"] substringToIndex:1] uppercaseString];
+        } else {
+            key = [[dict[@"last_name"] substringToIndex:1] uppercaseString];
         }
         
         if (category == nil || ![key isEqualToString:category[0]]) {
