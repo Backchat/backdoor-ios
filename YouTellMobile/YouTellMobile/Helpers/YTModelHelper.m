@@ -421,7 +421,6 @@
     NSString *newDbTimestamp = data[@"db_timestamp"];
     if (![oldDbTimestamp isEqualToString:newDbTimestamp]) {
         [YTModelHelper clearData];
-        NSLog(@"clearing data");
     }
 
     NSString *prevSyncTimeStr = [YTModelHelper settingsForKey:@"sync_time"];
