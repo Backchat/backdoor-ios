@@ -83,7 +83,7 @@
 "Delivered" = "Delivered";
 
 /* No comment provided by engineer. */
-"Delivering" = "Delivering";
+"Delivering" = "Pending";
 
 /* No comment provided by engineer. */
 "Delivering feedback" = "Fornecimento de feedback";
@@ -98,7 +98,7 @@
 "Done" = "Feito";
 
 /* No comment provided by engineer. */
-"Earn 5 additional free clues by posting, liking\nor tweeting about Backdoor" = "Earn 5 additional free clues by posting, liking\nor tweeting about Backdoor";
+"Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor" = "Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor";
 
 /* No comment provided by engineer. */
 "Error" = "Erro";
@@ -134,7 +134,7 @@
 "Help" = "Ajuda";
 
 /* No comment provided by engineer. */
-"Help & About Us" = "Ajuda & Sobre Nos";
+"Help & About Us" = "Sobre Nos";
 
 /* No comment provided by engineer. */
 "Input name for anonymous user" = "Input name for anonymous user";

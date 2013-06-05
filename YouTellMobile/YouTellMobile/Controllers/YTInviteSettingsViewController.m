@@ -48,8 +48,8 @@
     CGFloat base_y = 0;
     
     UILabel *label1 = [[UILabel alloc] init];
-    label1.text = NSLocalizedString(@"Earn 5 additional free clues by posting, liking\nor tweeting about Backdoor", nil);
-    label1.font = [UIFont boldSystemFontOfSize:13];
+    label1.text = NSLocalizedString(@"Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor", nil);
+    label1.font = [UIFont boldSystemFontOfSize:14];
     label1.textColor = [UIColor colorWithRed:0x24/255.0 green:0x6d/255.0 blue:0x00/255.0 alpha:1];
     label1.textColor = [UIColor blackColor];
     label1.numberOfLines = 3;

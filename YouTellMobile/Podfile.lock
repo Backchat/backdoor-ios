@@ -7,8 +7,8 @@ PODS:
   - google-plus-ios-sdk (1.2.1)
   - HockeySDK (3.0.0)
   - SDWebImage (3.2):
-    - SDWebImage/MapKit
-  - SDWebImage/MapKit (3.2)
+    - SDWebImage/Core
+  - SDWebImage/Core (3.2)
   - SVProgressHUD (0.9)
   - UIImage-Categories (0.0.1)
 
@@ -32,7 +32,7 @@ SPEC CHECKSUMS:
   FlurrySDK: 52245ae8c6fa31825dc74a6afb94b861da2435fa
   google-plus-ios-sdk: fd312bf0eed88cfc708fe2cdcb9c1084598af99e
   HockeySDK: ffb5d1bc7b6fef6a2ffd7a614504665c377607e8
-  SDWebImage: 4e2b2287a54c052cb0d717bcdf37387b9c4751ae
+  SDWebImage: f742ac91b65bd34b6d452325115e2ded3a73380e
   SVProgressHUD: 03d4845ec8e64591726428a08236c6a5489d45f8
   UIImage-Categories: d9f10e0afb9b281b35a3c2b0c7d16d1ca251d824
 

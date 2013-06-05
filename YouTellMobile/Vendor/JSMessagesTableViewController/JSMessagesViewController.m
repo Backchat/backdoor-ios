@@ -286,15 +286,15 @@
 #pragma mark - Keyboard notifications
 - (void)handleWillShowKeyboard:(NSNotification *)notification
 {
-    [self keyboardWillShowHide:notification];
+    [self keyboardWillShowHide:notification hide:NO];
 }
 
 - (void)handleWillHideKeyboard:(NSNotification *)notification
 {
-    [self keyboardWillShowHide:notification];
+    [self keyboardWillShowHide:notification hide:YES];
 }
 
-- (void)keyboardWillShowHide:(NSNotification *)notification
+- (void)keyboardWillShowHide:(NSNotification *)notification hide:(BOOL)hide
 {
     CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	//UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
@@ -305,6 +305,10 @@
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          CGFloat keyboardY = [self.view convertRect:keyboardRect fromView:nil].origin.y;
+                         if (hide) {
+                             keyboardY = self.view.frame.size.height;
+                           //  keyboardY += keyboardRect.size.height;
+                         }
                          
                          CGRect inputViewFrame = self.inputView.frame;
                          self.inputView.frame = CGRectMake(inputViewFrame.origin.x,

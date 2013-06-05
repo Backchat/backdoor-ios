@@ -78,9 +78,9 @@
     [self.sendHelper updateButtons];
 }
 
-- (void)keyboardWillShowHide:(NSNotification *)notification
+- (void)keyboardWillShowHide:(NSNotification *)notification hide:(BOOL)hide
 {
-    [super keyboardWillShowHide:notification];
+    [super keyboardWillShowHide:notification hide:hide];
     [self.sendHelper keyboardWillShowHide:notification];
 }
 

@@ -123,6 +123,7 @@
   
     myParams[@"sync_time"] = [YTModelHelper settingsForKey:@"sync_time"];
     myParams[@"sync_uid"] = [YTModelHelper settingsForKey:@"sync_uid"];
+    myParams[@"db_timestamp"] = [YTModelHelper settingsForKey:@"db_timestamp"];
     NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
     [request setTimeoutInterval:CONFIG_TIMEOUT];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
@@ -242,11 +243,18 @@
         [YTViewHelper refreshViews];
         [YTViewHelper endRefreshing];
         
-        YTAppDelegate *delegate = [YTAppDelegate current];
-        if (delegate.autoSyncGabId) {
-            [YTViewHelper showGabWithId:delegate.autoSyncGabId];
-            delegate.autoSyncGabId = nil;
-        }
+        double delayInSeconds = 0.5;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            
+            YTAppDelegate *delegate = [YTAppDelegate current];
+            if (delegate.autoSyncGabId) {
+                [YTViewHelper showGabWithId:delegate.autoSyncGabId];
+                delegate.autoSyncGabId = nil;
+            }
+            
+        });
+
         
     } failure:^(id JSON) {
         [delegate.autoSyncLock unlock];
@@ -311,7 +319,12 @@
 
 + (void)deleteGab:(NSNumber*)gabId success:(void(^)(id JSON))success
 {
-    [YTApiHelper sendJSONRequestWithMessage:NSLocalizedString(@"Deleting messages", nil) path:@"/clear-gab" method:@"POST" params:@{@"id": gabId} success:success failure:nil quiet:NO];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [YTModelHelper clearGab:gabId];
+        [YTViewHelper refreshViews];
+        [YTApiHelper sendJSONRequestWithMessage:@"" path:@"/clear-gab" method:@"POST" params:@{@"id": gabId} success:success failure:nil quiet:YES];
+    }];
+        
     
     [Flurry logEvent:@"Deleted_Thread"];
 }
