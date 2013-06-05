@@ -129,7 +129,7 @@
         };
         text = [object valueForKey:@"content"];
         if (messages[text] != nil) { text = messages[text]; }
-        data = [NSBubbleData dataWithText:text date:localDate type:type];
+        data = [NSBubbleData dataWithTextView:text date:localDate type:type];
     } else if ([object valueForKey:@"kind"] == [NSNumber numberWithInteger:YTMessageKindPhoto]) {
         image = [YTModelHelper imageForMessage:object];
         data = [NSBubbleData dataWithImage:image date:localDate type:type];
@@ -140,7 +140,7 @@
         data.view.tag = row;
         
     } else {
-        data = [NSBubbleData dataWithText:@"" date:localDate type:type];
+        data = [NSBubbleData dataWithTextView:@"" date:localDate type:type];
     }
     
     NSInteger status = [[object valueForKey:@"status"] integerValue];
