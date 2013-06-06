@@ -38,6 +38,7 @@
 
 + (NSDictionary*)cluesForGab:(NSNumber*)gabId;
 + (NSInteger)userAvailableClues;
++ (BOOL)userHasShared;
 
 + (void)clearContactsWithType:(NSString*)type;
 + (void)addContactWithData:(NSDictionary*)data;

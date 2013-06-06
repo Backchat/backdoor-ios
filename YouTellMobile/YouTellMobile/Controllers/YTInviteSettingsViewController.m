@@ -12,6 +12,7 @@
 #import "YTGPPHelper.h"
 #import "YTFBLikeButton.h"
 #import "YTTwitterHelper.h"
+#import "YTModelHelper.h"
 
 @interface YTInviteSettingsViewController ()
 
@@ -19,9 +20,24 @@
 
 @implementation YTInviteSettingsViewController
 
+
 - (void)viewDidLoad
 {
-    self.title = NSLocalizedString(@"Free Clues", nil);
+    NSString *title;
+    NSString *labelText;
+    NSInteger labelSize;
+    
+    if ([YTModelHelper userHasShared]) {
+        title = NSLocalizedString(@"Share with Friends", nil);
+        labelText = NSLocalizedString(@"Share with Friends", nil);
+        labelSize = 16;
+    } else {
+        title = NSLocalizedString(@"Free Clues", nil);
+        labelText = NSLocalizedString(@"Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor", nil);
+        labelSize = 14;
+    }
+    
+    self.title = title;
     
     //YTAppDelegate *delegate = [YTAppDelegate current];
     
@@ -48,8 +64,8 @@
     CGFloat base_y = 0;
     
     UILabel *label1 = [[UILabel alloc] init];
-    label1.text = NSLocalizedString(@"Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor", nil);
-    label1.font = [UIFont boldSystemFontOfSize:14];
+    label1.text = labelText;
+    label1.font = [UIFont boldSystemFontOfSize:labelSize];
     label1.textColor = [UIColor colorWithRed:0x24/255.0 green:0x6d/255.0 blue:0x00/255.0 alpha:1];
     label1.textColor = [UIColor blackColor];
     label1.numberOfLines = 3;

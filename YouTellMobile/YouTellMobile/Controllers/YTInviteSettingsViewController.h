@@ -9,4 +9,5 @@
 
 @interface YTInviteSettingsViewController : YTBaseSettingsViewController
 
+
 @end

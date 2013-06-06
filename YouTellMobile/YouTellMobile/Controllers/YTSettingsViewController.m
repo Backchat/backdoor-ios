@@ -18,6 +18,7 @@
 #import "YTPrivacySettingsViewController.h"
 #import "YTInviteSettingsViewController.h"
 #import "YTApiHelper.h"
+#import "YTModelHelper.h"
 #import "YTNotificationSettingsViewController.h"
 
 @implementation YTSettingsViewController
@@ -26,12 +27,14 @@
 
 - (void)viewDidLoad
 {
+    NSString *freeCluesTitle = ([YTModelHelper userHasShared]) ? NSLocalizedString(@"Share with Friends", nil) : NSLocalizedString(@"Free Clues", nil);
+
     self.tableData = @[
         @[
             @[@"icon_notifications3.png", NSLocalizedString(@"Notifications", nil), @"showNotifications"]
         ],
         @[
-            @[@"icon_facebook3.png", NSLocalizedString(@"Free Clues", nil), @"showInvite"]
+            @[@"icon_facebook3.png", freeCluesTitle, @"showInvite"]
         ], @[
             /*@[@"icon_account2.png", NSLocalizedString(@"Your Account", nil), @"showYourAccount"],*/
             @[@"icon_privacy3.png", NSLocalizedString(@"Privacy & Abuse", nil), @"showPrivacy"]

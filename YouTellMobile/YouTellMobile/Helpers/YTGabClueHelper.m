@@ -137,6 +137,7 @@
     // View background
     
     UIView *bgView = [[UIView alloc] init];
+    bgView.tag = 13;
     bgView.backgroundColor = [UIColor colorWithRed:63/255.0 green:173/255.0 blue:30/255.0 alpha:1];
     [sheetView addSubview:bgView];
     
@@ -221,8 +222,9 @@
     height += 90;
     
     // Buy Clues button
-
+    
     UIButton *buyButton = [[UIButton alloc] init];
+    buyButton.tag = 11;
     [buyButton setBackgroundImage:[UIImage imageNamed:@"clue_button"] forState:UIControlStateNormal];
     frame.origin.y = height;
     frame.size.width = 278;
@@ -234,12 +236,17 @@
     buyButton.titleLabel.font = [UIFont boldSystemFontOfSize:19];
     [sheetView addSubview:buyButton];
     [buyButton addTarget:self action:@selector(buyCluesButtonWasPressed) forControlEvents:UIControlEventTouchUpInside];
-    height += 50;
-
+    
+    if ([YTModelHelper userAvailableClues] == 0) {
+        height += 50;
+    } else {
+        buyButton.hidden = YES;
+    }
     
     // Cancel button
     
     UIButton *cancelButton = [[UIButton alloc] init];
+    cancelButton.tag = 12;
     [cancelButton setBackgroundImage:[UIImage imageNamed:@"clue_button"] forState:UIControlStateNormal];
     frame.origin.y = height;
     frame.size.width = 278;
@@ -251,8 +258,9 @@
     cancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:19];
     [cancelButton addTarget:self action:@selector(cancelButtonWasPressed) forControlEvents:UIControlEventTouchUpInside];
     [sheetView addSubview:cancelButton];
-    height += 60;
+    height += 50;
     
+    height += 10;
     
     // View frame
     
@@ -285,6 +293,8 @@
         shadow.layer.shadowRadius = clue ? 0 : 4;
         [self updateClue:clue number:n];
     }
+    
+    [self updateBuyButton];
 }
 
 - (void)updateClue:(NSDictionary *)clue number:(NSNumber*)number
@@ -303,6 +313,46 @@
     label.text = parsed[@"text"];
     [button setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"clue_hidden2"]];
 
+}
+
+- (void)updateBuyButton
+{
+    BOOL doshow = ([YTModelHelper userAvailableClues] == 0);
+    
+    UIView *sheetView = self.sheet.sheetView;
+    UIButton *buyButton = (UIButton*)[sheetView viewWithTag:11];
+    UIButton *cancelButton = (UIButton*)[sheetView viewWithTag:12];
+    UIView *bgView = [sheetView viewWithTag:13];
+    CGFloat height = 50;
+    
+    if (doshow && !buyButton.hidden) {
+        return;
+    }
+    
+    if (!doshow && buyButton.hidden) {
+        return;
+    }
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect frame;
+        NSInteger factor = doshow ? 1 : -1;
+       
+        frame = cancelButton.frame;
+        frame.origin.y += height * factor;
+        cancelButton.frame = frame;
+            
+        frame = sheetView.frame;
+        frame.size.height += height * factor;
+        frame.origin.y -= height * factor;
+        sheetView.frame = frame;
+            
+        frame = bgView.frame;
+        frame.size.height += height * factor;
+        bgView.frame = frame;
+        
+        buyButton.hidden = !doshow;
+    }];
+    
 }
 
 - (NSDictionary*)parseClueValue:(NSDictionary *)clue

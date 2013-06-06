@@ -505,6 +505,11 @@
     return [value integerValue];
 }
 
++ (BOOL)userHasShared
+{
+    return [[YTAppDelegate current].userInfo[@"settings"][@"has_shared"] boolValue];
+}
+
 + (void)clearContactsWithType:(NSString *)type
 {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Contacts"];
