@@ -245,7 +245,8 @@
     cell.textLabel.text = @" "                                                                                          ;
     
     detTextLabel.frame= CGRectMake(78, 23, cell.frame.size.width - 30 -  78, 32);
-    detTextLabel.text = [NSString stringWithFormat:@"%@\n ", [object valueForKey:@"content_summary"]];
+    NSString* sum = [object valueForKey:@"content_summary"];
+    detTextLabel.text = [NSString stringWithFormat:@"%@\n ", sum];
 
     cell.detailTextLabel.text = @" ";
     

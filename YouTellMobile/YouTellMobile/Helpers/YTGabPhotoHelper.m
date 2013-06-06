@@ -6,6 +6,7 @@
 //
 
 #import <UIImage+Resize.h>
+#import <Base64/MF_Base64Additions.h>
 
 #import "YTGabPhotoHelper.h"
 #import "YTGabViewController.h"
@@ -129,8 +130,11 @@
 - (void)sendButtonWasClicked
 {
     [self cancelButtonWasClicked];
-    [self.gabView.sendHelper setPhotoContent:self.image];
-    [self.gabView.sendHelper sendMessage];
+    //LINREVIEW this is memory intensive for very big images!! is base64 the right way here?
+    NSData *data = UIImageJPEGRepresentation(self.image, 0.85);
+    NSString* imageText = [data base64String];
+
+    [self.gabView queueMessage:imageText ofKind:YTMessageKindPhoto];
 }
 
 - (UIImage *)scaleImage:(UIImage*)image

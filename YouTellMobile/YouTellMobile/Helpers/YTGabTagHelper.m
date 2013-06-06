@@ -73,7 +73,7 @@
     NSString *tag = [alertView textFieldAtIndex:0].text;
     tag = [tag stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    [YTApiHelper tagGab:self.gabView.gabId tag:tag success:^(id JSON) {
+    [YTApiHelper tagGab:[self.gabView.gab valueForKey:@"id"] tag:tag success:^(id JSON) {
         [YTViewHelper refreshViews];
     }];
 }

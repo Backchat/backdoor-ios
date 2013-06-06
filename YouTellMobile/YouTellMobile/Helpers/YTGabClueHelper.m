@@ -53,7 +53,7 @@
     UIButton *button = (UIButton*)sender;
     NSNumber *number = [NSNumber numberWithInt:(button.tag - 100)];
     UILabel *label = (UILabel*)[self.sheet.sheetView viewWithTag:button.tag - 100 + 1000];
-    NSDictionary *clues = [YTModelHelper cluesForGab:self.gabView.gabId];
+    NSDictionary *clues = [YTModelHelper cluesForGab:[self.gabView.gab valueForKey:@"id"]];
     NSDictionary *clue = clues[number];
     NSInteger availClues = [YTModelHelper userAvailableClues];
     
@@ -94,7 +94,7 @@
     [button addSubview:self.activityIndicator];
     [self.activityIndicator startAnimating];
     
-    [YTApiHelper requestClue:self.gabView.gabId number:number success:^(id JSON) {
+    [YTApiHelper requestClue:[self.gabView.gab valueForKey:@"id"] number:number success:^(id JSON) {
         [YTViewHelper refreshViews];
         
         [self.activityIndicator stopAnimating];
@@ -167,7 +167,7 @@
     [sheetView addSubview:label];
     height += 60;
     
-    NSManagedObject *gab = [YTModelHelper gabForId:self.gabView.gabId];
+    NSManagedObject *gab = self.gabView.gab;
     NSInteger clue_count = [[gab valueForKey:@"clue_count"] integerValue];
     
     // Clue buttons
@@ -279,7 +279,7 @@
 
 - (void)updateClues
 {
-    NSDictionary *clues = [YTModelHelper cluesForGab:self.gabView.gabId];
+    NSDictionary *clues = [YTModelHelper cluesForGab:[self.gabView.gab valueForKey:@"id"]];
     
     UILabel *label = (UILabel*)[self.sheet.sheetView viewWithTag:10];
 
