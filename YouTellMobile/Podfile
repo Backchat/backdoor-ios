@@ -12,6 +12,7 @@ pod 'SDWebImage'
 pod 'CKRefreshControl'
 pod 'google-plus-ios-sdk'
 pod 'FlurrySDK'
+pod 'NoticeView'
 
 post_install do |installer|
   installer.project.targets.each do |target|
