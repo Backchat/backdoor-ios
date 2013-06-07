@@ -55,7 +55,8 @@
         return;
     }
     
-    [YTApiHelper deleteGab:self.gabView.gabId success:^(id JSON) {
+    //LINREVIEW: is this even used?!
+    [YTApiHelper deleteGab:[self.gabView.gab valueForKey:@"id"] success:^(id JSON) {
         YTAppDelegate *delegate = [YTAppDelegate current];
         [delegate.currentMainViewController deselectSelectedGab:YES];
         [YTViewHelper refreshViews];

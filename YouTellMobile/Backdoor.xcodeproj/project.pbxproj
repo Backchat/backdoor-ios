@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		372FA910171C83DA00E3BCB2 /* ipad-icon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 372FA90F171C83D900E3BCB2 /* ipad-icon2x.png */; };
 		372FA912171C83E500E3BCB2 /* ipad-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 372FA911171C83E500E3BCB2 /* ipad-icon.png */; };
+		3E9F69161761407D00374616 /* YTGabMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F69151761407C00374616 /* YTGabMessage.m */; };
 		B2225ED717383EAC00A47F28 /* icon_help3.png in Resources */ = {isa = PBXBuildFile; fileRef = B2225ECF17383EAB00A47F28 /* icon_help3.png */; };
 		B2225ED817383EAC00A47F28 /* icon_help3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2225ED017383EAB00A47F28 /* icon_help3@2x.png */; };
 		B2225ED917383EAC00A47F28 /* icon_notifications3.png in Resources */ = {isa = PBXBuildFile; fileRef = B2225ED117383EAB00A47F28 /* icon_notifications3.png */; };
@@ -300,6 +301,8 @@
 /* Begin PBXFileReference section */
 		372FA90F171C83D900E3BCB2 /* ipad-icon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ipad-icon2x.png"; path = "../../ipad-icon2x.png"; sourceTree = "<group>"; };
 		372FA911171C83E500E3BCB2 /* ipad-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ipad-icon.png"; path = "../../ipad-icon.png"; sourceTree = "<group>"; };
+		3E9F69141761407C00374616 /* YTGabMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabMessage.h; path = Helpers/YTGabMessage.h; sourceTree = "<group>"; };
+		3E9F69151761407C00374616 /* YTGabMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabMessage.m; path = Helpers/YTGabMessage.m; sourceTree = "<group>"; };
 		8805C8C26C024483B1635E5F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A8F36B8198B40769F476A03 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		B2225ECF17383EAB00A47F28 /* icon_help3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_help3.png; sourceTree = "<group>"; };
@@ -1066,6 +1069,8 @@
 				B2D83FFD1752A89D00FAB33C /* YTNotifHelper.m */,
 				B2D8400C175F410000FAB33C /* YTSocialHelper.h */,
 				B2D8400D175F410000FAB33C /* YTSocialHelper.m */,
+				3E9F69141761407C00374616 /* YTGabMessage.h */,
+				3E9F69151761407C00374616 /* YTGabMessage.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1595,6 +1600,7 @@
 				B2A37BB5174FE8CB006EAA5B /* YTNotificationSettingsViewController.m in Sources */,
 				B2D83FFE1752A89D00FAB33C /* YTNotifHelper.m in Sources */,
 				B2D8400E175F410000FAB33C /* YTSocialHelper.m in Sources */,
+				3E9F69161761407D00374616 /* YTGabMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

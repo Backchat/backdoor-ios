@@ -15,12 +15,23 @@
 
 + (void)toggleNetworkActivityIndicatorVisible:(BOOL)visible;
 
-+ (void) sendJSONRequestWithMessage:(NSString*)message path:(NSString*)path method:(NSString*)method params:(NSDictionary*)params success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure quiet:(BOOL)quiet;
++ (void) sendJSONRequestToPath:(NSString*)path
+                        method:(NSString*)method
+                        params:(NSDictionary*)params
+                       success:(void(^)(id JSON))success
+                       failure:(void(^)(id JSON))failure;
+
++ (void) sendJSONRequestWithBlockingUIMessage:(NSString*)message
+                                         path:(NSString*)path
+                                       method:(NSString*)method
+                                       params:(NSDictionary*)params
+                                      success:(void(^)(id JSON))success
+                                      failure:(void(^)(id JSON))failure;
+
 + (void)autoSync:(BOOL)quiet;
 
 + (void)sendFeedback:(NSString*)content rating:(NSNumber*)rating success:(void(^)(id JSON))success;
 + (void)sendAbuseReport:(NSString*)content success:(void(^)(id JSON))success;
-+ (void)sendMessage:(NSString*)content kind:(NSNumber*)kind receiverData:(NSDictionary*)receiverData success:(void(^)(id JSON))success;
 + (void)deleteGab:(NSNumber*)gabId success:(void(^)(id JSON))success;
 + (void)tagGab:(NSNumber*)gabId tag:(NSString*)tag success:(void(^)(id JSON))success;
 
@@ -30,7 +41,7 @@
 + (void)getFeaturedUsers;
 + (void)updateSettingsWithKey:(NSString*)key value:(id)value;
 
-+ (void)checkUid:(NSString*)uid success:(void(^)(id JSON))success;
++ (void)checkUid:(NSString*)uid success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure;
 + (void)checkUpdates;
 
 
