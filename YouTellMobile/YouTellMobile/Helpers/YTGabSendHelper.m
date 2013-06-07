@@ -5,7 +5,6 @@
 //  Copyright (c) 2013 Backdoor LLC. All rights reserved.
 //
 
-#import <Base64/MF_Base64Additions.h>
 #import <NSString+JSMessagesView.h>
 #import <Facebook-iOS-SDK/FacebookSDK/FacebookSDK.h>
 
@@ -19,7 +18,6 @@
 #import "YTModelHelper.h"
 #import "YTFBHelper.h"
 #import "YTAppDelegate.h"
-
 
 @implementation YTGabSendHelper
 
@@ -41,7 +39,7 @@
     
     self.contactWidget = [[YTContactWidget alloc] initWithFrame:contactWidgetFrame tableView:self.contactTable];
     self.contactWidget.delegate = self;
-    self.contactWidget.hidden = !!self.gabView.gabId;
+    self.contactWidget.hidden = self.gabView.gab != nil;
     self.contactWidget.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
     [self.gabView.view addSubview:self.contactTable];
@@ -51,95 +49,6 @@
 
     
     return self;
-}
-
-
-- (void)sendMessageCallback:(NSDictionary *)receiverData
-{
-    //[self.gabView.inputView.textView resignFirstResponder];
-    [self.gabView.inputView.textView setText:nil];
-    [self.gabView textViewDidChange:self.gabView.inputView.textView];
-   
-    [YTApiHelper sendMessage:self.content kind:[NSNumber numberWithInteger:self.kind] receiverData:receiverData success:^(id JSON) {
-        
-        if (!self.gabView.gabId) {
-            self.gabView.gabId = JSON[@"gab_id"];
-            [self.gabView loadGab];
-        }
-        
-        
-        if (self.contactWidget != nil) {
-            [UIView animateWithDuration:0.5 animations:^{
-                self.contactWidget.frame = CGRectMake(0, -self.contactWidget.frame.size.height, self.contactWidget.frame.size.width, self.contactWidget.frame.size.height);
-            } completion:^(BOOL finished) {
-                self.contactWidget.hidden = YES;
-                self.contactWidget = nil;
-            }];
-        };
-        
-
-        [YTViewHelper refreshViews];
-        
-        [self.gabView scrollToBottomAnimated:YES];
-        
-    }];
-}
-
-- (void)sendMessage
-{
-    if (self.gabView.gabId) {
-        return [self sendMessageCallback:[self receiverData]];
-    }
-    
-    if (!self.contactWidget || !self.contactWidget.selectedContact) {
-        return;
-    }
-    
-    NSDictionary *contact = self.contactWidget.selectedContact;
-    if (![contact[@"type"] isEqualToString:@"facebook"] && ![contact[@"type"] isEqualToString:@"gpp"]) {
-        return [self sendMessageCallback:[self receiverData]];
-    }
-    
-    [YTApiHelper checkUid:contact[@"value"] success:^(id JSON) {
-        if ([JSON[@"uid_exists"] isEqualToString:@"yes"]) {
-            return [self sendMessageCallback:[self receiverData]];
-        }
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"New message", nil) message:NSLocalizedString(@"Your friend does not have a Backdoor account.  Would you like to send an invite?", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Invite", nil), nil];
-        [alert show];
-        /*
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle: NSLocalizedString(@"New message", nil)
-                              message: NSLocalizedString(@"Please enter phone number of your friend", nil)
-                              delegate: nil
-                              cancelButtonTitle: NSLocalizedString(@"Cancel", nil)
-                              otherButtonTitles: NSLocalizedString(@"Send", nil), nil
-                              ];
-        
-        alert.delegate = self;
-        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        
-        UITextField *alertTextField = [alert textFieldAtIndex:0];
-        alertTextField.keyboardType = UIKeyboardTypeNumberPad;
-        alertTextField.text = [YTModelHelper phoneForUid:contact[@"value"]];
-        alertTextField.delegate = self;
-        
-        [alert show];
-         */
-    }];
-}
-
-- (void)setTextContent:(NSString *)text
-{
-    self.content = text;
-    self.kind = YTMessageKindText;
-}
-
-- (void)setPhotoContent:(UIImage *)image
-{
-    NSData *data = UIImageJPEGRepresentation(image, 0.85);
-    self.content = [data base64String];
-    self.kind = YTMessageKindPhoto;
 }
 
 # pragma mark UIAlertViewDelegate methods
@@ -169,29 +78,7 @@
     
 
     [self performSelector:@selector(sendRequest) withObject:nil afterDelay:0.5];
-    
-    /*
-    UITextField *field = [alertView textFieldAtIndex:0];
-    [field resignFirstResponder];
-    
-    if (buttonIndex == alertView.cancelButtonIndex) {
-        return;
-    }
-    
-    NSMutableDictionary *receiverData = [NSMutableDictionary dictionaryWithDictionary:[self receiverData]];
-    
-    [YTModelHelper setPhoneForUid:receiverData[@"receiver_uid"] phone:field.text];
-    receiverData[@"related_phone"] = field.text;
-   
-    [self sendMessageCallback:receiverData];
-     */
 }
-/*
-- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
-{
-    return [[alertView textFieldAtIndex:0].text length] > 8;
-}
-*/
 
 # pragma mark YTContactsViewDelegate methods
 
@@ -242,8 +129,9 @@
 
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
-    [self setTextContent:text];
-    [self sendMessage];
+    [self.gabView.inputView.textView setText:nil];
+    [self.gabView textViewDidChange:self.gabView.inputView.textView];
+    [self.gabView queueMessage:text ofKind:YTMessageKindText];
 }
 
 
@@ -268,7 +156,7 @@
 
 - (BOOL)selectedContact
 {
-    if (self.gabView.gabId) {
+    if (self.gabView.gab) {
         return YES;
     }
     
@@ -277,26 +165,6 @@
     }
     
     return NO;
-}
-
-- (NSDictionary *)receiverData
-{
-
-    if (self.gabView.gabId) {
-        return @{@"gab_id": self.gabView.gabId};
-    } else if (self.contactWidget.selectedContact) {
-        NSDictionary *contact = self.contactWidget.selectedContact;
-        NSMutableDictionary *ret = [NSMutableDictionary new];
-
-        ret[@"related_user_name"] = contact[@"name"];
-        ret[@"receiver_phone"] = ([contact[@"type"] isEqualToString:@"phone"] ? contact[@"value"] : @"");
-        ret[@"receiver_email"] = ([contact[@"type"] isEqualToString:@"email"] ? contact[@"value"] : @"");
-        ret[@"receiver_fb_id"] =   ([contact[@"type"] isEqualToString:@"facebook"] ? contact[@"value"] : @"");
-        ret[@"receiver_gpp_id"] =   ([contact[@"type"] isEqualToString:@"gpp"] ? contact[@"value"] : @"");
-        return ret;
-    };
-    
-    return nil;
 }
 
 @end

@@ -25,17 +25,8 @@ enum {
 @property (strong, nonatomic) UITableView *contactTable;
 @property (strong, nonatomic) UIPopoverController *popover;
 
-@property (strong, nonatomic) NSString *content;
-@property (assign, nonatomic) NSInteger kind;
-
 - (id)initWithGabView:(YTGabViewController*)gabView;
 - (void)updateButtons;
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text;
 - (void)keyboardWillShowHide:(NSNotification *)notification;
-
-- (void)setTextContent:(NSString *)text;
-- (void)setPhotoContent:(UIImage *)image;
-
-- (void)sendMessage;
-- (void)sendMessageCallback:(NSDictionary*)receiverData;
 @end

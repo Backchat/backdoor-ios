@@ -18,6 +18,7 @@
 #import "YTGabSendHelper.h"
 #import "YTGabDeleteHelper.h"
 #import "YTGabTagHelper.h"
+#import <CoreData/CoreData.h>
 
 
 @interface YTGabViewController : JSMessagesViewController <UINavigationControllerDelegate, UIBubbleTableViewDataSource>
@@ -27,15 +28,16 @@
 @property (strong, nonatomic) YTGabSendHelper *sendHelper;
 @property (strong, nonatomic) YTGabDeleteHelper *deleteHelper;
 @property (strong, nonatomic) YTGabTagHelper *tagHelper;
-
-
-@property (strong, nonatomic) NSNumber *gabId;
-@property (strong, nonatomic) NSDictionary *receiverData;
 @property (strong, nonatomic) UIPopoverController *popover;
-@property (strong, nonatomic) NSArray *messages;
 
 - (void)loadGab;
 - (void)reloadData;
 - (void)dismiss;
+- (void)setGabId:(NSNumber*)gabId;
+
+@property (nonatomic, retain) NSManagedObject* gab;
+
+//LINREVIEW this is ugly we need to refactor the send queue code into a different helper
+- (void)queueMessage:(NSString*)text ofKind:(NSInteger)kind;
 
 @end

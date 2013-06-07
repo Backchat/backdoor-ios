@@ -151,7 +151,7 @@
     [message setValue:[YTHelper parseDate:data[@"created_at"]] forKey:@"created_at"];
 }
 
-+ (void)createMessage:(NSDictionary*)data
++ (NSManagedObject*)createMessage:(NSDictionary*)data
 {
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
     NSManagedObject *message = [YTModelHelper messageForKey:data[@"key"] context:context];
@@ -161,25 +161,45 @@
     [message setValue:data[@"content"] forKey:@"content"];
     [message setValue:data[@"kind"] forKey:@"kind"];
     [message setValue:data[@"secret"] forKey:@"secret"];
+    [message setValue:data[@"created_at"] forKey:@"created_at"];
     
     [message setValue:[NSNumber numberWithBool:YES] forKey:@"read"];
     [message setValue:[NSNumber numberWithBool:NO] forKey:@"deleted"];
     [message setValue:[NSNumber numberWithBool:YES] forKey:@"sent"];
     
-    /*
-    // FIXME: sanitize utc conversions
-    NSDate *date = [NSDate date];
-    NSTimeZone *tz = [NSTimeZone defaultTimeZone];
-    NSInteger seconds = [tz secondsFromGMTForDate:date];
-    date = [date dateByAddingTimeInterval:-seconds];
-    [message setValue:date forKey:@"created_at"];
-    */
+    return message;
+}
+
++ (NSManagedObject*)createGab:(id)data
+{
+    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
+    NSManagedObject *gab = [NSEntityDescription insertNewObjectForEntityForName:@"Gabs" inManagedObjectContext:context];
+
+    [gab setValue:data[@"related_user_name"] forKey:@"related_user_name"];
+    [gab setValue:data[@"related_avatar"] forKey:@"related_avatar"];
     
-    NSArray *messages = [YTModelHelper messagesForGab:data[@"gab_id"]];
-    NSManagedObject *lastMessage = [messages lastObject];
-    NSDate *date = [lastMessage valueForKey:@"created_at"];
-    date = [date dateByAddingTimeInterval:5];
-    [message setValue:date forKey:@"created_at"];
+    [gab setValue:data[@"content_cache"] forKey:@"content_cache"];
+    [gab setValue:data[@"content_summary"] forKey:@"content_summary"];
+    
+    [gab setValue:data[@"id"] forKey:@"id"];
+
+    [gab setValue:[YTHelper parseNumber:data[@"unread_count"]] forKey:@"unread_count"];
+    [gab setValue:[YTHelper parseNumber:data[@"total_count"]] forKey:@"total_count"];
+    [gab setValue:[YTHelper parseNumber:data[@"clue_count"]] forKey:@"clue_count"];
+    
+    [gab setValue:[YTHelper parseBool:data[@"sent"]] forKey:@"sent"];
+    
+    [gab setValue:[YTHelper parseDate:data[@"last_date"]] forKey:@"last_date"];
+
+    return gab;
+}
+
++ (NSNumber*)nextFakeGabId
+{
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"(id < 0)"];
+    int count = [YTModelHelper objectCount:@"Gabs" predicate:pred];
+
+    return [NSNumber numberWithInt:(-count-1)];
 }
 
 + (void)failMessage:(NSString*)key
@@ -211,8 +231,11 @@
         request.sortDescriptors = @[sortDescriptor];
     }
     request.predicate = predicate;
-    request.fetchLimit = 1;
-    request.fetchOffset = row;
+    //LINREVIEW what the hell, there is some weird bug here with coredata..
+    //not using the paging anymore and just fetching the entire set.
+    //this is only used for gabs so it's OK perf wise.
+//    request.fetchLimit = 1;
+//    request.fetchOffset = row;
     
     NSError *error;
  
@@ -222,7 +245,7 @@
         return nil;
     }
     
-    return objects[0];
+    return objects[row];
 }
 
 + (NSInteger)objectCount:(NSString*)entityName predicate:(NSPredicate*)predicate

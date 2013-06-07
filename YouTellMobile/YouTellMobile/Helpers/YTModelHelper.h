@@ -28,12 +28,14 @@
 + (NSManagedObject*)gabForId:(NSNumber*)gabId;
 + (void)clearGab:(NSNumber*)gabId;
 + (NSString*)userNameForGab:(NSManagedObject*)gab;
++ (NSManagedObject*)createGab:(id)data;
++ (NSNumber*)nextFakeGabId;
 
 //+ (NSManagedObject *)messageForRow:(NSInteger)row gabId:(id)gabId;
 + (NSArray*)messagesForGab:(id)gabId;
 + (NSInteger)messageCount:(id)gabId;
 + (UIImage*)imageForMessage:(NSManagedObject*)message;
-+ (void)createMessage:(NSDictionary*)data;
++ (NSManagedObject*)createMessage:(NSDictionary*)data;
 + (void)failMessage:(NSString*)key;
 
 + (NSDictionary*)cluesForGab:(NSNumber*)gabId;
