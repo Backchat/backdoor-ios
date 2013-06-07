@@ -111,7 +111,6 @@
 {
     
     AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[YTApiHelper baseUrl]];
-    NSLog(@"sendJSONRequest to [%@] %@", method, path);
     
     NSMutableDictionary *myParams = [[NSMutableDictionary alloc] initWithDictionary:params];
     NSDictionary *userParams = [YTApiHelper userParams];
@@ -128,17 +127,13 @@
     myParams[@"sync_uid"] = [YTModelHelper settingsForKey:@"sync_uid"];
     myParams[@"db_timestamp"] = [YTModelHelper settingsForKey:@"db_timestamp"];
     NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
-    
-    NSLog(@"%@", myParams);
-    
+        
     [request setTimeoutInterval:CONFIG_TIMEOUT];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
             [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
             [YTApiHelper updateUserInfo:userParams];
-            
-            NSLog(@"%@", JSON);
             
             if(![JSON[@"status"] isEqualToString:@"ok"]) {
                 if (failure != nil) {
@@ -191,8 +186,6 @@
                                       success:(void(^)(id JSON))success
                                       failure:(void(^)(id JSON))failure
 {
-    NSLog(@"sendJSONRequestBlockingUI to [%@] %@ message: %@", method, path, message);
-    
     [SVProgressHUD showWithStatus:message maskType:SVProgressHUDMaskTypeClear];
     
     [YTApiHelper sendJSONRequestToPath:path method:method params:params success:^(id JSON) {
