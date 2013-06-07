@@ -24,4 +24,5 @@
 + (void)showGabs;
 + (void)showSettings;
 + (void)loadSettingsController:(UIViewController*)controller;
++ (void)showNetworkErrorAlert;
 @end

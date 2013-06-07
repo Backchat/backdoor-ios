@@ -15,7 +15,6 @@
 #import <Facebook-iOS-SDK/FacebookSDK/Facebook.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <Flurry.h>
-
 #import "YTConfig.h"
 #import "YTAppDelegate.h"
 #import "YTHelper.h"
@@ -164,9 +163,7 @@
             
             [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
             
-            //connection bad?
-            //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Network error", nil) message:NSLocalizedString(@"Unable to connect with Backdoor server. Please check your data connection", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
-            //[alert show];
+            [YTViewHelper showNetworkErrorAlert];            
             
             if (failure != nil) {
                 failure(JSON);
