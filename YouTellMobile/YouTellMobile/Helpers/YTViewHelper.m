@@ -19,6 +19,8 @@
 #import "YTViewController.h"
 #import "YTWebViewController.h"
 
+#import <WBErrorNoticeView.h>
+
 @implementation YTViewHelper
 
 + (void)setup
@@ -226,4 +228,15 @@
 
 }
 
++ (void)showNetworkErrorAlert
+{
+    UIView* view = [YTAppDelegate current].navController.view;
+    WBErrorNoticeView *notice = [WBErrorNoticeView errorNoticeInView:view
+                                                               title:NSLocalizedString(@"Network error", nil)
+                                                             message:NSLocalizedString(@"Unable to connect with Backdoor server. Please check your data connection", nil)];
+    notice.sticky = YES;
+    notice.originY = [UIApplication sharedApplication].statusBarFrame.size.height;
+    
+    [notice show];
+}
 @end
