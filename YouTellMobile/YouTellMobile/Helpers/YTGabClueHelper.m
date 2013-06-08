@@ -19,6 +19,7 @@
 #import "YTConfig.h"
 #import "YTSheetViewController.h"
 #import "YTViewHelper.h"
+#import "YTHelper.h"
 
 @implementation YTGabClueHelper
 
@@ -89,7 +90,7 @@
         return;
     }
     
-    [button setBackgroundImage:[UIImage imageNamed:@"clue_blank"] forState:UIControlStateNormal];
+    [button setBackgroundImage:[YTHelper imageNamed:@"clue_blank"] forState:UIControlStateNormal];
     [self.activityIndicator removeFromSuperview];
     [button addSubview:self.activityIndicator];
     [self.activityIndicator startAnimating];
@@ -144,7 +145,7 @@
     
     // Header background
     
-    UIImageView *hdrImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"clue_header"]];
+    UIImageView *hdrImage = [[UIImageView alloc] initWithImage:[YTHelper imageNamed:@"clue_header"]];
     hdrImage.frame = CGRectMake(0, 0, width, 44);
     [sheetView addSubview:hdrImage];
 
@@ -194,7 +195,7 @@
             
             
         UIButton *button = [[UIButton alloc] init];
-        [button setBackgroundImage:[UIImage imageNamed:@"clue_hidden2"] forState:UIControlStateNormal];
+        [button setBackgroundImage:[YTHelper imageNamed:@"clue_hidden2"] forState:UIControlStateNormal];
         button.frame = CGRectMake(0,0,60,60);
         button.tag = 100 + k;
         button.layer.masksToBounds = YES;
@@ -225,7 +226,7 @@
     
     UIButton *buyButton = [[UIButton alloc] init];
     buyButton.tag = 11;
-    [buyButton setBackgroundImage:[UIImage imageNamed:@"clue_button"] forState:UIControlStateNormal];
+    [buyButton setBackgroundImage:[YTHelper imageNamed:@"clue_button"] forState:UIControlStateNormal];
     frame.origin.y = height;
     frame.size.width = 278;
     frame.size.height = 45;
@@ -247,7 +248,7 @@
     
     UIButton *cancelButton = [[UIButton alloc] init];
     cancelButton.tag = 12;
-    [cancelButton setBackgroundImage:[UIImage imageNamed:@"clue_button"] forState:UIControlStateNormal];
+    [cancelButton setBackgroundImage:[YTHelper imageNamed:@"clue_button"] forState:UIControlStateNormal];
     frame.origin.y = height;
     frame.size.width = 278;
     frame.size.height = 45;
@@ -311,7 +312,7 @@
     }
 
     label.text = parsed[@"text"];
-    [button setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"clue_hidden2"]];
+    [button setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[YTHelper imageNamed:@"clue_hidden2"]];
 
 }
 

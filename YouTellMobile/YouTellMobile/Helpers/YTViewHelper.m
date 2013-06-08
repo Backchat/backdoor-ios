@@ -28,14 +28,14 @@
     YTAppDelegate *delegate = [YTAppDelegate current];
     
     
-    [[UIBarButtonItem appearance] setBackgroundImage:[[UIImage imageNamed:@"baritem4"] resizableImageWithCapInsets:UIEdgeInsetsMake(5,5,5,5)] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[UIImage imageNamed:@"backbaritem4"] resizableImageWithCapInsets:UIEdgeInsetsMake(15,15,15,5)] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UIBarButtonItem appearance] setBackgroundImage:[[YTHelper imageNamed:@"baritem4"] resizableImageWithCapInsets:UIEdgeInsetsMake(5,5,5,5)] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[YTHelper imageNamed:@"backbaritem4"] resizableImageWithCapInsets:UIEdgeInsetsMake(15,15,15,5)] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [[UIBarButtonItem appearance] setTintColor:[UIColor clearColor]];
     
     delegate.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     delegate.usesSplitView = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
     delegate.navController = [UINavigationController new];
-    [delegate.navController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar3"] forBarMetrics:UIBarMetricsDefault];
+    [delegate.navController.navigationBar setBackgroundImage:[YTHelper imageNamed:@"navbar3"] forBarMetrics:UIBarMetricsDefault];
     
     delegate.window.backgroundColor = [UIColor colorWithRed:0x44/255.0 green:0x8d/255.0 blue:0x1f/255.0 alpha:1];
 

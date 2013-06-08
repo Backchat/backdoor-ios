@@ -11,6 +11,7 @@
 #import "YTContactsViewController.h"
 #import "YTSocialHelper.h"
 #import "YTGPPHelper.h"
+#import "YTHelper.h"
 
 #define HEIGHT 30.0f
 #define PADDING 12.0f
@@ -199,7 +200,7 @@
     
     if ([ident isEqualToString:@"cell_social"]) {
         
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gpp_tableitem2"]];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[YTHelper imageNamed:@"gpp_tableitem2"]];
         
         UILabel *label = [UILabel new];
         

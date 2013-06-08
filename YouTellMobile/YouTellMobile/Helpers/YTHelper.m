@@ -174,4 +174,9 @@
     return ret;
 }
 
++ (UIImage *)imageNamed:(NSString *)imageName
+{
+    return [UIImage imageNamed:imageName];
+}
+
 @end

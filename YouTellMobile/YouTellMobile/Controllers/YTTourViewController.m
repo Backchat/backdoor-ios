@@ -9,6 +9,8 @@
 #import "YTAppDelegate.h"
 #import "YTFBHelper.h"
 #import "YTGPPHelper.h"
+#import "YTHelper.h"
+
 
 #define PAGE_COUNT 3
 
@@ -48,7 +50,7 @@
     
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.frame = frame;
-    imageView.image = [UIImage imageNamed:imageName];
+    imageView.image = [YTHelper imageNamed:imageName];
     imageView.contentMode = UIViewContentModeTop;
     
     if (page == 2) {
@@ -60,12 +62,12 @@
         frame.origin.y = 300;
         
         if (isfb) {
-            [shareButton setBackgroundImage:[[UIImage imageNamed:@"fbsharebtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)] forState:UIControlStateNormal];
+            [shareButton setBackgroundImage:[[YTHelper imageNamed:@"fbsharebtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)] forState:UIControlStateNormal];
             [shareButton setTitle:NSLocalizedString(@"Share on Facebook", nil) forState:UIControlStateNormal];
             frame.size.height = 50;
 
         } else {
-            [shareButton setBackgroundImage:[[UIImage imageNamed:@"tour_gpp_button"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 25, 25, 25)] forState:UIControlStateNormal];
+            [shareButton setBackgroundImage:[[YTHelper imageNamed:@"tour_gpp_button"] resizableImageWithCapInsets:UIEdgeInsetsMake(25, 25, 25, 25)] forState:UIControlStateNormal];
             [shareButton setTitle:NSLocalizedString(@"Share on Google+", nil) forState:UIControlStateNormal];
             frame.size.height = 67;
         }
@@ -104,7 +106,7 @@
     [super viewDidLoad];
     
     UIImageView *background = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    background.image = [UIImage imageNamed:@"background2"];
+    background.image = [YTHelper imageNamed:@"background2"];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     

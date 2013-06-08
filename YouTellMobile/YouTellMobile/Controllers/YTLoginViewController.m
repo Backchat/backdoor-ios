@@ -14,6 +14,7 @@
 #import "YTGPPHelper.h"
 #import "YTLoginButton.h"
 #import "YTConfig.h"
+#import "YTHelper.h"
 
 @implementation YTLoginViewController
 
@@ -99,11 +100,11 @@
     self.imageView = [[UIImageView alloc] initWithFrame:frame];
     self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.imageView.userInteractionEnabled = YES;
-    self.imageView.image = [UIImage imageNamed:@"signin2"];
+    self.imageView.image = [YTHelper imageNamed:@"signin2"];
 
     
     
-    UIImage *logoImage = [UIImage imageNamed:@"signin"];
+    UIImage *logoImage = [YTHelper imageNamed:@"signin"];
     self.logoView = [[UIImageView alloc] initWithImage:logoImage];
     self.logoView.frame = CGRectMake((frame.size.width - logoImage.size.width) / 2, 40, logoImage.size.width, logoImage.size.height);
     self.logoView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
