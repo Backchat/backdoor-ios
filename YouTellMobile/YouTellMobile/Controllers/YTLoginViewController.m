@@ -14,6 +14,7 @@
 #import "YTGPPHelper.h"
 #import "YTLoginButton.h"
 #import "YTConfig.h"
+#import "YTHelper.h"
 
 @implementation YTLoginViewController
 
@@ -99,11 +100,11 @@
     self.imageView = [[UIImageView alloc] initWithFrame:frame];
     self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.imageView.userInteractionEnabled = YES;
-    self.imageView.image = [UIImage imageNamed:@"signin2.png"];
+    self.imageView.image = [YTHelper imageNamed:@"signin2"];
 
     
     
-    UIImage *logoImage = [UIImage imageNamed:@"signin.png"];
+    UIImage *logoImage = [YTHelper imageNamed:@"signin"];
     self.logoView = [[UIImageView alloc] initWithImage:logoImage];
     self.logoView.frame = CGRectMake((frame.size.width - logoImage.size.width) / 2, 40, logoImage.size.width, logoImage.size.height);
     self.logoView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -123,11 +124,15 @@
     label.frame = labelFrame;
     
     self.gppButton = [[YTLoginButton alloc] initWithType:@"google"];
-    self.gppButton.frame = CGRectMake((frame.size.width - BUTTON_WIDTH) / 2.0f, frame.size.height  - BUTTON_HEIGHT - 30, BUTTON_WIDTH, BUTTON_HEIGHT);
+    int TOP_HEIGHT = 265; //approx logo height hand tuned
+    int top_button = ((self.view.frame.size.height - TOP_HEIGHT) - (BUTTON_HEIGHT*2+8))/2.0 + TOP_HEIGHT; 
+    
+    self.gppButton.frame = CGRectMake((frame.size.width - BUTTON_WIDTH) / 2.0f, top_button, BUTTON_WIDTH, BUTTON_HEIGHT);
     [self.gppButton addTarget:self action:@selector(gppButtonWasPressed:) forControlEvents:UIControlEventTouchUpInside];
 
     self.button = [[YTLoginButton alloc] initWithType:@"facebook"];
-    self.button.frame = CGRectMake((frame.size.width - BUTTON_WIDTH) / 2.0f, frame.size.height  - 2 * BUTTON_HEIGHT - 32, BUTTON_WIDTH, BUTTON_HEIGHT);
+    //32 is the margin between buttons
+    self.button.frame = CGRectMake((frame.size.width - BUTTON_WIDTH) / 2.0f, top_button + BUTTON_HEIGHT + 8, BUTTON_WIDTH, BUTTON_HEIGHT);
     [self.button addTarget:self action:@selector(loginButtonWasPressed:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:self.imageView];

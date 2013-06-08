@@ -116,8 +116,8 @@
         BOOL gabSent = ![[self.gab valueForKey:@"sent"] isEqualToNumber:@0];
         
         if (!gabSent) {
-            [self.inputView.sendButton setBackgroundImage:[[UIImage imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateNormal];
-            [self.inputView.sendButton setBackgroundImage:[[UIImage imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateDisabled];
+            [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateNormal];
+            [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateDisabled];
         }
         
         [YTApiHelper autoSync:YES];
@@ -271,7 +271,7 @@
     //[self setBackgroundColor:[UIColor colorWithRed:0xfc/255.0 green:0xfc/255.0 blue:0xfc/255.0 alpha:1]];
     [self setBackgroundColor:[UIColor colorWithRed:0xed/255.0 green:0xec/255.0 blue:0xec/255.0 alpha:1]];
     
-    self.inputView.image = [[UIImage imageNamed:@"inputview3.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
+    self.inputView.image = [[YTHelper imageNamed:@"inputview3"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
     self.inputView.textView.layer.cornerRadius = 10;
     self.inputView.textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
     self.inputView.textView.layer.borderWidth = 1;

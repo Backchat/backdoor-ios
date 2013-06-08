@@ -8,6 +8,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "YTLoginButton.h"
+#import "YTHelper.h"
 
 
 @implementation YTLoginButton
@@ -25,8 +26,8 @@
     
     if ([type isEqualToString:@"facebook"]) {
         
-        [self setBackgroundImage:[[UIImage imageNamed:@"btn_white_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateNormal];
-        [self setBackgroundImage:[[UIImage imageNamed:@"btn_white_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateHighlighted];
+        [self setBackgroundImage:[[YTHelper imageNamed:@"btn_white_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateNormal];
+        [self setBackgroundImage:[[YTHelper imageNamed:@"btn_white_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateHighlighted];
 
         [self setTitle:NSLocalizedString(@"Sign in with Facebook", nil) forState:UIControlStateNormal];
         [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -36,9 +37,9 @@
 
         [self setTitle:NSLocalizedString(@"Sign in with Google", nil) forState:UIControlStateNormal];
         
-        [self setBackgroundImage:[[UIImage imageNamed:@"btn_black_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateNormal];
+        [self setBackgroundImage:[[YTHelper imageNamed:@"btn_black_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateNormal];
         
-        [self setBackgroundImage:[[UIImage imageNamed:@"btn_black_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateHighlighted];
+        [self setBackgroundImage:[[YTHelper imageNamed:@"btn_black_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateHighlighted];
         
         [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 
