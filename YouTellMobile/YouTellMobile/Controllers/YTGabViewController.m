@@ -26,6 +26,7 @@
 #import "YTWebViewController.h"
 #import "YTPhotoViewController.h"
 #import "YTHelper.h"
+#import "YTFBHelper.h"
 #import "YTGabMessage.h"
 
 @interface YTGabViewController ()
@@ -432,13 +433,11 @@
                                                                    delegate:self
                                                           cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                                           otherButtonTitles:NSLocalizedString(@"Invite", nil), nil];
-                    [alert show];
-                    //at this point, some number of messages may be queued.
-                    //we need to empty the unsent queue and cache messages.
-                    //LINREVIEW is that the right UX?
-                    [self.queuedMessages removeAllObjects];
-                    //TODO remove [self.gab];
-                    [YTViewHelper refreshViews];
+
+                    alert.delegate = self;
+
+                    [alert show];                    
+                    
                     /*
                      UIAlertView *alert = [[UIAlertView alloc]
                      initWithTitle: NSLocalizedString(@"New message", nil)
@@ -465,6 +464,47 @@
                           }];
         }
     }
+}
+
+//TODO DRY this up and make it less ugly. we shouldn't use a delay and we should
+//add a block to the main thread
+
+- (void) showFBRequest
+{    
+    NSDictionary *contact = self.sendHelper.contactWidget.selectedContact;
+    [YTFBHelper presentRequestDialogWithContact:contact[@"value"] complete:^{
+        [self dismiss];
+    }];
+}
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{    
+    //at this point, some number of messages may be queued.
+    //we need to empty the unsent queue and cache messages.
+    //LINREVIEW is that the right UX?
+        
+    [self.queuedMessages removeAllObjects];
+    [YTApiHelper deleteGab:[self.gab valueForKey:@"id"] success:nil];
+    [YTViewHelper refreshViews];
+    
+    if(buttonIndex == 1) {
+        //"invite"
+        if ([[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"]) {
+            [self.inputView.textView resignFirstResponder]; //LINREVIEW brittle, no abstraction here
+            
+            //a half second delay is needed because of animation issues
+            [self performSelector:@selector(showFBRequest) withObject:nil afterDelay:0.5];
+        
+        } else {        
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"Sending messages to unregistered Google+ friends is not supported yet", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
+            [alert show];
+            [self dismiss];            
+        }
+    }
+    else {
+        [self dismiss];        
+    }
+
 }
 
 - (NSMutableDictionary *)buildParamsFromContactData:(NSDictionary*)contact andParams:(NSDictionary*)params
