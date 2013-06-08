@@ -51,35 +51,6 @@
     return self;
 }
 
-# pragma mark UIAlertViewDelegate methods
-
-- (void)sendRequest
-{
-    if ([[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"]) {
-        
-        NSDictionary *contact = self.contactWidget.selectedContact;
-
-        [YTFBHelper presentRequestDialogWithContact:contact[@"value"] complete:^{
-            [self.gabView dismiss];
-        }];
-        
-    } else {
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"Sending messages to unregistered Google+ friends is not supported yet", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
-        [alert show];
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == alertView.cancelButtonIndex) {
-        return;
-    }
-    
-
-    [self performSelector:@selector(sendRequest) withObject:nil afterDelay:0.5];
-}
-
 # pragma mark YTContactsViewDelegate methods
 
 - (void)changedSelectedContact:(NSDictionary *)contact
