@@ -342,7 +342,7 @@
 		B2225F2417456E4400A47F28 /* fc_facebook_active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fc_facebook_active@2x.png"; sourceTree = "<group>"; };
 		B2225F2517456E4400A47F28 /* fc_facebook_inactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fc_facebook_inactive.png; sourceTree = "<group>"; };
 		B2225F2617456E4400A47F28 /* fc_facebook_inactive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fc_facebook_inactive@2x.png"; sourceTree = "<group>"; };
-		B24038FD16F080F9000632AA /* YouTellMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouTellMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B24038FD16F080F9000632AA /* Backdoor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Backdoor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B240390016F080F9000632AA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B240390216F080F9000632AA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B240390416F080F9000632AA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -689,7 +689,7 @@
 		B24038FE16F080F9000632AA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B24038FD16F080F9000632AA /* YouTellMobile.app */,
+				B24038FD16F080F9000632AA /* Backdoor.app */,
 				B240392616F080FA000632AA /* YouTellMobileTests.octest */,
 			);
 			name = Products;
@@ -1204,9 +1204,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B24038FC16F080F9000632AA /* YouTellMobile */ = {
+		B24038FC16F080F9000632AA /* Backdoor */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B240393816F080FA000632AA /* Build configuration list for PBXNativeTarget "YouTellMobile" */;
+			buildConfigurationList = B240393816F080FA000632AA /* Build configuration list for PBXNativeTarget "Backdoor" */;
 			buildPhases = (
 				B24038F916F080F9000632AA /* Sources */,
 				B24038FA16F080F9000632AA /* Frameworks */,
@@ -1217,14 +1217,14 @@
 			);
 			dependencies = (
 			);
-			name = YouTellMobile;
+			name = Backdoor;
 			productName = YouTellMobile;
-			productReference = B24038FD16F080F9000632AA /* YouTellMobile.app */;
+			productReference = B24038FD16F080F9000632AA /* Backdoor.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B240392516F080FA000632AA /* YouTellMobileTests */ = {
+		B240392516F080FA000632AA /* BackdoorTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B240393B16F080FA000632AA /* Build configuration list for PBXNativeTarget "YouTellMobileTests" */;
+			buildConfigurationList = B240393B16F080FA000632AA /* Build configuration list for PBXNativeTarget "BackdoorTests" */;
 			buildPhases = (
 				B240392116F080FA000632AA /* Sources */,
 				B240392216F080FA000632AA /* Frameworks */,
@@ -1236,7 +1236,7 @@
 			dependencies = (
 				B240392C16F080FA000632AA /* PBXTargetDependency */,
 			);
-			name = YouTellMobileTests;
+			name = BackdoorTests;
 			productName = YouTellMobileTests;
 			productReference = B240392616F080FA000632AA /* YouTellMobileTests.octest */;
 			productType = "com.apple.product-type.bundle";
@@ -1282,8 +1282,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				B24038FC16F080F9000632AA /* YouTellMobile */,
-				B240392516F080FA000632AA /* YouTellMobileTests */,
+				B24038FC16F080F9000632AA /* Backdoor */,
+				B240392516F080FA000632AA /* BackdoorTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1617,7 +1617,7 @@
 /* Begin PBXTargetDependency section */
 		B240392C16F080FA000632AA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B24038FC16F080F9000632AA /* YouTellMobile */;
+			target = B24038FC16F080F9000632AA /* Backdoor */;
 			targetProxy = B240392B16F080FA000632AA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1748,7 +1748,7 @@
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "DEBUG=1";
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = YouTellMobile;
+				PRODUCT_NAME = Backdoor;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1768,7 +1768,7 @@
 				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "";
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = YouTellMobile;
+				PRODUCT_NAME = Backdoor;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1822,7 +1822,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B240393816F080FA000632AA /* Build configuration list for PBXNativeTarget "YouTellMobile" */ = {
+		B240393816F080FA000632AA /* Build configuration list for PBXNativeTarget "Backdoor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B240393916F080FA000632AA /* Debug */,
@@ -1831,7 +1831,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B240393B16F080FA000632AA /* Build configuration list for PBXNativeTarget "YouTellMobileTests" */ = {
+		B240393B16F080FA000632AA /* Build configuration list for PBXNativeTarget "BackdoorTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B240393C16F080FA000632AA /* Debug */,
