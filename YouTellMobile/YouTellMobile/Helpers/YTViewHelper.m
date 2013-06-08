@@ -230,11 +230,21 @@
 
 + (void)showNetworkErrorAlert
 {
+    static bool showing = false;
+    
+    if(showing)
+        return;
+    
+    showing = true;
     UIView* view = [YTAppDelegate current].navController.view;
     WBErrorNoticeView *notice = [WBErrorNoticeView errorNoticeInView:view
-                                                               title:NSLocalizedString(@"Network error", nil)
-                                                             message:NSLocalizedString(@"Unable to connect with Backdoor server. Please check your data connection", nil)];
+                                                               title:NSLocalizedString(@"Network error", nil)                                                             message:NSLocalizedString(@"Unable to connect with Backdoor server. Please check your data connection", nil)];
     notice.sticky = YES;
+    [notice setDismissalBlock:^(BOOL dismiss) {
+        //showing = false;
+        return;
+    }];
+
     notice.originY = [UIApplication sharedApplication].statusBarFrame.size.height;
     
     [notice show];
