@@ -21,7 +21,7 @@
 #import <CoreData/CoreData.h>
 
 
-@interface YTGabViewController : JSMessagesViewController <UINavigationControllerDelegate, UIBubbleTableViewDataSource>
+@interface YTGabViewController : JSMessagesViewController <UINavigationControllerDelegate, UIBubbleTableViewDataSource, UIAlertViewDelegate>
 
 @property (strong, nonatomic) YTGabPhotoHelper *photoHelper;
 @property (strong, nonatomic) YTGabClueHelper *clueHelper;

@@ -263,7 +263,10 @@
         params[@"to"] = contact;
     }
     
-    [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:NSLocalizedString(@"Try Backdoor! It's a fun new way to anonymously message your friends", nil)  title:nil  parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+    [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:NSLocalizedString(@"Try Backdoor! It's a fun new way to anonymously message your friends", nil)  title:nil  parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {        
+        if (complete) {
+            complete();
+        }
         
         if (error != nil) {
             NSLog(@"%@", error.debugDescription);
@@ -275,13 +278,12 @@
         }
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"Your invitation has been sent", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+      
         [alert show];
         
         [YTApiHelper getFreeCluesWithReason:@"fbinvite"];
 
-        if (complete) {
-            complete();
-        }
+
     }];
 }
 
