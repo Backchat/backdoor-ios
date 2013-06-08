@@ -25,6 +25,7 @@
 + (NSString *)md5FromString:(NSString*)string;
 + (NSString*)randString:(NSInteger)length;
 
++ (UIImage *)imageNamed:(NSString *)imageName;
 + (void)simpleAlertWithTitle:(NSString*)title message:(NSString*)message;
 + (BOOL)appStoreEnvironment;
 + (BOOL)simulatedEnvironment;
