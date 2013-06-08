@@ -1740,8 +1740,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8A8F36B8198B40769F476A03 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "CONFIGURATION_$(CONFIGURATION)";
@@ -1749,8 +1749,8 @@
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = Backdoor;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "35D7DFF1-840C-47C8-89BD-40A0E7B1643E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35D7DFF1-840C-47C8-89BD-40A0E7B1643E";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1760,8 +1760,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8A8F36B8198B40769F476A03 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "CONFIGURATION_$(CONFIGURATION)";
@@ -1769,8 +1769,8 @@
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = Backdoor;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "35D7DFF1-840C-47C8-89BD-40A0E7B1643E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35D7DFF1-840C-47C8-89BD-40A0E7B1643E";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
