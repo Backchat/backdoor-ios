@@ -175,7 +175,20 @@
 }
 
 + (UIImage *)imageNamed:(NSString *)imageName
-{
+{    
+    //are we on a iPhone5? if so, add the -568h
+    //we assume no extension ".png"
+    if  ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) &&
+         ([UIScreen mainScreen].bounds.size.height > 480.0f)) {
+        NSMutableString *imageNameMutable = [imageName mutableCopy];
+
+        [imageNameMutable appendString:@"-568h@2x"]; //iPhone5 must be retina
+        NSString *imagePath = [[NSBundle mainBundle] pathForResource:imageNameMutable ofType:@"png"];
+        if (imagePath) {
+            return [UIImage imageNamed:imageNameMutable];
+        }
+    }
+
     return [UIImage imageNamed:imageName];
 }
 
