@@ -162,8 +162,6 @@
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
             [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
-            NSLog(@"%@", JSON);
-            NSLog(@"%@", request);
             [YTViewHelper showNetworkErrorAlert];            
             
             if (failure != nil) {
