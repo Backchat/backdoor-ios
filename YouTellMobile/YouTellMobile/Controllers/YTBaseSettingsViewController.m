@@ -8,6 +8,7 @@
 #import "YTBaseSettingsViewController.h"
 #import "YTAppDelegate.h"
 #import "YTWebViewController.h"
+#import "YTHelper.h"
 
 @interface YTBaseSettingsViewController ()
 
@@ -71,7 +72,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     cell.textLabel.text =  item[1];
-    cell.imageView.image = [UIImage imageNamed:item[0]];
+    cell.imageView.image = [YTHelper imageNamed:item[0]];
     cell.backgroundColor = [UIColor clearColor];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     

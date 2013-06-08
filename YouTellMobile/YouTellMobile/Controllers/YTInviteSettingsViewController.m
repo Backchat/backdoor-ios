@@ -13,6 +13,8 @@
 #import "YTFBLikeButton.h"
 #import "YTTwitterHelper.h"
 #import "YTModelHelper.h"
+#import "YTHelper.h"
+
 
 @interface YTInviteSettingsViewController ()
 
@@ -83,8 +85,8 @@
     [shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     shareButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     [shareButton sizeToFit];
-    [shareButton setBackgroundImage:[[UIImage imageNamed:@"fc_facebook_inactive.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10,10,10,10)] forState:UIControlStateNormal];
-    [shareButton setBackgroundImage:[[UIImage imageNamed:@"fc_facebook_active.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10,10,10,10)] forState:UIControlStateNormal];
+    [shareButton setBackgroundImage:[[YTHelper imageNamed:@"fc_facebook_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(10,10,10,10)] forState:UIControlStateNormal];
+    [shareButton setBackgroundImage:[[YTHelper imageNamed:@"fc_facebook_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(10,10,10,10)] forState:UIControlStateNormal];
 
     [shareButton addTarget:self action:@selector(showFBShare) forControlEvents:UIControlEventTouchUpInside];
     frame = shareButton.frame;
@@ -141,8 +143,8 @@
     [tweetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     tweetButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     [tweetButton sizeToFit];
-    [tweetButton setBackgroundImage:[[UIImage imageNamed:@"fc_twitter_inactive.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)] forState:UIControlStateNormal];
-    [tweetButton setBackgroundImage:[[UIImage imageNamed:@"fc_twitter_active.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)] forState:UIControlStateHighlighted];
+    [tweetButton setBackgroundImage:[[YTHelper imageNamed:@"fc_twitter_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)] forState:UIControlStateNormal];
+    [tweetButton setBackgroundImage:[[YTHelper imageNamed:@"fc_twitter_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)] forState:UIControlStateHighlighted];
 
     [tweetButton addTarget:self action:@selector(showTweetSheet) forControlEvents:UIControlEventTouchUpInside];
     frame = tweetButton.frame;
@@ -154,8 +156,8 @@
     
     UIButton *gppButton = [[UIButton alloc] init];
     [gppButton setTitle:NSLocalizedString(@"Share on Google+", nil) forState:UIControlStateNormal];
-    [gppButton setBackgroundImage:[[UIImage imageNamed:@"fc_gpp_inactive.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateNormal];
-    [gppButton setBackgroundImage:[[UIImage imageNamed:@"fc_gpp_active.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateHighlighted];
+    [gppButton setBackgroundImage:[[YTHelper imageNamed:@"fc_gpp_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateNormal];
+    [gppButton setBackgroundImage:[[YTHelper imageNamed:@"fc_gpp_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)] forState:UIControlStateHighlighted];
     [gppButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     gppButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     [gppButton addTarget:self action:@selector(showGPPShare) forControlEvents:UIControlEventTouchUpInside];
