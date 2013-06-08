@@ -219,6 +219,7 @@
     NSMutableArray *group = nil;
     NSString *prevName = nil;
     NSArray *objects = [YTModelHelper findContactsWithString:string];
+    NSMutableArray *matchedNameCategory = [[NSMutableArray alloc] initWithObjects:@" ", [NSMutableArray new], nil];
     
     for (NSManagedObject* object in objects) {
         NSDictionary *dict = [object dictionaryWithValuesForKeys:[[[object entity] attributesByName] allKeys]];
@@ -227,25 +228,38 @@
         
         if ([dict[@"last_name"] length] == 0 && [dict[@"first_name"] length] == 0) {
             key = @" ";
-        } else if ([dict[@"first_name"] length] > 0) {
-            key = [[dict[@"first_name"] substringToIndex:1] uppercaseString];
-        } else {
+        } else if ([dict[@"last_name"] length] > 0) {
             key = [[dict[@"last_name"] substringToIndex:1] uppercaseString];
+        } else {
+            key = [[dict[@"first_name"] substringToIndex:1] uppercaseString];
         }
         
-        if (category == nil || ![key isEqualToString:category[0]]) {
-            category = [[NSMutableArray alloc] initWithObjects:key, [NSMutableArray new], nil];
-            [categories addObject:category];
-        }
-        
-        if (prevName == nil || ![prevName isEqualToString:name] || !grouped) {
+        if ([name hasPrefix:[string lowercaseString]]) {
+            
             group = [NSMutableArray new];
-            [category[1] addObject:group];
+            [matchedNameCategory[1] addObject:group];
+            
+        } else {
+        
+            if (category == nil || ![key isEqualToString:category[0]]) {
+                category = [[NSMutableArray alloc] initWithObjects:key, [NSMutableArray new], nil];
+                [categories addObject:category];
+            }
+        
+            if (prevName == nil || ![prevName isEqualToString:name] || !grouped) {
+                group = [NSMutableArray new];
+                [category[1] addObject:group];
+            }
+            
         }
         
         [group addObject:dict];
         prevName = name;
     };
+    
+    if ([matchedNameCategory[1] count] > 0) {
+        [categories insertObject:matchedNameCategory atIndex:0];
+    }
     
     return categories;    
 }

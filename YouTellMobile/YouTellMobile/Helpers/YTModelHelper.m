@@ -568,9 +568,9 @@
         request.predicate = [NSPredicate predicateWithFormat:@"(name CONTAINS[cd] %@)", string];
     }
     
-    //NSSortDescriptor *lastNameSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
+    NSSortDescriptor *lastNameSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
     NSSortDescriptor *nameSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
-    request.sortDescriptors = @[nameSortDescriptor];
+    request.sortDescriptors = @[lastNameSortDescriptor, nameSortDescriptor];
     
     NSError *error;
     return [context executeFetchRequest:request error:&error];
