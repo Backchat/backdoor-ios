@@ -31,19 +31,19 @@
 
     self.tableData = @[
         @[
-            @[@"icon_notifications3.png", NSLocalizedString(@"Notifications", nil), @"showNotifications"]
+            @[@"icon_notifications3", NSLocalizedString(@"Notifications", nil), @"showNotifications"]
         ],
         @[
-            @[@"icon_facebook3.png", freeCluesTitle, @"showInvite"]
+            @[@"icon_facebook3", freeCluesTitle, @"showInvite"]
         ], @[
             /*@[@"icon_account2.png", NSLocalizedString(@"Your Account", nil), @"showYourAccount"],*/
-            @[@"icon_privacy3.png", NSLocalizedString(@"Privacy & Abuse", nil), @"showPrivacy"]
+            @[@"icon_privacy3", NSLocalizedString(@"Privacy & Abuse", nil), @"showPrivacy"]
         ],  /*@[
             @[@"icon_chat2.png", NSLocalizedString(@"Chat Settings", nil), @"showChatSettings"]
         ] @[
             @[@"icon_lang2.png", NSLocalizedString(@"Language", nil), @"showLanguage"]
         ], */ @[
-            @[@"icon_help3.png", NSLocalizedString(@"Help & About Us", nil), @"showHelp"]
+            @[@"icon_help3", NSLocalizedString(@"Help & About Us", nil), @"showHelp"]
         ]
     ];
     

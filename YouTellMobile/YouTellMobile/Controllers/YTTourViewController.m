@@ -60,7 +60,7 @@
         frame.origin.y = 300;
         
         if (isfb) {
-            [shareButton setBackgroundImage:[[UIImage imageNamed:@"fbsharebtn.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)] forState:UIControlStateNormal];
+            [shareButton setBackgroundImage:[[UIImage imageNamed:@"fbsharebtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)] forState:UIControlStateNormal];
             [shareButton setTitle:NSLocalizedString(@"Share on Facebook", nil) forState:UIControlStateNormal];
             frame.size.height = 50;
 
@@ -104,7 +104,7 @@
     [super viewDidLoad];
     
     UIImageView *background = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    background.image = [UIImage imageNamed:@"background2.png"];
+    background.image = [UIImage imageNamed:@"background2"];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     

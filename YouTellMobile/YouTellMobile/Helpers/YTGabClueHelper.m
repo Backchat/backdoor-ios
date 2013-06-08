@@ -194,7 +194,7 @@
             
             
         UIButton *button = [[UIButton alloc] init];
-        [button setBackgroundImage:[UIImage imageNamed:@"clue_hidden2.png"] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"clue_hidden2"] forState:UIControlStateNormal];
         button.frame = CGRectMake(0,0,60,60);
         button.tag = 100 + k;
         button.layer.masksToBounds = YES;

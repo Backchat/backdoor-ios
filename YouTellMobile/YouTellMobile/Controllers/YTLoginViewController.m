@@ -99,11 +99,11 @@
     self.imageView = [[UIImageView alloc] initWithFrame:frame];
     self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.imageView.userInteractionEnabled = YES;
-    self.imageView.image = [UIImage imageNamed:@"signin2.png"];
+    self.imageView.image = [UIImage imageNamed:@"signin2"];
 
     
     
-    UIImage *logoImage = [UIImage imageNamed:@"signin.png"];
+    UIImage *logoImage = [UIImage imageNamed:@"signin"];
     self.logoView = [[UIImageView alloc] initWithImage:logoImage];
     self.logoView.frame = CGRectMake((frame.size.width - logoImage.size.width) / 2, 40, logoImage.size.width, logoImage.size.height);
     self.logoView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;

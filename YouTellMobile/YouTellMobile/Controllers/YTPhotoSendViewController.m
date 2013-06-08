@@ -28,7 +28,7 @@
     // Do any additional setup after loading the view from its nib.
     self.sendButton.title = NSLocalizedString(@"Send", nil);
     self.cancelButton.title = NSLocalizedString(@"Cancel", nil);
-    [self.toolbar setBackgroundImage:[UIImage imageNamed:@"navbar3.png"] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    [self.toolbar setBackgroundImage:[UIImage imageNamed:@"navbar3"] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
 
 }
 

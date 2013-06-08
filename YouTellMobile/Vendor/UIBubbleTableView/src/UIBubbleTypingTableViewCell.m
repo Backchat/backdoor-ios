@@ -40,12 +40,12 @@
     
     if (value == NSBubbleTypingTypeMe)
     {
-        bubbleImage = [UIImage imageNamed:@"typingMine.png"]; 
+        bubbleImage = [UIImage imageNamed:@"typingMine"]; 
         x = self.frame.size.width - bubbleImage.size.width;
     }
     else
     {
-        bubbleImage = [UIImage imageNamed:@"typingSomeone.png"]; 
+        bubbleImage = [UIImage imageNamed:@"typingSomeone"]; 
         x = 0;
     }
     

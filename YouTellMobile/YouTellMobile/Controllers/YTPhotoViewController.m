@@ -49,7 +49,7 @@
     [self.imageView setImageWithURL:self.url completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
         [self.indicator stopAnimating];
     }];
-    [self.toolbar setBackgroundImage:[UIImage imageNamed:@"navbar.png"] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+    [self.toolbar setBackgroundImage:[UIImage imageNamed:@"navbar"] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     
     // Do any additional setup after loading the view from its nib.
 }

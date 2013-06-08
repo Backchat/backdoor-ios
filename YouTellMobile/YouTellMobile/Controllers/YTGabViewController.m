@@ -271,7 +271,7 @@
     //[self setBackgroundColor:[UIColor colorWithRed:0xfc/255.0 green:0xfc/255.0 blue:0xfc/255.0 alpha:1]];
     [self setBackgroundColor:[UIColor colorWithRed:0xed/255.0 green:0xec/255.0 blue:0xec/255.0 alpha:1]];
     
-    self.inputView.image = [[UIImage imageNamed:@"inputview3.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
+    self.inputView.image = [[UIImage imageNamed:@"inputview3"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
     self.inputView.textView.layer.cornerRadius = 10;
     self.inputView.textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
     self.inputView.textView.layer.borderWidth = 1;

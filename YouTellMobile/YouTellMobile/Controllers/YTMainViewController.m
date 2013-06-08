@@ -105,7 +105,7 @@
     [cell.contentView addSubview:detTextLabel];
     cell.detailTextLabel.textColor = [UIColor clearColor];
     
-    UIImage *image = [UIImage imageNamed:@"newgab.png"];
+    UIImage *image = [UIImage imageNamed:@"newgab"];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     imageView.tag = 4;
     [cell.contentView addSubview:imageView];
@@ -122,7 +122,7 @@
 {
     [super viewDidLoad];
  
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings.png"] style:UIBarButtonItemStyleBordered target:[YTViewHelper class] action:@selector(showSettings)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:[YTViewHelper class] action:@selector(showSettings)];
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonWasClicked)];
     
@@ -131,14 +131,14 @@
     self.searchBar = [UISearchBar new];
     [self.searchBar sizeToFit];
     self.searchBar.delegate = self;
-    self.searchBar.backgroundImage = [UIImage imageNamed:@"navbar3.png"];
+    self.searchBar.backgroundImage = [UIImage imageNamed:@"navbar3"];
     self.tableView.tableHeaderView = self.searchBar;
     
     self.refreshControl = [UIRefreshControl new];
     [self.refreshControl addTarget:self action:@selector(refreshWasRequested) forControlEvents:UIControlEventValueChanged];
     
    // self.title = NSLocalizedString(@"Backdoor", nil);
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navbartitle4.png"]];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"navbartitle4"]];
     self.view.backgroundColor = [UIColor whiteColor];
 
 
@@ -271,7 +271,7 @@
     [avatarView removeFromSuperview];
     [cell addSubview:avatarView];
     
-    [avatarView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"related_avatar"]] placeholderImage:[UIImage imageNamed:@"avatar6.png"] options:SDWebImageRefreshCached];
+    [avatarView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"related_avatar"]] placeholderImage:[UIImage imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
 
     return cell;
 }
@@ -292,10 +292,10 @@
     
     if ([user[@"type"] isEqualToString:@"facebook"]) {
         NSString *urls = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", user[@"value"]];
-        [avatarView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[UIImage imageNamed:@"avatar6.png"] options:SDWebImageRefreshCached];
+        [avatarView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[UIImage imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
     } else if ([user[@"type"] isEqualToString:@"gpp"]) {
         NSString *urls = [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=50", user[@"value"]];
-        [avatarView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[UIImage imageNamed:@"avatar6.png"] options:SDWebImageRefreshCached];
+        [avatarView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[UIImage imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
     } else {
         [avatarView setImage:nil];
     }
