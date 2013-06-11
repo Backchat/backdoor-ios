@@ -243,6 +243,10 @@
         params[@"gab_id"] = delegate.currentMainViewController.selectedGabId;
     }
     
+    if (delegate.currentGabViewController && delegate.currentGabViewController.gab) {
+        params[@"gab_id"] = [delegate.currentGabViewController.gab valueForKey:@"id"];
+    }
+    
     [YTApiHelper sendJSONRequestToPath:@"/sync" method:@"POST" params:params success:^(id JSON) {
         [delegate.autoSyncLock unlock];
         [YTViewHelper refreshViews];
