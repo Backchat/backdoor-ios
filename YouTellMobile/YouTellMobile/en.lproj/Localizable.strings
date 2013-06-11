@@ -230,6 +230,9 @@
 "Sending messages to unregistered Google+ friends is not supported yet" = "Sending messages to unregistered Google+ friends is not supported yet";
 
 /* No comment provided by engineer. */
+"Share with Friends" = "Share with Friends";
+
+/* No comment provided by engineer. */
 "Share on Facebook" = "Share on Facebook";
 
 /* No comment provided by engineer. */
@@ -258,6 +261,18 @@
 
 /* No comment provided by engineer. */
 "Tag conversation" = "Tag conversation";
+
+/* No comment provided by engineer. */
+"Sound" = "Sound";
+
+/* No comment provided by engineer. */
+"Message Preview" = "Message Preview";
+
+/* No comment provided by engineer. */
+"Play a sound when a new message is received" = "Play a sound when a new message is received"
+
+/* No comment provided by engineer. */
+"Show message preview inside new\nmessage notifications" = "Show message preview inside new\nmessage notifications"
 
 /* No comment provided by engineer. */
 "Take photo" = "Take photo";

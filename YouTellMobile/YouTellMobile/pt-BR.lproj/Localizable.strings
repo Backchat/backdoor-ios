@@ -35,7 +35,7 @@
 "Buy clues" = "Comprar pistas";
 
 /* No comment provided by engineer. */
-"Cancel" = "Cancela";
+"Cancel" = "Cancelar";
 
 /* No comment provided by engineer. */
 "Cannot connect with iTunes store" = "Não Consigo conecta com a loja do iTunes";
@@ -50,7 +50,7 @@
 "Checking for updates" = "Checking for updates";
 
 /* No comment provided by engineer. */
-"Choose existing" = "Escolhe o existente";
+"Choose existing" = "Escolher existente";
 
 /* No comment provided by engineer. */
 "Choose saved" = "Escolhe salvo";
@@ -185,13 +185,13 @@
 "No, thanks" = "Não, obrigado";
 
 /* No comment provided by engineer. */
-"Notifications" = "Notifications";
+"Notifications" = "Notificações";
 
 /* No comment provided by engineer. */
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"Please be as descriptive as possible\nand we will do our best\nto block the offender. Thank you." = "Please be as descriptive as possible\nand we will do our best\nto block the offender. Thank you.";
+"Please be as descriptive as possible\nand we will do our best\nto block the offender. Thank you." = "Por favor seja o mais descritível possível e nós iremos fazer nosso melhor para BLOQUEAR o  ofensor. Obrigado.";
 
 /* No comment provided by engineer. */
 "Please enter phone number of your friend" = "Por favor colocar o número de telefone do seu amigo";
@@ -215,7 +215,7 @@
 "Requesting clue" = "Solicitando pista";
 
 /* No comment provided by engineer. */
-"Save" = "Save";
+"Save" = "Salvar";
 
 /* No comment provided by engineer. */
 "School" = "School";
@@ -224,10 +224,25 @@
 "Send" = "Enviar";
 
 /* No comment provided by engineer. */
+"Sound" = "Som";
+
+/* No comment provided by engineer. */
+"Message Preview" = "Visualização de Mensagem";
+
+/* No comment provided by engineer. */
+"Play a sound when a new message is received" = "Tocar um som quando receber uma nova mensagem"
+
+/* No comment provided by engineer. */
+"Show message preview inside new\nmessage notifications" = "Mostrar Visualização de Mensagens dentro de Notificações de Novas Mensagens"
+
+/* No comment provided by engineer. */
 "Send and receive anonymous feedback" = "Enviar e receber mensagem anônimo";
 
 /* No comment provided by engineer. */
 "Sending messages to unregistered Google+ friends is not supported yet" = "Sending messages to unregistered Google+ friends is not supported yet";
+
+/* No comment provided by engineer. */
+"Share with Friends" = "Compartilhar com Amigos";
 
 /* No comment provided by engineer. */
 "Share on Facebook" = "Compartilhar no Facebook";
@@ -260,7 +275,7 @@
 "Tag conversation" = "Tag conversation";
 
 /* No comment provided by engineer. */
-"Take photo" = "Tira foto";
+"Take photo" = "Tirar foto";
 
 /* No comment provided by engineer. */
 "Terms of Service" = "Termos de serviço";
@@ -290,7 +305,7 @@
 "Tweet about Backdoor" = "Twittar sobre Backdoor";
 
 /* No comment provided by engineer. */
-"Unable to connect with Backdoor server. Please check your data connection" = "Não consigamos conecta com  servidor do Backdoor.  Por favor checar seu dados de conexão";
+"Unable to connect with Backdoor server. Please check your data connection" = "Não Conseguimos conectar com o servidor Backdoor. Por Favor checar seus dados de conexão";
 
 /* No comment provided by engineer. */
 "Unexpected error happened. Try again later." = "Unexpected error happened. Try again later.";
@@ -323,7 +338,7 @@
 "You have %d available clues. You can use them in all incoming threads" = "Você tem %d pistas disponível. Você pode usa todos nos mensagem que entra";
 
 /* No comment provided by engineer. */
-"You have %d clues remaining" = "You have %d clues remaining";
+"You have %d clues remaining" = "Você possui %d PISTAS restantes.";
 
 /* No comment provided by engineer. */
 "You have no remaining clues" = "You have no remaining clues";
@@ -335,7 +350,7 @@
 "You need to log-in using your Facebook account" = "You need to log-in using your Facebook account";
 
 /* No comment provided by engineer. */
-"You received %1%d free clues! Now you have %2%d available clues to use in all incoming threads" = "Você recebeu %1$d pista gratuitas. agora você tem %2$d pista disponíveis para usar em todas as conversas.";
+"You received %1%d free clues! Now you have %2%d available clues to use in all incoming threads" = "Você recebeu %1$d pistas gratis! Agora voce tem %2$d pistas validas para usar dentre todas as suas  conversas na pagina principal de mensagens.";
 
 /* No comment provided by engineer. */
 "Your Account" = "Your Account";

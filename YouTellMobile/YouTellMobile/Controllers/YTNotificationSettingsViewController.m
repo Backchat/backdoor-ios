@@ -37,7 +37,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -49,10 +49,14 @@
 {
     UITableViewCell *cell;
     
-    NSArray *hints = @[NSLocalizedString(@"Play a sound when a new message is received", nil), NSLocalizedString(@"Vibrate the device when a new\nmessage is received", nil), NSLocalizedString(@"Show message preview inside new\nmessage notifications", nil)];
+//    NSArray *hints = @[NSLocalizedString(@"Play a sound when a new message is received", nil), NSLocalizedString(@"Vibrate the device when a new\nmessage is received", nil), NSLocalizedString(@"Show message preview inside new\nmessage notifications", nil)];
     
-    NSArray *labels = @[NSLocalizedString(@"Sound", nil), NSLocalizedString(@"Vibration", nil), NSLocalizedString(@"Message Preview", nil)];
+    NSArray *hints = @[NSLocalizedString(@"Play a sound when a new message is received", nil), NSLocalizedString(@"Show message preview inside new\nmessage notifications", nil)];
+    
+//    NSArray *labels = @[NSLocalizedString(@"Sound", nil), NSLocalizedString(@"Vibration", nil), NSLocalizedString(@"Message Preview", nil)];
 
+    NSArray *labels = @[NSLocalizedString(@"Sound", nil), NSLocalizedString(@"Message Preview", nil)];
+    
     if (indexPath.row == 1) {
         cell = [self cellForHintWithTableView:tableView];
         UILabel *label = (UILabel*)[cell viewWithTag:10];
@@ -64,8 +68,8 @@
         UISwitch *swtch = (UISwitch*)[cell viewWithTag:10];
         switch (indexPath.section) {
             case 0: swtch.on = [YTNotifHelper soundEnabled]; break;
-            case 1: swtch.on = [YTNotifHelper vibrationEnabled]; break;
-            case 2: swtch.on = [[YTAppDelegate current].userInfo[@"settings"][@"message_preview"] boolValue]; break;
+            //case 1: swtch.on = [YTNotifHelper vibrationEnabled]; break;
+            case 1: swtch.on = [[YTAppDelegate current].userInfo[@"settings"][@"message_preview"] boolValue]; break;
         }
     }
     
@@ -135,8 +139,8 @@
     
     switch(cell.tag) {
         case 0: [YTNotifHelper setSoundEnabled:sender.on]; break;
-        case 1: [YTNotifHelper setVibrationEnabled:sender.on]; break;
-        case 2: [YTApiHelper updateSettingsWithKey:@"message_preview" value:value];
+        //case 1: [YTNotifHelper setVibrationEnabled:sender.on]; break;
+        case 1: [YTApiHelper updateSettingsWithKey:@"message_preview" value:value];
     }
 }
 
