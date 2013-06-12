@@ -18,6 +18,7 @@
 #import "YTApiHelper.h"
 #import "YTViewHelper.h"
 #import "YTConfig.h"
+#import "YTGPPHelper.h"
 
 @implementation YTMainViewController
 
@@ -60,7 +61,6 @@
     } else {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ident];
     }
-    
     
     UIImageView *avatarView = [[UIImageView alloc] init];
     avatarView.tag = 5;
@@ -192,6 +192,9 @@
         ret = CONFIG_MAX_INDEX_OF_FB_FRIEND - count;
         ret = MAX(ret, CONFIG_MIN_INDEX_OF_FB_FRIEND);
         ret = MIN(ret, [[YTAppDelegate current].randFriends count]);
+        if(ret == 0 && [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"gpp"]) {
+            return 1;
+        }
     }
     
     return ret;
@@ -204,7 +207,35 @@
     } else if (indexPath.section == 1) {
         return [self tableView:tableView cellForUserAtRow:indexPath.row];
     } else if (indexPath.section == 2) {
-        return [self tableView:tableView cellForFriendAtRow:indexPath.row];
+        if([self isShareButton:indexPath]) {
+            //display GPP share button
+            //TODO dry this up with YTContactWidget
+            
+            UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"cell_share"];
+            
+            if (cell) {
+                return cell;
+            }
+            
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell_share"];
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[YTHelper imageNamed:@"gpp_tableitem3"]];
+            
+            UILabel *label = [UILabel new];
+            
+            label.textColor = [UIColor whiteColor];
+            label.text = NSLocalizedString(@"Want friends on Backdoor?\nNo worries, Share on Google+", nil);
+            label.numberOfLines = 2;
+            label.font = [UIFont systemFontOfSize:14];
+            label.textAlignment = NSTextAlignmentCenter;
+            label.frame = CGRectMake(0, 0, 320, 55); //a few pixel off for alignment
+            label.backgroundColor = [UIColor clearColor];
+            
+            [cell addSubview:imageView];
+            [cell addSubview:label];
+            return cell;
+        }
+        else
+            return [self tableView:tableView cellForFriendAtRow:indexPath.row];
     } else {
         return nil;
     }
@@ -339,10 +370,22 @@
         [YTViewHelper showGabWithReceiver:user];
 
     } else if (indexPath.section == 2) {
-        NSDictionary *friendData = [YTAppDelegate current].randFriends[indexPath.row];
-        NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
-        [YTViewHelper showGabWithReceiver:friend];
+        if([self isShareButton:indexPath]) {
+            //TODO dry up with YTContactWidget
+            [[YTGPPHelper sharedInstance] presentShareDialog];
+        }
+        else {
+            NSDictionary *friendData = [YTAppDelegate current].randFriends[indexPath.row];
+            NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
+            [YTViewHelper showGabWithReceiver:friend];
+        }
     }
+}
+
+- (bool)isShareButton:(NSIndexPath*)indexPath
+{
+    return indexPath.section == 2 && [YTAppDelegate current].randFriends.count == 0 &&
+    [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"gpp"];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
