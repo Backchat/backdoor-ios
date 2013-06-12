@@ -51,7 +51,10 @@
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.frame = frame;
     imageView.image = [YTHelper imageNamed:imageName];
-    imageView.contentMode = UIViewContentModeTop;
+    if([YTHelper isPhone5])
+        imageView.contentMode = UIViewContentModeCenter;
+    else
+        imageView.contentMode = UIViewContentModeTop;
     
     if (page == 2) {
         UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];

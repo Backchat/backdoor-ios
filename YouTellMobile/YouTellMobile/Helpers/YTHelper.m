@@ -174,12 +174,17 @@
     return ret;
 }
 
++ (bool)isPhone5
+{
+    return ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) &&
+            ([UIScreen mainScreen].bounds.size.height > 480.0f));
+}
+
 + (UIImage *)imageNamed:(NSString *)imageName
 {    
     //are we on a iPhone5? if so, add the -568h
     //we assume no extension ".png"
-    if  ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) &&
-         ([UIScreen mainScreen].bounds.size.height > 480.0f)) {
+    if  ([YTHelper isPhone5]) {
         NSMutableString *imageNameMutable = [imageName mutableCopy];
 
         [imageNameMutable appendString:@"-568h@2x"]; //iPhone5 must be retina
