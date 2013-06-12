@@ -33,7 +33,6 @@
     CGRect contactTableFrame = CGRectMake(0, 44, self.gabView.view.bounds.size.width, self.gabView.view.frame.size.height - contactWidgetFrame.size.height - self.gabView.inputView.frame.size.height);
     
     self.contactTable = [[UITableView alloc] initWithFrame:contactTableFrame style:UITableViewStylePlain];
-    self.contactTable.hidden = YES;
     self.contactTable.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.contactTable.backgroundColor = [UIColor clearColor];
     
