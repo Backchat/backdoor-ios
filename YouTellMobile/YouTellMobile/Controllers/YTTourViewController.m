@@ -44,17 +44,24 @@
     }
    
     NSString *lang = [NSLocale preferredLanguages][0];
-    if ([lang isEqualToString:@"pt"] || [lang isEqualToString:@"pt-PT"]) {
+    bool brazilLang = [lang isEqualToString:@"pt"] || [lang isEqualToString:@"pt-PT"];
+    if (brazilLang) {
         imageName = [imageName stringByAppendingString:@"_pt"];
     }
     
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.frame = frame;
     imageView.image = [YTHelper imageNamed:imageName];
-    if([YTHelper isPhone5])
-        imageView.contentMode = UIViewContentModeCenter;
-    else
-        imageView.contentMode = UIViewContentModeTop;
+    imageView.contentMode = UIViewContentModeCenter;
+    
+    //TODO get rid of this w/ perfect images one day
+    if (brazilLang) {
+        imageView.frame = CGRectMake(frame.origin.x, frame.origin.y - 15, frame.size.width, frame.size.height);
+    }
+    else {
+        imageView.frame = CGRectMake(frame.origin.x, frame.origin.y + 10, frame.size.width, frame.size.height);
+    }
+        
     
     if (page == 2) {
         UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -62,7 +69,12 @@
         CGRect frame;
         frame.size.width = 250;
         frame.origin.x = (imageView.frame.size.width - frame.size.width) / 2;
-        frame.origin.y = 300;
+        frame.origin.y = imageView.frame.size.height - 140;
+        //TODO perfect images?
+        if (!brazilLang) {
+            frame.origin.y = frame.origin.y - 40;
+        }
+
         
         if (isfb) {
             [shareButton setBackgroundImage:[[YTHelper imageNamed:@"fbsharebtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)] forState:UIControlStateNormal];
@@ -92,7 +104,7 @@
         
         frame = cancelButton.frame;
         frame.origin.x = (imageView.frame.size.width - frame.size.width) / 2;
-        frame.origin.y = 380;
+        frame.origin.y = shareButton.frame.origin.y + 80;
         cancelButton.frame = frame;
         [cancelButton addTarget:self action:@selector(cancelButtonWasClicked) forControlEvents:UIControlEventTouchUpInside];
         
