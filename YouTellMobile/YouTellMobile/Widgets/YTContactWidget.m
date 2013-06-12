@@ -68,7 +68,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.scrollEnabled = YES;
-    
     self.selectedContact = nil;
     
     [self updateButtons];
@@ -82,7 +81,8 @@
 
 - (void)textDidChange:(NSString*)text
 {
-    self.tableView.hidden = [text isEqualToString:@""];
+    if(self.allContacts.count != 0)
+        self.tableView.hidden = [text isEqualToString:@""];
 
     self.selectedContact = nil;
     self.contacts = [YTContactHelper findContactsWithString:text grouped:NO];
@@ -107,6 +107,22 @@
     return YES;
 }
 
+- (void)setHidden:(BOOL)hidden
+{
+    self.allContacts = [YTContactHelper findContactsWithString:@"" grouped:NO];
+
+    if(hidden)
+        self.tableView.hidden = YES;
+    else {
+        if(self.allContacts.count == 0)
+            self.tableView.hidden = NO;
+        else
+            self.tableView.hidden = YES;
+    }
+    
+    [super setHidden:hidden];
+}
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     self.contacts = [YTContactHelper findContactsWithString:textField.text grouped:NO];
@@ -116,7 +132,8 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    self.tableView.hidden = YES;
+    if(self.allContacts.count != 0)
+        self.tableView.hidden = YES;
     self.contacts = nil;
     self.textField.textColor = self.selectedContact ? [UIColor blackColor] : [UIColor redColor];
     [self.tableView reloadData];
@@ -259,7 +276,6 @@
 - (void)addButtonWasPressed:(id)sender
 {
     [self.textField resignFirstResponder];
-    self.allContacts = [YTContactHelper findContactsWithString:@"" grouped:NO];
     self.contactsView = [YTContactsViewController new];
     self.contactsView.tableView.dataSource = self;
     self.contactsView.tableView.delegate = self;
