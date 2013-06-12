@@ -29,5 +29,6 @@
 + (void)simpleAlertWithTitle:(NSString*)title message:(NSString*)message;
 + (BOOL)appStoreEnvironment;
 + (BOOL)simulatedEnvironment;
++ (bool)isPhone5;
 
 @end
