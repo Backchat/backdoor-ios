@@ -28,6 +28,7 @@
 #import "YTHelper.h"
 #import "YTFBHelper.h"
 #import "YTGabMessage.h"
+#import "YTGPPHelper.h"
 
 @interface YTGabViewController ()
 @property (nonatomic, retain) NSArray* messages;
@@ -477,6 +478,11 @@
     }];
 }
 
+- (void) showGPPRequest
+{
+    [[YTGPPHelper sharedInstance] presentShareDialog];
+}
+
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {    
     //at this point, some number of messages may be queued.
@@ -495,9 +501,13 @@
             //a half second delay is needed because of animation issues
             [self performSelector:@selector(showFBRequest) withObject:nil afterDelay:0.5];
         
-        } else {        
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"Sending messages to unregistered Google+ friends is not supported yet", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
-            [alert show];
+        } else {
+            //show the GPP generalized share
+            //TODO target the specific user
+            //a half second delay is needed because of animation issues
+            [self performSelector:@selector(showGPPRequest) withObject:nil afterDelay:0.5];
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"Sending messages to unregistered Google+ friends is not supported yet", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
+//            [alert show];
             [self dismiss];            
         }
     }
