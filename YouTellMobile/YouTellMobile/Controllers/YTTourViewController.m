@@ -69,11 +69,12 @@
         CGRect frame;
         frame.size.width = 250;
         frame.origin.x = (imageView.frame.size.width - frame.size.width) / 2;
-        frame.origin.y = imageView.frame.size.height - 140;
-        //TODO perfect images?
-        if (!brazilLang) {
-            frame.origin.y = frame.origin.y - 40;
+        frame.origin.y = 260;//imageView.frame.size.height - 220;
+        if([YTHelper isPhone5]) {
+            frame.origin.y = frame.origin.y + 40;
         }
+        //TODO perfect images?
+        
 
         
         if (isfb) {
