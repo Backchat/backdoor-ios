@@ -20,6 +20,11 @@
 #import "YTConfig.h"
 #import "YTGPPHelper.h"
 
+@interface YTMainViewController ()
+@property (nonatomic, retain) NSMutableArray* currentFeaturedUsers;
+@property (nonatomic, retain) NSMutableArray* currentFilteredUsers;
+@end
+
 @implementation YTMainViewController
 
 # pragma mark Custom methods
@@ -141,6 +146,8 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[YTHelper imageNamed:@"navbartitle4"]];
     self.view.backgroundColor = [UIColor whiteColor];
 
+    self.currentFeaturedUsers = [[NSMutableArray alloc] init];
+    self.currentFilteredUsers = [[NSMutableArray alloc] init];
 
 }
 
@@ -159,11 +166,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (!self.searchBar.text || [self.searchBar.text isEqualToString:@""]) {
-        return 3;
-    } else {
-        return 1;
-    }
+    return 3;
 }
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -187,11 +190,35 @@
     if (section == 0) {
         ret = count;
     } else if (section == 1) {
-        return [YTAppDelegate current].featuredUsers.count;
+        [self.currentFeaturedUsers removeAllObjects];
+        NSArray* allFeaturedUsers = [YTAppDelegate current].featuredUsers;
+        for(NSDictionary* user in allFeaturedUsers) {
+            NSString* name = user[@"name"];
+            if(self.searchBar.text.length == 0 ||
+               [name rangeOfString:self.searchBar.text options:NSCaseInsensitiveSearch].location != NSNotFound)
+                [self.currentFeaturedUsers addObject:user];
+        }
+        ret = self.currentFeaturedUsers.count;
     } else if (section == 2) {
-        ret = CONFIG_MAX_INDEX_OF_FB_FRIEND - count;
-        ret = MAX(ret, CONFIG_MIN_INDEX_OF_FB_FRIEND);
-        ret = MIN(ret, [[YTAppDelegate current].randFriends count]);
+        if(self.searchBar.text.length == 0) {
+            ret = CONFIG_MAX_INDEX_OF_FB_FRIEND - count;
+            ret = MAX(ret, CONFIG_MIN_INDEX_OF_FB_FRIEND);
+            ret = MIN(ret, [[YTAppDelegate current].randFriends count]);
+            [self.currentFilteredUsers removeAllObjects];
+            [self.currentFilteredUsers addObjectsFromArray:[YTAppDelegate current].randFriends];
+        }
+        else {
+            [self.currentFilteredUsers removeAllObjects];
+            NSArray* friends = [YTModelHelper findContactsWithString:self.searchBar.text];
+            for(NSManagedObject* friend in friends) {
+                [self.currentFilteredUsers addObject:@{
+                    @"type": [friend valueForKey:@"type"],
+                    @"value": [friend valueForKey:@"value"]
+                }];
+            }
+            ret = self.currentFilteredUsers.count;
+        }
+        
         if(ret == 0 && [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"gpp"]) {
             return 1;
         }
@@ -343,14 +370,14 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForFriendAtRow:(NSInteger)row
 {
-    NSDictionary *friendData = [YTAppDelegate current].randFriends[row];
+    NSDictionary *friendData = self.currentFilteredUsers[row];
     NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
     return [self tableView:tableView cellForUser:friend];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForUserAtRow:(NSInteger)row
 {
-    NSDictionary *user = [YTAppDelegate current].featuredUsers[row];
+    NSDictionary *user = self.currentFeaturedUsers[row];
     return [self tableView:tableView cellForUser:user];
 }
 
@@ -366,7 +393,7 @@
         self.selectedGabId = [object valueForKey:@"id"];
         [YTViewHelper showGabWithId:self.selectedGabId];
     } else if (indexPath.section == 1) {
-        NSDictionary *user = [YTAppDelegate current].featuredUsers[indexPath.row];
+        NSDictionary *user = self.currentFeaturedUsers[indexPath.row];
         [YTViewHelper showGabWithReceiver:user];
 
     } else if (indexPath.section == 2) {
@@ -375,7 +402,7 @@
             [[YTGPPHelper sharedInstance] presentShareDialog];
         }
         else {
-            NSDictionary *friendData = [YTAppDelegate current].randFriends[indexPath.row];
+            NSDictionary *friendData = self.currentFilteredUsers[indexPath.row];
             NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
             [YTViewHelper showGabWithReceiver:friend];
         }
@@ -384,7 +411,7 @@
 
 - (bool)isShareButton:(NSIndexPath*)indexPath
 {
-    return indexPath.section == 2 && [YTAppDelegate current].randFriends.count == 0 &&
+    return indexPath.section == 2 && self.currentFilteredUsers.count == 0 &&
     [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"gpp"];
 }
 
