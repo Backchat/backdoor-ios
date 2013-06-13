@@ -33,7 +33,7 @@
 //        ],
         @[
             @[@"", NSLocalizedString(@"Update Backdoor", nil), @"showUpdate"],
-            @[@"", NSLocalizedString(@"Licenses", nil), @"showLicenses"],
+//            @[@"", NSLocalizedString(@"Licenses", nil), @"showLicenses"],
             @[@"", NSLocalizedString(@"Legal", nil), @"showLegal"],
             @[@"", NSLocalizedString(@"About Us", nil), @"showAbout"]
         ]
