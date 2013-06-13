@@ -44,7 +44,7 @@
 "Chat Settings" = "Chat Settings";
 
 /* No comment provided by engineer. */
-"#backdoor me - the new guess who messaging app %@" = "#backdoor me - the new guess who messaging app %@";
+"Message me with Backdoor. %@ #backdoorme" = "Message me with Backdoor. %@ #backdoorme";
 
 /* No comment provided by engineer. */
 "Checking for updates" = "Checking for updates";
@@ -360,4 +360,6 @@
 
 /* No comment provided by engineer. */
 "Your invitation has been sent" = "Your invitation has been sent";
+
+"Want friends on Backdoor?\nNo worries, Share on Google+" = "Want friends on Backdoor?\nNo worries, Share on Google+";
 

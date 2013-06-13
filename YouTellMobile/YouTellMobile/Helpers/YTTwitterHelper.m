@@ -27,7 +27,7 @@
     if ([TWTweetComposeViewController canSendTweet]) {
         TWTweetComposeViewController *sheet = [[TWTweetComposeViewController alloc] init];
         NSString* shortenedLink = @"backdoorapp.com";
-        [sheet setInitialText:[NSString stringWithFormat:NSLocalizedString(@"#backdoor me - the new guess who messaging app %@",
+        [sheet setInitialText:[NSString stringWithFormat:NSLocalizedString(@"Message me with Backdoor. %@ #backdoorme",
                                                                            nil), shortenedLink]];
         sheet.completionHandler = ^(TWTweetComposeViewControllerResult result) {
             [self completionHandler:result];

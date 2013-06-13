@@ -20,7 +20,7 @@
 "Backdoor" = "Backdoor";
 
 /* No comment provided by engineer. */
-"Backdoor a friend" = "Backdoor a friend";
+"Backdoor a friend" = "Backdoor seu amigo";
 
 /* No comment provided by engineer. */
 "Backdoor is a new application for iOS that allows sending and receiving anonymous text and photo messages." = "Backdoor e o novo aplicação para iOS que deixa mandar e recebe mensagem do texto e photo de maneira anônima.";
@@ -296,7 +296,7 @@
 "Try Backdoor" = "Try Backdoor";
 
 /* No comment provided by engineer. */
-"Message me anything you want anonymously with Backdoor.  Backdoor Me!" = "Message me anything you want anonymously with Backdoor.  Backdoor Me!";
+"Message me with Backdoor. %@ #backdoorme" = "Me mande uma mensagem pela Backdoor. %@ #backdoorme";
 
 /* No comment provided by engineer. */
 "Try it!" = "Try it!";
@@ -361,3 +361,4 @@
 /* No comment provided by engineer. */
 "Your invitation has been sent" = "Your invitation has been sent";
 
+"Want friends on Backdoor?\nNo worries, Share on Google+" = "Quer mais amigos no Backdoor?\nE fácil, compartilhe no Google+";
