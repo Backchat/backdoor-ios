@@ -263,7 +263,7 @@
         params[@"to"] = contact;
     }
     
-    [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:NSLocalizedString(@"Text me anything you want anonymously with Backdoor.  Backdoor Me!", nil)  title:nil  parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {        
+    [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:NSLocalizedString(@"Message me anything you want anonymously with Backdoor.  Backdoor Me!", nil)  title:nil  parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {        
         if (complete) {
             complete();
         }
