@@ -83,8 +83,14 @@ void uncaughtExceptionHandler(NSException *exception)
     [YTViewHelper showLogin];
 
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
+
     [manager configureWithIdentifier:CONFIG_HOCKEY_ID delegate:self];
     [manager updateManager].delegate = self;
+    
+    manager.disableUpdateManager = TRUE; //PRODUCTION
+    manager.updateManager.checkForUpdateOnLaunch = NO;
+    manager.updateManager.updateSetting = BITUpdateCheckManually;
+    
     [manager crashManager].crashManagerStatus = BITCrashManagerStatusAlwaysAsk;    
     [manager startManager];
     [[BITHockeyManager sharedHockeyManager] startManager];
