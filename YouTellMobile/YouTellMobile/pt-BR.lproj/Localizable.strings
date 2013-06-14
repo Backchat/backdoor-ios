@@ -137,10 +137,10 @@
 "Help & About Us" = "Sobre Nos";
 
 /* No comment provided by engineer. */
-"Input name for anonymous user" = "Input name for anonymous user";
+"Input name for anonymous user" = "Insira o nome do usuário anônimo.";
 
 /* No comment provided by engineer. */
-"Invite" = "Invite";
+"Invite" = "Convidar";
 
 /* No comment provided by engineer. */
 "Invite on Facebook" = "Invite on Facebook";
@@ -173,10 +173,10 @@
 "Message delivered" = "Mensagem entregue";
 
 /* No comment provided by engineer. */
-"Messages" = "Mensagem";
+"Messages" = "Mensagens";
 
 /* No comment provided by engineer. */
-"Network error" = "Erro da rede";
+"Network error" = "Erro de rede";
 
 /* No comment provided by engineer. */
 "New message" = "Nova mensagem";
@@ -191,7 +191,7 @@
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"Please be as descriptive as possible\nand we will do our best\nto block the offender. Thank you." = "Por favor seja o mais descritível possível e nós iremos fazer nosso melhor para BLOQUEAR o  ofensor. Obrigado.";
+"Please be as descriptive as possible\nand we will do our best\nto block the offender. Thank you." = "Por favor seja o mais descritível possível\ne nós iremos fazer nosso melhor para\nBLOQUEAR o  ofensor. Obrigado.";
 
 /* No comment provided by engineer. */
 "Please enter phone number of your friend" = "Por favor colocar o número de telefone do seu amigo";
@@ -236,7 +236,7 @@
 "Show message preview inside new\nmessage notifications" = "Mostrar Visualização de Mensagens dentro de Notificações de Novas Mensagens";
 
 /* No comment provided by engineer. */
-"Send and receive anonymous messages" = "Send and receive anonymous messages";
+"Send and receive anonymous messages" = "Envie e receba mensagens anonimas.";
 
 /* No comment provided by engineer. */
 "Sending messages to unregistered Google+ friends is not supported yet" = "Sending messages to unregistered Google+ friends is not supported yet";
@@ -296,7 +296,7 @@
 "Try Backdoor" = "Try Backdoor";
 
 /* No comment provided by engineer. */
-"Message me with Backdoor. %@ #backdoorme" = "Me mande uma mensagem pela Backdoor. %@ #backdoorme";
+"Message me with Backdoor. %@ #backdoorme" = "Me mande uma mensagem pelo Backdoor. %@ #backdoorme";
 
 /* No comment provided by engineer. */
 "Try it!" = "Try it!";
@@ -305,7 +305,7 @@
 "Tweet about Backdoor" = "Twittar sobre Backdoor";
 
 /* No comment provided by engineer. */
-"Unable to connect with Backdoor server. Please check your data connection" = "Não Conseguimos conectar com o servidor Backdoor. Por Favor checar seus dados de conexão";
+"Unable to connect with Backdoor server. Please check your data connection" =  "Não Conseguimos conectar com o servidor Backdoor. Por Favor checar seus dados de conexão";
 
 /* No comment provided by engineer. */
 "Unexpected error happened. Try again later." = "Unexpected error happened. Try again later.";
@@ -356,9 +356,12 @@
 "Your Account" = "Your Account";
 
 /* No comment provided by engineer. */
-"Your friend does not have a Backdoor account.  Would you like to send an invite?" = "Your friend does not have a Backdoor account.  Would you like to send an invite?";
+"Your friend does not have a Backdoor account.  Would you like to send an invite?" = "Seu amigo não possui uma conta Backdoor.  Gostaria de enviar um convite?";
 
 /* No comment provided by engineer. */
 "Your invitation has been sent" = "Your invitation has been sent";
 
 "Want friends on Backdoor?\nNo worries, Share on Google+" = "Quer mais amigos no Backdoor?\nE fácil, compartilhe no Google+";
+
+"Message me anything you want anonymously with Backdoor.  Backdoor Me!" = "Me mande qualquer mensagem que voce queira que seja anonima atraves do BACKDOOR - Me manda um Backdoor!";
+

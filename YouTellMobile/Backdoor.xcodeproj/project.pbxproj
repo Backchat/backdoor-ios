@@ -1748,7 +1748,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8A8F36B8198B40769F476A03 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
@@ -1757,8 +1757,7 @@
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = Backdoor;
-				PROVISIONING_PROFILE = "A52EBFA2-64EE-4DA8-9B7D-C204F7EDDB9D";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A52EBFA2-64EE-4DA8-9B7D-C204F7EDDB9D";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1768,7 +1767,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8A8F36B8198B40769F476A03 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
@@ -1777,8 +1776,7 @@
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = Backdoor;
-				PROVISIONING_PROFILE = "A52EBFA2-64EE-4DA8-9B7D-C204F7EDDB9D";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A52EBFA2-64EE-4DA8-9B7D-C204F7EDDB9D";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

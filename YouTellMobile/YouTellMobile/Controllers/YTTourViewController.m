@@ -98,7 +98,8 @@
         
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         cancelButton.titleLabel.textColor = [UIColor blackColor];
-        cancelButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        cancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+        
         [cancelButton setTitle:NSLocalizedString(@"No, thanks", nil) forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [cancelButton sizeToFit];
