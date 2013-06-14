@@ -338,7 +338,7 @@
         }
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:
-                              [NSString stringWithFormat:NSLocalizedString(@"You received %1%d free clues! Now you have %2%d available clues to use in all incoming threads", nil), count, total] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil];
+                              [NSString stringWithFormat:NSLocalizedString(@"You received %1$d free clues! Now you have %2$d available clues to use in all incoming threads", nil), count, total] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil];
         [alert show];
         
     } failure:nil];

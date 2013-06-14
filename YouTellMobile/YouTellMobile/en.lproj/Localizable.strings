@@ -350,7 +350,7 @@
 "You need to log-in using your Facebook account" = "You need to log-in using your Facebook account";
 
 /* No comment provided by engineer. */
-"You received %1%d free clues! Now you have %2%d available clues to use in all incoming threads" = "You received %1%d free clues! Now you have %2%d available clues to use in all incoming threads";
+"You received %1$d free clues! Now you have %2$d available clues to use in all incoming threads" = "You received %1$d free clues! Now you have %2$d available clues to use in all incoming threads";
 
 /* No comment provided by engineer. */
 "Your Account" = "Your Account";
