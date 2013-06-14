@@ -59,10 +59,10 @@ void uncaughtExceptionHandler(NSException *exception)
 - (NSString *)customDeviceIdentifierForUpdateManager:(BITUpdateManager *)updateManager
 {
 //#ifndef CONFIGURATION_RELEASE
-#ifdef FALSE //TODO use production check
-    if ([[UIDevice currentDevice] respondsToSelector:@selector(uniqueIdentifier)])
-        return [[UIDevice currentDevice] performSelector:@selector(uniqueIdentifier)];
-#endif
+//#ifdef TRUE //TODO use production check
+//    if ([[UIDevice currentDevice] respondsToSelector:@selector(uniqueIdentifier)])
+//        return [[UIDevice currentDevice] performSelector:@selector(uniqueIdentifier)];
+//#endif
 //#endif
     return nil;
 }
