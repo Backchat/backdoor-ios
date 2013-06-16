@@ -250,7 +250,7 @@
             return;
         }
         
-        [YTApiHelper getFreeCluesWithReason:@"fbshare"];
+        [YTApiHelper getFreeCluesWithReason:@"freeclues"];
 
     }];
 }
@@ -281,7 +281,7 @@
       
         [alert show];
         
-        [YTApiHelper getFreeCluesWithReason:@"fbinvite"];
+        [YTApiHelper getFreeCluesWithReason:@"freeclues"];
 
 
     }];
