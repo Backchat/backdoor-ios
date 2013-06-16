@@ -8,6 +8,7 @@
 #define CONFIG_APPLE_ID @"659951602"
 //#define CONFIG_URL @"https://capricalabs.com:7564/"
 #define CONFIG_URL @"https://backdoor-api.herokuapp.com/"
+//#define CONFIG_URL @"https://backdoor-stage.herokuapp.com/"
 #define CONFIG_MODEL @"YTModel16"
 
 //app behaviors 
