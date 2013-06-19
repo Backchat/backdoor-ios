@@ -174,7 +174,7 @@
 - (void)finishedSharing:(BOOL)shared
 {
     if (shared) {
-        [YTApiHelper getFreeCluesWithReason:@"freeclues"];
+        [YTApiHelper getFreeCluesWithReason:@"gppshare"];
     }
 }
 

@@ -36,7 +36,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>1.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -61,7 +61,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.0.0</string>
+	<string>1.0.1</string>
 	<key>FacebookAppID</key>
 	<string>122753474571987</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -87,9 +87,9 @@
 				<key>Blue</key>
 				<real>0.1215686274509804</real>
 				<key>Green</key>
-				<real>0.5529411764705883</real>
+				<real>0.55294117647058827</real>
 				<key>Red</key>
-				<real>0.2666666666666667</real>
+				<real>0.26666666666666672</real>
 			</dict>
 			<key>Translucent</key>
 			<false/>

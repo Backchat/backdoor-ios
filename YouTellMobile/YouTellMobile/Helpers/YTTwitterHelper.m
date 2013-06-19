@@ -47,7 +47,7 @@
         return;
     }
     
-    [YTApiHelper getFreeCluesWithReason:@"freeclues"];
+    [YTApiHelper getFreeCluesWithReason:@"tweet"];
 }
 
 @end
