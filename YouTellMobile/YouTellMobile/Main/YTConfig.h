@@ -6,9 +6,6 @@
 //
 
 #define CONFIG_APPLE_ID @"659951602"
-//#define CONFIG_URL @"https://capricalabs.com:7564/"
-//#define CONFIG_URL @"https://backdoor-api.herokuapp.com/"
-#define CONFIG_URL @"https://backdoor-stage.herokuapp.com/"
 #define CONFIG_MODEL @"YTModel16"
 
 //app behaviors 
@@ -29,7 +26,6 @@
 //api identification
 #define CONFIG_HOCKEY_ID @"bedb756bb2c16d161fcff11b35a35a11"
 #define CONFIG_FLURRY_APP_TOKEN @"34FTVFVF9M8TKVGSTNGG"
-#define CONFIG_GPP_CLIENT_ID @"964294341461.apps.googleusercontent.com"
 
 //external pages
 #define CONFIG_PRIVACY_POLICY_URL @"http://backdoorapp.com/privacy"

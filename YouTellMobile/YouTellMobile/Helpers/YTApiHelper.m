@@ -163,7 +163,7 @@
             
             [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
             [YTViewHelper showNetworkErrorAlert];            
-            
+            NSLog(@"%@", [error debugDescription]);
             if (failure != nil) {
                 failure(JSON);
             }

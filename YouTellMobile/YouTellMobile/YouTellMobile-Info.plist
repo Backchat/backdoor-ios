@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Backdoor</string>
+	<string>Backdoor${BUNDLE_DISPLAY_NAME_SUFFIX}</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIcons</key>
@@ -28,7 +28,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.backdoor.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>com.backdoor.${PRODUCT_NAME:rfc1034identifier}${BUNDLE_ID_SUFFIX}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -41,6 +41,22 @@
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
 	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.backdoor.BackdoorStage</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.backdoor.BackdoorStage</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.backdoor.BackdoorDev</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.backdoor.BackdoorDev</string>
+			</array>
+		</dict>
 		<dict>
 			<key>CFBundleURLName</key>
 			<string></string>
