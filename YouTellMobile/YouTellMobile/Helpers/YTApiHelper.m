@@ -385,9 +385,9 @@
                                                       [alert show];
                                                       return;
                                                   }
-                                                  
-                                                  NSString *urlS = [NSString stringWithFormat:@"itms://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftwareUpdate?id=%@&mt=8", CONFIG_APPLE_ID];
+                                                  NSString *urlS = [NSString stringWithFormat:@"http://itunes.apple.com/us/app/id%@?mt=8", CONFIG_APPLE_ID];
                                                   NSURL *url = [NSURL URLWithString:urlS];
+
                                                   [[UIApplication sharedApplication] openURL:url];
                                               } failure:nil];
 }
