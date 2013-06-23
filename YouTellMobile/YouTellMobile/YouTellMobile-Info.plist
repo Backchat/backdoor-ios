@@ -20,8 +20,8 @@
 				<string>ipad-icon.png</string>
 				<string>ipad-icon2x.png</string>
 				<string>icon_57x57${ICON_SUFFIX}.png</string>
-				<string>Icon.png</string>
-				<string>Icon2-114.png</string>
+				<string>icon_57x57${ICON_SUFFIX}.png</string>
+				<string>icon_114x114${ICON_SUFFIX}.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
