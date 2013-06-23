@@ -217,20 +217,8 @@
     return params;
 }
 
-+ (void)presentFeedDialog
++ (void)presentFeedDialogCallback
 {
-    /*
-    if (![[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"]) {
-        return;
-    }
-     */
-    
-    if (!FBSession.activeSession.isOpen) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"You need to log in with Facebook to use this feature", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-        [alert show];
-        return;
-    }
-    
     NSDictionary *params = @{
         @"name": NSLocalizedString(@"Backdoor", nil),
         @"caption": NSLocalizedString(@"Send and receive anonymous messages", nil),
@@ -251,7 +239,38 @@
         }
         
         [YTApiHelper getFreeCluesWithReason:@"fbshare"];
+        
+    }];
 
+}
+
++ (void)presentFeedDialog
+{
+    /*
+    if (![[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"]) {
+        return;
+    }
+     */
+    
+    if (!FBSession.activeSession.isOpen) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"You need to log in with Facebook to use this feature", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
+    if ([FBSession.activeSession.permissions containsObject:@"publish_actions"]) {
+        [YTFBHelper presentFeedDialogCallback];
+        return;
+    }
+    
+    [FBSession.activeSession requestNewPublishPermissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone completionHandler:^(FBSession *session, NSError *error) {
+        
+        if (error) {
+            NSLog(@"%@", error.debugDescription);
+            return;
+        }
+        
+        [YTFBHelper presentFeedDialogCallback];
     }];
 }
 
