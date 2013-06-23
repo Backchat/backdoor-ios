@@ -224,7 +224,7 @@
         @"caption": NSLocalizedString(@"Send and receive anonymous messages", nil),
         @"description": NSLocalizedString(@"Backdoor is a new application for iOS that allows sending and receiving anonymous text and photo messages.", nil),
         @"link": @"http://backdoorapp.com/",
-        @"picture": @"https://raw.github.com/dan-a/backdoor-ios/master/YouTellMobile/icon_114x114.png?login=dan-a&token=aaee6e51ef1b6a1b8576056e165500e0"
+        @"picture": @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png"
     };
     
     [FBWebDialogs presentFeedDialogModallyWithSession:nil parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
