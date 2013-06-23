@@ -235,7 +235,7 @@
         @"name": NSLocalizedString(@"Backdoor", nil),
         @"caption": NSLocalizedString(@"Send and receive anonymous messages", nil),
         @"description": NSLocalizedString(@"Backdoor is a new application for iOS that allows sending and receiving anonymous text and photo messages.", nil),
-        @"link": @"https://youtell.com/",
+        @"link": @"http://backdoorapp.com/",
         @"picture": @"https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png"
     };
     
