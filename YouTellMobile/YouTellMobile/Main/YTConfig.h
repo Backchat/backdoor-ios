@@ -25,7 +25,7 @@
 
 //api identification
 #define CONFIG_HOCKEY_ID @"bedb756bb2c16d161fcff11b35a35a11"
-#define CONFIG_FLURRY_APP_TOKEN @"34FTVFVF9M8TKVGSTNGG"
+#define CONFIG_FLURRY_APP_TOKEN @"HR2Q2C7D8MKPPWM6MBY2"
 
 //external pages
 #define CONFIG_PRIVACY_POLICY_URL @"http://backdoorapp.com/privacy"
