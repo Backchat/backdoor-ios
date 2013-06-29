@@ -9,6 +9,7 @@
 
 #import "YTTwitterHelper.h"
 #import "YTApiHelper.h"
+#import "YTConfig.h"
 
 @implementation YTTwitterHelper
 
@@ -26,7 +27,7 @@
 {
     if ([TWTweetComposeViewController canSendTweet]) {
         TWTweetComposeViewController *sheet = [[TWTweetComposeViewController alloc] init];
-        NSString* shortenedLink = @"backdoorapp.com";
+        NSString* shortenedLink = CONFIG_SHARE_URL;
         [sheet setInitialText:[NSString stringWithFormat:NSLocalizedString(@"Message me with Backdoor. %@ #backdoorme",
                                                                            nil), shortenedLink]];
         sheet.completionHandler = ^(TWTweetComposeViewControllerResult result) {

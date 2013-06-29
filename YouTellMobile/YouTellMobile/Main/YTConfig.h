@@ -36,3 +36,5 @@
 #define CONFIG_HELP_LEGAL_URL @"http://backdoorapp.com/terms"
 #define CONFIG_HELP_ABOUT_URL @"http://backdoorapp.com/about"
 #define CONFIG_FB_LIKE_URL @"http://facebook.com/YouTellSocial"
+
+#define CONFIG_SHARE_URL @"https://itun.es/us/Y_GvN.i"

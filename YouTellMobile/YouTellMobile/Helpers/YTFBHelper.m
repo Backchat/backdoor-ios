@@ -18,6 +18,7 @@
 #import "YTContactHelper.h"
 #import "YTModelHelper.h"
 #import "YTHelper.h"
+#import "YTConfig.h"
 
 @implementation YTFBHelper
 
@@ -223,7 +224,7 @@
         @"name": NSLocalizedString(@"Backdoor", nil),
         @"caption": NSLocalizedString(@"Send and receive anonymous messages", nil),
         @"description": NSLocalizedString(@"Backdoor is a new application for iOS that allows sending and receiving anonymous text and photo messages.", nil),
-        @"link": @"https://itunes.apple.com/us/app/backdoor/id659951602?ls=1&mt=8",
+        @"link": CONFIG_SHARE_URL,
         @"picture": @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png"
     };
     

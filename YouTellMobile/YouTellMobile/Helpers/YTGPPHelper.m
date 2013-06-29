@@ -165,7 +165,7 @@
 
     id<GPPShareBuilder> builder = [[GPPShare sharedInstance] shareDialog];
     //[builder setTitle:NSLocalizedString(@"Try Backdoor", nil) description:NSLocalizedString(@"Backdoor is fun", nil) thumbnailURL:[NSURL URLWithString:@"http://d17ke1zpt7t3r2.cloudfront.net/assets/logo_header.png"]];
-    [builder setURLToShare:[NSURL URLWithString:@"http://backdoorapp.com"]];
+    [builder setURLToShare:[NSURL URLWithString:CONFIG_SHARE_URL]];
     [builder setPrefillText:NSLocalizedString(@"Message me anything you want anonymously with Backdoor.  Backdoor Me!", nil)];
     [builder open];
  
