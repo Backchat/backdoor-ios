@@ -228,25 +228,31 @@
 
 }
 
-+ (void)showNetworkErrorAlert
++ (void)showAlertWithTitle:(NSString*)title message:(NSString*)message
 {
-    static bool showing = false;
+    static WBErrorNoticeView *notice = nil;
     
-    if(showing)
+    if (notice && [notice.title isEqualToString:title] && [notice.message isEqualToString:message]) {
         return;
-    
-    showing = true;
-    UIView* view = [YTAppDelegate current].navController.view;
-    WBErrorNoticeView *notice = [WBErrorNoticeView errorNoticeInView:view
-                                                               title:NSLocalizedString(@"Network error", nil)                                                             message:NSLocalizedString(@"Unable to connect with Backdoor server. Please check your data connection", nil)];
-    notice.sticky = YES;
-    [notice setDismissalBlock:^(BOOL dismiss) {
-        //showing = false;
-        return;
-    }];
+    }
 
-    notice.originY = [UIApplication sharedApplication].statusBarFrame.size.height;
+    void (^block)(BOOL) = ^(BOOL dismissedInteractively) {
+        
+        UIView* view = [YTAppDelegate current].navController.view;
+        notice = [WBErrorNoticeView errorNoticeInView:view title:title message:message];
+        notice.sticky = YES;
+        notice.originY = [UIApplication sharedApplication].statusBarFrame.size.height;
+        [notice show];
+    };
     
-    [notice show];
+    if (notice) {
+        [notice setDismissalBlock:block];
+        notice.delay = 0;
+        [notice dismissNotice];
+    } else {
+        block(false);
+    }
 }
+
+
 @end

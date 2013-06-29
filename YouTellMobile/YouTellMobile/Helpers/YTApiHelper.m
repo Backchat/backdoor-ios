@@ -152,7 +152,6 @@
                 success(JSON[@"response"]);
             } else {
                 [YTViewHelper refreshViews];
-                
             }
             
         }];
@@ -160,10 +159,15 @@
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            
             [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
-            [YTViewHelper showNetworkErrorAlert];            
-            NSLog(@"%@", [error debugDescription]);
+
+            if (response.statusCode == 503) {
+                [YTApiHelper showMaintenanceModeAlert];
+            } else {
+                [YTApiHelper showNetworkErrorAlert];
+                NSLog(@"%@", [error debugDescription]);
+            }
+            
             if (failure != nil) {
                 failure(JSON);
             }
@@ -390,6 +394,21 @@
 
                                                   [[UIApplication sharedApplication] openURL:url];
                                               } failure:nil];
+}
+
+
++ (void)showNetworkErrorAlert
+{
+    NSString *title = NSLocalizedString(@"Network error", nil);
+    NSString *message = NSLocalizedString(@"Unable to connect with Backdoor server. Please check your data connection", nil);
+    [YTViewHelper showAlertWithTitle:title message:message];
+};
+
++ (void)showMaintenanceModeAlert
+{
+    NSString *title = NSLocalizedString(@"Maintenance mode", nil);
+    NSString *message = NSLocalizedString(@"Our server is currently undergoing a scheduled maintenance. Please try again in 30 minutes.", nil);
+    [YTViewHelper showAlertWithTitle:title message:message];
 }
 
 @end
