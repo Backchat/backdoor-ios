@@ -407,7 +407,7 @@
 + (void)showMaintenanceModeAlert
 {
     NSString *title = NSLocalizedString(@"Maintenance mode", nil);
-    NSString *message = NSLocalizedString(@"Our server is currently undergoing a scheduled maintenance. Please try again in 30 minutes.", nil);
+    NSString *message = NSLocalizedString(@"Our server is currently undergoing a scheduled maintenance. Please try again later.", nil);
     [YTViewHelper showAlertWithTitle:title message:message];
 }
 
