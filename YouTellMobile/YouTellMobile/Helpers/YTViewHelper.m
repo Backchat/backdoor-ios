@@ -242,6 +242,9 @@
         notice = [WBErrorNoticeView errorNoticeInView:view title:title message:message];
         notice.sticky = YES;
         notice.originY = [UIApplication sharedApplication].statusBarFrame.size.height;
+        [notice setDismissalBlock:^(BOOL dismissedInteractively) {
+            notice = nil;
+        }];
         [notice show];
     };
     
