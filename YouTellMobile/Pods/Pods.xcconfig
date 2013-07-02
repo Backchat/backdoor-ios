@@ -1,10 +1,19 @@
+#include "Pods-AFNetworking.xcconfig"
+#include "Pods-Base64.xcconfig"
+#include "Pods-CKRefreshControl.xcconfig"
+#include "Pods-Facebook-iOS-SDK.xcconfig"
+#include "Pods-FlurrySDK.xcconfig"
+#include "Pods-HockeySDK.xcconfig"
+#include "Pods-Mixpanel.xcconfig"
+#include "Pods-NoticeView.xcconfig"
+#include "Pods-SDWebImage.xcconfig"
+#include "Pods-SVProgressHUD.xcconfig"
+#include "Pods-UIImage-Categories.xcconfig"
+#include "Pods-google-plus-ios-sdk.xcconfig"
 ALWAYS_SEARCH_USER_PATHS = YES
-FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/HockeySDK/Vendor"
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 $(inherited) BITHOCKEY_VERSION="@\"3.0.0\""
-HEADER_SEARCH_PATHS = ${PODS_HEADERS_SEARCH_PATHS}
-LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/FlurrySDK/Flurry" "$(PODS_ROOT)/google-plus-ios-sdk/google-plus-ios-sdk-1.2.1/lib"
-OTHER_LDFLAGS = -ObjC -ObjC -lFlurry -lGooglePlusUniversal -lsqlite3.0 -framework CoreGraphics -framework CoreLocation -framework CoreText -framework CrashReporter -framework Foundation -framework ImageIO -framework MobileCoreServices -framework QuartzCore -framework Security -framework SystemConfiguration -framework UIKit -weak_framework Accounts -weak_framework AdSupport -weak_framework Social
-PODS_BUILD_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/AFNetworking" "${PODS_ROOT}/BuildHeaders/Base64" "${PODS_ROOT}/BuildHeaders/CKRefreshControl" "${PODS_ROOT}/BuildHeaders/Facebook-iOS-SDK" "${PODS_ROOT}/BuildHeaders/Facebook-iOS-SDK/FacebookSDK" "${PODS_ROOT}/BuildHeaders/FlurrySDK" "${PODS_ROOT}/BuildHeaders/HockeySDK" "${PODS_ROOT}/BuildHeaders/NoticeView" "${PODS_ROOT}/BuildHeaders/SDWebImage" "${PODS_ROOT}/BuildHeaders/SVProgressHUD" "${PODS_ROOT}/BuildHeaders/UIImage-Categories" "${PODS_ROOT}/BuildHeaders/google-plus-ios-sdk"
-PODS_HEADERS_SEARCH_PATHS = ${PODS_PUBLIC_HEADERS_SEARCH_PATHS}
-PODS_PUBLIC_HEADERS_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/AFNetworking" "${PODS_ROOT}/Headers/Base64" "${PODS_ROOT}/Headers/CKRefreshControl" "${PODS_ROOT}/Headers/Facebook-iOS-SDK" "${PODS_ROOT}/Headers/Facebook-iOS-SDK/FacebookSDK" "${PODS_ROOT}/Headers/FlurrySDK" "${PODS_ROOT}/Headers/HockeySDK" "${PODS_ROOT}/Headers/NoticeView" "${PODS_ROOT}/Headers/SDWebImage" "${PODS_ROOT}/Headers/SVProgressHUD" "${PODS_ROOT}/Headers/UIImage-Categories" "${PODS_ROOT}/Headers/google-plus-ios-sdk"
+FRAMEWORK_SEARCH_PATHS =  ${PODS_HOCKEYSDK_FRAMEWORK_SEARCH_PATHS}
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1 ${PODS_HOCKEYSDK_GCC_PREPROCESSOR_DEFINITIONS}
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/AFNetworking" "${PODS_ROOT}/Headers/Base64" "${PODS_ROOT}/Headers/CKRefreshControl" "${PODS_ROOT}/Headers/Facebook-iOS-SDK" "${PODS_ROOT}/Headers/Facebook-iOS-SDK/FacebookSDK" "${PODS_ROOT}/Headers/FlurrySDK" "${PODS_ROOT}/Headers/HockeySDK" "${PODS_ROOT}/Headers/Mixpanel" "${PODS_ROOT}/Headers/NoticeView" "${PODS_ROOT}/Headers/SDWebImage" "${PODS_ROOT}/Headers/SVProgressHUD" "${PODS_ROOT}/Headers/UIImage-Categories" "${PODS_ROOT}/Headers/google-plus-ios-sdk"
+LIBRARY_SEARCH_PATHS =  ${PODS_FLURRYSDK_LIBRARY_SEARCH_PATHS} ${PODS_GOOGLE_PLUS_IOS_SDK_LIBRARY_SEARCH_PATHS}
+OTHER_LDFLAGS = -ObjC ${PODS_AFNETWORKING_OTHER_LDFLAGS} ${PODS_CKREFRESHCONTROL_OTHER_LDFLAGS} ${PODS_FACEBOOK_IOS_SDK_OTHER_LDFLAGS} ${PODS_FLURRYSDK_OTHER_LDFLAGS} ${PODS_HOCKEYSDK_OTHER_LDFLAGS} ${PODS_MIXPANEL_OTHER_LDFLAGS} ${PODS_NOTICEVIEW_OTHER_LDFLAGS} ${PODS_SDWEBIMAGE_OTHER_LDFLAGS} ${PODS_SVPROGRESSHUD_OTHER_LDFLAGS} ${PODS_UIIMAGE_CATEGORIES_OTHER_LDFLAGS} ${PODS_GOOGLE_PLUS_IOS_SDK_OTHER_LDFLAGS}
 PODS_ROOT = ${SRCROOT}/Pods

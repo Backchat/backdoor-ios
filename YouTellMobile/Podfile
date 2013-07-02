@@ -13,6 +13,7 @@ pod 'CKRefreshControl'
 pod 'google-plus-ios-sdk'
 pod 'FlurrySDK'
 pod 'NoticeView'
+pod 'Mixpanel'
 
 post_install do |installer|
   installer.project.targets.each do |target|
