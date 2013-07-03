@@ -8,6 +8,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import <GPPSignInButton.h>
+#import <Mixpanel.h>
 
 #import "YTLoginViewController.h"
 #import "YTFBHelper.h"
@@ -22,11 +23,13 @@
 
 - (IBAction)loginButtonWasPressed:(id)sender
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Facebook Login Button"];
     [YTFBHelper openSession];
 }
 
 - (IBAction)gppButtonWasPressed:(id)sender
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Google+ Login Button"];
     [[YTGPPHelper sharedInstance] signIn];
 }
 

@@ -6,6 +6,7 @@
 //
 
 #import <UIImage+Resize.h>
+#import <Mixpanel.h>
 #import <Base64/MF_Base64Additions.h>
 
 #import "YTGabPhotoHelper.h"
@@ -116,6 +117,8 @@
     
     photoView.sendButton.target = self;
     photoView.sendButton.action = @selector(sendButtonWasClicked);
+    
+    [[Mixpanel sharedInstance] track:@"Selected Image"];
 }
 
 - (void)cancelButtonWasClicked

@@ -6,6 +6,8 @@
 //
 #import <QuartzCore/QuartzCore.h>
 
+#import <Mixpanel.h>
+
 #import "YTInviteSettingsViewController.h"
 #import "YTAppDelegate.h"
 #import "YTFBHelper.h"
@@ -180,6 +182,7 @@
 
 - (void)showFBShare
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Post On Facebook Button"];
     [YTFBHelper presentFeedDialog];
 }
 
@@ -190,11 +193,13 @@
 
 - (void)showGPPShare
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Share On Google+ Button"];
     [[YTGPPHelper sharedInstance] presentShareDialog];
 }
 
 - (void)showTweetSheet
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Tweet About Backdoor Button"];
     [[YTTwitterHelper sharedInstance] showTweetSheet:self];
 }
 

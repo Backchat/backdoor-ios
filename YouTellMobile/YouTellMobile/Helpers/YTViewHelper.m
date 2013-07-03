@@ -20,6 +20,7 @@
 #import "YTWebViewController.h"
 
 #import <WBErrorNoticeView.h>
+#import <Mixpanel.h>
 
 @implementation YTViewHelper
 
@@ -212,6 +213,7 @@
 
 + (void)showSettings
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Settings Button"];
     YTAppDelegate *delegate = [YTAppDelegate current];
     YTSettingsViewController *controller = [YTSettingsViewController new];
 
@@ -237,7 +239,6 @@
     }
 
     void (^block)(BOOL) = ^(BOOL dismissedInteractively) {
-        
         UIView* view = [YTAppDelegate current].navController.view;
         notice = [WBErrorNoticeView errorNoticeInView:view title:title message:message];
         notice.sticky = YES;

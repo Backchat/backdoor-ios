@@ -8,6 +8,7 @@
 #import <CoreData/CoreData.h>
 
 #import <FlurrySDK/Flurry.h>
+#import <Mixpanel.h>
 
 #import "YTAppDelegate.h"
 #import "YTGabViewController.h"
@@ -38,6 +39,7 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)signOut
 {
+    [[Mixpanel sharedInstance] track:@"Signed Out"];
     [[YTGPPHelper sharedInstance] signOut];
     [YTFBHelper closeSession];
     [YTModelHelper changeStoreId:nil];
@@ -102,6 +104,10 @@ void uncaughtExceptionHandler(NSException *exception)
         [Flurry setEventLoggingEnabled:YES];
     }
     [Flurry startSession:CONFIG_FLURRY_APP_TOKEN];
+    
+    [Mixpanel sharedInstanceWithToken:CONFIG_MIXPANEL_TOKEN];
+    [[Mixpanel sharedInstance] track:@"Launched Application"];
+    
 
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
     
@@ -113,12 +119,25 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     static BOOL firstTime = YES;
-
+    
     if (firstTime) {
         firstTime = NO;
     } else {
         [YTApiHelper autoSync:NO];
     }
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    [[Mixpanel sharedInstance] track:@"Deactivated Application"];
+    [[Mixpanel sharedInstance] flush];
+}
+
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    [[Mixpanel sharedInstance] track:@"Terminated Application"];
+    [[Mixpanel sharedInstance] flush];
 }
 
 - (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

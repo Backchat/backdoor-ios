@@ -9,6 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import <UIImageView+WebCache.h>
+#import <Mixpanel.h>
 
 #import "YTAppDelegate.h"
 #import "YTMainViewController.h"
@@ -31,11 +32,13 @@
 
 - (void)refreshWasRequested
 {
+    [[Mixpanel sharedInstance] track:@"Dragged Refresh Control"];
     [YTApiHelper autoSync:NO];
 }
 
 - (void)composeButtonWasClicked
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Compose Button"];
     [self.searchBar resignFirstResponder];
     [YTViewHelper showGab];
 }
@@ -390,18 +393,22 @@
 
     if (indexPath.section == 0) {
         NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row  filter:self.searchBar.text];
+        [[Mixpanel sharedInstance] track:@"Tapped Thread Item"];
         self.selectedGabId = [object valueForKey:@"id"];
         [YTViewHelper showGabWithId:self.selectedGabId];
     } else if (indexPath.section == 1) {
+        [[Mixpanel sharedInstance] track:@"Tapped Featured Users Item"];
         NSDictionary *user = self.currentFeaturedUsers[indexPath.row];
         [YTViewHelper showGabWithReceiver:user];
 
     } else if (indexPath.section == 2) {
         if([self isShareButton:indexPath]) {
+            [[Mixpanel sharedInstance] track:@"Tapped Share Item"];
             //TODO dry up with YTContactWidget
             [[YTGPPHelper sharedInstance] presentShareDialog];
         }
         else {
+            [[Mixpanel sharedInstance] track:@"Tapped Backdoor A Friend Item"];
             NSDictionary *friendData = self.currentFilteredUsers[indexPath.row];
             NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
             [YTViewHelper showGabWithReceiver:friend];
@@ -462,6 +469,7 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+    [[Mixpanel sharedInstance] track:@"Used Thread Search Bar"];
     [self reloadData];
 }
      

@@ -6,6 +6,7 @@
 //
 
 #import <Twitter/Twitter.h>
+#import <Mixpanel.h>
 
 #import "YTTwitterHelper.h"
 #import "YTApiHelper.h"
@@ -49,6 +50,7 @@
     }
     
     [YTApiHelper getFreeCluesWithReason:@"tweet"];
+    [[Mixpanel sharedInstance] track:@"Tweeted About Backdoor"];
 }
 
 @end

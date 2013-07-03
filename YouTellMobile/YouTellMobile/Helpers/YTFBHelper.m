@@ -8,6 +8,7 @@
 #import <FacebookSDK/Facebook.h>
 
 #import <FlurrySDK/Flurry.h>
+#import <Mixpanel.h>
 
 #import "YTAppDelegate.h"
 #import "YTFBHelper.h"
@@ -34,6 +35,7 @@
     [YTApiHelper resetUserInfo];
     
     [Flurry logEvent:@"Signed_In_With_Facebook"];
+    [[Mixpanel sharedInstance] track:@"Signed In With Facebook"];
     
     YTAppDelegate *delegate = [YTAppDelegate current];
     delegate.userInfo[@"provider"] = @"facebook";
@@ -241,6 +243,7 @@
         
         [YTApiHelper getFreeCluesWithReason:@"fbshare"];
         
+        [[Mixpanel sharedInstance] track:@"Shared On Facebook"];
     }];
 
 }
@@ -294,6 +297,9 @@
         }
         
         if (result == FBWebDialogResultDialogNotCompleted || [resultURL.absoluteString isEqualToString:@"fbconnect://success"]) {
+            [[Mixpanel sharedInstance] track:@"Cancelled Inviting Friend"];
+            [[Mixpanel sharedInstance] track:@"Cancelled Inviting Friend On Facebook"];
+
             return;
         }
         
@@ -303,7 +309,8 @@
         
         [YTApiHelper getFreeCluesWithReason:@"fbinvite"];
 
-
+        [[Mixpanel sharedInstance] track:@"Invited Friend On Facebook"];
+        [[Mixpanel sharedInstance] track:@"Invited Friend"];
     }];
 }
 

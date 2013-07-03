@@ -6,6 +6,7 @@
 //
 
 #import <NSString+JSMessagesView.h>
+#import <Mixpanel.h>
 #import <Facebook-iOS-SDK/FacebookSDK/FacebookSDK.h>
 
 #import "YTGabSendHelper.h"
@@ -54,6 +55,7 @@
 
 - (void)changedSelectedContact:(NSDictionary *)contact
 {
+    [[Mixpanel sharedInstance] track:@"Selected Thread Receiver"];
     [self updateButtons];
 }
 

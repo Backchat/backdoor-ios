@@ -15,6 +15,8 @@
 #import <Facebook-iOS-SDK/FacebookSDK/Facebook.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <Flurry.h>
+#import <Mixpanel.h>
+
 #import "YTConfig.h"
 #import "YTAppDelegate.h"
 #import "YTHelper.h"
@@ -141,7 +143,11 @@
                 return;
             }
             
-            [Flurry setUserID:JSON[@"response"][@"sync_data"][@"sync_uid"]];
+            NSString *uid = JSON[@"response"][@"sync_data"][@"sync_uid"];
+            if (uid) {
+                [Flurry setUserID:uid];
+                [[Mixpanel sharedInstance] identify:uid];
+            }
             
             NSDictionary *sync_data = JSON[@"response"][@"sync_data"];
             if (sync_data != nil) {
@@ -217,6 +223,7 @@
                                               success:success
                                               failure:nil];
     [Flurry logEvent:@"Sent_Feedback"];
+    [[Mixpanel sharedInstance] track:@"Sent Feedback" properties:@{@"rating": rating}];
 }
 
 
@@ -230,6 +237,7 @@
                                               success:success
                                               failure:nil];
     [Flurry logEvent:@"Sent_Abuse_Report"];
+    [[Mixpanel sharedInstance] track:@"Sent Abuse Report"];
 }
 
 
@@ -292,11 +300,12 @@
 
         if(gabId.integerValue >= 0) {
             [YTApiHelper sendJSONRequestToPath:@"/clear-gab" method:@"POST" params:@{@"id": gabId} success:success failure:nil];
+            
+            [Flurry logEvent:@"Deleted_Thread"];
+            [[Mixpanel sharedInstance] track:@"Deleted Thread"];
         }
     }];
-    
-    
-    [Flurry logEvent:@"Deleted_Thread"];
+
 }
 
 + (void)tagGab:(NSNumber*)gabId tag:(NSString*)tag success:(void(^)(id JSON))success
@@ -308,6 +317,7 @@
                                               success:success
                                               failure:nil];
     [Flurry logEvent:@"Tagged_Thread"];
+    [[Mixpanel sharedInstance] track:@"Tagged Thread"];
 }
 
 + (void)requestClue:(NSNumber*)gabId number:(NSNumber*)number success:(void(^)(id JSON))success;
@@ -318,6 +328,7 @@
                                success:success failure:nil];
     
     [Flurry logEvent:@"Requested_Clue"];
+    [[Mixpanel sharedInstance] track:@"Requested Clue"];
 }
 
 + (void)buyCluesWithReceipt:(NSString *)receipt success:(void(^)(id JSON))success

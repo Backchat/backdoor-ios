@@ -12,6 +12,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #import <Flurry.h>
+#import <Mixpanel.h>
 
 #import "JSMessagesViewController.h"
 #import "JSMessageInputView.h"
@@ -312,6 +313,7 @@
 
 - (void)dismiss
 {
+    [[Mixpanel sharedInstance] track:@"Cancelled Thread Compose"];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -427,8 +429,11 @@
             [YTApiHelper checkUid:contact[@"value"] success:^(id JSON) {
                 if ([JSON[@"uid_exists"] isEqualToString:@"yes"]) {
                     [self sendMessage:message withContact:contact];
+                    [[Mixpanel sharedInstance] track:@"Tried To Send Message To An Existent User"];
                 }
                 else {
+                    [[Mixpanel sharedInstance] track:@"Tried To Send Message To Nonexistent User"];
+
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"New message", nil)
                                                                     message:NSLocalizedString(@"Your friend does not have a Backdoor account.  Would you like to send an invite?", nil)
                                                                    delegate:self
@@ -495,24 +500,34 @@
     
     if(buttonIndex == 1) {
         //"invite"
+        [[Mixpanel sharedInstance] track:@"Agreed To Invite Friend Instead Of Sending Message"];
+        
         if ([[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"]) {
             [self.inputView.textView resignFirstResponder]; //LINREVIEW brittle, no abstraction here
             
             //a half second delay is needed because of animation issues
             [self performSelector:@selector(showFBRequest) withObject:nil afterDelay:0.5];
+            
+            [[Mixpanel sharedInstance] track:@"Agreed To Invite Facebook Friend Instead Of Sending Message"];
+
         
         } else {
             //show the GPP generalized share
             //TODO target the specific user
             //a half second delay is needed because of animation issues
             [self performSelector:@selector(showGPPRequest) withObject:nil afterDelay:0.5];
+            
+            [[Mixpanel sharedInstance] track:@"Agreed To Invite Google+ Friend Instead Of Sending Message"];
+
 //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"Sending messages to unregistered Google+ friends is not supported yet", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
 //            [alert show];
             [self dismiss];            
         }
     }
     else {
-        [self dismiss];        
+        [[Mixpanel sharedInstance] track:@"Disagreed To Invite Friend Instead Of Sending Message"];
+
+        [self dismiss];
     }
 
 }
@@ -574,6 +589,12 @@
 
                                    [self updateState];
                                    
+                                   [Flurry logEvent:@"Sent_Message" withParameters:@{@"kind":params[@"kind"]}];
+                                   [[Mixpanel sharedInstance] track:@"Sent Message"];
+                                   if (!params[@"gab_id"]) {
+                                       [[Mixpanel sharedInstance] track:@"Created Thread"];
+                                   }
+                                   
                                    self.ongoingRequest = false;
                                    [self handleNextQueuedMessage];
                                }
@@ -587,7 +608,8 @@
                                    
                                }];
 
-    [Flurry logEvent:@"Sent_Message" withParameters:@{@"kind":params[@"kind"]}];
+    
+
 }
 
 @end

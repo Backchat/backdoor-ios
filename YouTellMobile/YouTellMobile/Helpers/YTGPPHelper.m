@@ -16,6 +16,7 @@
 #import <GTMOAuth2Authentication.h>
 #import <GPPShare.h>
 #import <FlurrySDK/Flurry.h>
+#import <Mixpanel.h>
 
 #import "YTGPPHelper.h"
 #import "YTApiHelper.h"
@@ -74,6 +75,7 @@
         [YTApiHelper resetUserInfo];
         
         [Flurry logEvent:@"Signed_In_With_Google+"];
+        [[Mixpanel sharedInstance] track:@"Signed In With Google+"];
 
         YTAppDelegate *delegate = [YTAppDelegate current];
 
@@ -175,6 +177,11 @@
 {
     if (shared) {
         [YTApiHelper getFreeCluesWithReason:@"gppshare"];
+        [[Mixpanel sharedInstance] track:@"Shared On Google+"];
+    } else {
+        [[Mixpanel sharedInstance] track:@"Cancelled Google+ Share"];        
+        [[Mixpanel sharedInstance] track:@"Cancelled Inviting Friend"];
+
     }
 }
 

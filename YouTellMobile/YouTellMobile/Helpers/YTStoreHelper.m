@@ -10,6 +10,7 @@
 #import <MF_Base64Additions.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <Flurry.h>
+#import <Mixpanel.h>
 
 #import "YTStoreHelper.h"
 #import "YTApiHelper.h"
@@ -131,6 +132,7 @@
         NSInteger count = [YTModelHelper userAvailableClues];
 
         [Flurry logEvent:@"Bought_Clues" withParameters:@{@"count": [NSNumber numberWithInteger:count - prevCount]}];
+        [[Mixpanel sharedInstance] track:@"Bought Clues"];
 
         YTAppDelegate *delegate = [YTAppDelegate current];
         if (delegate.currentGabViewController && delegate.currentGabViewController.clueHelper) {

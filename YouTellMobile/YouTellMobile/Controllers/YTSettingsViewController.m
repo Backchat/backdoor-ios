@@ -5,6 +5,8 @@
 //  Copyright (c) 2013 Backdoor LLC. All rights reserved.
 //
 
+#import <Mixpanel.h>
+
 #import "YTConfig.h"
 #import "YTSettingsViewController.h"
 #import "YTViewHelper.h"
@@ -80,21 +82,26 @@
 
 - (void)showNotifications
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Notification Settings Button"];
     [YTViewHelper loadSettingsController:[[YTNotificationSettingsViewController alloc]init]];
 }
 
 - (void)showInvite
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Share With Friends (Free Clues) Settings Button"];
+
     [YTViewHelper loadSettingsController:[[YTInviteSettingsViewController alloc]init]];
 }
 
 - (void)showPrivacy
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Privacy & Abuse Settings Button"];
     [YTViewHelper loadSettingsController:[[YTPrivacySettingsViewController alloc]init]];
 }
 
 - (void)showHelp
 {
+    [[Mixpanel sharedInstance] track:@"Tapped About Us Settings Button"];
     [YTViewHelper loadSettingsController:[[YTHelpSettingsViewController alloc] init]];
 }
 
@@ -108,11 +115,13 @@
     NSString *urlString = [NSString stringWithFormat:@"http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%@&type=Purple+Software", CONFIG_APPLE_ID];
     NSURL *url = [NSURL URLWithString:urlString];
     [[UIApplication sharedApplication] openURL:url];
+    [[Mixpanel sharedInstance] track:@"Tapped Rate Button"];
 }
 
 - (void)inviteButtonWasClicked
 {
     [YTFBHelper presentRequestDialogWithContact:nil complete:nil];
+    [[Mixpanel sharedInstance] track:@"Tapped Invite Button"];
 }
 
 - (void)shareButtonWasClicked
@@ -122,6 +131,8 @@
     } else {
         [[YTGPPHelper sharedInstance] presentShareDialog];
     }
+    
+    [[Mixpanel sharedInstance] track:@"Tapped Share Button"];
 }
 
 @end
