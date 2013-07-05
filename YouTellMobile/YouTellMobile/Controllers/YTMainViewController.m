@@ -20,6 +20,14 @@
 #import "YTViewHelper.h"
 #import "YTConfig.h"
 #import "YTGPPHelper.h"
+#import "YTSocialHelper.h"
+
+#define SECTION_GABS 0
+#define SECTION_FRIENDS 1
+#define SECTION_MORE 2
+#define SECTION_SHARE 3
+#define SECTION_FEATURED 4
+#define SECTION_COUNT 5
 
 @interface YTMainViewController ()
 @property (nonatomic, retain) NSMutableArray* currentFeaturedUsers;
@@ -74,6 +82,7 @@
     avatarView.tag = 5;
     avatarView.layer.cornerRadius = 5;
     avatarView.layer.masksToBounds = YES;
+    avatarView.frame = CGRectMake(26, 7, 45, 45);
     [cell.contentView addSubview:avatarView];
     
     UILabel *textLabel = [[UILabel alloc] init];
@@ -89,7 +98,6 @@
         return cell;
     }
 
-
     cell.textLabel.font = [UIFont systemFontOfSize:17];
     
     UILabel *timeLabel = [[UILabel alloc] init];
@@ -102,7 +110,6 @@
 
     [cell.contentView addSubview:timeLabel];
 
-
     UILabel *detTextLabel = [[UILabel alloc] init];
     detTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     detTextLabel.font = [UIFont systemFontOfSize:13];
@@ -113,13 +120,78 @@
     [cell.contentView addSubview:detTextLabel];
     cell.detailTextLabel.textColor = [UIColor clearColor];
     
-    UIImage *image = [YTHelper imageNamed:@"newgab"];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    UIImageView *imageView = [[UIImageView alloc] init];
     imageView.tag = 4;
     [cell.contentView addSubview:imageView];
 
 
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    return cell;
+}
+
+- (UITableViewCell *)cellWithTitle:(NSString*)title subtitle:(NSString*)subtitle time:(NSString*)time image:(NSString*)image
+{
+    UITableViewCell *cell = [self cellWithIdent:@"cell"];
+    
+    UILabel *timeLabel = (UILabel*)[cell viewWithTag:1];
+    UILabel *textLabel = (UILabel*)[cell viewWithTag:2];
+    UILabel *detTextLabel = (UILabel*)[cell viewWithTag:3];
+    UIImageView *imageView = (UIImageView*)[cell viewWithTag:4];
+    
+    // Update time label
+
+    CGSize timeSize;
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 6.0) {
+        timeLabel.text = time;
+        timeSize = [time sizeWithFont:timeLabel.font];
+    } else {
+        NSAttributedString *timeAttString = [YTHelper formatDateAttr:time size:12 color:[UIColor blueColor]];
+        timeLabel.attributedText = timeAttString;
+        timeSize = [timeAttString size];
+    }
+    CGFloat timeWidth = timeSize.width + 5;
+    timeLabel.frame = CGRectMake(cell.bounds.size.width - timeWidth - 30, 5, timeWidth, timeSize.height);
+    
+    // Update title label
+    
+    CGFloat textFontSize = cell.textLabel.font.pointSize;
+    textLabel.frame= CGRectMake(78, 2, cell.frame.size.width - timeWidth - 30 - 10 - 78, 21);
+    textLabel.font = [UIFont boldSystemFontOfSize:textFontSize];
+    textLabel.text = title;
+    cell.textLabel.text = @" ";
+    
+    // Update subtitle label
+    
+    detTextLabel.frame= CGRectMake(78, 23, cell.frame.size.width - 30 -  78, 32);
+    detTextLabel.text = [NSString stringWithFormat:@"%@\n ", subtitle];
+
+    cell.detailTextLabel.text = @" ";
+    
+    imageView.frame = CGRectMake(5, (cell.frame.size.height - 18) / 2, 18, 18);
+    if (image) {
+        imageView.image = [YTHelper imageNamed:image];
+        imageView.hidden = NO;
+    } else {
+        imageView.image = nil;
+        imageView.hidden = YES;
+    }
+    
+    [textLabel removeFromSuperview];
+    [cell.contentView addSubview:textLabel];
+    
+    [timeLabel removeFromSuperview];
+    [cell.contentView addSubview:timeLabel];
+    
+    [detTextLabel removeFromSuperview];
+    [cell.contentView addSubview:detTextLabel];
+    
+    [imageView removeFromSuperview];
+    [cell.contentView addSubview:imageView];
+    
+    for (UIView *view in cell.contentView.subviews) {
+        view.alpha = 1;
+    }
     
     return cell;
 }
@@ -169,105 +241,76 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
-}
-
-- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == 0) {
-        return nil;
-    } else if (section == 1 && [self tableView:tableView  numberOfRowsInSection:1] > 0) {
-        return NSLocalizedString(@"Featured users", nil);
-    } else if (section == 2 && [self tableView:tableView  numberOfRowsInSection:2] > 0){
-        return NSLocalizedString(@"Backdoor a friend", nil);
-    } else {
-        return nil;
-    }
+    return SECTION_COUNT;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger count = [YTModelHelper gabCountWithFilter:self.searchBar.text];
-    NSInteger ret = 0;
-    
-    if (section == 0) {
-        ret = count;
-    } else if (section == 1) {
-        [self.currentFeaturedUsers removeAllObjects];
-        NSArray* allFeaturedUsers = [YTAppDelegate current].featuredUsers;
-        for(NSDictionary* user in allFeaturedUsers) {
-            NSString* name = user[@"name"];
-            if(self.searchBar.text.length == 0 ||
-               [name rangeOfString:self.searchBar.text options:NSCaseInsensitiveSearch].location != NSNotFound)
-                [self.currentFeaturedUsers addObject:user];
-        }
-        ret = self.currentFeaturedUsers.count;
-    } else if (section == 2) {
-        if(self.searchBar.text.length == 0) {
-            ret = CONFIG_MAX_INDEX_OF_FB_FRIEND - count;
-            ret = MAX(ret, CONFIG_MIN_INDEX_OF_FB_FRIEND);
-            ret = MIN(ret, [[YTAppDelegate current].randFriends count]);
-            [self.currentFilteredUsers removeAllObjects];
-            [self.currentFilteredUsers addObjectsFromArray:[YTAppDelegate current].randFriends];
-        }
-        else {
-            [self.currentFilteredUsers removeAllObjects];
-            NSArray* friends = [YTModelHelper findContactsWithString:self.searchBar.text];
-            for(NSManagedObject* friend in friends) {
-                [self.currentFilteredUsers addObject:@{
-                    @"type": [friend valueForKey:@"type"],
-                    @"value": [friend valueForKey:@"value"]
-                }];
-            }
-            ret = self.currentFilteredUsers.count;
-        }
-        
-        if(ret == 0 && [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"gpp"]) {
-            return 1;
-        }
+    switch(section) {
+        case SECTION_GABS: return [self numberOfGabRows];
+        case SECTION_FRIENDS: return [self numberOfFriendRows];
+        case SECTION_MORE: return [self numberOfMoreRows];
+        case SECTION_SHARE: return [self numberOfShareRows];
+        case SECTION_FEATURED: return [self numberOfFeaturedRows];
+        default: return 0;
+    }
+}
+
+- (NSInteger)numberOfGabRows
+{
+    return [YTModelHelper gabCountWithFilter:self.searchBar.text];
+}
+
+- (NSInteger)numberOfFriendRows
+{
+    if ([YTModelHelper gabCountWithFilter:@""] >= 10) {
+        return 0;
     }
     
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    
+    NSInteger count = [delegate.randFriends count];
+    NSInteger ret = MIN(count, CONFIG_GHOST_FRIEND_COUNT);
+     
     return ret;
+}
+
+- (NSInteger)numberOfFeaturedRows
+{
+    return [[YTAppDelegate current].featuredUsers count];
+}
+
+- (NSInteger)numberOfMoreRows
+{
+    if ([YTModelHelper gabCountWithFilter:@""] >= CONFIG_MAX_CONVERSATION_COUNT_FOR_GHOST_FRIENDS) {
+        return 0;
+    }
+    
+    if ([YTAppDelegate current].randFriends.count <= CONFIG_GHOST_FRIEND_COUNT) {
+        return 0;
+    }
+    
+    return 1;
+}
+
+- (NSInteger)numberOfShareRows
+{
+    if ([YTModelHelper gabCountWithFilter:@""] >= CONFIG_MAX_CONVERSATION_COUNT_FOR_GHOST_FRIENDS) {
+        return 0;
+    }
+    
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return [self tableView:tableView cellForGabAtRow:indexPath.row];
-    } else if (indexPath.section == 1) {
-        return [self tableView:tableView cellForUserAtRow:indexPath.row];
-    } else if (indexPath.section == 2) {
-        if([self isShareButton:indexPath]) {
-            //display GPP share button
-            //TODO dry this up with YTContactWidget
-            
-            UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"cell_share"];
-            
-            if (cell) {
-                return cell;
-            }
-            
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell_share"];
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[YTHelper imageNamed:@"gpp_tableitem3"]];
-            
-            UILabel *label = [UILabel new];
-            
-            label.textColor = [UIColor whiteColor];
-            label.text = NSLocalizedString(@"Want friends on Backdoor?\nNo worries, Share on Google+", nil);
-            label.numberOfLines = 2;
-            label.font = [UIFont systemFontOfSize:14];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.frame = CGRectMake(0, 0, 320, 55); //a few pixel off for alignment
-            label.backgroundColor = [UIColor clearColor];
-            
-            [cell addSubview:imageView];
-            [cell addSubview:label];
-            return cell;
-        }
-        else
-            return [self tableView:tableView cellForFriendAtRow:indexPath.row];
-    } else {
-        return nil;
+    switch (indexPath.section) {
+        case SECTION_GABS: return [self tableView:tableView cellForGabAtRow:indexPath.row];
+        case SECTION_FRIENDS: return [self tableView:tableView cellForFriendAtRow:indexPath.row];
+        case SECTION_MORE: return [self tableView:tableView cellForMoreAtRow:indexPath.row];
+        case SECTION_SHARE: return [self tableView:tableView cellForShareAtRow:indexPath.row];
+        case SECTION_FEATURED: return [self tableView:tableView cellForUserAtRow:indexPath.row];
+        default: return nil;
     }
 }
 
@@ -275,82 +318,30 @@
 {
     NSManagedObject *object = [YTModelHelper gabForRow:row  filter:self.searchBar.text];
 
-    UITableViewCell *cell = [self cellWithIdent:@"cell"];
-    
-    UILabel *timeLabel = (UILabel*)[cell viewWithTag:1];
-    UILabel *textLabel = (UILabel*)[cell viewWithTag:2];
-    UILabel *detTextLabel = (UILabel*)[cell viewWithTag:3];
-    UIImageView *imageView = (UIImageView*)[cell viewWithTag:4];
-    UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
-
-    NSString *timeString = [YTHelper formatDate:[object valueForKey:@"last_date"]];
-    CGSize timeSize;
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 6.0) {
-        timeLabel.text = timeString;
-        timeSize = [timeString sizeWithFont:timeLabel.font];
-    } else {
-        NSAttributedString *timeAttString = [YTHelper formatDateAttr:timeString size:12 color:[UIColor blueColor]];
-        timeLabel.attributedText = timeAttString;
-        timeSize = [timeAttString size];
-    }
-    CGFloat timeWidth = timeSize.width + 5;
-    timeLabel.frame = CGRectMake(cell.bounds.size.width - timeWidth - 30, 5, timeWidth, timeSize.height);
-
     BOOL read = [[object valueForKey:@"unread_count"] isEqualToNumber:@0];
-    CGFloat textFontSize = cell.textLabel.font.pointSize;
+    NSString *title = [YTModelHelper userNameForGab:object];
+    NSString *subtitle = [object valueForKey:@"content_summary"];
+    NSString *time = [YTHelper formatDate:[object valueForKey:@"last_date"]];
+    NSString *image = read ? nil : @"newgab2";
 
-    textLabel.frame= CGRectMake(78, 2, cell.frame.size.width - timeWidth - 30 - 10 - 78, 21);
-    //textLabel.font = read ? [UIFont systemFontOfSize:textFontSize] : [UIFont boldSystemFontOfSize:textFontSize];
-    textLabel.font = [UIFont boldSystemFontOfSize:textFontSize];
-    textLabel.text = [YTModelHelper userNameForGab:object];
-    cell.textLabel.text = @" "                                                                                          ;
-    
-    detTextLabel.frame= CGRectMake(78, 23, cell.frame.size.width - 30 -  78, 32);
-    detTextLabel.text = [NSString stringWithFormat:@"%@\n ", [object valueForKey:@"content_summary"]];
+    UITableViewCell *cell = [self cellWithTitle:title subtitle:subtitle time:time image:image];
 
-    cell.detailTextLabel.text = @" ";
-    
-    imageView.frame = CGRectMake(5, (cell.frame.size.height - imageView.frame.size.height) / 2, 15, 15);
-    imageView.hidden = read;
-    
-
-    avatarView.frame = CGRectMake(26, 7, 45, 45);
-
-    
-    [textLabel removeFromSuperview];
-    [cell addSubview:textLabel];
-    
-    [timeLabel removeFromSuperview];
-    [cell addSubview:timeLabel];
-
-    [detTextLabel removeFromSuperview];
-    [cell addSubview:detTextLabel];
-    
-    [imageView removeFromSuperview];
-    [cell addSubview:imageView];
-    
-    [avatarView removeFromSuperview];
-    [cell addSubview:avatarView];
-    
+    UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"related_avatar"]] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
 
     return cell;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForUser:(NSDictionary*)user
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForUser:(NSDictionary*)user featured:(BOOL)featured
 {
-    UITableViewCell *cell = [self cellWithIdent:@"cell_friend"];
-
+    NSString *title = user[@"name"];
+    NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation", nil);
+    NSString *time = featured ? NSLocalizedString(@"Featured", nil) : @"";
+    NSString *image = featured ? @"star2" : nil;
+    
+    UITableViewCell *cell = [self cellWithTitle:title subtitle:subtitle time:time image:image];
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
-    avatarView.frame = CGRectMake(26, 6, 45, 45);
-    
-    UILabel *textLabel = (UILabel*)[cell viewWithTag:2];
-    
-    textLabel.frame= CGRectMake(78, 18, cell.frame.size.width - 93, 21);
-    textLabel.font = [UIFont boldSystemFontOfSize:21];
-    textLabel.text = user[@"name"];
-    cell.textLabel.text = @" ";
-    
+
     if ([user[@"type"] isEqualToString:@"facebook"]) {
         NSString *urls = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", user[@"value"]];
         [avatarView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
@@ -360,30 +351,63 @@
     } else {
         [avatarView setImage:nil];
     }
+
     
-    
-    [textLabel removeFromSuperview];
-    [cell addSubview:textLabel];
-    
-    [avatarView removeFromSuperview];
-    [cell addSubview:avatarView];
     
     return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForFriendAtRow:(NSInteger)row
 {
-    NSDictionary *friendData = self.currentFilteredUsers[row];
+    NSDictionary *friendData = [YTAppDelegate current].randFriends[row];
     NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
-    return [self tableView:tableView cellForUser:friend];
+    UITableViewCell *cell = [self tableView:tableView cellForUser:friend featured:NO];
+    
+    for (UIView *view in cell.contentView.subviews) {
+        view.alpha = 0.6;
+        [view setNeedsDisplay];
+    }
+    
+    return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForUserAtRow:(NSInteger)row
 {
-    NSDictionary *user = self.currentFeaturedUsers[row];
-    return [self tableView:tableView cellForUser:user];
+    NSDictionary *user = [YTAppDelegate current].featuredUsers[row];
+    return [self tableView:tableView cellForUser:user featured:YES];
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForShareAtRow:(NSInteger)row
+{
+    NSString *title = NSLocalizedString(@"Share", nil);
+    NSString *subtitle = NSLocalizedString(@"Tap me to get more friends", nil);
+    NSString *time = @"";
+    NSString *image = nil;
+    
+    UITableViewCell *cell = [self cellWithTitle:title subtitle:subtitle time:time image:image];
+    
+    UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
+
+    NSString *url = @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png";
+    [avatarView setImageWithURL:[NSURL URLWithString:url] placeholderImage:nil options:SDWebImageRefreshCached];
+    
+    return cell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForMoreAtRow:(NSInteger)row
+{
+    NSString *title = NSLocalizedString(@"Show More", nil);
+    NSString *subtitle = NSLocalizedString(@"Show all of your Backdoor friends", nil);
+    NSString *time = @"";
+    NSString *image = nil;
+    
+    UITableViewCell *cell = [self cellWithTitle:title subtitle:subtitle time:time image:image];
+    
+    UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
+    [avatarView setImage:[UIImage imageNamed:@"more2"]];
+    
+    return cell;
+}
 
 # pragma mark UITableViewDelegate methods
 
@@ -391,40 +415,45 @@
 {
     [self.searchBar resignFirstResponder];
 
-    if (indexPath.section == 0) {
+    if (indexPath.section == SECTION_GABS) {
         NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row  filter:self.searchBar.text];
-        [[Mixpanel sharedInstance] track:@"Tapped Thread Item"];
+        [[Mixpanel sharedInstance] track:@"Tapped Main View / Thread Item"];
         self.selectedGabId = [object valueForKey:@"id"];
         [YTViewHelper showGabWithId:self.selectedGabId];
-    } else if (indexPath.section == 1) {
-        [[Mixpanel sharedInstance] track:@"Tapped Featured Users Item"];
-        NSDictionary *user = self.currentFeaturedUsers[indexPath.row];
-        [YTViewHelper showGabWithReceiver:user];
-
-    } else if (indexPath.section == 2) {
-        if([self isShareButton:indexPath]) {
-            [[Mixpanel sharedInstance] track:@"Tapped Share Item"];
-            //TODO dry up with YTContactWidget
-            [[YTGPPHelper sharedInstance] presentShareDialog];
-        }
-        else {
-            [[Mixpanel sharedInstance] track:@"Tapped Backdoor A Friend Item"];
-            NSDictionary *friendData = self.currentFilteredUsers[indexPath.row];
-            NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
-            [YTViewHelper showGabWithReceiver:friend];
-        }
+        return;
     }
-}
+    
+    if (indexPath.section == SECTION_FRIENDS) {
+        [[Mixpanel sharedInstance] track:@"Tapped Main View / Friend Item"];
+        NSDictionary *friendData = [YTAppDelegate current].randFriends[indexPath.row];
+        NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
+        [YTViewHelper showGabWithReceiver:friend];
+        return;
+    }
+    
+    if (indexPath.section == SECTION_MORE) {
+        [[Mixpanel sharedInstance] track:@"Tapped Main View / More Item"];
 
-- (bool)isShareButton:(NSIndexPath*)indexPath
-{
-    return indexPath.section == 2 && self.currentFilteredUsers.count == 0 &&
-    [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"gpp"];
+        return;
+    }
+    
+    if (indexPath.section == SECTION_SHARE) {
+        [[Mixpanel sharedInstance] track:@"Tapped Main View / Share Item"];
+        [[YTSocialHelper sharedInstance] presentShareDialog];
+        return;
+    }
+    
+    if (indexPath.section == SECTION_FEATURED) {
+        [[Mixpanel sharedInstance] track:@"Tapped Main View / Featured Users Item"];
+        NSDictionary *user = [YTAppDelegate current].featuredUsers[indexPath.row];
+        [YTViewHelper showGabWithReceiver:user];
+        return;
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
+    if (indexPath.section == SECTION_GABS) {
         return YES;
     } else {
         return NO;
@@ -458,11 +487,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return 60;
-    } else {
-        return 58;
-    }
+    return 60;
 }
 
 #pragma mark UISearchBarDelegate methods

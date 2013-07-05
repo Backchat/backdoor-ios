@@ -11,5 +11,7 @@
 
 + (YTSocialHelper*)sharedInstance;
 - (BOOL)isGPP;
+- (BOOL)isFacebook;
+- (void)presentShareDialog;
 
 @end

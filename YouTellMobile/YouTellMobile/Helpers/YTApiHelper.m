@@ -367,7 +367,6 @@
     }
     
     [YTApiHelper sendJSONRequestToPath:@"/featured-users" method:@"POST" params:@{} success:^(id JSON) {
-        
         [YTAppDelegate current].featuredUsers = JSON[@"users"];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [YTViewHelper refreshViews];

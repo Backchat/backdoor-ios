@@ -20,6 +20,8 @@
 @property (strong, nonatomic) UISearchBar *searchBar;
 
 @property (strong, nonatomic) NSNumber *selectedGabId;
+@property (assign, nonatomic) BOOL showMoreItem;
+@property (assign, nonatomic) BOOL showShareItem;
 
 - (void)refreshWasRequested;
 - (void)composeButtonWasClicked;

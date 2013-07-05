@@ -7,6 +7,8 @@
 //
 
 #import "YTSocialHelper.h"
+#import "YTGPPHelper.h"
+#import "YTFBHelper.h"
 #import "YTAppDelegate.h"
 
 @implementation YTSocialHelper
@@ -24,6 +26,20 @@
 - (BOOL)isGPP
 {
     return [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"gpp"];
+}
+
+- (BOOL)isFacebook
+{
+    return [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"];
+}
+
+- (void)presentShareDialog
+{
+    if ([self isGPP]) {
+        [[YTGPPHelper sharedInstance] presentShareDialog];
+    } else if ([self isFacebook]) {
+        [YTFBHelper presentFeedDialog];
+    }
 }
 
 @end
