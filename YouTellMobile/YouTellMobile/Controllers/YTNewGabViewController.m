@@ -2,8 +2,7 @@
 //  YTNewGabViewController.m
 //  Backdoor
 //
-//  Created by Łukasz S on 7/6/13.
-//  Copyright (c) 2013 4WT. All rights reserved.
+//  Copyright (c) 2013 Backdoor LLC. All rights reserved.
 //
 
 #import "YTNewGabViewController.h"
