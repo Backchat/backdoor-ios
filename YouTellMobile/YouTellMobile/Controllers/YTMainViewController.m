@@ -18,9 +18,11 @@
 #import "YTModelHelper.h"
 #import "YTApiHelper.h"
 #import "YTViewHelper.h"
+#import "YTNewGabViewController.h"
 #import "YTConfig.h"
 #import "YTGPPHelper.h"
 #import "YTSocialHelper.h"
+#import "YTMainViewHelper.h"
 
 #define SECTION_GABS 0
 #define SECTION_FRIENDS 1
@@ -47,14 +49,12 @@
 - (void)composeButtonWasClicked
 {
     [[Mixpanel sharedInstance] track:@"Tapped Compose Button"];
+    
     [self.searchBar resignFirstResponder];
-    [YTViewHelper showGab];
-}
-
-- (void)deselectSelectedGab:(BOOL)animated
-{
-    [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:animated];
-    self.selectedGabId = nil;
+    
+    YTNewGabViewController *c = [YTNewGabViewController new];
+    [[YTAppDelegate current].navController pushViewController:c animated:YES];
+    //[YTViewHelper showGab];
 }
 
 - (void)reloadData
@@ -64,137 +64,6 @@
     [self.tableView selectRowAtIndexPath:[YTModelHelper indexPathForGab:self.selectedGabId filter:self.searchBar.text] animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
-- (UITableViewCell *)cellWithIdent:(NSString*)ident
-{
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:ident];
-    
-    if (cell) {
-        return cell;
-    }
-    
-    if ([ident isEqualToString:@"cell"]) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ident];
-    } else {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ident];
-    }
-    
-    UIImageView *avatarView = [[UIImageView alloc] init];
-    avatarView.tag = 5;
-    avatarView.layer.cornerRadius = 5;
-    avatarView.layer.masksToBounds = YES;
-    avatarView.frame = CGRectMake(26, 7, 45, 45);
-    [cell.contentView addSubview:avatarView];
-    
-    UILabel *textLabel = [[UILabel alloc] init];
-    textLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    textLabel.font = [UIFont systemFontOfSize:12];
-    textLabel.textColor = cell.textLabel.textColor;
-    textLabel.tag = 2;
-    textLabel.backgroundColor = [UIColor clearColor];
-    [cell.contentView addSubview:textLabel];
-    cell.textLabel.textColor = [UIColor clearColor];
-    
-    if (![ident isEqualToString:@"cell"]) {
-        return cell;
-    }
-
-    cell.textLabel.font = [UIFont systemFontOfSize:17];
-    
-    UILabel *timeLabel = [[UILabel alloc] init];
-    timeLabel.font = [UIFont systemFontOfSize:12];
-    timeLabel.textColor = [UIColor blueColor];
-    timeLabel.backgroundColor = [UIColor clearColor];
-    timeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    timeLabel.textAlignment = NSTextAlignmentRight;
-    timeLabel.tag = 1;
-
-    [cell.contentView addSubview:timeLabel];
-
-    UILabel *detTextLabel = [[UILabel alloc] init];
-    detTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    detTextLabel.font = [UIFont systemFontOfSize:13];
-    detTextLabel.textColor = cell.detailTextLabel.textColor;
-    detTextLabel.backgroundColor = [UIColor clearColor];
-    detTextLabel.tag = 3;
-    detTextLabel.numberOfLines = 2;
-    [cell.contentView addSubview:detTextLabel];
-    cell.detailTextLabel.textColor = [UIColor clearColor];
-    
-    UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.tag = 4;
-    [cell.contentView addSubview:imageView];
-
-
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
-    return cell;
-}
-
-- (UITableViewCell *)cellWithTitle:(NSString*)title subtitle:(NSString*)subtitle time:(NSString*)time image:(NSString*)image
-{
-    UITableViewCell *cell = [self cellWithIdent:@"cell"];
-    
-    UILabel *timeLabel = (UILabel*)[cell viewWithTag:1];
-    UILabel *textLabel = (UILabel*)[cell viewWithTag:2];
-    UILabel *detTextLabel = (UILabel*)[cell viewWithTag:3];
-    UIImageView *imageView = (UIImageView*)[cell viewWithTag:4];
-    
-    // Update time label
-
-    CGSize timeSize;
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 6.0) {
-        timeLabel.text = time;
-        timeSize = [time sizeWithFont:timeLabel.font];
-    } else {
-        NSAttributedString *timeAttString = [YTHelper formatDateAttr:time size:12 color:[UIColor blueColor]];
-        timeLabel.attributedText = timeAttString;
-        timeSize = [timeAttString size];
-    }
-    CGFloat timeWidth = timeSize.width + 5;
-    timeLabel.frame = CGRectMake(cell.bounds.size.width - timeWidth - 30, 5, timeWidth, timeSize.height);
-    
-    // Update title label
-    
-    CGFloat textFontSize = cell.textLabel.font.pointSize;
-    textLabel.frame= CGRectMake(78, 2, cell.frame.size.width - timeWidth - 30 - 10 - 78, 21);
-    textLabel.font = [UIFont boldSystemFontOfSize:textFontSize];
-    textLabel.text = title;
-    cell.textLabel.text = @" ";
-    
-    // Update subtitle label
-    
-    detTextLabel.frame= CGRectMake(78, 23, cell.frame.size.width - 30 -  78, 32);
-    detTextLabel.text = [NSString stringWithFormat:@"%@\n ", subtitle];
-
-    cell.detailTextLabel.text = @" ";
-    
-    imageView.frame = CGRectMake(5, (cell.frame.size.height - 18) / 2, 18, 18);
-    if (image) {
-        imageView.image = [YTHelper imageNamed:image];
-        imageView.hidden = NO;
-    } else {
-        imageView.image = nil;
-        imageView.hidden = YES;
-    }
-    
-    [textLabel removeFromSuperview];
-    [cell.contentView addSubview:textLabel];
-    
-    [timeLabel removeFromSuperview];
-    [cell.contentView addSubview:timeLabel];
-    
-    [detTextLabel removeFromSuperview];
-    [cell.contentView addSubview:detTextLabel];
-    
-    [imageView removeFromSuperview];
-    [cell.contentView addSubview:imageView];
-    
-    for (UIView *view in cell.contentView.subviews) {
-        view.alpha = 1;
-    }
-    
-    return cell;
-}
 
 #pragma mark UIViewController methods
 
@@ -225,12 +94,6 @@
     self.currentFilteredUsers = [[NSMutableArray alloc] init];
 
 }
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [self deselectSelectedGab:animated];
-}
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -263,13 +126,11 @@
 
 - (NSInteger)numberOfFriendRows
 {
-    if ([YTModelHelper gabCountWithFilter:@""] >= 10) {
+    if ([YTModelHelper gabCountWithFilter:@""] >= CONFIG_MAX_CONVERSATION_COUNT_FOR_GHOST_FRIENDS) {
         return 0;
     }
     
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    
-    NSInteger count = [delegate.randFriends count];
+    NSInteger count = [YTContactHelper sharedInstance].filteredRandomizedFriends.count;
     NSInteger ret = MIN(count, CONFIG_GHOST_FRIEND_COUNT);
      
     return ret;
@@ -286,11 +147,11 @@
         return 0;
     }
     
-    if ([YTAppDelegate current].randFriends.count <= CONFIG_GHOST_FRIEND_COUNT) {
-        return 0;
+    if ([YTContactHelper sharedInstance].randomizedFriends.count > [self numberOfFriendRows]) {
+        return 1;
     }
     
-    return 1;
+    return 0;
 }
 
 - (NSInteger)numberOfShareRows
@@ -324,7 +185,7 @@
     NSString *time = [YTHelper formatDate:[object valueForKey:@"last_date"]];
     NSString *image = read ? nil : @"newgab2";
 
-    UITableViewCell *cell = [self cellWithTitle:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
 
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"related_avatar"]] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
@@ -335,11 +196,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForUser:(NSDictionary*)user featured:(BOOL)featured
 {
     NSString *title = user[@"name"];
-    NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation", nil);
+    NSString *subtitle = NSLocalizedString(@"Start a new conversation", nil);
     NSString *time = featured ? NSLocalizedString(@"Featured", nil) : @"";
     NSString *image = featured ? @"star2" : nil;
     
-    UITableViewCell *cell = [self cellWithTitle:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
 
     if ([user[@"type"] isEqualToString:@"facebook"]) {
@@ -359,8 +220,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForFriendAtRow:(NSInteger)row
 {
-    NSDictionary *friendData = [YTAppDelegate current].randFriends[row];
-    NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
+    NSDictionary *friendData = [YTContactHelper sharedInstance].filteredRandomizedFriends[row];
+    NSDictionary *friend = [[YTContactHelper sharedInstance] findContactWithType:friendData[@"type"] value:friendData[@"value"]];
     UITableViewCell *cell = [self tableView:tableView cellForUser:friend featured:NO];
     
     for (UIView *view in cell.contentView.subviews) {
@@ -384,7 +245,7 @@
     NSString *time = @"";
     NSString *image = nil;
     
-    UITableViewCell *cell = [self cellWithTitle:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
     
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
 
@@ -401,7 +262,7 @@
     NSString *time = @"";
     NSString *image = nil;
     
-    UITableViewCell *cell = [self cellWithTitle:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
     
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImage:[UIImage imageNamed:@"more2"]];
@@ -414,6 +275,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.searchBar resignFirstResponder];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     if (indexPath.section == SECTION_GABS) {
         NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row  filter:self.searchBar.text];
@@ -425,15 +288,18 @@
     
     if (indexPath.section == SECTION_FRIENDS) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Friend Item"];
-        NSDictionary *friendData = [YTAppDelegate current].randFriends[indexPath.row];
-        NSDictionary *friend = [YTContactHelper findContactWithType:friendData[@"type"] value:friendData[@"value"]];
+        NSDictionary *friendData = [YTContactHelper sharedInstance].filteredRandomizedFriends[indexPath.row];
+        NSDictionary *friend = [[YTContactHelper sharedInstance] findContactWithType:friendData[@"type"] value:friendData[@"value"]];
         [YTViewHelper showGabWithReceiver:friend];
         return;
     }
     
     if (indexPath.section == SECTION_MORE) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / More Item"];
-
+        [self.searchBar resignFirstResponder];
+        
+        YTNewGabViewController *c = [YTNewGabViewController new];
+        [[YTAppDelegate current].navController pushViewController:c animated:YES];
         return;
     }
     
@@ -481,7 +347,8 @@
     
     NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row filter:self.searchBar.text];
     [YTApiHelper deleteGab:[object valueForKey:@"id"] success:^(id JSON) {
-        [tableView reloadData];
+        [[YTContactHelper sharedInstance] filterRandomizedFriends];
+        // [tableView reloadData];   Called by filterRandomizedFriends
     }];
 }
 

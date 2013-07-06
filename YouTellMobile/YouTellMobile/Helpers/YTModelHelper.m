@@ -286,6 +286,27 @@
     return [YTModelHelper objectCount:@"Gabs" predicate:pred];
 }
 
++ (NSSet*)gabReceiverNames
+{
+    NSMutableSet *names = [NSMutableSet new];
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Gabs"];
+
+    request.predicate = [NSPredicate predicateWithFormat:@"(total_count > 0) && (related_user_name != %@)", @""];
+
+    NSError *error;
+    
+    NSArray *objects = [context executeFetchRequest:request error:&error];
+    
+    for (NSManagedObject *object in objects) {
+        [names addObject:[object valueForKey:@"related_user_name"]];
+    }
+
+    return names;
+}
+
 + (void)clearGab:(NSNumber*)gabId
 {
     NSManagedObject *gab = [YTModelHelper gabForId:gabId];

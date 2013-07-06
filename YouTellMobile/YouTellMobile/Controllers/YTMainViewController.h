@@ -25,9 +25,6 @@
 
 - (void)refreshWasRequested;
 - (void)composeButtonWasClicked;
-
-- (void)deselectSelectedGab:(BOOL)animated;
 - (void)reloadData;
-- (UITableViewCell *)cellWithIdent:(NSString*)ident;
 
 @end

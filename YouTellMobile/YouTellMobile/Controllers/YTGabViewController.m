@@ -29,6 +29,7 @@
 #import "YTHelper.h"
 #import "YTFBHelper.h"
 #import "YTGabMessage.h"
+#import "YTNewGabViewController.h"
 #import "YTGPPHelper.h"
 
 @interface YTGabViewController ()
@@ -99,6 +100,31 @@
     self.gab = [YTModelHelper gabForId:gabId];
     
     [self reloadData];
+}
+
+- (void)createAndSetGabWithData:(NSDictionary*)data
+{
+    self.gab = [YTModelHelper createGab:data];
+
+    // Remove New Gab view from the stack, so the back button points to the Main view again
+    NSMutableArray *views = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+    for (UIViewController *c in views) {
+        if ([c isKindOfClass:[YTNewGabViewController class]]) {
+            [views removeObject:c];
+            break;
+        }
+    }
+    self.navigationController.viewControllers = views;
+    
+    // Replace Cancel button with standard back button
+    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.hidesBackButton = NO;
+    
+    // FIXME: remove contact widget
+    [self hideContactWidget];
+    
+    [[YTContactHelper sharedInstance] filterRandomizedFriends];
+    //[YTViewHelper refreshViews];  Called by filterRandomizedFriends
 }
 
 - (void)loadGab
@@ -282,7 +308,6 @@
     
     self.photoHelper = [[YTGabPhotoHelper alloc] initWithGabView:self];
     self.clueHelper = [[YTGabClueHelper alloc] initWithGabView:self];
-    self.deleteHelper = [[YTGabDeleteHelper alloc] initWithGabView:self];
     self.sendHelper = [[YTGabSendHelper alloc] initWithGabView:self];
     self.tagHelper = [[YTGabTagHelper alloc] initWithGabView:self];
  
@@ -357,9 +382,7 @@
                                   @"id":val, @"total_count":@1, @"last_date":dateStr,
                                   @"unread_count":@0, @"content_summary":messageText};
         
-        self.gab = [YTModelHelper createGab:gabData];
-        [self hideContactWidget];
-        [YTViewHelper refreshViews];
+        [self createAndSetGabWithData:gabData];
     }
     
     NSManagedObject* messageObject = [self addMessageLocally:message];

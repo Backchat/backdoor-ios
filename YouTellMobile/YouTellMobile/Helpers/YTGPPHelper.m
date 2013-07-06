@@ -144,7 +144,7 @@
             [self fetchFriendsWithPageToken:peopleFeed.nextPageToken];
         } else {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [YTContactHelper loadGPPFriends:self.friends];
+                [[YTContactHelper sharedInstance] loadGPPFriends:self.friends];
             }];
         }
     }];

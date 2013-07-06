@@ -43,7 +43,6 @@ void uncaughtExceptionHandler(NSException *exception)
     [[YTGPPHelper sharedInstance] signOut];
     [YTFBHelper closeSession];
     [YTModelHelper changeStoreId:nil];
-    [YTAppDelegate current].randFriends = @[];
     [YTApiHelper resetUserInfo];
     [YTViewHelper showLogin];
     [YTViewHelper refreshViews];
@@ -80,7 +79,7 @@ void uncaughtExceptionHandler(NSException *exception)
     
     [YTApiHelper setup];
     [YTModelHelper setup];    
-    [YTContactHelper setup];
+    [[YTContactHelper sharedInstance] setup];
     [YTViewHelper setup];
     [YTFBHelper setup];
     [[YTGPPHelper sharedInstance] setup];

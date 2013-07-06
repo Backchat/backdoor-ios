@@ -33,6 +33,7 @@
     CGRect contactWidgetFrame = CGRectMake(0, 0, self.gabView.view.bounds.size.width, 44);
     CGRect contactTableFrame = CGRectMake(0, 44, self.gabView.view.bounds.size.width, self.gabView.view.frame.size.height - contactWidgetFrame.size.height - self.gabView.inputView.frame.size.height);
     
+  
     self.contactTable = [[UITableView alloc] initWithFrame:contactTableFrame style:UITableViewStylePlain];
     self.contactTable.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.contactTable.backgroundColor = [UIColor clearColor];
@@ -41,6 +42,11 @@
     self.contactWidget.delegate = self;
     self.contactWidget.hidden = self.gabView.gab != nil;
     self.contactWidget.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    self.contactTable.hidden = YES;
+    self.contactWidget.hidden = YES;
+    
+    // FIXME: Remove this code completely if we decide to stay with the new design
     
     [self.gabView.view addSubview:self.contactTable];
     [self.gabView.view addSubview:self.contactWidget];
@@ -57,6 +63,7 @@
 {
     [[Mixpanel sharedInstance] track:@"Selected Thread Receiver"];
     [self updateButtons];
+    self.gabView.title = contact[@"name"];
 }
 
 - (void)showContactViewController:(YTContactsViewController*)contactViewController

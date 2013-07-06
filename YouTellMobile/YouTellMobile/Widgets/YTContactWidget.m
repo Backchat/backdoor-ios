@@ -85,7 +85,7 @@
         self.tableView.hidden = [text isEqualToString:@""];
 
     self.selectedContact = nil;
-    self.contacts = [YTContactHelper findContactsWithString:text grouped:NO];
+    self.contacts = [[YTContactHelper sharedInstance] findContactsWithString:text grouped:NO];
     [self.tableView reloadData];
     [self updateButtons];
 
@@ -109,7 +109,7 @@
 
 - (void)setHidden:(BOOL)hidden
 {
-    self.allContacts = [YTContactHelper findContactsWithString:@"" grouped:NO];
+    self.allContacts = [[YTContactHelper sharedInstance] findContactsWithString:@"" grouped:NO];
 
     if(hidden)
         self.tableView.hidden = YES;
@@ -125,7 +125,7 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    self.contacts = [YTContactHelper findContactsWithString:textField.text grouped:NO];
+    self.contacts = [[YTContactHelper sharedInstance] findContactsWithString:textField.text grouped:NO];
     self.textField.textColor = [UIColor blackColor];
     [self.tableView reloadData];
 }
@@ -241,7 +241,6 @@
 {
     self.selectedContact = contact;
     self.textField.text = contact[@"name"];
-    
 
     self.textField.textColor = [UIColor blackColor];
     

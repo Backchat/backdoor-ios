@@ -7,19 +7,34 @@
 
 #import <AddressBook/AddressBook.h>
 
+#import <SDWebImage/UIImageView+WebCache.h>
+
 #import "YTContactHelper.h"
 #import "YTModelHelper.h"
+#import "YTViewHelper.h"
 #import "YTHelper.h"
 
 @implementation YTContactHelper
 
-+ (void)setup
++ (YTContactHelper*)sharedInstance
 {
-    [YTModelHelper clearContactsWithType:nil];
-    [YTContactHelper loadAddressBook];
+    static YTContactHelper *instance = nil;
+    static dispatch_once_t token = 0;
+    dispatch_once(&token, ^{
+        instance = [YTContactHelper new];
+    });
+    return instance;
 }
 
-+ (NSArray *)arrayFromAB:(ABRecordRef)record property:(ABPropertyID)property;
+- (void)setup
+{
+    [YTModelHelper clearContactsWithType:nil];
+    [self loadAddressBook];
+    self.randomizedFriends = [NSMutableArray new];
+    self.filteredRandomizedFriends = [NSArray new];
+}
+
+- (NSArray *)arrayFromAB:(ABRecordRef)record property:(ABPropertyID)property;
 {
     ABMultiValueRef items = ABRecordCopyValue(record, property);
     
@@ -49,7 +64,7 @@
     return ret;
 }
 
-+ (void)loadAddressBookCB:(ABAddressBookRef)addressBook accessGranted:(BOOL)accessGranted
+- (void)loadAddressBookCB:(ABAddressBookRef)addressBook accessGranted:(BOOL)accessGranted
 {
     if (!accessGranted) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Contacts", nil) message:NSLocalizedString(@"You can change this later in Settings > Privacy > Backdoor", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
@@ -91,8 +106,8 @@
             name = [[NSString alloc] initWithFormat:@"%@ %@", first, last];
         }
         
-        NSArray *emails = [YTContactHelper arrayFromAB:person property:kABPersonEmailProperty];
-        NSArray *phones = [YTContactHelper arrayFromAB:person property:kABPersonPhoneProperty];
+        NSArray *emails = [self arrayFromAB:person property:kABPersonEmailProperty];
+        NSArray *phones = [self arrayFromAB:person property:kABPersonPhoneProperty];
         
         NSMutableDictionary *data;
         
@@ -125,7 +140,7 @@
     [YTModelHelper save];
 }
 
-+ (void)loadAddressBook
+- (void)loadAddressBook
 {
 	return;
 
@@ -139,21 +154,46 @@
     }
    
     if (ABAddressBookRequestAccessWithCompletion == nil) {
-        return [YTContactHelper loadAddressBookCB:addressBook accessGranted:YES];
+        return [self loadAddressBookCB:addressBook accessGranted:YES];
     }
     
     ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
         return [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTContactHelper loadAddressBookCB:addressBook accessGranted:granted];
+            [self loadAddressBookCB:addressBook accessGranted:granted];
         }];
     });
 }
 
-+ (void)loadFacebookFriends:(NSArray*)friends;
+- (void)addRandomizedFriends:(NSArray *)friends
+{
+    NSMutableArray *myFriends = [NSMutableArray arrayWithArray:friends];
+    for (int x=0;x<[myFriends count];++x) {
+        int r = (arc4random() % ([myFriends count] - x)) + x;
+        [myFriends exchangeObjectAtIndex:x withObjectAtIndex:r];
+    }
+    [self.randomizedFriends addObjectsFromArray:myFriends];
+    [self filterRandomizedFriends];
+}
+
+- (void)filterRandomizedFriends
+{
+    NSSet *names = [YTModelHelper gabReceiverNames];
+    NSMutableArray *myFriends = [NSMutableArray new];
+    for (NSDictionary *friend in self.randomizedFriends) {
+        if ([names containsObject:friend[@"name"]]) {
+            continue;
+        }
+        [myFriends addObject:friend];
+    }
+    self.filteredRandomizedFriends = myFriends;
+    [YTViewHelper refreshViews];
+}
+
+- (void)loadFacebookFriends:(NSArray*)friends;
 {
     [YTModelHelper clearContactsWithType:@"facebook"];
     
-    NSMutableArray *randFriends = [NSMutableArray new];
+    NSMutableArray *myFriends = [NSMutableArray new];
     
     for (NSDictionary *friend in friends) {
         NSDictionary *data = @{
@@ -166,22 +206,21 @@
         };
         [YTModelHelper addContactWithData:data];
         
-        [randFriends addObject:@{@"type": @"facebook", @"value": friend[@"id"]}];
+        [myFriends addObject:@{@"type": @"facebook", @"value": friend[@"id"], @"name": friend[@"name"]}];
     };
     
-    for (int x=0;x<[randFriends count];++x) {
-        int r = (arc4random() % ([randFriends count] - x)) + x;
-        [randFriends exchangeObjectAtIndex:x withObjectAtIndex:r];
-    }
-    [YTAppDelegate current].randFriends = randFriends;
+    [self addRandomizedFriends:myFriends];
+
     [[YTAppDelegate current].currentMainViewController.tableView reloadData];
     
     [YTModelHelper save];
 }
 
-+ (void)loadGPPFriends:(NSArray*)friends
+- (void)loadGPPFriends:(NSArray*)friends
 {
     [YTModelHelper clearContactsWithType:@"gpp"];
+
+    NSMutableArray *myFriends = [NSMutableArray new];
 
     for (NSDictionary *friend in friends) {
         NSString *name = friend[@"displayName"];
@@ -206,13 +245,18 @@
             @"title": NSLocalizedString(@"Google+", nil),
             @"value": friend[@"id"],
         };
+        
+        [myFriends addObject:@{@"type": @"gpp", @"value": friend[@"id"], @"name": name}];
+
         [YTModelHelper addContactWithData:data];
     };
+    
+    [self addRandomizedFriends:myFriends];
     
     [YTModelHelper save];
 }
 
-+ (NSArray*)findContactsWithString:(NSString*)string grouped:(BOOL)grouped
+- (NSArray*)findContactsWithString:(NSString*)string grouped:(BOOL)grouped
 {
     NSMutableArray *categories = [NSMutableArray new];
     NSMutableArray *category = nil;
@@ -264,13 +308,39 @@
     return categories;    
 }
 
-+ (NSDictionary*)findContactWithType:(NSString*)type value:(NSString*)value
+- (NSArray *)findContactsFlat
+{
+    NSMutableArray *ret = [NSMutableArray new];
+    NSArray *objects = [YTModelHelper findContactsWithString:@""];
+    
+    for (NSManagedObject *object in objects) {
+        NSDictionary *contact = [object dictionaryWithValuesForKeys:object.entity.attributesByName.allKeys];
+        [ret addObject:contact];
+    }
+
+    return ret;
+}
+
+- (NSDictionary*)findContactWithType:(NSString*)type value:(NSString*)value
 {
     NSManagedObject *object = [YTModelHelper findContactWithType:type value:value];
     if (object) {
         return [object dictionaryWithValuesForKeys:[[[object entity] attributesByName] allKeys]];
     } else {
         return nil;
+    }
+}
+
+- (void)showAvatarInImageView:(UIImageView *)imageView forContact:(NSDictionary*)contact
+{
+    if ([contact[@"type"] isEqualToString:@"facebook"]) {
+        NSString *urls = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", contact[@"value"]];
+        [imageView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
+    } else if ([contact[@"type"] isEqualToString:@"gpp"]) {
+        NSString *urls = [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=50", contact[@"value"]];
+        [imageView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
+    } else {
+        [imageView setImage:nil];
     }
 }
 

@@ -85,7 +85,6 @@
 		B24CB2C11702057D00813B2C /* UIBubbleTypingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2B21702057D00813B2C /* UIBubbleTypingTableViewCell.m */; };
 		B24CB2C91703136A00813B2C /* YTGabClueHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2C81703136900813B2C /* YTGabClueHelper.m */; };
 		B24CB2CC1703198200813B2C /* YTGabSendHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2CB1703198200813B2C /* YTGabSendHelper.m */; };
-		B24CB2CF17031A1100813B2C /* YTGabDeleteHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2CE17031A1000813B2C /* YTGabDeleteHelper.m */; };
 		B24CB2D317046DF300813B2C /* YTPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2D117046DF100813B2C /* YTPhotoViewController.m */; };
 		B24CB2D417046DF300813B2C /* YTPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B24CB2D217046DF200813B2C /* YTPhotoViewController.xib */; };
 		B25E45C516F99E4E005DB8FB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B25E45C416F99E4E005DB8FB /* AudioToolbox.framework */; };
@@ -138,6 +137,8 @@
 		B29B6AE8178755F800E9E197 /* newgab2.png in Resources */ = {isa = PBXBuildFile; fileRef = B29B6AE6178755F800E9E197 /* newgab2.png */; };
 		B29B6AEB178758AE00E9E197 /* more2.png in Resources */ = {isa = PBXBuildFile; fileRef = B29B6AE9178758AE00E9E197 /* more2.png */; };
 		B29B6AEC178758AE00E9E197 /* more2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B29B6AEA178758AE00E9E197 /* more2@2x.png */; };
+		B29B6AEF17881E5C00E9E197 /* YTNewGabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B29B6AEE17881E5C00E9E197 /* YTNewGabViewController.m */; };
+		B29B6AF21788268F00E9E197 /* YTMainViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B29B6AF11788268E00E9E197 /* YTMainViewHelper.m */; };
 		B2A37B5F17475581006EAA5B /* clue_hidden2.png in Resources */ = {isa = PBXBuildFile; fileRef = B2A37B5D17475581006EAA5B /* clue_hidden2.png */; };
 		B2A37B6017475581006EAA5B /* clue_hidden2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2A37B5E17475581006EAA5B /* clue_hidden2@2x.png */; };
 		B2A37B7F1747EDB0006EAA5B /* clue_header.png in Resources */ = {isa = PBXBuildFile; fileRef = B2A37B7D1747EDB0006EAA5B /* clue_header.png */; };
@@ -489,8 +490,6 @@
 		B24CB2C81703136900813B2C /* YTGabClueHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabClueHelper.m; path = Helpers/YTGabClueHelper.m; sourceTree = "<group>"; };
 		B24CB2CA1703198200813B2C /* YTGabSendHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabSendHelper.h; path = Helpers/YTGabSendHelper.h; sourceTree = "<group>"; };
 		B24CB2CB1703198200813B2C /* YTGabSendHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabSendHelper.m; path = Helpers/YTGabSendHelper.m; sourceTree = "<group>"; };
-		B24CB2CD17031A1000813B2C /* YTGabDeleteHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabDeleteHelper.h; path = Helpers/YTGabDeleteHelper.h; sourceTree = "<group>"; };
-		B24CB2CE17031A1000813B2C /* YTGabDeleteHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabDeleteHelper.m; path = Helpers/YTGabDeleteHelper.m; sourceTree = "<group>"; };
 		B24CB2D017046DF100813B2C /* YTPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPhotoViewController.h; sourceTree = "<group>"; };
 		B24CB2D117046DF100813B2C /* YTPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTPhotoViewController.m; sourceTree = "<group>"; };
 		B24CB2D217046DF200813B2C /* YTPhotoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YTPhotoViewController.xib; sourceTree = "<group>"; };
@@ -556,6 +555,10 @@
 		B29B6AE6178755F800E9E197 /* newgab2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newgab2.png; sourceTree = "<group>"; };
 		B29B6AE9178758AE00E9E197 /* more2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more2.png; sourceTree = "<group>"; };
 		B29B6AEA178758AE00E9E197 /* more2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more2@2x.png"; sourceTree = "<group>"; };
+		B29B6AED17881E5C00E9E197 /* YTNewGabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTNewGabViewController.h; sourceTree = "<group>"; };
+		B29B6AEE17881E5C00E9E197 /* YTNewGabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTNewGabViewController.m; sourceTree = "<group>"; };
+		B29B6AF01788268E00E9E197 /* YTMainViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTMainViewHelper.h; path = Helpers/YTMainViewHelper.h; sourceTree = "<group>"; };
+		B29B6AF11788268E00E9E197 /* YTMainViewHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTMainViewHelper.m; path = Helpers/YTMainViewHelper.m; sourceTree = "<group>"; };
 		B2A37B5D17475581006EAA5B /* clue_hidden2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clue_hidden2.png; sourceTree = "<group>"; };
 		B2A37B5E17475581006EAA5B /* clue_hidden2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clue_hidden2@2x.png"; sourceTree = "<group>"; };
 		B2A37B7D1747EDB0006EAA5B /* clue_header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clue_header.png; sourceTree = "<group>"; };
@@ -1171,8 +1174,8 @@
 				B2C9E6EB16F491C300B589E2 /* YTFBHelper.m */,
 				B24CB2C71703136900813B2C /* YTGabClueHelper.h */,
 				B24CB2C81703136900813B2C /* YTGabClueHelper.m */,
-				B24CB2CD17031A1000813B2C /* YTGabDeleteHelper.h */,
-				B24CB2CE17031A1000813B2C /* YTGabDeleteHelper.m */,
+				3E9F69141761407C00374616 /* YTGabMessage.h */,
+				3E9F69151761407C00374616 /* YTGabMessage.m */,
 				B24CB2931701AE9C00813B2C /* YTGabPhotoHelper.h */,
 				B24CB2941701AE9C00813B2C /* YTGabPhotoHelper.m */,
 				B24CB2CA1703198200813B2C /* YTGabSendHelper.h */,
@@ -1183,20 +1186,20 @@
 				B2EF84621715392900EECBE7 /* YTGPPHelper.m */,
 				B2BA774B16F09DC8006C17F7 /* YTHelper.h */,
 				B2BA774C16F09DC8006C17F7 /* YTHelper.m */,
+				B29B6AF01788268E00E9E197 /* YTMainViewHelper.h */,
+				B29B6AF11788268E00E9E197 /* YTMainViewHelper.m */,
 				B2A75B3316F231BA00F0CAB4 /* YTModelHelper.h */,
 				B2A75B3416F231BA00F0CAB4 /* YTModelHelper.m */,
-				B25E464416F9F09A005DB8FB /* YTStoreHelper.h */,
-				B25E464516F9F09A005DB8FB /* YTStoreHelper.m */,
-				B2C9E6E716F48D3E00B589E2 /* YTViewHelper.h */,
-				B2C9E6E816F48D3E00B589E2 /* YTViewHelper.m */,
-				B2E68F5E172CE13A00914B40 /* YTTwitterHelper.h */,
-				B2E68F5F172CE13A00914B40 /* YTTwitterHelper.m */,
 				B2D83FFC1752A89C00FAB33C /* YTNotifHelper.h */,
 				B2D83FFD1752A89D00FAB33C /* YTNotifHelper.m */,
 				B2D8400C175F410000FAB33C /* YTSocialHelper.h */,
 				B2D8400D175F410000FAB33C /* YTSocialHelper.m */,
-				3E9F69141761407C00374616 /* YTGabMessage.h */,
-				3E9F69151761407C00374616 /* YTGabMessage.m */,
+				B25E464416F9F09A005DB8FB /* YTStoreHelper.h */,
+				B25E464516F9F09A005DB8FB /* YTStoreHelper.m */,
+				B2E68F5E172CE13A00914B40 /* YTTwitterHelper.h */,
+				B2E68F5F172CE13A00914B40 /* YTTwitterHelper.m */,
+				B2C9E6E716F48D3E00B589E2 /* YTViewHelper.h */,
+				B2C9E6E816F48D3E00B589E2 /* YTViewHelper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1288,6 +1291,8 @@
 				B2C9D14016FF3137002DDE4F /* YTMainViewController.h */,
 				B2C9D14116FF3137002DDE4F /* YTMainViewController.m */,
 				B2C9D14216FF3137002DDE4F /* YTMainViewController.xib */,
+				B29B6AED17881E5C00E9E197 /* YTNewGabViewController.h */,
+				B29B6AEE17881E5C00E9E197 /* YTNewGabViewController.m */,
 				B2A37BB3174FE8CA006EAA5B /* YTNotificationSettingsViewController.h */,
 				B2A37BB4174FE8CB006EAA5B /* YTNotificationSettingsViewController.m */,
 				B24CB2961701B1DD00813B2C /* YTPhotoSendViewController.h */,
@@ -1803,7 +1808,6 @@
 				B24CB2C11702057D00813B2C /* UIBubbleTypingTableViewCell.m in Sources */,
 				B24CB2C91703136A00813B2C /* YTGabClueHelper.m in Sources */,
 				B24CB2CC1703198200813B2C /* YTGabSendHelper.m in Sources */,
-				B24CB2CF17031A1100813B2C /* YTGabDeleteHelper.m in Sources */,
 				B24CB2D317046DF300813B2C /* YTPhotoViewController.m in Sources */,
 				B291102D170B057100A8508D /* YTLoginButton.m in Sources */,
 				B2EF84631715392A00EECBE7 /* YTGPPHelper.m in Sources */,
@@ -1821,6 +1825,8 @@
 				B2D83FFE1752A89D00FAB33C /* YTNotifHelper.m in Sources */,
 				B2D8400E175F410000FAB33C /* YTSocialHelper.m in Sources */,
 				3E9F69161761407D00374616 /* YTGabMessage.m in Sources */,
+				B29B6AEF17881E5C00E9E197 /* YTNewGabViewController.m in Sources */,
+				B29B6AF21788268F00E9E197 /* YTMainViewHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

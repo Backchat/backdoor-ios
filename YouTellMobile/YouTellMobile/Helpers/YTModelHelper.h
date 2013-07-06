@@ -25,6 +25,7 @@
 
 + (NSManagedObject *)gabForRow:(NSInteger)row filter:(NSString*)filter;
 + (NSInteger)gabCountWithFilter:(NSString*)filter;
++ (NSSet*)gabReceiverNames;
 + (NSManagedObject*)gabForId:(NSNumber*)gabId;
 + (void)clearGab:(NSNumber*)gabId;
 + (NSString*)userNameForGab:(NSManagedObject*)gab;

@@ -16,7 +16,6 @@
 #import "YTGabPhotoHelper.h"
 #import "YTGabClueHelper.h"
 #import "YTGabSendHelper.h"
-#import "YTGabDeleteHelper.h"
 #import "YTGabTagHelper.h"
 #import <CoreData/CoreData.h>
 
@@ -26,7 +25,6 @@
 @property (strong, nonatomic) YTGabPhotoHelper *photoHelper;
 @property (strong, nonatomic) YTGabClueHelper *clueHelper;
 @property (strong, nonatomic) YTGabSendHelper *sendHelper;
-@property (strong, nonatomic) YTGabDeleteHelper *deleteHelper;
 @property (strong, nonatomic) YTGabTagHelper *tagHelper;
 @property (strong, nonatomic) UIPopoverController *popover;
 

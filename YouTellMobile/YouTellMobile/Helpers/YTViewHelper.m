@@ -18,6 +18,7 @@
 #import "YTSettingsViewController.h"
 #import "YTViewController.h"
 #import "YTWebViewController.h"
+#import "YTNewGabViewController.h"
 
 #import <WBErrorNoticeView.h>
 #import <Mixpanel.h>
@@ -120,7 +121,7 @@
             }
         }
         
-        if (![delegate.navController.topViewController isKindOfClass:[YTMainViewController class]]) {
+        if (![delegate.navController.topViewController isKindOfClass:[YTMainViewController class]] && ![delegate.navController.topViewController isKindOfClass:[YTNewGabViewController class]]) {
             [delegate.navController popToRootViewControllerAnimated:NO];
         }
         
@@ -149,7 +150,6 @@
 
 + (void)showGab
 {
-    [[YTAppDelegate current].currentMainViewController deselectSelectedGab:YES];
     [YTViewHelper showGabWithId:nil];
 }
 
