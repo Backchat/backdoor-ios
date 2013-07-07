@@ -9,10 +9,12 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import <Mixpanel.h>
+
 #import "YTModelHelper.h"
 #import "YTContactHelper.h"
 #import "YTMainViewHelper.h"
-#import <Mixpanel.h>
+#import "YTHelper.h"
 
 @interface YTNewGabViewController ()
 
@@ -33,13 +35,20 @@
 {
     [super viewDidLoad];
     
-    self.contacts = [[YTContactHelper sharedInstance] findContactsFlat];
+    self.contacts = [[YTContactHelper sharedInstance] findContactsFlatWithString:@""];
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height) style:UITableViewStylePlain];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.sectionHeaderHeight = 0;
     
+    self.searchBar = [UISearchBar new];
+    [self.searchBar sizeToFit];
+    self.searchBar.delegate = self;
+    self.searchBar.backgroundImage = [YTHelper imageNamed:@"navbar3"];
+    self.tableView.tableHeaderView = self.searchBar;
+    self.tableView.contentOffset = CGPointMake(0, self.searchBar.frame.size.height);
+
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonWasClicked)];
@@ -84,9 +93,20 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Friend Item"];
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.searchBar resignFirstResponder];
+    
     NSDictionary *contact = self.contacts[indexPath.row];
     [YTViewHelper showGabWithReceiver:contact];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    [[Mixpanel sharedInstance] track:@"Used New Gab View / Search Bar"];
+    self.contacts = [[YTContactHelper sharedInstance] findContactsFlatWithString:searchText];
+    [self.tableView reloadData];
 }
 
 

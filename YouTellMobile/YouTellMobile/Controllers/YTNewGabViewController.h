@@ -7,9 +7,10 @@
 
 #import "YTViewController.h"
 
-@interface YTNewGabViewController : YTViewController <UITableViewDataSource, UITableViewDelegate>
+@interface YTNewGabViewController : YTViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) NSArray *contacts;
 
 @end

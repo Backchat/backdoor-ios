@@ -308,10 +308,10 @@
     return categories;    
 }
 
-- (NSArray *)findContactsFlat
+- (NSArray *)findContactsFlatWithString:(NSString*)string
 {
     NSMutableArray *ret = [NSMutableArray new];
-    NSArray *objects = [YTModelHelper findContactsWithString:@""];
+    NSArray *objects = [YTModelHelper findContactsWithString:string];
     
     for (NSManagedObject *object in objects) {
         NSDictionary *contact = [object dictionaryWithValuesForKeys:object.entity.attributesByName.allKeys];

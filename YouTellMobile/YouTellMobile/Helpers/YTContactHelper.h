@@ -20,7 +20,7 @@
 - (void)filterRandomizedFriends;
 - (void)loadFacebookFriends:(NSArray*)friends;
 - (void)loadGPPFriends:(NSArray*)friends;
-- (NSArray*)findContactsFlat;
+- (NSArray*)findContactsFlatWithString:(NSString*)string;
 - (NSArray*)findContactsWithString:(NSString*)string grouped:(BOOL)grouped;
 - (NSDictionary*)findContactWithType:(NSString*)type value:(NSString*)value;
 - (void)showAvatarInImageView:(UIImageView *)imageView forContact:(NSDictionary*)contact;
