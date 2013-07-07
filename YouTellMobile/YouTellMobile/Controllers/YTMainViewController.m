@@ -196,7 +196,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForUser:(NSDictionary*)user featured:(BOOL)featured
 {
     NSString *title = user[@"name"];
-    NSString *subtitle = NSLocalizedString(@"Start a new conversation", nil);
+    NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation.", nil);
     NSString *time = featured ? NSLocalizedString(@"Featured", nil) : @"";
     NSString *image = featured ? @"star2" : nil;
     
@@ -241,7 +241,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForShareAtRow:(NSInteger)row
 {
     NSString *title = NSLocalizedString(@"Share", nil);
-    NSString *subtitle = NSLocalizedString(@"Tap me to get more friends", nil);
+    NSString *subtitle = NSLocalizedString(@"Tap me to get more BD friends.", nil);
     NSString *time = @"";
     NSString *image = nil;
     
@@ -258,7 +258,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForMoreAtRow:(NSInteger)row
 {
     NSString *title = NSLocalizedString(@"Show More", nil);
-    NSString *subtitle = NSLocalizedString(@"Show all of your Backdoor friends", nil);
+    NSString *subtitle = NSLocalizedString(@"Show all of your Backdoor friends.", nil);
     NSString *time = @"";
     NSString *image = nil;
     

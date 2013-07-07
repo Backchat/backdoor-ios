@@ -74,7 +74,7 @@
 {
     NSDictionary *record = self.contacts[indexPath.row];
     NSString *title = record[@"name"];
-    NSString *subtitle = NSLocalizedString(@"Start a new conversation", nil);
+    NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation.", nil);
     NSString *image = nil;
     NSString *time = @"";
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
