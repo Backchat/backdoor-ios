@@ -28,10 +28,13 @@
 
 - (void)setup
 {
-    [YTModelHelper clearContactsWithType:nil];
     [self loadAddressBook];
     self.randomizedFriends = [NSMutableArray new];
     self.filteredRandomizedFriends = [NSArray new];
+    
+    NSArray *contacts = [self findContactsFlatWithString:@""];
+    [self addRandomizedFriends:contacts];
+
 }
 
 - (NSArray *)arrayFromAB:(ABRecordRef)record property:(ABPropertyID)property;
@@ -189,9 +192,21 @@
     [YTViewHelper refreshViews];
 }
 
+- (void)clearRandomizedFriendWithType:(NSString *)type
+{
+    for (int i=self.randomizedFriends.count-1;i>=0;--i) {
+        NSDictionary *friend = self.randomizedFriends[i];
+        if ([friend[@"type"] isEqualToString:type]) {
+            [self.randomizedFriends removeObject:friend];
+        }
+    }
+}
+
 - (void)loadFacebookFriends:(NSArray*)friends;
 {
     [YTModelHelper clearContactsWithType:@"facebook"];
+    [self clearRandomizedFriendWithType:@"facebook"];
+
     
     NSMutableArray *myFriends = [NSMutableArray new];
     
@@ -219,6 +234,8 @@
 - (void)loadGPPFriends:(NSArray*)friends
 {
     [YTModelHelper clearContactsWithType:@"gpp"];
+    [self clearRandomizedFriendWithType:@"gpp"];
+
 
     NSMutableArray *myFriends = [NSMutableArray new];
 
