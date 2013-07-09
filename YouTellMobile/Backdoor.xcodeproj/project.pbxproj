@@ -1913,7 +1913,7 @@
 					"$(inherited)",
 					CONFIGURATION_Debug,
 					"_AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_=1",
-					"CONFIG_URL=\\@\\\"https://capricalabs.com:7564\\\"",
+					"CONFIG_URL=\\@\\\"http://capricalabs.com:7564\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461-mgbsap2s5bh61ae2nggh9h45djonk8qi.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"06e542f53ddbd2430aac9c4664e5903f\\\"",
 				);
