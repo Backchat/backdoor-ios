@@ -43,6 +43,7 @@ void uncaughtExceptionHandler(NSException *exception)
     [[YTGPPHelper sharedInstance] signOut];
     [YTFBHelper closeSession];
     [YTModelHelper changeStoreId:nil];
+    [[YTContactHelper sharedInstance] clearRandomizedFriendWithType:nil];
     [YTApiHelper resetUserInfo];
     [YTViewHelper showLogin];
     [YTViewHelper refreshViews];

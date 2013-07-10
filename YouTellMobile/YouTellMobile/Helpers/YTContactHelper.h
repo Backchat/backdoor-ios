@@ -18,6 +18,7 @@
 - (void)setup;
 - (void)loadAddressBook;
 - (void)addRandomizedFriends:(NSArray*)friends;
+- (void)clearRandomizedFriendWithType:(NSString *)type;
 - (void)filterRandomizedFriends;
 - (void)loadFacebookFriends:(NSArray*)friends;
 - (void)loadFriends:(NSArray*)friends;

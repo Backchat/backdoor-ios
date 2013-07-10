@@ -201,6 +201,7 @@
             [self.randomizedFriends removeObject:friend];
         }
     }
+    [self filterRandomizedFriends];
 }
 
 - (void)loadFacebookFriends:(NSArray*)friends;
