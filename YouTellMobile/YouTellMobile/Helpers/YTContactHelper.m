@@ -31,6 +31,7 @@
     [self loadAddressBook];
     self.randomizedFriends = [NSMutableArray new];
     self.filteredRandomizedFriends = [NSArray new];
+    self.updateFriends = NO;
     
     NSArray *contacts = [self findContactsFlatWithString:@""];
     [self addRandomizedFriends:contacts];
@@ -196,7 +197,7 @@
 {
     for (int i=self.randomizedFriends.count-1;i>=0;--i) {
         NSDictionary *friend = self.randomizedFriends[i];
-        if ([friend[@"type"] isEqualToString:type]) {
+        if (!type || [friend[@"type"] isEqualToString:type]) {
             [self.randomizedFriends removeObject:friend];
         }
     }
@@ -227,6 +228,33 @@
     [self addRandomizedFriends:myFriends];
 
     [[YTAppDelegate current].currentMainViewController.tableView reloadData];
+    
+    [YTModelHelper save];
+}
+
+- (void)loadFriends:(NSArray*)friends
+{
+    [YTModelHelper clearContactsWithType:nil];
+    [self clearRandomizedFriendWithType:nil];
+
+    NSMutableArray *myFriends = [NSMutableArray new];
+    
+    for (NSDictionary *friend in friends) {
+        NSDictionary *data = @{
+                               @"name": friend[@"name"],
+                               @"first_name": friend[@"first_name"],
+                               @"last_name": friend[@"last_name"],
+                               @"type": friend[@"provider"],
+                               @"title": NSLocalizedString(@"Facebook", nil),
+                               @"value": friend[@"social_id"],
+                               };
+        [YTModelHelper addContactWithData:data];
+        
+        [myFriends addObject:@{@"type": friend[@"provider"], @"value": friend[@"social_id"], @"name": friend[@"name"]}];
+    };
+    
+    [self addRandomizedFriends:myFriends];
+    self.updateFriends = NO;
     
     [YTModelHelper save];
 }

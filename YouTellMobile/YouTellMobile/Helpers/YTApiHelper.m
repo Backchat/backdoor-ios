@@ -264,6 +264,10 @@
         [YTViewHelper refreshViews];
         [YTViewHelper endRefreshing];
         
+        if ([YTContactHelper sharedInstance].updateFriends) {
+            [YTApiHelper getFriends];
+        }
+        
         double delayInSeconds = 0.5;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -368,10 +372,23 @@
     
     [YTApiHelper sendJSONRequestToPath:@"/featured-users" method:@"POST" params:@{} success:^(id JSON) {
         [YTAppDelegate current].featuredUsers = JSON[@"users"];
+
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [YTViewHelper refreshViews];
         }];
         
+    } failure:nil];
+}
+
++ (void)getFriends
+{
+    [YTApiHelper sendJSONRequestToPath:@"/get-friends" method:@"POST" params:@{} success:^(id JSON) {
+        
+        [[YTContactHelper sharedInstance] loadFriends:JSON[@"friends"]];
+
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [YTViewHelper refreshViews];
+        }];
     } failure:nil];
 }
 

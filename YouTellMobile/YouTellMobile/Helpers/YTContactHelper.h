@@ -11,6 +11,7 @@
 
 @property (strong, nonatomic) NSMutableArray *randomizedFriends;
 @property (strong, nonatomic) NSArray *filteredRandomizedFriends;
+@property (assign, nonatomic) BOOL updateFriends;
 
 
 + (YTContactHelper*)sharedInstance;
@@ -19,6 +20,7 @@
 - (void)addRandomizedFriends:(NSArray*)friends;
 - (void)filterRandomizedFriends;
 - (void)loadFacebookFriends:(NSArray*)friends;
+- (void)loadFriends:(NSArray*)friends;
 - (void)loadGPPFriends:(NSArray*)friends;
 - (NSArray*)findContactsFlatWithString:(NSString*)string;
 - (NSArray*)findContactsWithString:(NSString*)string grouped:(BOOL)grouped;

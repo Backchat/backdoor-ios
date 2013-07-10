@@ -97,8 +97,8 @@
             NSLog(@"Logged in as %@", result[@"name"]);
             delegate.userInfo[@"fb_data"] = [NSMutableDictionary dictionaryWithDictionary:result];
             [YTModelHelper changeStoreId:result[@"email"]];
+            [YTContactHelper sharedInstance].updateFriends = YES;
             [YTApiHelper autoSync:NO];
-            [YTFBHelper fetchFriends];
             [YTFBHelper fetchFamily];
             [YTFBHelper fetchInterests];
             [YTFBHelper fetchLikes];
