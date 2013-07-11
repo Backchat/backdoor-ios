@@ -1,4 +1,13 @@
 /* No comment provided by engineer. */
+"Tap me to start a new conversation." = "Tap me to start a new conversation.";
+
+/* No comment provided by engineer. */
+"Show all of your Backdoor friends." = "Show all of your Backdoor friends.";
+
+/* No comment provided by engineer. */
+"Tap me to get more BD friends." = "Tap me to get more BD friends.";
+
+/* No comment provided by engineer. */
 "- OR -" = "- OR -";
 
 /* No comment provided by engineer. */
@@ -113,7 +122,7 @@
 "Failed" = "Failed";
 
 /* No comment provided by engineer. */
-"Featured users" = "Featured users";
+"Featured users" = "Featured Users";
 
 /* No comment provided by engineer. */
 "Feedback" = "Feedback";
