@@ -123,6 +123,7 @@ void uncaughtExceptionHandler(NSException *exception)
     if (firstTime) {
         firstTime = NO;
     } else {
+        [YTContactHelper sharedInstance].updateFriends = YES;
         [YTApiHelper autoSync:NO];
     }
 }
