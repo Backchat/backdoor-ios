@@ -83,15 +83,22 @@
         
         if ([result[@"gender"] isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
+
         } else if ([result[@"gender"] isEqualToString:@"female"]) {
             [Flurry setGender:@"f"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
         }
         
-        NSInteger age = [YTHelper ageWithBirthdayString:result[@"birthday"]];
+        NSInteger age = [YTHelper ageWithBirthdayString:result[@"birthday"] format:@"MM/dd/yyyy"];
         
         if (age > 0) {
             [Flurry setAge:age];
+            [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
         }
+        [[Mixpanel sharedInstance].people set:@{@"$email": result[@"email"], @"$first_name": result[@"first_name"], @"$last_name": result[@"last_name"]}];
+        [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
+        
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             NSLog(@"Logged in as %@", result[@"name"]);

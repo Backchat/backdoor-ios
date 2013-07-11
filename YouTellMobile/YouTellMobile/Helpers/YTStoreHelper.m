@@ -130,9 +130,10 @@
 
         [YTViewHelper refreshViews];
         NSInteger count = [YTModelHelper userAvailableClues];
-
-        [Flurry logEvent:@"Bought_Clues" withParameters:@{@"count": [NSNumber numberWithInteger:count - prevCount]}];
+        NSNumber *inc = [NSNumber numberWithInteger:(count - prevCount)];
+        [Flurry logEvent:@"Bought_Clues" withParameters:@{@"count": inc}];
         [[Mixpanel sharedInstance] track:@"Bought Clues"];
+        [[Mixpanel sharedInstance].people increment:@"Clues bought" by:inc];
 
         YTAppDelegate *delegate = [YTAppDelegate current];
         if (delegate.currentGabViewController && delegate.currentGabViewController.clueHelper) {

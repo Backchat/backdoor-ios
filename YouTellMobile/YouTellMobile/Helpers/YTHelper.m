@@ -23,14 +23,14 @@
 }
 
 
-+ (NSInteger)ageWithBirthdayString:(NSString*)string
++ (NSInteger)ageWithBirthdayString:(NSString*)string format:(NSString*)format
 {
     if (!string) {
         return 0;
     }
     
     NSDateFormatter *formatter = [NSDateFormatter new];
-    formatter.dateFormat = @"MM/dd/yyyy";
+    formatter.dateFormat = format;
     NSDate *birthDate = [formatter dateFromString:string];
     NSDate *curDate = [NSDate new];
     NSTimeInterval interval = [curDate timeIntervalSinceDate:birthDate];

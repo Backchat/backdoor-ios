@@ -16,7 +16,7 @@
 + (NSString *)formatDate:(NSDate*)date;
 + (NSAttributedString *)formatDateAttr:(NSString*)date size:(CGFloat)size color:(UIColor*)color;
 
-+ (NSInteger)ageWithBirthdayString:(NSString*)string;
++ (NSInteger)ageWithBirthdayString:(NSString*)string format:(NSString*)format;
 + (NSDate *)parseDate:(NSString*)dateString;
 + (NSNumber *)parseBool:(id)boolString;
 + (NSNumber *)parseNumber:(id)numberString;

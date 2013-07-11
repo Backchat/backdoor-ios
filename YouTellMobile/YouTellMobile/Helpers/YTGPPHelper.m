@@ -25,6 +25,7 @@
 #import "YTModelHelper.h"
 #import "YTAppDelegate.h"
 #import "YTContactHelper.h"
+#import "YTHelper.h"
 
 @implementation YTGPPHelper
 
@@ -107,9 +108,19 @@
         
         if ([person.gender isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
         } else if ([person.gender isEqualToString:@"female"]) {
             [Flurry setGender:@"f"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
         }
+        
+        NSInteger age = [YTHelper ageWithBirthdayString:[person JSON][@"birthday"] format:@"yyyy-MM-dd"];
+        
+        
+        [[Mixpanel sharedInstance].people set:@{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName, @"Age": [NSNumber numberWithInt:age]}];
+        [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
+        
+       
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             YTAppDelegate *delegate = [YTAppDelegate current];
             [delegate.userInfo[@"gpp_data"] addEntriesFromDictionary:[person JSON]];
