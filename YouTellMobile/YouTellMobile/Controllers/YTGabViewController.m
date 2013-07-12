@@ -45,12 +45,9 @@
 - (void)processMessage:(NSManagedObject*)message;
 
 - (void)sendMessage:(NSManagedObject*)message;
-- (void)sendMessage:(NSManagedObject*)message withContact:(NSDictionary*)contact;
-- (void)sendParamMessage:(NSDictionary*)params;
 
 - (NSManagedObject*)addMessageLocally:(YTGabMessage*)message;
 
-- (NSMutableDictionary *)buildParamsFromContactData:(NSDictionary*)contact andParams:(NSDictionary*)params;
 - (void)handleNextQueuedMessage;
 - (bool)fakeGab;
 @end
@@ -90,7 +87,7 @@
 
 - (bool)fakeGab
 {
-    if(self.gab == nil) return false;
+    if(self.gab == nil) return true;
     NSNumber* g_id = [self.gab valueForKey:@"id"];
     return g_id.integerValue < 0;
 }
@@ -104,7 +101,7 @@
 
 - (void)createAndSetGabWithData:(NSDictionary*)data
 {
-    self.gab = [YTModelHelper createGab:data];
+    self.gab = [YTModelHelper createOrUpdateGab:data];
 
     // Remove New Gab view from the stack, so the back button points to the Main view again
     NSMutableArray *views = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
@@ -147,9 +144,6 @@
             [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateNormal];
             [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateDisabled];
         }
-        
-        [YTApiHelper autoSync:YES];
-
     }
     else {
         self.title = NSLocalizedString(@"New message", nil);
@@ -317,6 +311,8 @@
     
     [self loadGab];
 
+    if(![self fakeGab])
+        [YTApiHelper syncGabWithId:[self.gab valueForKey:@"id"] popup:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -378,8 +374,9 @@
         
         NSDictionary* gabData = @{@"related_user_name": contact[@"name"],
                                   @"related_avatar": avatar_url,
-                                  @"sent":@"t",
-                                  @"id":val, @"total_count":@1, @"last_date":dateStr,
+                                  @"sent":@true,
+                                  @"clue_count":@0,
+                                  @"id":val, @"total_count":@1, @"updated_at":dateStr,
                                   @"unread_count":@0, @"content_summary":messageText};
         
         [self createAndSetGabWithData:gabData];
@@ -447,50 +444,42 @@
             //non-fb people to show up
         }
         else {
+            [[Mixpanel sharedInstance] track:@"Created Thread"];
+            
             self.ongoingRequest = true;
-            //check to see if it's a valid user signed up
-            [YTApiHelper checkUid:contact[@"value"] success:^(id JSON) {
-                if ([JSON[@"uid_exists"] isEqualToString:@"yes"]) {
-                    [self sendMessage:message withContact:contact];
-                    [[Mixpanel sharedInstance] track:@"Tried To Send Message To An Existent User"];
-                }
-                else {
-                    [[Mixpanel sharedInstance] track:@"Tried To Send Message To Nonexistent User"];
+            NSMutableDictionary* params = [[NSMutableDictionary alloc] init];
 
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"New message", nil)
-                                                                    message:NSLocalizedString(@"Your friend does not have a Backdoor account.  Would you like to send an invite?", nil)
-                                                                   delegate:self
-                                                          cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                                          otherButtonTitles:NSLocalizedString(@"Invite", nil), nil];
-
-                    alert.delegate = self;
-
-                    [alert show];                    
-                    
-                    /*
-                     UIAlertView *alert = [[UIAlertView alloc]
-                     initWithTitle: NSLocalizedString(@"New message", nil)
-                     message: NSLocalizedString(@"Please enter phone number of your friend", nil)
-                     delegate: nil
-                     cancelButtonTitle: NSLocalizedString(@"Cancel", nil)
-                     otherButtonTitles: NSLocalizedString(@"Send", nil), nil
-                     ];
-                     
-                     alert.delegate = self;
-                     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-                     
-                     UITextField *alertTextField = [alert textFieldAtIndex:0];
-                     alertTextField.keyboardType = UIKeyboardTypeNumberPad;
-                     alertTextField.text = [YTModelHelper phoneForUid:contact[@"value"]];
-                     alertTextField.delegate = self;
-                     
-                     [alert show];
-                     */
-                }
-            }
-                          failure:^(id JSON) {
-                              self.ongoingRequest = false;
-                          }];
+            [params setValue:@{@"content": [message valueForKey:@"content"],
+             @"kind": [message valueForKey:@"kind"],
+             @"key": [message valueForKey:@"key"]} forKey:@"message"];
+            NSNumber* user_id = [NSNumber numberWithInt:114];
+            [params setValue:@{@"id": user_id} forKey:@"receiver"];
+            
+            [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"POST" params:params
+                                       success:^(id JSON) {
+                                           //make it real!
+                                           id new_id = JSON[@"gab"][@"id"];
+                                           id old_id = [self.gab valueForKey:@"id"];
+                                           for(NSManagedObject* to in self.queuedMessages) {
+                                               [to setValue:new_id forKey:@"gab_id"];
+                                           }
+                                           [YTApiHelper deleteGab:old_id success:nil];
+                                           
+                                           self.gab = [YTModelHelper createOrUpdateGab:JSON[@"gab"]];
+                                           [self loadGab];
+                                           
+                                           [YTViewHelper refreshViews];
+                                           self.ongoingRequest = false;
+                                           [self handleNextQueuedMessage];
+                                           
+                                       }
+             
+                                       failure:^(id JSON) {
+                                           [YTViewHelper refreshViews];                                           
+                                           self.ongoingRequest = false;
+                                           [self handleNextQueuedMessage];
+                                           
+                                       }];
         }
     }
 }
@@ -499,7 +488,7 @@
 //add a block to the main thread
 
 - (void) showFBRequest
-{    
+{
     NSDictionary *contact = self.sendHelper.contactWidget.selectedContact;
     [YTFBHelper presentRequestDialogWithContact:contact[@"value"] complete:^{
         [self dismiss];
@@ -555,68 +544,25 @@
 
 }
 
-- (NSMutableDictionary *)buildParamsFromContactData:(NSDictionary*)contact andParams:(NSDictionary*)params
-{
-    NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithDictionary:params];
-        
-    ret[@"related_user_name"] = contact[@"name"];
-    ret[@"receiver_phone"] = ([contact[@"type"] isEqualToString:@"phone"] ? contact[@"value"] : @"");
-    ret[@"receiver_email"] = ([contact[@"type"] isEqualToString:@"email"] ? contact[@"value"] : @"");
-    ret[@"receiver_fb_id"] =   ([contact[@"type"] isEqualToString:@"facebook"] ? contact[@"value"] : @"");
-    ret[@"receiver_gpp_id"] =   ([contact[@"type"] isEqualToString:@"gpp"] ? contact[@"value"] : @"");
-
-    return ret;
-}
-
 - (void)sendMessage:(NSManagedObject*)message
 {
-    //reset the gab id as this message may have been queued when we were fake.
-    [message setValue:[self.gab valueForKey:@"id"] forKey:@"gab_id"];
-
     NSDictionary* params = [message dictionaryWithValuesForKeys:message.entity.attributesByName.allKeys];
 
-    [self sendParamMessage:params];
-}
-
-- (void)sendMessage:(NSManagedObject*)message withContact:(NSDictionary *)contact
-{
-    NSMutableDictionary* params = [self buildParamsFromContactData:contact andParams:
-                            [message dictionaryWithValuesForKeys:message.entity.attributesByName.allKeys]];
-    
-    [params removeObjectForKey:@"gab_id"];
-    [self sendParamMessage:params];
-}
-
-- (void)sendParamMessage:(NSDictionary*)params
-{
     NSString* key = params[@"key"];
+    NSNumber* gab_id = [message valueForKey:@"gab_id"];
     
     self.ongoingRequest = true;
 
-    [YTApiHelper sendJSONRequestToPath:@"/create-message" method:@"POST" params:params
+    [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@/messages", gab_id]
+                                method:@"POST" params:params
                                success:^(id JSON) {
                                    [YTAppDelegate current].deliveredMessages[key] = [NSDate date];                                   
                                    
-                                   if([self fakeGab]) {
-                                       //make it real!
-                                       id new_id = JSON[@"gab_id"];
-                                       id old_id = [self.gab valueForKey:@"id"];
-                                       for(NSManagedObject* to in self.queuedMessages) {
-                                           [to setValue:new_id forKey:@"gab_id"];
-                                       }
-                                       [YTApiHelper deleteGab:old_id success:nil];
-                                       
-                                       self.gab = [YTModelHelper gabForId:new_id];
-                                       [self loadGab];
-                                   }
-
+                                   [YTModelHelper updateMessage:JSON[@"message"]];
                                    [self updateState];
                                    
                                    [Flurry logEvent:@"Sent_Message" withParameters:@{@"kind":params[@"kind"]}];
                                    [[Mixpanel sharedInstance] track:@"Sent Message"];
-                                   if (!params[@"gab_id"]) {
-                                       [[Mixpanel sharedInstance] track:@"Created Thread"];
-                                   }
                                    
                                    self.ongoingRequest = false;
                                    [self handleNextQueuedMessage];
@@ -630,9 +576,6 @@
                                    [self handleNextQueuedMessage];
                                    
                                }];
-
-    
-
 }
 
 @end

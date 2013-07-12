@@ -24,6 +24,7 @@
 #import "YTModelHelper.h"
 #import "YTViewHelper.h"
 #import "YTContactHelper.h"
+#import "YTViewHelper.h"
 
 @implementation YTApiHelper
 
@@ -70,7 +71,6 @@
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
     NSMutableDictionary *userInfo = delegate.userInfo;
-    NSMutableDictionary *sentInfo = delegate.sentInfo;
     NSMutableDictionary *result = [NSMutableDictionary new];
     NSData *data;
     if (!userInfo[@"access_token"]) {
@@ -88,9 +88,8 @@
     result[@"gpp_data"] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     //}
     
-    if (userInfo[@"device_token"] && ![userInfo[@"device_token"] isEqual:sentInfo[@"device_token"]]) {
-        result[@"device_token"] = userInfo[@"device_token"];
-    }
+
+    result[@"device_token"] = userInfo[@"device_token"];
     return result;
 }
 
@@ -114,19 +113,11 @@
     AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[YTApiHelper baseUrl]];
     
     NSMutableDictionary *myParams = [[NSMutableDictionary alloc] initWithDictionary:params];
-    NSDictionary *userParams = [YTApiHelper userParams];
-    if (!userParams) {
-        if (failure != nil) {
-            failure(nil);
-        }
-        return;
+    if([myParams valueForKey:@"access_token"] == nil) {
+        NSString* access_token = [YTAppDelegate current].userInfo[@"access_token"];
+        [myParams setValue:access_token forKey:@"access_token"];
     }
     
-    [myParams addEntriesFromDictionary:userParams];
-    
-    myParams[@"sync_time"] = [YTModelHelper settingsForKey:@"sync_time"];
-    myParams[@"sync_uid"] = [YTModelHelper settingsForKey:@"sync_uid"];
-    myParams[@"db_timestamp"] = [YTModelHelper settingsForKey:@"db_timestamp"];
     NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
         
     [request setTimeoutInterval:CONFIG_TIMEOUT];
@@ -134,24 +125,12 @@
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
             [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
-            [YTApiHelper updateUserInfo:userParams];
             
             if(![JSON[@"status"] isEqualToString:@"ok"]) {
                 if (failure != nil) {
                     failure(JSON);
                 }
                 return;
-            }
-            
-            NSString *uid = JSON[@"response"][@"sync_data"][@"sync_uid"];
-            if (uid) {
-                [Flurry setUserID:uid];
-                [[Mixpanel sharedInstance] identify:uid];
-            }
-            
-            NSDictionary *sync_data = JSON[@"response"][@"sync_data"];
-            if (sync_data != nil) {
-                [YTModelHelper loadSyncData:sync_data];
             }
             
             if (success != nil) {
@@ -226,6 +205,24 @@
     [[Mixpanel sharedInstance] track:@"Sent Feedback" properties:@{@"rating": rating}];
 }
 
++ (void)login:(void(^)(id JSON))success
+{
+    NSDictionary* params = [self userParams];
+    NSString* device_token= [params valueForKey:@"device_token"];
+    if(device_token == nil || device_token.length == 0)
+        return;
+        //this will occur when login is caleld as part of opening FB session, which occurs
+        //before getting the device_token from APN.
+        //this flow could only happen when you are not logged in yet, because when you log in,
+        //we have a valid access_token we store indefinitely.
+        //ultimately, login will be called again when the uesr hits a login button.
+    [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Logging in", nil)
+                                                 path:@"/login"
+                                               method:@"POST" params:params
+                                              success:success
+                                              failure:nil];
+
+}
 
 + (void)sendAbuseReport:(NSString*)content success:(void(^)(id JSON))success
 {
@@ -241,7 +238,32 @@
 }
 
 
-+ (void)autoSync:(BOOL)quiet
++ (void)syncGabs
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    
+    if ([delegate.autoSyncLock tryLock] == NO) {
+        return;
+    }
+          
+    [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"GET" params:nil
+                               success:^(id JSON) {
+                                   id gabs = JSON[@"gabs"];
+                                   for(id gab in gabs) {
+                                       [YTModelHelper createOrUpdateGab:gab];
+                                   }
+                                   [delegate.autoSyncLock unlock];
+                                   [YTViewHelper refreshViews];
+                                   [YTViewHelper endRefreshing];
+                               }
+     
+                               failure:^(id JSON) {
+                                   [delegate.autoSyncLock unlock];
+                                   [YTViewHelper endRefreshing];
+                               }];
+}
+
++ (void)syncGabWithId:(NSNumber *)gab_id popup:(BOOL)popup
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
     
@@ -249,52 +271,29 @@
         return;
     }
     
-    NSMutableDictionary *params = [NSMutableDictionary new];
-    
-    if (delegate.currentMainViewController && delegate.currentMainViewController.selectedGabId) {
-        params[@"gab_id"] = delegate.currentMainViewController.selectedGabId;
-    }
-    
-    if (delegate.currentGabViewController && delegate.currentGabViewController.gab) {
-        params[@"gab_id"] = [delegate.currentGabViewController.gab valueForKey:@"id"];
-    }
-    
-    [YTApiHelper sendJSONRequestToPath:@"/sync" method:@"POST" params:params success:^(id JSON) {
-        [delegate.autoSyncLock unlock];
-        [YTViewHelper refreshViews];
-        [YTViewHelper endRefreshing];
-        
-        if ([YTContactHelper sharedInstance].updateFriends) {
-            [YTApiHelper getFriends];
-        }
-        
-        double delayInSeconds = 0.5;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            
-            YTAppDelegate *delegate = [YTAppDelegate current];
-            if (delegate.autoSyncGabId) {
-                [YTViewHelper showGabWithId:delegate.autoSyncGabId];
-                delegate.autoSyncGabId = nil;
-            }
-            
-        });
-        
-        
-    } failure:^(id JSON) {
-        [delegate.autoSyncLock unlock];
-        [YTViewHelper endRefreshing];
-    }];
-}
+    [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@", gab_id]
+                                method:@"GET" params:@{@"extended":@true}
+                               success:^(id JSON) {
+                                   [YTModelHelper createOrUpdateGab:JSON[@"gab"]];
 
-+ (void)checkUid:(NSString*)uid success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure
-{
-    [YTApiHelper sendJSONRequestToPath:@"/check-uid"
-                                method:@"POST"
-                                params:@{@"uid": uid}
-                               success:success failure:failure];
+                                   [delegate.autoSyncLock unlock];
+                                   [YTViewHelper refreshViews];
+                                   [YTViewHelper endRefreshing];
+                                   
+                                   if(popup) {
+                                       double delayInSeconds = 0.5;
+                                       dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                       dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                           [YTViewHelper showGabWithId:gab_id];
+                                       });
+                                   }
+                               }
+     
+                               failure:^(id JSON) {
+                                   [delegate.autoSyncLock unlock];
+                                   [YTViewHelper endRefreshing];
+                               }];
 }
-
 
 + (void)deleteGab:(NSNumber*)gabId success:(void(^)(id JSON))success
 {
@@ -303,7 +302,8 @@
         [YTViewHelper refreshViews];
 
         if(gabId.integerValue >= 0) {
-            [YTApiHelper sendJSONRequestToPath:@"/clear-gab" method:@"POST" params:@{@"id": gabId} success:success failure:nil];
+            [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@", gabId]
+                                        method:@"DELETE" params:nil success:success failure:nil];
             
             [Flurry logEvent:@"Deleted_Thread"];
             [[Mixpanel sharedInstance] track:@"Deleted Thread"];
@@ -315,9 +315,9 @@
 + (void)tagGab:(NSNumber*)gabId tag:(NSString*)tag success:(void(^)(id JSON))success
 {
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Updating thread", nil)
-                                                 path:@"/tag-gab"
+                                                 path:[NSString stringWithFormat:@"/gabs/%@", gabId]
                                                method:@"POST"
-                                               params:@{@"id": gabId, @"tag": tag}
+                                               params:@{@"related_user_name": tag}
                                               success:success
                                               failure:nil];
     [Flurry logEvent:@"Tagged_Thread"];
@@ -326,9 +326,9 @@
 
 + (void)requestClue:(NSNumber*)gabId number:(NSNumber*)number success:(void(^)(id JSON))success;
 {
-    [YTApiHelper sendJSONRequestToPath:@"/request-clue"
+    [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@/clues/request/%@", gabId, number]
                                 method:@"POST"
-                                params:@{@"gab_id": gabId, @"number": number}
+                                params:nil
                                success:success failure:nil];
     
     [Flurry logEvent:@"Requested_Clue"];
@@ -370,7 +370,7 @@
         return;
     }
     
-    [YTApiHelper sendJSONRequestToPath:@"/featured-users" method:@"POST" params:@{} success:^(id JSON) {
+    [YTApiHelper sendJSONRequestToPath:@"/featured-users" method:@"POST" params:nil success:^(id JSON) {
         [YTAppDelegate current].featuredUsers = JSON[@"users"];
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -382,7 +382,7 @@
 
 + (void)getFriends
 {
-    [YTApiHelper sendJSONRequestToPath:@"/get-friends" method:@"POST" params:@{} success:^(id JSON) {
+    [YTApiHelper sendJSONRequestToPath:@"/friends" method:@"GET" params:nil success:^(id JSON) {
         
         [[YTContactHelper sharedInstance] loadFriends:JSON[@"friends"]];
 

@@ -10,6 +10,7 @@
 @interface YTApiHelper : NSObject
 
 + (void)setup;
++ (void)login:(void(^)(id JSON))success;
 + (void)resetUserInfo;
 + (NSURL*)baseUrl;
 
@@ -28,7 +29,8 @@
                                       success:(void(^)(id JSON))success
                                       failure:(void(^)(id JSON))failure;
 
-+ (void)autoSync:(BOOL)quiet;
++ (void)syncGabs;
++ (void)syncGabWithId:(NSNumber *)gab_id popup:(BOOL)popup;
 
 + (void)sendFeedback:(NSString*)content rating:(NSNumber*)rating success:(void(^)(id JSON))success;
 + (void)sendAbuseReport:(NSString*)content success:(void(^)(id JSON))success;
@@ -41,8 +43,6 @@
 + (void)getFeaturedUsers;
 + (void)getFriends;
 + (void)updateSettingsWithKey:(NSString*)key value:(id)value;
-
-+ (void)checkUid:(NSString*)uid success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure;
 + (void)checkUpdates;
 
 

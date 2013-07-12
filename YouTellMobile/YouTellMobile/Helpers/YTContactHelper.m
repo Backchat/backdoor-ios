@@ -31,11 +31,9 @@
     [self loadAddressBook];
     self.randomizedFriends = [NSMutableArray new];
     self.filteredRandomizedFriends = [NSArray new];
-    self.updateFriends = NO;
     
     NSArray *contacts = [self findContactsFlatWithString:@""];
     [self addRandomizedFriends:contacts];
-
 }
 
 - (NSArray *)arrayFromAB:(ABRecordRef)record property:(ABPropertyID)property;
@@ -255,7 +253,6 @@
     };
     
     [self addRandomizedFriends:myFriends];
-    self.updateFriends = NO;
     
     [YTModelHelper save];
 }

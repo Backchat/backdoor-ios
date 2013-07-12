@@ -39,10 +39,22 @@
     
     YTAppDelegate *delegate = [YTAppDelegate current];
     delegate.userInfo[@"provider"] = @"facebook";
-    delegate.userInfo[@"access_token"] = FBSession.activeSession.accessTokenData.accessToken;
-
-    [YTFBHelper fetchUserData];
+    FBAccessTokenData* token_data = FBSession.activeSession.accessTokenData;
+    if(!token_data) {
+        NSLog(@"What the hell");
+        return;
+    }
+    
+    delegate.userInfo[@"access_token"] = token_data.accessToken;
+    
     [YTViewHelper hideLogin];
+
+    [YTApiHelper login:^(id JSON) {
+        //TODO make this call happen parallel and join to the end
+        //[YTFBHelper fetchUserData];
+        //yap yap
+        [YTApiHelper getFeaturedUsers];
+    }];
 }
 
 + (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error
@@ -97,12 +109,11 @@
             NSLog(@"Logged in as %@", result[@"name"]);
             delegate.userInfo[@"fb_data"] = [NSMutableDictionary dictionaryWithDictionary:result];
             [YTModelHelper changeStoreId:result[@"email"]];
-            [YTContactHelper sharedInstance].updateFriends = YES;
-            [YTApiHelper autoSync:NO];
             [YTFBHelper fetchFamily];
             [YTFBHelper fetchInterests];
             [YTFBHelper fetchLikes];
-            [YTApiHelper getFeaturedUsers];
+            
+            [YTApiHelper getFriends];
         }];
     }];
 }

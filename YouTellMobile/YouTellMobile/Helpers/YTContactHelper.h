@@ -11,8 +11,6 @@
 
 @property (strong, nonatomic) NSMutableArray *randomizedFriends;
 @property (strong, nonatomic) NSArray *filteredRandomizedFriends;
-@property (assign, nonatomic) BOOL updateFriends;
-
 
 + (YTContactHelper*)sharedInstance;
 - (void)setup;

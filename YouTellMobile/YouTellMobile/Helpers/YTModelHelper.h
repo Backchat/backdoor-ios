@@ -29,7 +29,7 @@
 + (NSManagedObject*)gabForId:(NSNumber*)gabId;
 + (void)clearGab:(NSNumber*)gabId;
 + (NSString*)userNameForGab:(NSManagedObject*)gab;
-+ (NSManagedObject*)createGab:(id)data;
++ (NSManagedObject*)createOrUpdateGab:(id)data;
 + (NSNumber*)nextFakeGabId;
 
 //+ (NSManagedObject *)messageForRow:(NSInteger)row gabId:(id)gabId;
@@ -37,6 +37,7 @@
 + (NSInteger)messageCount:(id)gabId;
 + (UIImage*)imageForMessage:(NSManagedObject*)message;
 + (NSManagedObject*)createMessage:(NSDictionary*)data;
++ (NSManagedObject*)updateMessage:(id)data;
 + (void)failMessage:(NSString*)key;
 
 + (NSDictionary*)cluesForGab:(NSNumber*)gabId;
