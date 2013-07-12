@@ -607,7 +607,10 @@ static int available_clues;
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
     request.predicate = [NSPredicate predicateWithFormat:@"(type = %@ AND value = %@)", type, value];
     NSArray *objects = [context executeFetchRequest:request error:&error];
-    return objects[0];
+    if(objects.count > 0)
+        return objects[0];
+    else
+        return nil;
 }
 
 + (NSString*)phoneForUid:(NSString*)uid

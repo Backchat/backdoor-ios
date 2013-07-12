@@ -9,6 +9,7 @@
     </entity>
     <entity name="Contacts" syncable="YES">
         <attribute name="first_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="friend_id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="last_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -46,7 +47,7 @@
     </entity>
     <elements>
         <element name="Clues" positionX="160" positionY="192" width="128" height="120"/>
-        <element name="Contacts" positionX="160" positionY="192" width="128" height="135"/>
+        <element name="Contacts" positionX="160" positionY="192" width="128" height="150"/>
         <element name="Gabs" positionX="160" positionY="192" width="128" height="195"/>
         <element name="Messages" positionX="160" positionY="192" width="128" height="210"/>
         <element name="Settings" positionX="160" positionY="192" width="128" height="75"/>

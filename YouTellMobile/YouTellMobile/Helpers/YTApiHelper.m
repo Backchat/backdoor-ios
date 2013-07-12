@@ -200,7 +200,12 @@
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Logging in", nil)
                                                  path:@"/login"
                                                method:@"POST" params:params
-                                              success:success
+                                              success:^(id JSON) {
+                                                  [self getFriends];
+                                                  if(success) {
+                                                      success(JSON);
+                                                  }
+                                              }
                                               failure:nil];
 
 }

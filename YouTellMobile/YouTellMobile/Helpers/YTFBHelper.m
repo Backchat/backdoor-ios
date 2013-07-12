@@ -125,7 +125,7 @@
             return;
         }
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [[YTContactHelper sharedInstance] loadFacebookFriends:result[@"data"]];
+            //[[YTContactHelper sharedInstance] loadFacebookFriends:result[@"data"]];
         }];
 
     }];

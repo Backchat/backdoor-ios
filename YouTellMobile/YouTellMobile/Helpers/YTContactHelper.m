@@ -219,9 +219,10 @@
             @"title": NSLocalizedString(@"Facebook", nil),
             @"value": friend[@"id"],
         };
-        [YTModelHelper addContactWithData:data];
+
+//        [YTModelHelper addContactWithData:data];
         
-        [myFriends addObject:@{@"type": @"facebook", @"value": friend[@"id"], @"name": friend[@"name"]}];
+//        [myFriends addObject:@{@"type": @"facebook", @"value": friend[@"id"], @"name": friend[@"name"]}];
     };
     
     [self addRandomizedFriends:myFriends];
@@ -239,17 +240,20 @@
     NSMutableArray *myFriends = [NSMutableArray new];
     
     for (NSDictionary *friend in friends) {
-        NSDictionary *data = @{
-                               @"name": friend[@"name"],
-                               @"first_name": friend[@"first_name"],
-                               @"last_name": friend[@"last_name"],
-                               @"type": friend[@"provider"],
-                               @"title": NSLocalizedString(@"Facebook", nil),
-                               @"value": friend[@"social_id"],
-                               };
+        NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+        [data setValue:friend[@"first_name"] forKey:@"first_name"];
+        [data setValue:friend[@"last_name"] forKey:@"last_name"];
+        [data setValue:friend[@"provider"] forKey:@"type"];
+        [data setValue:NSLocalizedString(@"Facebook", nil) forKey:@"title"];
+        [data setValue:friend[@"social_id"] forKey:@"value"];
+        [data setValue:friend[@"friend_id"] forKey:@"friend_id"];
+        [data setValue:[NSString stringWithFormat:@"%@ %@", friend[@"first_name"], friend[@"last_name"]] forKey:@"name"];
         [YTModelHelper addContactWithData:data];
         
-        [myFriends addObject:@{@"type": friend[@"provider"], @"value": friend[@"social_id"], @"name": friend[@"name"]}];
+        //TODO wtf?
+        [myFriends addObject:@{@"type": friend[@"provider"], @"value": friend[@"social_id"],
+         @"name": [NSString stringWithFormat:@"%@ %@", friend[@"first_name"], friend[@"last_name"]],
+         @"friend_id": friend[@"friend_id"]}];
     };
     
     [self addRandomizedFriends:myFriends];
