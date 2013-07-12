@@ -1955,7 +1955,7 @@
 					CONFIGURATION_Release,
 					"CONFIG_URL=\\@\\\"https://backdoor-api.herokuapp.com/\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461.apps.googleusercontent.com\\\"",
-					"CONFIG_MIXPANEL_TOKEN=\\@\\\"09041166629c17a600c110352ef8dbae\\\"",
+					"CONFIG_MIXPANEL_TOKEN=\\@\\\"b773675a02695460a27af2b8c2d11d39\\\"",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
