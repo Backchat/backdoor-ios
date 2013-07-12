@@ -39,7 +39,6 @@
 
 
 @property (strong, atomic) NSLock *autoSyncLock;
-@property (strong, nonatomic) NSNumber *autoSyncGabId;
 
 - (void)signOut;
 + (YTAppDelegate*)current;

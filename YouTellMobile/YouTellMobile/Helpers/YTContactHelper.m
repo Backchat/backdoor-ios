@@ -31,11 +31,9 @@
     [self loadAddressBook];
     self.randomizedFriends = [NSMutableArray new];
     self.filteredRandomizedFriends = [NSArray new];
-    self.updateFriends = NO;
     
     NSArray *contacts = [self findContactsFlatWithString:@""];
     [self addRandomizedFriends:contacts];
-
 }
 
 - (NSArray *)arrayFromAB:(ABRecordRef)record property:(ABPropertyID)property;
@@ -204,6 +202,7 @@
     [self filterRandomizedFriends];
 }
 
+//NOTE CURRENTLY NEVER CALLED
 - (void)loadFacebookFriends:(NSArray*)friends;
 {
     [YTModelHelper clearContactsWithType:@"facebook"];
@@ -221,6 +220,7 @@
             @"title": NSLocalizedString(@"Facebook", nil),
             @"value": friend[@"id"],
         };
+
         [YTModelHelper addContactWithData:data];
         
         [myFriends addObject:@{@"type": @"facebook", @"value": friend[@"id"], @"name": friend[@"name"]}];
@@ -241,21 +241,23 @@
     NSMutableArray *myFriends = [NSMutableArray new];
     
     for (NSDictionary *friend in friends) {
-        NSDictionary *data = @{
-                               @"name": friend[@"name"],
-                               @"first_name": friend[@"first_name"],
-                               @"last_name": friend[@"last_name"],
-                               @"type": friend[@"provider"],
-                               @"title": NSLocalizedString(@"Facebook", nil),
-                               @"value": friend[@"social_id"],
-                               };
+        NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+        [data setValue:friend[@"first_name"] forKey:@"first_name"];
+        [data setValue:friend[@"last_name"] forKey:@"last_name"];
+        [data setValue:friend[@"provider"] forKey:@"type"];
+        [data setValue:NSLocalizedString(@"Facebook", nil) forKey:@"title"];
+        [data setValue:friend[@"social_id"] forKey:@"value"];
+        [data setValue:friend[@"friend_id"] forKey:@"friend_id"];
+        [data setValue:[NSString stringWithFormat:@"%@ %@", friend[@"first_name"], friend[@"last_name"]] forKey:@"name"];
         [YTModelHelper addContactWithData:data];
         
-        [myFriends addObject:@{@"type": friend[@"provider"], @"value": friend[@"social_id"], @"name": friend[@"name"]}];
+        //TODO wtf?
+        [myFriends addObject:@{@"type": friend[@"provider"], @"value": friend[@"social_id"],
+         @"name": [NSString stringWithFormat:@"%@ %@", friend[@"first_name"], friend[@"last_name"]],
+         @"friend_id": friend[@"friend_id"]}];
     };
     
     [self addRandomizedFriends:myFriends];
-    self.updateFriends = NO;
     
     [YTModelHelper save];
 }

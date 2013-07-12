@@ -97,7 +97,9 @@
 
 + (NSNumber *)parseBool:(id)boolString
 {
-    BOOL cond = [boolString isEqualToString:@"t"];
+    BOOL cond = NO;
+    if(boolString)
+        cond = [boolString isEqualToString:@"t"];
     return [NSNumber numberWithBool:cond];
 }
 

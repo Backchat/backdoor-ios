@@ -115,26 +115,10 @@
     return object;
 }
 
-+ (void)updateGab:(id)data context:(NSManagedObjectContext*)context
++ (NSManagedObject*)updateMessage:(id)data
 {
-    NSManagedObject *gab = [YTModelHelper findOrCreateWithId:data[@"id"] entityName:@"Gabs" context:context];
-    [gab setValue:data[@"related_user_name"] forKey:@"related_user_name"];
-    [gab setValue:data[@"related_avatar"] forKey:@"related_avatar"];
+    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
 
-    [gab setValue:data[@"content_cache"] forKey:@"content_cache"];
-    [gab setValue:data[@"content_summary"] forKey:@"content_summary"];
-
-    [gab setValue:[YTHelper parseNumber:data[@"unread_count"]] forKey:@"unread_count"];
-    [gab setValue:[YTHelper parseNumber:data[@"total_count"]] forKey:@"total_count"];
-    [gab setValue:[YTHelper parseNumber:data[@"clue_count"]] forKey:@"clue_count"];
-
-    [gab setValue:[YTHelper parseBool:data[@"sent"]] forKey:@"sent"];
-
-    [gab setValue:[YTHelper parseDate:data[@"last_date"]] forKey:@"last_date"];
-}
-
-+ (void)updateMessage:(id)data context:(NSManagedObjectContext*)context
-{
     NSManagedObject *message = [YTModelHelper messageForKey:data[@"key"] context:context];
 
     [message setValue:[NSNumber numberWithInteger:MESSAGE_STATUS_READY] forKey:@"status"];
@@ -144,11 +128,13 @@
     [message setValue:[YTHelper parseNumber:data[@"kind"]] forKey:@"kind"];
     [message setValue:data[@"secret"] forKey:@"secret"];
 
-    [message setValue:[YTHelper parseBool:data[@"read"]] forKey:@"read"];
-    [message setValue:[YTHelper parseBool:data[@"deleted"]] forKey:@"deleted"];
-    [message setValue:[YTHelper parseBool:data[@"sent"]] forKey:@"sent"];
+    [message setValue:data[@"read"] forKey:@"read"];
+    [message setValue:data[@"deleted"] forKey:@"deleted"];
+    [message setValue:data[@"sent"] forKey:@"sent"];
     
     [message setValue:[YTHelper parseDate:data[@"created_at"]] forKey:@"created_at"];
+    
+    return message;
 }
 
 + (NSManagedObject*)createMessage:(NSDictionary*)data
@@ -170,10 +156,16 @@
     return message;
 }
 
-+ (NSManagedObject*)createGab:(id)data
++ (NSManagedObject*)createOrUpdateGab:(id)data
 {
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
-    NSManagedObject *gab = [NSEntityDescription insertNewObjectForEntityForName:@"Gabs" inManagedObjectContext:context];
+    
+    NSManagedObject *gab = nil;
+    if(data[@"id"]) {
+        gab = [self gabForId:data[@"id"]];
+    }
+    if(!gab)
+        gab = [NSEntityDescription insertNewObjectForEntityForName:@"Gabs" inManagedObjectContext:context];
 
     [gab setValue:data[@"related_user_name"] forKey:@"related_user_name"];
     [gab setValue:data[@"related_avatar"] forKey:@"related_avatar"];
@@ -185,12 +177,17 @@
 
     [gab setValue:[YTHelper parseNumber:data[@"unread_count"]] forKey:@"unread_count"];
     [gab setValue:[YTHelper parseNumber:data[@"total_count"]] forKey:@"total_count"];
-    [gab setValue:[YTHelper parseNumber:data[@"clue_count"]] forKey:@"clue_count"];
+    [gab setValue:data[@"clue_count"] forKey:@"clue_count"]; //sent as an integer now.
+    [gab setValue:data[@"sent"] forKey:@"sent"];//and as boolean.
     
-    [gab setValue:[YTHelper parseBool:data[@"sent"]] forKey:@"sent"];
-    
-    [gab setValue:[YTHelper parseDate:data[@"last_date"]] forKey:@"last_date"];
+    [gab setValue:[YTHelper parseDate:data[@"updated_at"]] forKey:@"updated_at"];
 
+    NSArray* messages = data[@"messages"];
+    if(messages) {
+        for(id message in messages) {
+            [self updateMessage:message];
+        }
+    }
     return gab;
 }
 
@@ -274,7 +271,7 @@
 {
     filter = [YTModelHelper gabFilterFromString:filter];
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"(total_count > 0) && (content_cache LIKE[cd] %@ || related_user_name LIKE[cd] %@)", filter, filter];
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"last_date" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"updated_at" ascending:NO];
     return [YTModelHelper objectForRow:row entityName:@"Gabs" predicate:pred sortDescriptor:sortDescriptor];
 }
 
@@ -338,7 +335,7 @@
         return nil;
     }
     
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"(total_count > 0) && (last_date > %@) && (content_cache LIKE[cd] %@ || related_user_name LIKE[cd] %@)", [gab valueForKey:@"last_date"], filter, filter];
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"(total_count > 0) && (updated_at > %@) && (content_cache LIKE[cd] %@ || related_user_name LIKE[cd] %@)", [gab valueForKey:@"updated_at"], filter, filter];
     NSInteger row = [YTModelHelper objectCount:@"Gabs" predicate:pred];
     return [NSIndexPath indexPathForRow:row inSection:0];
 }
@@ -479,11 +476,11 @@
     }
 
     for (id item in data[@"gabs"]) {
-        [YTModelHelper updateGab:item context:context];
+        [YTModelHelper createOrUpdateGab:item];
     }
     
     for (id item in data[@"messages"]) {
-        [YTModelHelper updateMessage:item context:context];
+        [YTModelHelper updateMessage:item];
     }
     
     for (id item in data[@"clues"]) {
@@ -543,10 +540,16 @@
     [YTViewHelper refreshViews];
 }
 
+static int available_clues;
+
 + (NSInteger)userAvailableClues
 {
-    NSString *value = [YTModelHelper settingsForKey:@"available_clues"];
-    return [value integerValue];
+    return available_clues;
+}
+
++ (void)setUserAvailableClues:(NSNumber*) value
+{
+    available_clues = value.integerValue;
 }
 
 + (BOOL)userHasShared
@@ -604,7 +607,10 @@
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
     request.predicate = [NSPredicate predicateWithFormat:@"(type = %@ AND value = %@)", type, value];
     NSArray *objects = [context executeFetchRequest:request error:&error];
-    return objects[0];
+    if(objects.count > 0)
+        return objects[0];
+    else
+        return nil;
 }
 
 + (NSString*)phoneForUid:(NSString*)uid

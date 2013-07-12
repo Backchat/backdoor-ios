@@ -28,6 +28,10 @@ void uncaughtExceptionHandler(NSException *exception)
     NSLog(@"uncaught");
 }
 
+@interface YTAppDelegate ()
+- (void)syncBasedOnView;
+@end
+
 @implementation YTAppDelegate
 
 # pragma mark Custom methods
@@ -108,10 +112,16 @@ void uncaughtExceptionHandler(NSException *exception)
     [Mixpanel sharedInstanceWithToken:CONFIG_MIXPANEL_TOKEN];
     [[Mixpanel sharedInstance] track:@"Launched Application"];
     
-
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
     
-    self.autoSyncGabId = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
+    if([YTHelper simulatedEnvironment]) {
+        [YTAppDelegate current].userInfo[@"device_token"] = @"1"; //not like you can run multiple simulators...
+    }
+    
+    NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
+    if(gab_id != nil) { //TODO maybe we dont have an access_token yet?
+        [YTApiHelper syncGabWithId:gab_id popup:YES];
+    }
     
     return YES;
 }
@@ -124,7 +134,7 @@ void uncaughtExceptionHandler(NSException *exception)
         firstTime = NO;
     } else {
         [YTContactHelper sharedInstance].updateFriends = YES;
-        [YTApiHelper autoSync:NO];
+        [self syncBasedOnView];
     }
 }
 
@@ -159,7 +169,9 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    self.userInfo[@"device_token"] = @"";
+    if(![YTHelper simulatedEnvironment]) {
+        self.userInfo[@"device_token"] = @"";
+    }
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -170,12 +182,24 @@ void uncaughtExceptionHandler(NSException *exception)
     
     [YTNotifHelper handleNotification:userInfo];
     
-    if (application.applicationState == UIApplicationStateActive) {
-        [YTApiHelper autoSync:NO];
+    [YTApiHelper syncGabWithId:userInfo[@"gab_id"] popup:NO];
+}
 
-    } else {
-        self.autoSyncGabId = userInfo[@"gab_id"];
-        [YTApiHelper autoSync:YES];
+- (void) syncBasedOnView
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    NSNumber* gab_id = nil;
+    
+    if (delegate.currentMainViewController && delegate.currentMainViewController.selectedGabId) {
+        gab_id = delegate.currentMainViewController.selectedGabId;
+    }
+    
+    if (delegate.currentGabViewController && delegate.currentGabViewController.gab) {
+        gab_id = [delegate.currentGabViewController.gab valueForKey:@"id"];
+    }
+    
+    if(gab_id) {
+        [YTApiHelper syncGabWithId:gab_id popup:NO];
     }
 
 }

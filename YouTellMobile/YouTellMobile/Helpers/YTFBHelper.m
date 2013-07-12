@@ -39,10 +39,19 @@
     
     YTAppDelegate *delegate = [YTAppDelegate current];
     delegate.userInfo[@"provider"] = @"facebook";
-    delegate.userInfo[@"access_token"] = FBSession.activeSession.accessTokenData.accessToken;
+    FBAccessTokenData* token_data = FBSession.activeSession.accessTokenData;
+    if(!token_data) {
+        NSLog(@"What the hell");
+        return;
+    }
+    
+    delegate.userInfo[@"access_token"] = token_data.accessToken;
+    
 
-    [YTFBHelper fetchUserData];
-    [YTViewHelper hideLogin];
+    [YTApiHelper login:^(id JSON) {
+        [YTFBHelper fetchUserData];
+        [YTViewHelper hideLogin];
+    }];
 }
 
 + (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error
@@ -104,12 +113,10 @@
             NSLog(@"Logged in as %@", result[@"name"]);
             delegate.userInfo[@"fb_data"] = [NSMutableDictionary dictionaryWithDictionary:result];
             [YTModelHelper changeStoreId:result[@"email"]];
-            [YTContactHelper sharedInstance].updateFriends = YES;
-            [YTApiHelper autoSync:NO];
             [YTFBHelper fetchFamily];
             [YTFBHelper fetchInterests];
             [YTFBHelper fetchLikes];
-            [YTApiHelper getFeaturedUsers];
+            //[YTFBHelper fetchFriends];
         }];
     }];
 }
@@ -141,6 +148,7 @@
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             delegate.userInfo[@"fb_data"][@"family"] = result[@"data"];
+            [YTFBHelper uploadIfDone];
         }];
     }];
 }
@@ -157,6 +165,7 @@
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             delegate.userInfo[@"fb_data"][@"interests"] = result[@"data"];
+            [YTFBHelper uploadIfDone];        
         }];
     }];
 }
@@ -173,8 +182,22 @@
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             delegate.userInfo[@"fb_data"][@"likes"] = result[@"data"];
+            [YTFBHelper uploadIfDone];            
         }];
     }];
+}
+
++ (void)uploadIfDone
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+
+    id likes = delegate.userInfo[@"fb_data"][@"likes"];
+    id interest = delegate.userInfo[@"fb_data"][@"interests"];
+    id family = delegate.userInfo[@"fb_data"][@"family"];
+    
+    if(likes && interest && family) {
+        [YTApiHelper updateUserInfo:nil];
+    }    
 }
 
 + (void)openSession

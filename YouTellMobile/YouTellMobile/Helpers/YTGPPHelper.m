@@ -83,11 +83,12 @@
         delegate.userInfo[@"provider"] = @"gpp";
         delegate.userInfo[@"access_token"] = auth.accessToken;
         delegate.userInfo[@"gpp_data"][@"email"] = auth.userEmail;
-
-        [YTViewHelper hideLogin];
+        [YTApiHelper login:^(id JSON) {
+            [YTViewHelper hideLogin];
+            [self fetchUserData];
+        }];
+        
         [YTModelHelper changeStoreId:auth.userEmail];
-
-        [self fetchUserData];
     }];
 }
 
@@ -124,9 +125,8 @@
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             YTAppDelegate *delegate = [YTAppDelegate current];
             [delegate.userInfo[@"gpp_data"] addEntriesFromDictionary:[person JSON]];
-            [YTApiHelper autoSync:NO];
-            [self fetchFriendsWithPageToken:nil];
-            [YTApiHelper getFeaturedUsers];
+            [YTApiHelper updateUserInfo:nil];
+            //not going to do this [self fetchFriendsWithPageToken:nil];
         }];
     }];
 }

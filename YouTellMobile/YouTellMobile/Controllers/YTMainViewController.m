@@ -43,7 +43,8 @@
 - (void)refreshWasRequested
 {
     [[Mixpanel sharedInstance] track:@"Dragged Refresh Control"];
-    [YTApiHelper autoSync:NO];
+    [YTApiHelper syncGabs];
+    [YTApiHelper getFeaturedUsers];
 }
 
 - (void)composeButtonWasClicked
@@ -66,6 +67,12 @@
 
 
 #pragma mark UIViewController methods
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self refreshWasRequested];
+    [super viewDidAppear:animated];
+}
 
 - (void)viewDidLoad
 {
@@ -182,7 +189,7 @@
     BOOL read = [[object valueForKey:@"unread_count"] isEqualToNumber:@0];
     NSString *title = [YTModelHelper userNameForGab:object];
     NSString *subtitle = [object valueForKey:@"content_summary"];
-    NSString *time = [YTHelper formatDate:[object valueForKey:@"last_date"]];
+    NSString *time = [YTHelper formatDate:[object valueForKey:@"updated_at"]];
     NSString *image = read ? nil : @"newgab2";
 
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
