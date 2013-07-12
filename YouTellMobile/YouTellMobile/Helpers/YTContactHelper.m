@@ -202,6 +202,7 @@
     [self filterRandomizedFriends];
 }
 
+//NOTE CURRENTLY NEVER CALLED
 - (void)loadFacebookFriends:(NSArray*)friends;
 {
     [YTModelHelper clearContactsWithType:@"facebook"];
@@ -220,9 +221,9 @@
             @"value": friend[@"id"],
         };
 
-//        [YTModelHelper addContactWithData:data];
+        [YTModelHelper addContactWithData:data];
         
-//        [myFriends addObject:@{@"type": @"facebook", @"value": friend[@"id"], @"name": friend[@"name"]}];
+        [myFriends addObject:@{@"type": @"facebook", @"value": friend[@"id"], @"name": friend[@"name"]}];
     };
     
     [self addRandomizedFriends:myFriends];

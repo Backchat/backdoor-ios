@@ -114,8 +114,8 @@
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             YTAppDelegate *delegate = [YTAppDelegate current];
             [delegate.userInfo[@"gpp_data"] addEntriesFromDictionary:[person JSON]];
-            //WHY?! [YTApiHelper autoSync:NO];
-            [self fetchFriendsWithPageToken:nil];
+            [YTApiHelper updateUserInfo:nil];
+            //not going to do this [self fetchFriendsWithPageToken:nil];
         }];
     }];
 }

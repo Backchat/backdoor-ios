@@ -49,10 +49,8 @@
     
 
     [YTApiHelper login:^(id JSON) {
-        //TODO make this call happen parallel and join to the end
         [YTFBHelper fetchUserData];
         [YTViewHelper hideLogin];
-        //yap yap
     }];
 }
 
@@ -111,7 +109,7 @@
             [YTFBHelper fetchFamily];
             [YTFBHelper fetchInterests];
             [YTFBHelper fetchLikes];
-            [YTFBHelper fetchFriends];
+            //[YTFBHelper fetchFriends];
         }];
     }];
 }
@@ -125,7 +123,7 @@
             return;
         }
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            //[[YTContactHelper sharedInstance] loadFacebookFriends:result[@"data"]];
+            [[YTContactHelper sharedInstance] loadFacebookFriends:result[@"data"]];
         }];
 
     }];
