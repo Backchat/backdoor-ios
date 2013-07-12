@@ -540,10 +540,16 @@
     [YTViewHelper refreshViews];
 }
 
+static int available_clues;
+
 + (NSInteger)userAvailableClues
 {
-    NSString *value = [YTModelHelper settingsForKey:@"available_clues"];
-    return [value integerValue];
+    return available_clues;
+}
+
++ (void)setUserAvailableClues:(NSNumber*) value
+{
+    available_clues = value.integerValue;
 }
 
 + (BOOL)userHasShared

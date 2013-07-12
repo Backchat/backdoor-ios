@@ -168,7 +168,9 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    self.userInfo[@"device_token"] = @"";
+    if(![YTHelper simulatedEnvironment]) {
+        self.userInfo[@"device_token"] = @"";
+    }
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo

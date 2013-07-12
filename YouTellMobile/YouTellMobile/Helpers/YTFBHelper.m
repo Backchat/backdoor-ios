@@ -47,13 +47,12 @@
     
     delegate.userInfo[@"access_token"] = token_data.accessToken;
     
-    [YTViewHelper hideLogin];
 
     [YTApiHelper login:^(id JSON) {
         //TODO make this call happen parallel and join to the end
-        //[YTFBHelper fetchUserData];
+        [YTFBHelper fetchUserData];
+        [YTViewHelper hideLogin];
         //yap yap
-        [YTApiHelper getFeaturedUsers];
     }];
 }
 
@@ -112,8 +111,7 @@
             [YTFBHelper fetchFamily];
             [YTFBHelper fetchInterests];
             [YTFBHelper fetchLikes];
-            
-            [YTApiHelper getFriends];
+            [YTFBHelper fetchFriends];
         }];
     }];
 }
@@ -145,6 +143,7 @@
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             delegate.userInfo[@"fb_data"][@"family"] = result[@"data"];
+            [YTFBHelper uploadIfDone];
         }];
     }];
 }
@@ -161,6 +160,7 @@
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             delegate.userInfo[@"fb_data"][@"interests"] = result[@"data"];
+            [YTFBHelper uploadIfDone];        
         }];
     }];
 }
@@ -177,8 +177,22 @@
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             delegate.userInfo[@"fb_data"][@"likes"] = result[@"data"];
+            [YTFBHelper uploadIfDone];            
         }];
     }];
+}
+
++ (void)uploadIfDone
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+
+    id likes = delegate.userInfo[@"fb_data"][@"likes"];
+    id interest = delegate.userInfo[@"fb_data"][@"interests"];
+    id family = delegate.userInfo[@"fb_data"][@"family"];
+    
+    if(likes && interest && family) {
+        [YTApiHelper updateUserInfo:nil];
+    }    
 }
 
 + (void)openSession

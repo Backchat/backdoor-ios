@@ -48,25 +48,6 @@
     delegate.userInfo[@"settings"] = [NSMutableDictionary new];
 }
 
-+ (void)updateUserInfo:(NSDictionary*)params
-{
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    NSMutableDictionary *sentInfo = delegate.sentInfo;
-    
-    /*
-     if (params[@"fb_data"]) {
-     sentInfo[@"fb_data"] = params[@"fb_data"];
-     }
-     
-     if (params[@"gpp_data"]) {
-     sentInfo[@"gpp_data"] = params[@"gpp_data"];
-     }
-     */
-    if (params[@"device_token"]) {
-        sentInfo[@"device_token"] = params[@"device_token"];
-    }
-}
-
 + (NSDictionary*)userParams
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
@@ -224,6 +205,29 @@
 
 }
 
++ (void)getUserInfo:(void(^)(id JSON))success
+{
+    [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Please wait...", nil)
+                                                 path:@"/"
+                                               method:@"GET" params:nil
+                                              success:^(id JSON) {
+                                                  [YTModelHelper setUserAvailableClues:JSON[@"available_clues"]];
+                                                  if(success)
+                                                      success(JSON);
+                                              }
+                                              failure:nil];
+}
+
++ (void)updateUserInfo:(void(^)(id JSON))success
+{
+    NSDictionary* params = [self userParams]; //TODO better?
+    
+    [YTApiHelper sendJSONRequestToPath:@"/"
+                                method:@"POST" params:params
+                               success:success
+                               failure:nil];
+}
+
 + (void)sendAbuseReport:(NSString*)content success:(void(^)(id JSON))success
 {
     NSDictionary *params = @{@"content": content};
@@ -370,7 +374,7 @@
         return;
     }
     
-    [YTApiHelper sendJSONRequestToPath:@"/featured-users" method:@"POST" params:nil success:^(id JSON) {
+    [YTApiHelper sendJSONRequestToPath:@"/featured-users" method:@"GET" params:nil success:^(id JSON) {
         [YTAppDelegate current].featuredUsers = JSON[@"users"];
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{

@@ -50,7 +50,6 @@
 
 - (void)requestClueButtonWasPressed:(id)sender
 {
-    
     UIButton *button = (UIButton*)sender;
     NSNumber *number = [NSNumber numberWithInt:(button.tag - 100)];
     UILabel *label = (UILabel*)[self.sheet.sheetView viewWithTag:button.tag - 100 + 1000];
@@ -65,12 +64,12 @@
         //}
         NSString *field = clue[@"field"];
         NSString *fieldText = @{
-            @"gender": NSLocalizedString(@"Gender", nil),
-            @"school": NSLocalizedString(@"School", nil),
-            @"location": NSLocalizedString(@"Location", nil),
-            @"work": NSLocalizedString(@"Work", nil),
-            @"like": NSLocalizedString(@"Likes", nil)
-        }[field];
+                                @"gender": NSLocalizedString(@"Gender", nil),
+                                @"school": NSLocalizedString(@"School", nil),
+                                @"location": NSLocalizedString(@"Location", nil),
+                                @"work": NSLocalizedString(@"Work", nil),
+                                @"like": NSLocalizedString(@"Likes", nil)
+                                }[field];
         NSString *text;
         
         if (fieldText) {
@@ -83,7 +82,7 @@
         [alert show];
         return;
     }
-
+    
     if (availClues == 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"You have no remaining clues", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [alert show];
@@ -100,7 +99,7 @@
         
         [self.activityIndicator stopAnimating];
         [self updateClues];
-
+        
         if ([JSON[@"success"] isEqualToNumber:@0]) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"You have no remaining clues", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [alert show];
@@ -284,18 +283,22 @@
     
     UILabel *label = (UILabel*)[self.sheet.sheetView viewWithTag:10];
 
-    NSInteger availClues = [YTModelHelper userAvailableClues];
-    label.text = [NSString stringWithFormat:NSLocalizedString(@"You have %d clues remaining", nil), availClues];
+    [YTApiHelper getUserInfo:^(id JSON) {
+        NSInteger availClues = [YTModelHelper userAvailableClues];
+        label.text = [NSString stringWithFormat:NSLocalizedString(@"You have %d clues remaining", nil), availClues];
+        
+        for (int i=0;i<9;++i) {
+            NSNumber *n = [NSNumber numberWithInt:i];
+            NSDictionary *clue = clues[n];
+            UIView *shadow = (UIView*)[self.sheet.sheetView viewWithTag:10000+i];
+            shadow.layer.shadowRadius = clue ? 0 : 4;
+            [self updateClue:clue number:n];
+        }
+        
+        [self updateBuyButton];
+        
+    }];
 
-    for (int i=0;i<9;++i) {
-        NSNumber *n = [NSNumber numberWithInt:i];
-        NSDictionary *clue = clues[n];
-        UIView *shadow = (UIView*)[self.sheet.sheetView viewWithTag:10000+i];
-        shadow.layer.shadowRadius = clue ? 0 : 4;
-        [self updateClue:clue number:n];
-    }
-    
-    [self updateBuyButton];
 }
 
 - (void)updateClue:(NSDictionary *)clue number:(NSNumber*)number
