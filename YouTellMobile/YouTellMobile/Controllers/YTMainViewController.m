@@ -43,6 +43,11 @@
 - (void)refreshWasRequested
 {
     [[Mixpanel sharedInstance] track:@"Dragged Refresh Control"];
+    [self doRefresh];
+}
+
+- (void)doRefresh
+{
     [YTApiHelper syncGabs];
     [YTApiHelper getFeaturedUsers];
 }
@@ -70,7 +75,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self refreshWasRequested];
+    [self doRefresh];
     [super viewDidAppear:animated];
 }
 
