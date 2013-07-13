@@ -202,6 +202,8 @@
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"related_avatar"]] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
 
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     return cell;
 }
 
@@ -225,7 +227,8 @@
         [avatarView setImage:nil];
     }
 
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     
     return cell;
 }
@@ -241,6 +244,8 @@
         [view setNeedsDisplay];
     }
     
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     return cell;
 }
 
@@ -264,6 +269,8 @@
     NSString *url = @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png";
     [avatarView setImageWithURL:[NSURL URLWithString:url] placeholderImage:nil options:SDWebImageRefreshCached];
     
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     return cell;
 }
 
@@ -279,6 +286,8 @@
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImage:[UIImage imageNamed:@"more2"]];
     
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
     return cell;
 }
 
@@ -288,8 +297,6 @@
 {
     [self.searchBar resignFirstResponder];
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
     if (indexPath.section == SECTION_GABS) {
         NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row  filter:self.searchBar.text];
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Thread Item"];
