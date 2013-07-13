@@ -34,6 +34,8 @@
 
 + (void)getUserInfo:(void(^)(id JSON))success;
 + (void)updateUserInfo:(void(^)(id JSON))success;
++ (bool)isNewUser;
++ (void)setNewUser:(bool)new_user;
 
 + (void)sendFeedback:(NSString*)content rating:(NSNumber*)rating success:(void(^)(id JSON))success;
 + (void)sendAbuseReport:(NSString*)content success:(void(^)(id JSON))success;

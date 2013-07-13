@@ -205,9 +205,7 @@
                                                   //we must have successfully logged in = we must be ok with server
                                                   [YTApiHelper hideNetworkErrorAlert];
                                                   //are we a new user? then show the tour:
-                                                  if(JSON[@"new_user"]) {
-                                                      [YTTourViewController show];
-                                                  }
+                                                  [YTApiHelper setNewUser:(JSON[@"new_user"] || CONFIG_DEBUG_TOUR)];
                                                   
                                                   [self getFriends];
                                                   if(success) {
@@ -216,6 +214,17 @@
                                               }
                                               failure:nil];
 
+}
+
+static bool new_user = false;
++ (void)setNewUser:(bool)user
+{
+    new_user = user;
+}
+
++ (bool)isNewUser
+{
+    return new_user;
 }
 
 + (void)getUserInfo:(void(^)(id JSON))success

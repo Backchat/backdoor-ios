@@ -22,7 +22,9 @@
 
 + (void)show
 {
-    [[YTAppDelegate current].currentMainViewController presentViewController:[[YTTourViewController alloc] init] animated:YES completion:nil];
+    YTTourViewController* view = [[YTTourViewController alloc] init];
+    UIViewController* con = [YTAppDelegate current].currentMainViewController;
+    [con presentViewController:view animated:YES completion:nil];
 }
 
 - (void)loadPage:(NSInteger)page

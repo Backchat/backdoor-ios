@@ -23,6 +23,8 @@
 #import "YTGPPHelper.h"
 #import "YTSocialHelper.h"
 #import "YTMainViewHelper.h"
+#import "YTTourViewController.h"
+
 
 #define SECTION_GABS 0
 #define SECTION_FRIENDS 1
@@ -77,6 +79,10 @@
 {
     [self doRefresh];
     [super viewDidAppear:animated];
+    if([YTApiHelper isNewUser]) {
+        [YTApiHelper setNewUser:FALSE];
+        [YTTourViewController show];
+    }
 }
 
 - (void)viewDidLoad
