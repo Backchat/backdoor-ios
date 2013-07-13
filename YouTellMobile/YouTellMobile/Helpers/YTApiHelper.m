@@ -25,6 +25,7 @@
 #import "YTViewHelper.h"
 #import "YTContactHelper.h"
 #import "YTViewHelper.h"
+#import "YTTourViewController.h"
 
 @implementation YTApiHelper
 
@@ -203,6 +204,11 @@
                                               success:^(id JSON) {
                                                   //we must have successfully logged in = we must be ok with server
                                                   [YTApiHelper hideNetworkErrorAlert];
+                                                  //are we a new user? then show the tour:
+                                                  if(JSON[@"new_user"]) {
+                                                      [YTTourViewController show];
+                                                  }
+                                                  
                                                   [self getFriends];
                                                   if(success) {
                                                       success(JSON);
@@ -333,6 +339,24 @@
                                               failure:nil];
     [Flurry logEvent:@"Tagged_Thread"];
     [[Mixpanel sharedInstance] track:@"Tagged Thread"];
+}
+
++ (void)getCluesForGab:(NSNumber*)gab_id success:(void(^)(id JSON))success
+{
+    [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@/clues/", gab_id]
+                                method:@"GET"
+                                params:@{@"available_clues": @true}
+                               success:^(id JSON) {
+                                   for (id clue in JSON[@"clues"])
+                                       [YTModelHelper createOrUpdateClue:clue];
+                                   
+                                   if(JSON[@"available_clues"])
+                                       [YTModelHelper setUserAvailableClues:JSON[@"available_clues"]];
+
+                                   if(success)
+                                       success(JSON);
+                               }
+                               failure:nil];
 }
 
 + (void)requestClue:(NSNumber*)gabId number:(NSNumber*)number success:(void(^)(id JSON))success;

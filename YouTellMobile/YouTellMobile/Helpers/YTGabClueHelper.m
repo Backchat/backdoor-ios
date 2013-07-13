@@ -279,15 +279,15 @@
 }
 
 - (void)updateClues
-{
-    NSDictionary *clues = [YTModelHelper cluesForGab:[self.gabView.gab valueForKey:@"id"]];
-    
+{    
     UILabel *label = (UILabel*)[self.sheet.sheetView viewWithTag:10];
 
-    [YTApiHelper getUserInfo:^(id JSON) {
+    [YTApiHelper getCluesForGab:[self.gabView.gab valueForKey:@"id"] success:^(id JSON) {
         NSInteger availClues = [YTModelHelper userAvailableClues];
         label.text = [NSString stringWithFormat:NSLocalizedString(@"You have %d clues remaining", nil), availClues];
         
+        NSDictionary *clues = [YTModelHelper cluesForGab:[self.gabView.gab valueForKey:@"id"]];
+
         for (int i=0;i<9;++i) {
             NSNumber *n = [NSNumber numberWithInt:i];
             NSDictionary *clue = clues[n];
