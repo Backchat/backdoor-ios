@@ -565,8 +565,10 @@
                                    [YTModelHelper updateMessage:JSON[@"message"]];
                                    [self updateState];
                                    
+                                   NSNumber *gabSent = [NSNumber numberWithBool:![[self.gab valueForKey:@"sent"] isEqualToNumber:@0]];
+
                                    [Flurry logEvent:@"Sent_Message" withParameters:@{@"kind":params[@"kind"]}];
-                                   [[Mixpanel sharedInstance] track:@"Sent Message"];
+                                   [[Mixpanel sharedInstance] track:@"Sent Message" properties:@{@"Anonymous": gabSent}];
                                    
                                    self.ongoingRequest = false;
                                    [self handleNextQueuedMessage];
