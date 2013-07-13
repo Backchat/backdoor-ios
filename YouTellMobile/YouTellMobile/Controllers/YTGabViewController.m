@@ -454,7 +454,7 @@
             [params setValue:@{@"content": [message valueForKey:@"content"],
              @"kind": [message valueForKey:@"kind"],
              @"key": [message valueForKey:@"key"]} forKey:@"message"];
-            [params setValue:@{@"id": contact[@"friend_id"]} forKey:@"receiver"];
+            [params setValue:@{@"id": contact[@"id"]} forKey:@"friendship"];
             
             [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"POST" params:params
                                        success:^(id JSON) {

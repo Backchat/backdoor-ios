@@ -201,6 +201,8 @@
                                                  path:@"/login"
                                                method:@"POST" params:params
                                               success:^(id JSON) {
+                                                  //we must have successfully logged in = we must be ok with server
+                                                  [YTApiHelper hideNetworkErrorAlert];
                                                   [self getFriends];
                                                   if(success) {
                                                       success(JSON);
@@ -439,6 +441,11 @@
     NSString *message = NSLocalizedString(@"Unable to connect with Backdoor server. Please check your data connection", nil);
     [YTViewHelper showAlertWithTitle:title message:message];
 };
+
++ (void)hideNetworkErrorAlert
+{
+    [YTViewHelper hideAlert];
+}
 
 + (void)showMaintenanceModeAlert
 {

@@ -248,13 +248,12 @@
         [data setValue:NSLocalizedString(@"Facebook", nil) forKey:@"title"];
         [data setValue:friend[@"social_id"] forKey:@"value"];
         [data setValue:friend[@"friend_id"] forKey:@"friend_id"];
+        [data setValue:friend[@"id"] forKey:@"id"];
         [data setValue:[NSString stringWithFormat:@"%@ %@", friend[@"first_name"], friend[@"last_name"]] forKey:@"name"];
         [YTModelHelper addContactWithData:data];
         
         //TODO wtf?
-        [myFriends addObject:@{@"type": friend[@"provider"], @"value": friend[@"social_id"],
-         @"name": [NSString stringWithFormat:@"%@ %@", friend[@"first_name"], friend[@"last_name"]],
-         @"friend_id": friend[@"friend_id"]}];
+        [myFriends addObject:data];
     };
     
     [self addRandomizedFriends:myFriends];

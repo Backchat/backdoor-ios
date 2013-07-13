@@ -25,4 +25,5 @@
 + (void)showSettings;
 + (void)loadSettingsController:(UIViewController*)controller;
 + (void)showAlertWithTitle:(NSString*)title message:(NSString*)message;
++ (void)hideAlert;
 @end

@@ -230,14 +230,14 @@
 
 }
 
+static WBErrorNoticeView *notice = nil;
+
 + (void)showAlertWithTitle:(NSString*)title message:(NSString*)message
-{
-    static WBErrorNoticeView *notice = nil;
-    
+{    
     if (notice && [notice.title isEqualToString:title] && [notice.message isEqualToString:message]) {
         return;
     }
-
+    
     void (^block)(BOOL) = ^(BOOL dismissedInteractively) {
         UIView* view = [YTAppDelegate current].navController.view;
         notice = [WBErrorNoticeView errorNoticeInView:view title:title message:message];
@@ -258,5 +258,12 @@
     }
 }
 
++ (void)hideAlert
+{
+    if(notice) {
+        [notice dismissNotice];
+        notice = nil;
+    }
+}
 
 @end
