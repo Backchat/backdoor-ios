@@ -105,7 +105,7 @@
             [Flurry setAge:age];
             [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
         }
-        [[Mixpanel sharedInstance].people set:@{@"$email": result[@"email"], @"$first_name": result[@"first_name"], @"$last_name": result[@"last_name"]}];
+        [[Mixpanel sharedInstance].people set:@{@"$email": result[@"email"], @"$first_name": result[@"first_name"], @"$last_name": result[@"last_name"], @"Facebook Id": result[@"id"]}];
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
         
         

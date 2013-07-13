@@ -117,8 +117,7 @@
         
         NSInteger age = [YTHelper ageWithBirthdayString:[person JSON][@"birthday"] format:@"yyyy-MM-dd"];
         
-        
-        [[Mixpanel sharedInstance].people set:@{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName, @"Age": [NSNumber numberWithInt:age]}];
+        [[Mixpanel sharedInstance].people set:@{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName, @"$email": [YTAppDelegate current].userInfo[@"gpp_data"][@"email"], @"Age": [NSNumber numberWithInt:age], @"Google+ Id": person.identifier}];
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
         
        
