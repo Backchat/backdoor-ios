@@ -9,10 +9,12 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <Mixpanel.h>
 
 #import "YTModelHelper.h"
 #import "YTContactHelper.h"
+#import "YTSocialHelper.h"
 #import "YTMainViewHelper.h"
 #import "YTHelper.h"
 
@@ -47,7 +49,6 @@
     self.searchBar.delegate = self;
     self.searchBar.backgroundImage = [YTHelper imageNamed:@"navbar3"];
     self.tableView.tableHeaderView = self.searchBar;
-    self.tableView.contentOffset = CGPointMake(0, self.searchBar.frame.size.height);
 
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.hidesBackButton = YES;
@@ -72,6 +73,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 0) {
+        return [self tableView:tableView cellForUserAtIndexPath:indexPath];
+    }
+    
+    if (indexPath.section == 1) {
+        return [self tableView:tableView cellForShareAtRow:0];
+    }
+    
+    return nil;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForUserAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *record = self.contacts[indexPath.row];
     NSString *title = record[@"name"];
     NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation.", nil);
@@ -85,20 +99,54 @@
     return cell;
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForShareAtRow:(NSInteger)row
+{
+    NSString *title = NSLocalizedString(@"Share", nil);
+    NSString *subtitle = NSLocalizedString(@"Tap me to get more BD friends.", nil);
+    NSString *time = @"";
+    NSString *image = nil;
+    
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
+    
+    UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
+    
+    NSString *url = @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png";
+    [avatarView setImageWithURL:[NSURL URLWithString:url] placeholderImage:nil options:SDWebImageRefreshCached];
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    return cell;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 60;
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Friend Item"];
-
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self.searchBar resignFirstResponder];
+
+    if (indexPath.section == 0) {
+        [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Friend Item"];
+
+        [self.searchBar resignFirstResponder];
     
-    NSDictionary *contact = self.contacts[indexPath.row];
-    [YTViewHelper showGabWithReceiver:contact];
+        NSDictionary *contact = self.contacts[indexPath.row];
+        [YTViewHelper showGabWithReceiver:contact];
+        return;
+    }
+    
+    if (indexPath.section == 1) {
+        [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Share Item"];
+        [[YTSocialHelper sharedInstance] presentShareDialog];
+        return;
+    }
 }
 
 

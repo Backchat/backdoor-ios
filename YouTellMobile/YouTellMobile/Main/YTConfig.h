@@ -6,7 +6,7 @@
 //
 
 #define CONFIG_APPLE_ID @"659951602"
-#define CONFIG_MODEL @"YTModel16"
+#define CONFIG_MODEL @"YTModel17"
 
 //app behaviors 
 #define CONFIG_TIMEOUT 20.0f

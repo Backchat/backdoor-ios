@@ -163,7 +163,7 @@
 		B2A37BB5174FE8CB006EAA5B /* YTNotificationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A37BB4174FE8CB006EAA5B /* YTNotificationSettingsViewController.m */; };
 		B2A75AD416F1EBEC00F0CAB4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A75AD316F1EBEC00F0CAB4 /* AVFoundation.framework */; };
 		B2A75B2816F2235600F0CAB4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A75B2716F2235600F0CAB4 /* CoreData.framework */; };
-		B2A75B3216F2311F00F0CAB4 /* YTModel16.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B2A75B3016F2311F00F0CAB4 /* YTModel16.xcdatamodeld */; };
+		B2A75B3216F2311F00F0CAB4 /* YTModel17.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B2A75B3016F2311F00F0CAB4 /* YTModel17.xcdatamodeld */; };
 		B2A75B3516F231BA00F0CAB4 /* YTModelHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2A75B3416F231BA00F0CAB4 /* YTModelHelper.m */; };
 		B2BA770616F08670006C17F7 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA770516F08670006C17F7 /* AddressBookUI.framework */; };
 		B2BA770816F08673006C17F7 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA770716F08673006C17F7 /* AddressBook.framework */; };
@@ -585,7 +585,7 @@
 		B2A37BB4174FE8CB006EAA5B /* YTNotificationSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTNotificationSettingsViewController.m; sourceTree = "<group>"; };
 		B2A75AD316F1EBEC00F0CAB4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B2A75B2716F2235600F0CAB4 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		B2A75B3116F2311F00F0CAB4 /* YTModel16.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = YTModel16.xcdatamodel; sourceTree = "<group>"; };
+		B2A75B3116F2311F00F0CAB4 /* YTModel17.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = YTModel17.xcdatamodel; sourceTree = "<group>"; };
 		B2A75B3316F231BA00F0CAB4 /* YTModelHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTModelHelper.h; path = Helpers/YTModelHelper.h; sourceTree = "<group>"; };
 		B2A75B3416F231BA00F0CAB4 /* YTModelHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTModelHelper.m; path = Helpers/YTModelHelper.m; sourceTree = "<group>"; };
 		B2BA770516F08670006C17F7 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
@@ -1210,7 +1210,7 @@
 				B2BA773F16F09511006C17F7 /* main.m */,
 				B2BA773916F094E9006C17F7 /* YTAppDelegate.h */,
 				B2BA773A16F094EA006C17F7 /* YTAppDelegate.m */,
-				B2A75B3016F2311F00F0CAB4 /* YTModel16.xcdatamodeld */,
+				B2A75B3016F2311F00F0CAB4 /* YTModel17.xcdatamodeld */,
 				B24CB2D617070E1C00813B2C /* YTConfig.h */,
 			);
 			name = Main;
@@ -1777,7 +1777,7 @@
 				B2BA774016F09511006C17F7 /* main.m in Sources */,
 				B2BA774D16F09DC9006C17F7 /* YTHelper.m in Sources */,
 				B2BA776016F0AD0E006C17F7 /* NSDate+TimeAgo.m in Sources */,
-				B2A75B3216F2311F00F0CAB4 /* YTModel16.xcdatamodeld in Sources */,
+				B2A75B3216F2311F00F0CAB4 /* YTModel17.xcdatamodeld in Sources */,
 				B2A75B3516F231BA00F0CAB4 /* YTModelHelper.m in Sources */,
 				B2C9E6E916F48D3E00B589E2 /* YTViewHelper.m in Sources */,
 				B2C9E6EC16F491C300B589E2 /* YTFBHelper.m in Sources */,
@@ -1913,7 +1913,7 @@
 					"$(inherited)",
 					CONFIGURATION_Debug,
 					"_AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_=1",
-					"CONFIG_URL=\\@\\\"http://localhost:4567\\\"",
+					"CONFIG_URL=\\@\\\"http://capricalabs.com:7564\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461-mgbsap2s5bh61ae2nggh9h45djonk8qi.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"06e542f53ddbd2430aac9c4664e5903f\\\"",
 				);
@@ -2168,13 +2168,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		B2A75B3016F2311F00F0CAB4 /* YTModel16.xcdatamodeld */ = {
+		B2A75B3016F2311F00F0CAB4 /* YTModel17.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				B2A75B3116F2311F00F0CAB4 /* YTModel16.xcdatamodel */,
+				B2A75B3116F2311F00F0CAB4 /* YTModel17.xcdatamodel */,
 			);
-			currentVersion = B2A75B3116F2311F00F0CAB4 /* YTModel16.xcdatamodel */;
-			path = YTModel16.xcdatamodeld;
+			currentVersion = B2A75B3116F2311F00F0CAB4 /* YTModel17.xcdatamodel */;
+			path = YTModel17.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

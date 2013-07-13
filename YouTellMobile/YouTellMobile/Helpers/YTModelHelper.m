@@ -546,7 +546,6 @@ static int available_clues;
 {
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
     NSObject *object = [NSEntityDescription insertNewObjectForEntityForName:@"Contacts" inManagedObjectContext:context];
-
     for (NSString *key in [data allKeys]) {
         [object setValue:data[key] forKey:key];
     }    
