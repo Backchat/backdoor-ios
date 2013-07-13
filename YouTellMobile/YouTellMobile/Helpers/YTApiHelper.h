@@ -39,6 +39,7 @@
 + (void)sendAbuseReport:(NSString*)content success:(void(^)(id JSON))success;
 + (void)deleteGab:(NSNumber*)gabId success:(void(^)(id JSON))success;
 + (void)tagGab:(NSNumber*)gabId tag:(NSString*)tag success:(void(^)(id JSON))success;
++ (void)clearUnread:(NSNumber*)gabId;
 
 + (void)getCluesForGab:(NSNumber*)gab_id success:(void(^)(id JSON))success;
 + (void)requestClue:(NSNumber*)gabId number:(NSNumber*)number success:(void(^)(id JSON))success;

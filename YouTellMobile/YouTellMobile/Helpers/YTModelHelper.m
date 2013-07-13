@@ -188,7 +188,31 @@
             [self updateMessage:message];
         }
     }
+    
+    //sum up all gabs and their unread count
+    [YTModelHelper updateUnreadCount];
     return gab;
+}
+
++ (void)updateUnreadCount
+{
+    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
+
+
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Gabs"];
+   
+    NSError *error;
+    
+    int unread = 0;
+    NSArray *objects = [context executeFetchRequest:request error:&error];
+    for(NSManagedObject* object in objects) {
+        NSNumber* u_count = [object valueForKey:@"unread_count"];
+        if(u_count)
+            unread += u_count.integerValue;
+    }
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:unread];
+
 }
 
 + (NSNumber*)nextFakeGabId

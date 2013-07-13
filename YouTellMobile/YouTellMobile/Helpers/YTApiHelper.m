@@ -329,6 +329,22 @@
 
 }
 
++ (void)clearUnread:(NSNumber*)gabId
+{
+    NSManagedObject* gab = [YTModelHelper gabForId:gabId];
+    NSNumber* current = [gab valueForKey:@"unread_count"];
+    if(current.integerValue != 0) {
+        [gab setValue:[NSNumber numberWithInt:0] forKey:@"unread_count"];
+        [YTModelHelper updateUnreadCount];
+
+        [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@", gabId]
+                                    method:@"POST"
+                                    params:@{@"unread_count": @0}
+                                   success:nil failure:nil];
+        
+    }
+}
+
 + (void)tagGab:(NSNumber*)gabId tag:(NSString*)tag success:(void(^)(id JSON))success
 {
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Updating thread", nil)

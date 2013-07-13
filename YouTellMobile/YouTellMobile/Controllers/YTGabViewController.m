@@ -171,6 +171,9 @@
         [self.tagHelper setupTagButton:sent];
         
         [self.tableView reloadData];
+        
+        [YTApiHelper clearUnread:gab_id];
+
         [self scrollToBottomAnimated:YES];
     }
 }

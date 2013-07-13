@@ -31,6 +31,7 @@
 + (NSString*)userNameForGab:(NSManagedObject*)gab;
 + (NSManagedObject*)createOrUpdateGab:(id)data;
 + (NSNumber*)nextFakeGabId;
++ (void)updateUnreadCount;
 
 //+ (NSManagedObject *)messageForRow:(NSInteger)row gabId:(id)gabId;
 + (NSArray*)messagesForGab:(id)gabId;
