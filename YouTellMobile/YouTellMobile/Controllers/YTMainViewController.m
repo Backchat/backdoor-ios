@@ -52,6 +52,7 @@
 {
     [YTApiHelper syncGabs];
     [YTApiHelper getFeaturedUsers];
+    [YTApiHelper getFriends];
 }
 
 - (void)composeButtonWasClicked
@@ -68,8 +69,6 @@
 - (void)reloadData
 {
     [self.tableView reloadData];
-    
-    [self.tableView selectRowAtIndexPath:[YTModelHelper indexPathForGab:self.selectedGabId filter:self.searchBar.text] animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
 
@@ -208,8 +207,6 @@
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"related_avatar"]] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
 
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
     return cell;
 }
 
@@ -232,9 +229,6 @@
     } else {
         [avatarView setImage:nil];
     }
-
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
     
     return cell;
 }
@@ -250,7 +244,6 @@
         [view setNeedsDisplay];
     }
     
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     return cell;
 }
@@ -275,8 +268,6 @@
     NSString *url = @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png";
     [avatarView setImageWithURL:[NSURL URLWithString:url] placeholderImage:nil options:SDWebImageRefreshCached];
     
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
     return cell;
 }
 
@@ -292,14 +283,13 @@
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImage:[UIImage imageNamed:@"more2"]];
     
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     return cell;
 }
 
 # pragma mark UITableViewDelegate methods
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.searchBar resignFirstResponder];
     
@@ -308,38 +298,31 @@
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Thread Item"];
         self.selectedGabId = [object valueForKey:@"id"];
         [YTViewHelper showGabWithId:self.selectedGabId];
-        return;
     }
-    
-    if (indexPath.section == SECTION_FRIENDS) {
+    else if (indexPath.section == SECTION_FRIENDS) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Friend Item"];
         NSDictionary *friendData = [YTContactHelper sharedInstance].filteredRandomizedFriends[indexPath.row];
         NSDictionary *friend = [[YTContactHelper sharedInstance] findContactWithType:friendData[@"type"] value:friendData[@"value"]];
         [YTViewHelper showGabWithReceiver:friend];
-        return;
-    }
-    
-    if (indexPath.section == SECTION_MORE) {
+    }    
+    else if (indexPath.section == SECTION_MORE) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / More Item"];
         [self.searchBar resignFirstResponder];
         
         YTNewGabViewController *c = [YTNewGabViewController new];
         [[YTAppDelegate current].navController pushViewController:c animated:YES];
-        return;
-    }
-    
-    if (indexPath.section == SECTION_SHARE) {
+    }    
+    else if (indexPath.section == SECTION_SHARE) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Share Item"];
         [[YTSocialHelper sharedInstance] presentShareDialog];
-        return;
-    }
-    
-    if (indexPath.section == SECTION_FEATURED) {
+    }    
+    else if (indexPath.section == SECTION_FEATURED) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Featured Users Item"];
         NSDictionary *user = [YTAppDelegate current].featuredUsers[indexPath.row];
         [YTViewHelper showGabWithReceiver:user];
-        return;
     }
+    
+    return nil;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

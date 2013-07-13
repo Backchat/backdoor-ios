@@ -458,7 +458,7 @@
              @"kind": [message valueForKey:@"kind"],
              @"key": [message valueForKey:@"key"]} forKey:@"message"];
             [params setValue:@{@"id": contact[@"id"]} forKey:@"friendship"];
-            
+            NSLog(@"friendship id %@", contact[@"id"]);
             [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"POST" params:params
                                        success:^(id JSON) {
                                            //make it real!
