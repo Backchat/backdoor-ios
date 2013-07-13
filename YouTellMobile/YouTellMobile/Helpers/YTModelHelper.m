@@ -206,17 +206,6 @@
     [message setValue:[NSNumber numberWithInteger:MESSAGE_STATUS_DELIVERING] forKey:@"status"];
 }
 
-+ (void)updateClue:(id)data context:(NSManagedObjectContext*)context
-{
-    NSManagedObject *clue = [YTModelHelper findOrCreateWithId:data[@"id"] entityName:@"Clues" context:context];
-    
-    [clue setValue:[YTHelper parseNumber:data[@"gab_id"]] forKey:@"gab_id"];
-    [clue setValue:data[@"field"] forKey:@"field"];
-    [clue setValue:data[@"value"] forKey:@"value"];
-    [clue setValue:[YTHelper parseNumber:data[@"number"]] forKey:@"number"];
-
-}
-
 + (NSManagedObject *)objectForRow:(NSInteger)row entityName:(NSString*)entityName predicate:(NSPredicate*)predicate sortDescriptor:(NSSortDescriptor *)sortDescriptor
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
@@ -430,6 +419,21 @@
     return ret;
 }
 
++ (NSManagedObject*)createOrUpdateClue:(NSDictionary*)data
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+
+    NSManagedObject *clue = [YTModelHelper findOrCreateWithId:data[@"id"] entityName:@"Clues" context:context];
+    
+    [clue setValue:[YTHelper parseNumber:data[@"gab_id"]] forKey:@"gab_id"];
+    [clue setValue:data[@"field"] forKey:@"field"];
+    [clue setValue:data[@"value"] forKey:@"value"];
+    [clue setValue:[YTHelper parseNumber:data[@"number"]] forKey:@"number"];
+    
+    return clue;
+}
+
 + (void)clearDataWithEntityName:(NSString*)entityName
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
@@ -451,65 +455,6 @@
     for (NSString *name in names) {
         [YTModelHelper clearDataWithEntityName:name];
     }
-}
-
-+ (void)loadSyncData:(id)data
-{
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    NSManagedObjectContext *context = delegate.managedObjectContext;
-    
-    NSString *oldDbTimestamp = [YTModelHelper settingsForKey:@"db_timestamp"];
-    NSString *newDbTimestamp = data[@"db_timestamp"];
-    if (![oldDbTimestamp isEqualToString:newDbTimestamp]) {
-        [YTModelHelper clearData];
-    }
-
-    NSString *prevSyncTimeStr = [YTModelHelper settingsForKey:@"sync_time"];
-    if (![prevSyncTimeStr isEqualToString:@""]) {
-        NSDate *prevSyncTime = [YTHelper parseDate:prevSyncTimeStr];
-        NSDate *curSyncTime = [YTHelper parseDate:data[@"sync_time"]];
-
-        if ([curSyncTime timeIntervalSinceDate:prevSyncTime] < 0) {
-            return;
-        }
-
-    }
-
-    for (id item in data[@"gabs"]) {
-        [YTModelHelper createOrUpdateGab:item];
-    }
-    
-    for (id item in data[@"messages"]) {
-        [YTModelHelper updateMessage:item];
-    }
-    
-    for (id item in data[@"clues"]) {
-        [YTModelHelper updateClue:item context:context];
-    }
-
-    [YTModelHelper setSettingsForKey:@"sync_time" value:data[@"sync_time"]];
-    [YTModelHelper setSettingsForKey:@"sync_uid" value:data[@"sync_uid"]];
-    [YTModelHelper setSettingsForKey:@"db_timestamp" value:data[@"db_timestamp"]];
-    [YTModelHelper setSettingsForKey:@"available_clues" value:data[@"available_clues"]];
-    
-    NSMutableDictionary *settings = delegate.userInfo[@"settings"];
-    [settings setValuesForKeysWithDictionary:data[@"settings"]];
-
-    NSError *error;
-    [context save:&error];
-
-    if (CONFIG_DEBUG_TOUR || ![data[@"new_user"] isEqualToNumber:@0]) {
-        [YTTourViewController show];
-        /*
-        [UIView animateWithDuration:0.0f delay:2.0f options:UIViewAnimationOptionAllowUserInteraction animations:^{} completion:^(BOOL finished) {
-            [YTFBHelper presentFeedDialog];
-            [[YTGPPHelper sharedInstance] presentShareDialog];
-        }];
-         */
-    }
-    
-    NSInteger unread = [data[@"unread_messages"] integerValue];
-    [UIApplication sharedApplication].applicationIconBadgeNumber = unread;
 }
 
 + (NSURL*)modelURL

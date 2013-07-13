@@ -41,6 +41,7 @@
 + (void)failMessage:(NSString*)key;
 
 + (NSDictionary*)cluesForGab:(NSNumber*)gabId;
++ (NSManagedObject*)createOrUpdateClue:(NSDictionary*)data;
 + (NSInteger)userAvailableClues;
 + (void)setUserAvailableClues:(NSNumber*)value;
 + (BOOL)userHasShared;
@@ -50,8 +51,6 @@
 + (NSArray*)findContactsWithString:(NSString *)string;
 + (NSManagedObject*)findContactWithType:(NSString *)type value:(NSString*)value;
 
-
-+ (void)loadSyncData:(id)data;
 + (NSIndexPath*)indexPathForGab:(NSNumber*)gabId filter:(NSString*)filter;
 
 + (NSURL*)modelURL;

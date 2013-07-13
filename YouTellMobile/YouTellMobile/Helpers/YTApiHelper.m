@@ -340,7 +340,13 @@
     [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@/clues/request/%@", gabId, number]
                                 method:@"POST"
                                 params:nil
-                               success:success failure:nil];
+                               success:^(id JSON) {
+                                   [YTModelHelper createOrUpdateClue:JSON[@"clue"]];
+                                   
+                                   if(success)
+                                       success(JSON);
+                               }
+                               failure:nil];
     
     [Flurry logEvent:@"Requested_Clue"];
     [[Mixpanel sharedInstance] track:@"Requested Clue"];

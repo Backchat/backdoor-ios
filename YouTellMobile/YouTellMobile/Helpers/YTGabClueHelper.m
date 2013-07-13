@@ -98,6 +98,7 @@
         [YTViewHelper refreshViews];
         
         [self.activityIndicator stopAnimating];
+        //TODO improve this so we only update the right button...jeez        
         [self updateClues];
         
         if ([JSON[@"success"] isEqualToNumber:@0]) {
