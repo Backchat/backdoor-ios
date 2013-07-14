@@ -103,7 +103,7 @@
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
     for(SKPaymentTransaction *transaction in transactions) {
-        NSLog(@"Transaction notification: %@ (%@), state: %d, error: %@", transaction.transactionIdentifier, transaction.payment.productIdentifier, transaction.transactionState, transaction.error.debugDescription);
+        //NSLog(@"Transaction notification: %@ (%@), state: %d, error: %@", transaction.transactionIdentifier, transaction.payment.productIdentifier, transaction.transactionState, transaction.error.debugDescription);
 
         switch(transaction.transactionState) {
             case SKPaymentTransactionStatePurchased:

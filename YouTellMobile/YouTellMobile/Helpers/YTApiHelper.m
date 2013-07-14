@@ -422,6 +422,18 @@ static bool new_user = false;
 
 + (void)buyCluesWithReceipt:(NSString *)receipt success:(void(^)(id JSON))success
 {
+    // Delay the request until user is properly signed in
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    NSString *accessToken = delegate.userInfo[@"access_token"];
+    if (!accessToken) {
+        double delayInSeconds = 10.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [YTApiHelper buyCluesWithReceipt:receipt success:success];
+        });
+        return;     
+    }
+
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Verifying transaction", nil)
                                                  path:@"/buy-clues"
                                                method:@"POST"
