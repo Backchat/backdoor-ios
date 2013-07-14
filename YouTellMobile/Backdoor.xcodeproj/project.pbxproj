@@ -1916,6 +1916,7 @@
 					"CONFIG_URL=\\@\\\"http://capricalabs.com:7564\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461-mgbsap2s5bh61ae2nggh9h45djonk8qi.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"06e542f53ddbd2430aac9c4664e5903f\\\"",
+					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"_Dev\\\"",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1956,6 +1957,7 @@
 					"CONFIG_URL=\\@\\\"https://backdoor-api.herokuapp.com/\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"b773675a02695460a27af2b8c2d11d39\\\"",
+					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"\\\"",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -2076,6 +2078,7 @@
 					"CONFIG_URL=\\@\\\"https://backdoor-stage.herokuapp.com/\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461-kiu3nt3onpdh8o89idagr66r1rgbh8k8.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"06e542f53ddbd2430aac9c4664e5903f\\\"",
+					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"_Stage\\\"",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -2108,8 +2111,8 @@
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = Backdoor;
-				PROVISIONING_PROFILE = "C3E883FC-D596-46B5-9388-C749A5C6AFD2";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C3E883FC-D596-46B5-9388-C749A5C6AFD2";
+				PROVISIONING_PROFILE = "49E070CB-7260-4759-A9F6-69A20E037DD7";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "49E070CB-7260-4759-A9F6-69A20E037DD7";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

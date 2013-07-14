@@ -35,8 +35,13 @@
 {
     self.barButtonItem = barButtonItem;
     
-    NSSet *productIdentifiers = [NSSet setWithObjects:@"YouTell_Mobile_Clues_001", @"YouTell_Mobile_Clues_002", @"YouTell_Mobile_Clues_003", nil];
-
+    NSMutableSet *productIdentifiers = [NSMutableSet new];
+    
+    for (int i=0;i<3;++i) {
+        NSString *productId = [NSString stringWithFormat:@"YouTell_Mobile_Clues%@_00%d", CONFIG_PRODUCT_ID_SUFFIX, (i+1)];
+        [productIdentifiers addObject:productId];
+    }
+    
     [SVProgressHUD showWithStatus:NSLocalizedString(@"Connecting to iTunes store", nil) maskType:SVProgressHUDMaskTypeClear];
     
 
