@@ -205,7 +205,9 @@
                                                   //we must have successfully logged in = we must be ok with server
                                                   [YTApiHelper hideNetworkErrorAlert];
                                                   //are we a new user? then show the tour:
-                                                  [YTApiHelper setNewUser:(JSON[@"new_user"] || CONFIG_DEBUG_TOUR)];
+                                                  NSNumber* num = JSON[@"new_user"];
+                                                  if(num)
+                                                      [YTApiHelper setNewUser:((num.integerValue == 1) || CONFIG_DEBUG_TOUR)];
                                                   
                                                   [self getFriends];
                                                   if(success) {
