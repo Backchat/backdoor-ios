@@ -134,7 +134,12 @@
         [Flurry logEvent:@"Bought_Clues" withParameters:@{@"count": inc}];
         [[Mixpanel sharedInstance] track:@"Bought Clues"];
         [[Mixpanel sharedInstance].people increment:@"Clues bought" by:inc];
-
+        
+        NSDecimalNumber *revenue = [[NSDecimalNumber alloc] initWithInteger:[JSON[@"revenue"] integerValue]];
+        NSDecimalNumber *number = [[NSDecimalNumber alloc] initWithInteger:100];
+        revenue = [revenue decimalNumberByDividingBy:number];
+        
+        [[Mixpanel sharedInstance].people trackCharge:revenue];
         YTAppDelegate *delegate = [YTAppDelegate current];
         if (delegate.currentGabViewController && delegate.currentGabViewController.clueHelper) {
             [delegate.currentGabViewController.clueHelper actionButtonWasPressed:nil];
