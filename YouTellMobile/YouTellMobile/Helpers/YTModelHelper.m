@@ -91,6 +91,9 @@
     
     [object setValue:key forKey:@"key"];
     [object setValue:value forKey:@"value"];
+    
+    //save immediately
+    [context save:&error];
 }
 
 + (NSManagedObject*)findOrCreateWithId:(NSString*)oId entityName:(NSString*)entityName context:(NSManagedObjectContext*)context

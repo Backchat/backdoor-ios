@@ -45,6 +45,7 @@ void uncaughtExceptionHandler(NSException *exception)
 {
     [[Mixpanel sharedInstance] track:@"Signed Out"];
     [[YTGPPHelper sharedInstance] signOut];
+    [YTModelHelper setSettingsForKey:@"logged_in_acccess_token" value:nil];
     [YTFBHelper closeSession];
     [YTModelHelper changeStoreId:nil];
     [[YTContactHelper sharedInstance] clearRandomizedFriendWithType:nil];

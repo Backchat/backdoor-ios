@@ -189,6 +189,19 @@
 
 + (void)login:(void(^)(id JSON))success
 {
+    NSString* local_access_token = [YTModelHelper settingsForKey:@"logged_in_access_token"];
+    if(local_access_token && local_access_token.length > 0)
+    {
+        ///already logged in
+        [YTAppDelegate current].userInfo[@"access_token"] = local_access_token;
+        //TODO dry
+        [self getFriends];
+        if(success) {
+            success(@{});
+        }
+        return;
+    }
+    
     NSDictionary* params = [self userParams];
     NSString* device_token= [params valueForKey:@"device_token"];
     if(device_token == nil || device_token.length == 0)
@@ -208,6 +221,10 @@
                                                   NSNumber* num = JSON[@"new_user"];
                                                   if(num)
                                                       [YTApiHelper setNewUser:((num.integerValue == 1) || CONFIG_DEBUG_TOUR)];
+                                                  //set the access_token locally so we know we're good:
+                                                  NSString* access_token = [YTAppDelegate current].userInfo[@"access_token"];
+
+                                                  [YTModelHelper setSettingsForKey:@"logged_in_access_token" value:access_token];
                                                   
                                                   [self getFriends];
                                                   if(success) {
