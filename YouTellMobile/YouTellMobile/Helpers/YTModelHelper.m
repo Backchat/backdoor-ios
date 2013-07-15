@@ -71,6 +71,22 @@
     return [obj valueForKey:@"value"];
 }
 
++ (void)removeSettingsForKey:(NSString*)key
+{
+    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Settings"];
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"(key = %@)", key];
+    [request setPredicate:pred];
+    
+    NSError *error;
+    NSArray *objects = [context executeFetchRequest:request error:&error];
+    
+    if ([objects count] > 0) {
+        [context deleteObject:objects[0]];
+    }
+}
+
 + (void)setSettingsForKey:(NSString*)key value:(id)value
 {
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;

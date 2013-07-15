@@ -241,6 +241,9 @@
                                                   [YTApiHelper hideNetworkErrorAlert];
                                                   //are we a new user? then show the tour:
                                                   NSNumber* num = JSON[@"new_user"];
+                                                  //we got settings!
+                                                  [YTAppDelegate current].userInfo[@"settings"] = JSON[@"settings"];
+                                                   
                                                   if(num)
                                                       [YTApiHelper setNewUser:((num.integerValue == 1) || CONFIG_DEBUG_TOUR)];
                                                   
@@ -263,6 +266,7 @@ static bool new_user = false;
     return new_user;
 }
 
+//NOTE: currentyl unused we get info from login and go from there
 + (void)getUserInfo:(void(^)(id JSON))success
 {
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Please wait...", nil)
@@ -456,6 +460,7 @@ static bool new_user = false;
     [YTApiHelper sendJSONRequestToPath:@"/free-clues" method:@"POST" params:@{@"reason":reason} success:^(id JSON) {
         
         NSInteger count = [JSON[@"count"] integerValue];
+        [YTModelHelper setUserAvailableClues:JSON[@"available_clues"]];
         NSInteger total = [YTModelHelper userAvailableClues];
         
         if (count == 0) {
