@@ -89,10 +89,10 @@
 "Deleting messages" = "Apagando mensagens";
 
 /* No comment provided by engineer. */
-"Delivered" = "Delivered";
+"Delivered" = "Mando";
 
 /* No comment provided by engineer. */
-"Delivering" = "Pending";
+"Delivering" = "Mandando";
 
 /* No comment provided by engineer. */
 "Delivering feedback" = "Fornecimento de feedback";
@@ -107,7 +107,7 @@
 "Done" = "Feito";
 
 /* No comment provided by engineer. */
-"Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor" = "Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor";
+"Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor" = "Ganhe 9 pistas grátis postando curtindo ou twittando sobre Backdoor";
 
 /* No comment provided by engineer. */
 "Error" = "Erro";
@@ -119,7 +119,7 @@
 "Facebook login error" = "Facebook erro de login";
 
 /* No comment provided by engineer. */
-"Failed" = "Failed";
+"Failed" = "Failio";
 
 /* No comment provided by engineer. */
 "Featured users" = "Celebridade";
@@ -131,7 +131,7 @@
 "Feedback" = "Feedback";
 
 /* No comment provided by engineer. */
-"Female" = "Female";
+"Female" = "Feminino";
 
 /* No comment provided by engineer. */
 "Free Clues" = "Pistas Gratuitas";
@@ -158,7 +158,7 @@
 "Invite on Facebook" = "Invite on Facebook";
 
 /* No comment provided by engineer. */
-"Language" = "Language";
+"Language" = "Lingua";
 
 /* No comment provided by engineer. */
 "Legal" = "Juridico";
@@ -167,16 +167,16 @@
 "Licenses" = "Licensas";
 
 /* No comment provided by engineer. */
-"Likes" = "Likes";
+"Likes" = "Curtir";
 
 /* No comment provided by engineer. */
-"Location" = "Location";
+"Location" = "Locacion";
 
 /* No comment provided by engineer. */
 "Logout" = "Sair";
 
 /* No comment provided by engineer. */
-"Male" = "Male";
+"Male" = "Masculino";
 
 /* No comment provided by engineer. */
 "Message Preview" = "Message Preview";
@@ -229,7 +229,7 @@
 "Save" = "Salvar";
 
 /* No comment provided by engineer. */
-"School" = "School";
+"School" = "Escola";
 
 /* No comment provided by engineer. */
 "Send" = "Enviar";
