@@ -213,6 +213,8 @@
 
 + (void)login:(void(^)(id JSON))success
 {
+    // FIXME: 1. access_token is not cleared on sign out, 2. It doesn't fetch up-to-date user settings
+    /*
     NSString* local_access_token = [YTModelHelper settingsForKey:@"logged_in_access_token"];
     if(local_access_token && local_access_token.length > 0)
     {
@@ -223,6 +225,7 @@
         }
         return;
     }
+    */
     
     NSDictionary* params = [self userParams];
     NSString* device_token= [params valueForKey:@"device_token"];
@@ -243,7 +246,6 @@
                                                   NSNumber* num = JSON[@"new_user"];
                                                   //we got settings!
                                                   [YTAppDelegate current].userInfo[@"settings"] = JSON[@"settings"];
-                                                   
                                                   if(num)
                                                       [YTApiHelper setNewUser:((num.integerValue == 1) || CONFIG_DEBUG_TOUR)];
                                                   
@@ -463,6 +465,8 @@ static bool new_user = false;
         [YTModelHelper setUserAvailableClues:JSON[@"available_clues"]];
         NSInteger total = [YTModelHelper userAvailableClues];
         
+        [YTAppDelegate current].userInfo[@"settings"] = JSON[@"settings"];
+
         if (count == 0) {
             return;
         }
