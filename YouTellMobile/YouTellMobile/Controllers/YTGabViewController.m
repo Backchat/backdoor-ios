@@ -460,8 +460,12 @@
             [params setValue:@{@"content": [message valueForKey:@"content"],
              @"kind": [message valueForKey:@"kind"],
              @"key": [message valueForKey:@"key"]} forKey:@"message"];
-            [params setValue:@{@"id": contact[@"id"]} forKey:@"friendship"];
-            NSLog(@"friendship id %@", contact[@"id"]);
+            if(contact[@"id"]) {
+                [params setValue:@{@"id": contact[@"id"]} forKey:@"friendship"];
+            }
+            else {
+                [params setValue:@{@"id": contact[@"featured_id"]} forKey:@"featured"];
+            }
             [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"POST" params:params
                                        success:^(id JSON) {
                                            //make it real!
