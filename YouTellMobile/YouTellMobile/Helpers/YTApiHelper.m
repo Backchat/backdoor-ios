@@ -240,9 +240,9 @@
                                                   //we must have successfully logged in = we must be ok with server
                                                   [YTApiHelper hideNetworkErrorAlert];
                                                   //are we a new user? then show the tour:
-                                                  NSNumber* num = JSON[@"new_user"];
+                                                  NSNumber* num = JSON[@"user"][@"new_user"];
                                                   //we got settings!
-                                                  [YTAppDelegate current].userInfo[@"settings"] = JSON[@"settings"];
+                                                  [YTAppDelegate current].userInfo[@"settings"] = JSON[@"user"][@"settings"];
                                                    
                                                   if(num)
                                                       [YTApiHelper setNewUser:((num.integerValue == 1) || CONFIG_DEBUG_TOUR)];
@@ -269,6 +269,8 @@ static bool new_user = false;
 //NOTE: currentyl unused we get info from login and go from there
 + (void)getUserInfo:(void(^)(id JSON))success
 {
+    return;
+    
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Please wait...", nil)
                                                  path:@"/"
                                                method:@"GET" params:nil
@@ -318,6 +320,9 @@ static bool new_user = false;
                                    for(id gab in gabs) {
                                        [YTModelHelper createOrUpdateGab:gab];
                                    }
+                                   //sync'ed all gabs, therefore unread count is up to date; refresh
+                                   [YTModelHelper updateUnreadCount];
+                                   
                                    [delegate.autoSyncLock unlock];
                                    [YTViewHelper refreshViews];
                                    [YTViewHelper endRefreshing];
@@ -376,12 +381,15 @@ static bool new_user = false;
     NSNumber* current = [gab valueForKey:@"unread_count"];
     if(current.integerValue != 0) {
         [gab setValue:[NSNumber numberWithInt:0] forKey:@"unread_count"];
-        [YTModelHelper updateUnreadCount];
 
         [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@", gabId]
                                     method:@"POST"
-                                    params:@{@"unread_count": @0}
-                                   success:nil failure:nil];
+                                    params:@{@"unread_count": @0, @"total_unread_count": @true}
+                                   success:^(id JSON) {
+                                       int new_unread = [JSON[@"total_unread_count"] integerValue];
+                                       [[UIApplication sharedApplication] setApplicationIconBadgeNumber:new_unread];
+                                   }
+                                   failure:nil];
         
     }
 }

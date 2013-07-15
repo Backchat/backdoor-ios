@@ -122,6 +122,8 @@ void uncaughtExceptionHandler(NSException *exception)
 
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
     if(gab_id != nil) { //we dont have an access_token yet?
+        //update gab unread count
+        [YTNotifHelper handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
         [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
     }
     
@@ -187,7 +189,7 @@ void uncaughtExceptionHandler(NSException *exception)
         [YTViewHelper showGabWithId:userInfo[@"gab_id"]];
     }
     
-    [YTApiHelper syncGabWithId:userInfo[@"gab_id"]];
+    [YTApiHelper syncGabWithId:userInfo[@"gab_id"]];    
 
 }
 

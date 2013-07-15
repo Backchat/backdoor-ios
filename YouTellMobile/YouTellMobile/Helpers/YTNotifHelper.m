@@ -50,6 +50,15 @@
         });
         
     }
+    
+    if(userInfo[@"aps"][@"badge"]) {
+        NSNumber* number = userInfo[@"aps"][@"badge"];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:number.integerValue];
+    }
+    else {
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    }
+
 
 
 }

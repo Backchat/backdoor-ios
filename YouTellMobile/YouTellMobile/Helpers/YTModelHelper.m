@@ -222,8 +222,6 @@
         }
     }
     
-    //sum up all gabs and their unread count
-    [YTModelHelper updateUnreadCount];
     return gab;
 }
 
