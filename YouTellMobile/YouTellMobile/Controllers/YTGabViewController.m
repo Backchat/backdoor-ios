@@ -317,9 +317,7 @@
     
     [self loadGab];
 
-    if(![self fakeGab] && self.messages.count == 0)
-        //occurs when we load the very first time.
-        //subsequently, we get a APN notification and then sync
+    if(![self fakeGab] && [[self.gab valueForKey:@"needs_update"] boolValue])
         [YTApiHelper syncGabWithId:[self.gab valueForKey:@"id"]];
 }
 

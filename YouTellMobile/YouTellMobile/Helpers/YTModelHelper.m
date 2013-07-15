@@ -199,12 +199,26 @@
     [gab setValue:data[@"clue_count"] forKey:@"clue_count"]; //sent as an integer now.
     [gab setValue:data[@"sent"] forKey:@"sent"];//and as boolean.
     
-    [gab setValue:[YTHelper parseDate:data[@"updated_at"]] forKey:@"updated_at"];
-
+    NSDate* old_update = [gab valueForKey:@"updated_at"];
+    NSDate* new_date = [YTHelper parseDate:data[@"updated_at"]];
+    [gab setValue:new_date forKey:@"updated_at"];
     NSArray* messages = data[@"messages"];
     if(messages) {
         for(id message in messages) {
             [self updateMessage:message];
+        }
+        [gab setValue:[NSNumber numberWithBool:false] forKey:@"needs_update"]; //no need to update we got messages as part of this packet
+    }
+    else {
+        //if there wasn't an old update, we must be afresh pull - therefore we need messages since we didn't get any in thepacket
+        if(!old_update)
+            [gab setValue:[NSNumber numberWithBool:true] forKey:@"needs_update"];
+        else
+        {
+            //if it's already needs update, do nothing:
+            if(![[gab valueForKey:@"needs_update"] boolValue])
+                //otherwise, if we weren't gonna update, check the updated_value
+                [gab setValue:[NSNumber numberWithBool:![old_update isEqualToDate:new_date]] forKey:@"needs_update"];
         }
     }
     

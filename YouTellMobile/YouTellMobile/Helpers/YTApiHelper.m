@@ -461,6 +461,7 @@ static bool new_user = false;
         
         NSInteger count = [JSON[@"count"] integerValue];
         [YTModelHelper setUserAvailableClues:JSON[@"available_clues"]];
+        [YTAppDelegate current].userInfo[@"settings"][@"has_shared"] = [NSNumber numberWithBool:true];
         NSInteger total = [YTModelHelper userAvailableClues];
         
         if (count == 0) {
