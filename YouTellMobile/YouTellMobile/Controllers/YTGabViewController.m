@@ -94,6 +94,7 @@
 
 - (void)setGabId:(NSNumber*)gabId
 {
+    NSLog(@"set gab id: %@", gabId);
     self.gab = [YTModelHelper gabForId:gabId];
     
     [self reloadData];
@@ -160,8 +161,10 @@
 {
     if(self.gab) {
         id gab_id = [self.gab valueForKey:@"id"];
-        self.messages = [YTModelHelper messagesForGab:gab_id];
         
+        self.messages = [YTModelHelper messagesForGab:gab_id];
+        NSLog(@"reload screen with messages %d", self.messages.count);
+
         NSString *title = [self.gab valueForKey:@"related_user_name"];
         BOOL hasTitle = title && [title length] > 0;
         BOOL sent = [[self.gab valueForKey:@"sent"] isEqualToNumber:@0];
@@ -317,7 +320,7 @@
     if(![self fakeGab] && self.messages.count == 0)
         //occurs when we load the very first time.
         //subsequently, we get a APN notification and then sync
-        [YTApiHelper syncGabWithId:[self.gab valueForKey:@"id"] popup:NO];
+        [YTApiHelper syncGabWithId:[self.gab valueForKey:@"id"]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

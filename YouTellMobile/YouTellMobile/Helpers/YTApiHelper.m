@@ -41,12 +41,15 @@
     YTAppDelegate *delegate = [YTAppDelegate current];
     
     NSString *deviceToken = delegate.userInfo ? delegate.userInfo[@"device_token"] : @"";
+    NSNumber* launch_on_active_token = delegate.userInfo ? delegate.userInfo[@"launch_on_active_token"] : nil;
     delegate.sentInfo = [NSMutableDictionary new];
     delegate.userInfo = [NSMutableDictionary new];
     delegate.userInfo[@"device_token"] = deviceToken;
     delegate.userInfo[@"fb_data"] = [NSMutableDictionary new];
     delegate.userInfo[@"gpp_data"] = [NSMutableDictionary new];
     delegate.userInfo[@"settings"] = [NSMutableDictionary new];
+    if(launch_on_active_token)
+        delegate.userInfo[@"launch_on_active_token"] = launch_on_active_token;
 }
 
 + (NSDictionary*)userParams
@@ -187,6 +190,27 @@
     [[Mixpanel sharedInstance] track:@"Sent Feedback" properties:@{@"rating": rating}];
 }
 
++ (void)postLogin
+{
+    
+    //set the access_token locally so we know we're good:
+    NSString* access_token = [YTAppDelegate current].userInfo[@"access_token"];
+    
+    [YTModelHelper setSettingsForKey:@"logged_in_access_token" value:access_token];
+
+    NSNumber* launch_on_login = [YTAppDelegate current].userInfo[@"launch_on_active_token"];
+    if(launch_on_login) {
+        dispatch_async(dispatch_get_main_queue(), ^() {
+            NSLog(@"launch on login: %@", launch_on_login);
+            
+            [YTViewHelper showGabWithId:launch_on_login];
+            [YTApiHelper syncGabWithId:launch_on_login];
+        });
+        [[YTAppDelegate current].userInfo removeObjectForKey:@"launch_on_active_token"];
+    }
+    [self getFriends];
+}
+
 + (void)login:(void(^)(id JSON))success
 {
     NSString* local_access_token = [YTModelHelper settingsForKey:@"logged_in_access_token"];
@@ -194,8 +218,6 @@
     {
         ///already logged in
         [YTAppDelegate current].userInfo[@"access_token"] = local_access_token;
-        //TODO dry
-        [self getFriends];
         if(success) {
             success(@{});
         }
@@ -221,12 +243,7 @@
                                                   NSNumber* num = JSON[@"new_user"];
                                                   if(num)
                                                       [YTApiHelper setNewUser:((num.integerValue == 1) || CONFIG_DEBUG_TOUR)];
-                                                  //set the access_token locally so we know we're good:
-                                                  NSString* access_token = [YTAppDelegate current].userInfo[@"access_token"];
-
-                                                  [YTModelHelper setSettingsForKey:@"logged_in_access_token" value:access_token];
                                                   
-                                                  [self getFriends];
                                                   if(success) {
                                                       success(JSON);
                                                   }
@@ -308,7 +325,7 @@ static bool new_user = false;
                                }];
 }
 
-+ (void)syncGabWithId:(NSNumber *)gab_id popup:(BOOL)popup
++ (void)syncGabWithId:(NSNumber *)gab_id
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
     
@@ -323,15 +340,7 @@ static bool new_user = false;
 
                                    [delegate.autoSyncLock unlock];
                                    [YTViewHelper refreshViews];
-                                   [YTViewHelper endRefreshing];
-                                   
-                                   if(popup) {
-                                       double delayInSeconds = 0.5;
-                                       dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                                       dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                                           [YTViewHelper showGabWithId:gab_id];
-                                       });
-                                   }
+                                   [YTViewHelper endRefreshing];                                   
                                }
      
                                failure:^(id JSON) {

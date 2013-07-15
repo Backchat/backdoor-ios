@@ -119,9 +119,10 @@ void uncaughtExceptionHandler(NSException *exception)
         [YTAppDelegate current].userInfo[@"device_token"] = @"1"; //not like you can run multiple simulators...
     }
     
+
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
-    if(gab_id != nil) { //TODO maybe we dont have an access_token yet?
-        [YTApiHelper syncGabWithId:gab_id popup:YES];
+    if(gab_id != nil) { //we dont have an access_token yet?
+        [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
     }
     
     return YES;
@@ -182,7 +183,12 @@ void uncaughtExceptionHandler(NSException *exception)
     
     [YTNotifHelper handleNotification:userInfo];
     
-    [YTApiHelper syncGabWithId:userInfo[@"gab_id"] popup:NO];
+    if ( application.applicationState != UIApplicationStateActive ) {
+        [YTViewHelper showGabWithId:userInfo[@"gab_id"]];
+    }
+    
+    [YTApiHelper syncGabWithId:userInfo[@"gab_id"]];
+
 }
 
 - (void) syncBasedOnView
@@ -199,7 +205,7 @@ void uncaughtExceptionHandler(NSException *exception)
     }
     
     if(gab_id) {
-        [YTApiHelper syncGabWithId:gab_id popup:NO];
+        [YTApiHelper syncGabWithId:gab_id];
     }
 
 }

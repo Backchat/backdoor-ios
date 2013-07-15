@@ -50,7 +50,6 @@
 
     [YTApiHelper login:^(id JSON) {
         [YTFBHelper fetchUserData];
-        [YTViewHelper hideLogin];
     }];
 }
 
@@ -83,6 +82,7 @@
 {
     FBRequest *request = [FBRequest requestForGraphPath:@"/me"];
     YTAppDelegate *delegate = [YTAppDelegate current];
+    //TODO need to keep on throwing up that message
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         
         if (error) {
@@ -116,7 +116,10 @@
             [YTFBHelper fetchFamily];
             [YTFBHelper fetchInterests];
             [YTFBHelper fetchLikes];
-            //[YTFBHelper fetchFriends];
+            //actually logged in : important changestore ID above...
+            [YTApiHelper postLogin];
+            [YTViewHelper hideLogin];
+
         }];
     }];
 }

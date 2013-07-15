@@ -11,6 +11,7 @@
 
 + (void)setup;
 + (void)login:(void(^)(id JSON))success;
++ (void)postLogin;
 + (void)resetUserInfo;
 + (NSURL*)baseUrl;
 
@@ -30,7 +31,7 @@
                                       failure:(void(^)(id JSON))failure;
 
 + (void)syncGabs;
-+ (void)syncGabWithId:(NSNumber *)gab_id popup:(BOOL)popup;
++ (void)syncGabWithId:(NSNumber *)gab_id;
 
 + (void)getUserInfo:(void(^)(id JSON))success;
 + (void)updateUserInfo:(void(^)(id JSON))success;

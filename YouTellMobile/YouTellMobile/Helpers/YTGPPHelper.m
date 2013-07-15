@@ -84,11 +84,12 @@
         delegate.userInfo[@"access_token"] = auth.accessToken;
         delegate.userInfo[@"gpp_data"][@"email"] = auth.userEmail;
         [YTApiHelper login:^(id JSON) {
-            [YTViewHelper hideLogin];
             [self fetchUserData];
         }];
         
         [YTModelHelper changeStoreId:auth.userEmail];
+        [YTApiHelper postLogin];
+        [YTViewHelper hideLogin];
     }];
 }
 
