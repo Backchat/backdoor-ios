@@ -61,7 +61,7 @@
 
     UIBarButtonItem *rateItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Rate", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(rateButtonWasClicked)];
     
-    UIBarButtonItem *inviteItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Invite", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(inviteButtonWasClicked)];
+    UIBarButtonItem *inviteItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Invite", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(shareButtonWasClicked)];
     
     NSMutableArray *items = [NSMutableArray arrayWithArray:@[logoutItem]];
     

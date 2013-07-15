@@ -2099,7 +2099,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8A8F36B8198B40769F476A03 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: uri singer (24E4PWAYVX)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
@@ -2111,8 +2111,8 @@
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = Backdoor;
-				PROVISIONING_PROFILE = "49E070CB-7260-4759-A9F6-69A20E037DD7";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "49E070CB-7260-4759-A9F6-69A20E037DD7";
+				PROVISIONING_PROFILE = "AB054F2E-35EC-4F13-88DB-9B2373002299";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5F74D686-1505-4235-BAE6-C23252E241FA";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
