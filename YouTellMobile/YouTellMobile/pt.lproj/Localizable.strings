@@ -2,7 +2,10 @@
 "Tap me to start a new conversation." = "Me enviar uma nova conversa.";
 
 /* No comment provided by engineer. */
-"Show all of your Backdoor friends." = "Mostrar todos os seus amigos do Backdoor.";
+"Show More" = "Ver Todos";
+
+/* No comment provided by engineer. */
+"Show all of your Backdoor friends." = "Ver seus amigos do Backdoor.";
 
 /* No comment provided by engineer. */
 "Tap me to get more BD friends." = "Obter mais amigos para o Backdoor.";
@@ -89,10 +92,10 @@
 "Deleting messages" = "Apagando mensagens";
 
 /* No comment provided by engineer. */
-"Delivered" = "Mando";
+"Delivered" = "Enviado";
 
 /* No comment provided by engineer. */
-"Delivering" = "Mandando";
+"Delivering" = "Enviando";
 
 /* No comment provided by engineer. */
 "Delivering feedback" = "Fornecimento de feedback";
@@ -152,7 +155,7 @@
 "Input name for anonymous user" = "Insira o nome do usuário anônimo.";
 
 /* No comment provided by engineer. */
-"Invite" = "Convidar";
+"Invite" = "Compartilhar";
 
 /* No comment provided by engineer. */
 "Invite on Facebook" = "Invite on Facebook";
@@ -251,6 +254,9 @@
 
 /* No comment provided by engineer. */
 "Sending messages to unregistered Google+ friends is not supported yet" = "Sending messages to unregistered Google+ friends is not supported yet";
+
+/* No comment provided by engineer. */
+"Share" = "Compartilhar";
 
 /* No comment provided by engineer. */
 "Share with Friends" = "Compartilhar com Amigos";
