@@ -173,6 +173,7 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     self.userInfo[@"device_token"] = [YTHelper hexStringFromData:deviceToken];
+    self.deviceToken = deviceToken;
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
@@ -185,6 +186,12 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     if (!userInfo[@"gab_id"]) {
+        NSString *message = userInfo[@"aps"][@"alert"];
+        if (!message) {
+            return;
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+        [alert show];
         return;
     }
     
