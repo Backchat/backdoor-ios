@@ -108,6 +108,14 @@
             return;
         }
         
+        YTAppDelegate *delegate = [YTAppDelegate current];
+        
+        [[Mixpanel sharedInstance] identify:person.identifier];
+        
+        if (delegate.deviceToken) {
+            [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
+        }
+        
         if ([person.gender isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];
             [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];

@@ -90,6 +90,12 @@
             return;
         }
         
+        [[Mixpanel sharedInstance] identify:result[@"id"]];
+        
+        if (delegate.deviceToken) {
+            [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
+        }
+        
         if ([result[@"gender"] isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];
             [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
@@ -107,7 +113,6 @@
         }
         [[Mixpanel sharedInstance].people set:@{@"$email": result[@"email"], @"$first_name": result[@"first_name"], @"$last_name": result[@"last_name"], @"Facebook Id": result[@"id"]}];
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
-        
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             NSLog(@"Logged in as %@", result[@"name"]);
@@ -278,7 +283,7 @@
         
         [[Mixpanel sharedInstance] track:@"Shared On Facebook"];
     }];
-
+    
 }
 
 + (void)presentFeedDialog
