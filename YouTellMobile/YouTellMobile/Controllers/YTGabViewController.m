@@ -314,11 +314,28 @@
     self.tableView.bubbleDataSource = self;
     self.tableView.snapInterval = 120;
     self.tableView.typingBubble = NSBubbleTypingTypeNobody;
+    self.tableView.delegate = self;
+
+    UITapGestureRecognizer *rec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
+    UISwipeGestureRecognizer *rec2 = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
+    rec2.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.tableView addGestureRecognizer:rec];
+    [self.tableView addGestureRecognizer:rec2];
     
     [self loadGab];
 
     if(![self fakeGab] && [[self.gab valueForKey:@"needs_update"] boolValue])
         [YTApiHelper syncGabWithId:[self.gab valueForKey:@"id"]];
+}
+
+- (void)tapped
+{
+    [self.inputView.textView resignFirstResponder];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    [self.inputView.textView resignFirstResponder];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
