@@ -24,6 +24,7 @@
 #import "YTSocialHelper.h"
 #import "YTMainViewHelper.h"
 #import "YTTourViewController.h"
+#import "YTFBHelper.h"
 
 
 #define SECTION_GABS 0
@@ -222,7 +223,7 @@
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
 
     if ([user[@"type"] isEqualToString:@"facebook"]) {
-        NSString *urls = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", user[@"value"]];
+        NSString *urls = [YTFBHelper avatarUrlWithFBId:user[@"value"]];
         [avatarView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
     } else if ([user[@"type"] isEqualToString:@"gpp"]) {
         NSString *urls = [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=50", user[@"value"]];

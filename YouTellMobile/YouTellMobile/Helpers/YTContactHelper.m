@@ -13,6 +13,7 @@
 #import "YTModelHelper.h"
 #import "YTViewHelper.h"
 #import "YTHelper.h"
+#import "YTFBHelper.h"
 
 @implementation YTContactHelper
 
@@ -381,7 +382,7 @@
 - (void)showAvatarInImageView:(UIImageView *)imageView forContact:(NSDictionary*)contact
 {
     if ([contact[@"type"] isEqualToString:@"facebook"]) {
-        NSString *urls = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", contact[@"value"]];
+        NSString *urls = [YTFBHelper avatarUrlWithFBId:contact[@"value"]];
         [imageView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
     } else if ([contact[@"type"] isEqualToString:@"gpp"]) {
         NSString *urls = [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=50", contact[@"value"]];

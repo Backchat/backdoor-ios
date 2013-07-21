@@ -19,5 +19,6 @@
 + (BOOL)handleOpenUrl:(NSURL*)url;
 + (void)presentFeedDialog;
 + (void)presentRequestDialogWithContact:(NSString*)contact complete:(void(^)())complete;
++ (NSString*)avatarUrlWithFBId:(NSString*)FBId;
 
 @end
