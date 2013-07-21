@@ -99,13 +99,14 @@
     self.searchBar.delegate = self;
     self.searchBar.backgroundImage = [YTHelper imageNamed:@"navbar3"];
     self.tableView.tableHeaderView = self.searchBar;
+    self.tableView.tableFooterView = [UIView new];
+    self.view.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
     
     self.refreshControl = [UIRefreshControl new];
     [self.refreshControl addTarget:self action:@selector(refreshWasRequested) forControlEvents:UIControlEventValueChanged];
     
    // self.title = NSLocalizedString(@"Backdoor", nil);
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[YTHelper imageNamed:@"navbartitle4"]];
-    self.view.backgroundColor = [UIColor whiteColor];
 
     self.currentFeaturedUsers = [[NSMutableArray alloc] init];
     self.currentFilteredUsers = [[NSMutableArray alloc] init];
@@ -323,6 +324,11 @@
     }
     
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = [UIColor whiteColor];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
