@@ -32,7 +32,6 @@
     }
     
     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ident];
-
     
     UIImageView *avatarView = [[UIImageView alloc] init];
     avatarView.tag = 5;
