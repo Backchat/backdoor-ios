@@ -147,7 +147,7 @@
         }
     }
     else {
-        self.title = NSLocalizedString(@"New message", nil);
+        self.title = NSLocalizedString(@"New Message", nil);
         
         if (![[YTAppDelegate current] usesSplitView]) {
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
