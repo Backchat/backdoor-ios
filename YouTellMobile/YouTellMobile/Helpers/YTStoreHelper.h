@@ -16,5 +16,5 @@
 
 
 - (void)showFromBarButtonItem:(UIBarButtonItem*)barButtonItem;
-
+- (void)disable;
 @end

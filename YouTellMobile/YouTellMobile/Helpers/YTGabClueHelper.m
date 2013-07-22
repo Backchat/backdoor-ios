@@ -113,6 +113,9 @@
 - (void)buyCluesButtonWasPressed
 {
     [self.sheet dismiss];
+    if(![YTAppDelegate current].storeHelper) {
+        [YTAppDelegate current].storeHelper = [YTStoreHelper new];
+    }
     [[YTAppDelegate current].storeHelper showFromBarButtonItem:self.button];
 }
 
