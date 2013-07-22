@@ -44,6 +44,10 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)signOut
 {
+    //TODO better?
+    [[YTAppDelegate current].storeHelper disable];
+    [YTAppDelegate current].storeHelper = nil;
+    
     [[Mixpanel sharedInstance] track:@"Signed Out"];
     [[YTGPPHelper sharedInstance] signOut];
     [YTModelHelper removeSettingsForKey:@"logged_in_acccess_token"];
@@ -81,7 +85,6 @@ void uncaughtExceptionHandler(NSException *exception)
 {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
-    self.storeHelper = [YTStoreHelper new];
     self.featuredUsers = @[];
     
     [YTApiHelper setup];

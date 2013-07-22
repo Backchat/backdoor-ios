@@ -19,16 +19,26 @@
 #import "YTModelHelper.h"
 #import "YTAppDelegate.h"
 
+@interface YTStoreHelper ()
+{
+    bool showingProducts;
+}
+@end
 
 @implementation YTStoreHelper
 
 - (id)init
 {
     id ret = [super init];
-    if (ret) {
+    if(ret) {
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
     return ret;
+}
+
+- (void)disable
+{
+    [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
 }
 
 - (void)showFromBarButtonItem:(UIBarButtonItem*)barButtonItem
@@ -59,6 +69,7 @@
         return;
     }
     
+    showingProducts = true;
     NSArray *products = response.products;
 
     UIActionSheet *sheet = [[UIActionSheet alloc] init];
@@ -95,6 +106,8 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    showingProducts = false;
+
     if (buttonIndex == actionSheet.cancelButtonIndex) {
         return;
     }
@@ -108,7 +121,7 @@
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
     for(SKPaymentTransaction *transaction in transactions) {
-        //NSLog(@"Transaction notification: %@ (%@), state: %d, error: %@", transaction.transactionIdentifier, transaction.payment.productIdentifier, transaction.transactionState, transaction.error.debugDescription);
+        NSLog(@"Transaction notification: %@ (%@), state: %d, error: %@", transaction.transactionIdentifier, transaction.payment.productIdentifier, transaction.transactionState, transaction.error.debugDescription);
 
         switch(transaction.transactionState) {
             case SKPaymentTransactionStatePurchased:
@@ -146,11 +159,12 @@
         
         [[Mixpanel sharedInstance].people trackCharge:revenue];
         YTAppDelegate *delegate = [YTAppDelegate current];
-        if (delegate.currentGabViewController && delegate.currentGabViewController.clueHelper) {
+        if (delegate.currentGabViewController && delegate.currentGabViewController.clueHelper && !showingProducts) {
             [delegate.currentGabViewController.clueHelper actionButtonWasPressed:nil];
         } else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Transaction", nil) message:[NSString stringWithFormat:NSLocalizedString(@"You have %d available clues. You can use them in all incoming threads", nil), count] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil];
-            [alert show];
+            //TODO do not show this alert for now.
+            //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Transaction", nil) message:[NSString stringWithFormat:NSLocalizedString(@"You have %d available clues. You can use them in all incoming threads", nil), count] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil];
+            //[alert show];
         }
     }];
 }
