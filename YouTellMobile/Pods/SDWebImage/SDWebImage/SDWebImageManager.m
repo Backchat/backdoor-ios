@@ -7,6 +7,7 @@
  */
 
 #import "SDWebImageManager.h"
+#import "UIImage+GIF.h"
 #import <objc/message.h>
 
 @interface SDWebImageCombinedOperation : NSObject <SDWebImageOperation>
@@ -39,7 +40,7 @@
 {
     if ((self = [super init]))
     {
-        _imageCache = [SDImageCache sharedImageCache];
+        _imageCache = [self createCache];
         _imageDownloader = SDWebImageDownloader.new;
         _failedURLs = NSMutableArray.new;
         _runningOperations = NSMutableArray.new;
@@ -47,6 +48,10 @@
     return self;
 }
 
+- (SDImageCache *)createCache
+{
+    return [SDImageCache sharedImageCache];
+}
 
 - (NSString *)cacheKeyForURL:(NSURL *)url
 {
@@ -78,9 +83,19 @@
     __block SDWebImageCombinedOperation *operation = SDWebImageCombinedOperation.new;
     __weak SDWebImageCombinedOperation *weakOperation = operation;
     
-    if (!url || !completedBlock || (!(options & SDWebImageRetryFailed) && [self.failedURLs containsObject:url]))
+    BOOL isFailedUrl = NO;
+    @synchronized(self.failedURLs)
     {
-        if (completedBlock) completedBlock(nil, nil, SDImageCacheTypeNone, NO);
+        isFailedUrl = [self.failedURLs containsObject:url];
+    }
+
+    if (!url || !completedBlock || (!(options & SDWebImageRetryFailed) && isFailedUrl))
+    {
+        if (completedBlock)
+        {
+            NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorFileDoesNotExist userInfo:nil];
+            completedBlock(nil, error, SDImageCacheTypeNone, YES);
+        }
         return operation;
     }
 
@@ -116,7 +131,7 @@
                 downloaderOptions |= SDWebImageDownloaderIgnoreCachedResponse;
             }
             __block id<SDWebImageOperation> subOperation = [self.imageDownloader downloadImageWithURL:url options:downloaderOptions progress:progressBlock completed:^(UIImage *downloadedImage, NSData *data, NSError *error, BOOL finished)
-            {
+            {                
                 if (weakOperation.cancelled)
                 {
                     completedBlock(nil, nil, SDImageCacheTypeNone, finished);
@@ -141,7 +156,8 @@
                     {
                         // Image refresh hit the NSURLCache cache, do not call the completion block
                     }
-                    else if (downloadedImage && [self.delegate respondsToSelector:@selector(imageManager:transformDownloadedImage:withURL:)])
+                    // NOTE: We don't call transformDownloadedImage delegate method on animated images as most transformation code would mangle it
+                    else if (downloadedImage && !downloadedImage.images && [self.delegate respondsToSelector:@selector(imageManager:transformDownloadedImage:withURL:)])
                     {
                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^
                         {
@@ -154,7 +170,8 @@
 
                             if (transformedImage && finished)
                             {
-                                [self.imageCache storeImage:transformedImage imageData:nil forKey:key toDisk:cacheOnDisk];
+                                NSData *dataToStore = [transformedImage isEqual:downloadedImage] ? data : nil;
+                                [self.imageCache storeImage:transformedImage imageData:dataToStore forKey:key toDisk:cacheOnDisk];
                             }
                         });
                     }
