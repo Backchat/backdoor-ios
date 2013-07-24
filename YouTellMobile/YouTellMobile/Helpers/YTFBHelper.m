@@ -269,22 +269,51 @@
         @"link": CONFIG_SHARE_URL,
         @"picture": @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png"
     };
+
+    FBShareDialogParams *fbparams = [[FBShareDialogParams alloc] init];
+    fbparams.name = params[@"name"];
+    fbparams.caption = params[@"caption"];
+    fbparams.description = params[@"description"];
+    fbparams.link = [NSURL URLWithString:params[@"link"]];
+    fbparams.picture = [NSURL URLWithString:params[@"picture"]];
     
-    [FBWebDialogs presentFeedDialogModallyWithSession:nil parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+    if ([FBDialogs canPresentShareDialogWithParams:fbparams]) {
         
-        if (error != nil) {
-            NSLog(@"%@", error.debugDescription);
-            return;
-        }
+        [FBDialogs presentShareDialogWithParams:fbparams clientState:nil handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
+            
+            if (error != nil) {
+                NSLog(@"%@", error.debugDescription);
+                return;
+            }
+            
+            if (![results[@"completionGesture"] isEqualToString:@"post"]) {
+                [[Mixpanel sharedInstance] track:@"Cancelled Facebook Share"];
+                return;
+            }
+
+            [YTApiHelper getFreeCluesWithReason:@"fbshare"];
+            [[Mixpanel sharedInstance] track:@"Shared On Facebook"];
+        }];
         
-        if (result == FBWebDialogResultDialogNotCompleted || [resultURL.absoluteString isEqualToString:@"fbconnect://success"]) {
-            return;
-        }
+    } else {
+
+        [FBWebDialogs presentFeedDialogModallyWithSession:nil parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
         
-        [YTApiHelper getFreeCluesWithReason:@"fbshare"];
+            if (error != nil) {
+                NSLog(@"%@", error.debugDescription);
+                return;
+            }
         
-        [[Mixpanel sharedInstance] track:@"Shared On Facebook"];
-    }];
+            if (result == FBWebDialogResultDialogNotCompleted || [resultURL.absoluteString isEqualToString:@"fbconnect://success"]) {
+                [[Mixpanel sharedInstance] track:@"Cancelled Facebook Share"];
+                return;
+            }
+        
+            [YTApiHelper getFreeCluesWithReason:@"fbshare"];
+            [[Mixpanel sharedInstance] track:@"Shared On Facebook"];
+        }];
+        
+    }
     
 }
 
