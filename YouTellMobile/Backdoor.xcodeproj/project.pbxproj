@@ -204,6 +204,12 @@
 		B2C9E6E916F48D3E00B589E2 /* YTViewHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9E6E816F48D3E00B589E2 /* YTViewHelper.m */; };
 		B2C9E6EC16F491C300B589E2 /* YTFBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C9E6EB16F491C300B589E2 /* YTFBHelper.m */; };
 		B2C9E6F016F4AEFA00B589E2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2C9E6F216F4AEFA00B589E2 /* Localizable.strings */; };
+		B2CDB645179FDBE1000758B3 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CDB644179FDBE1000758B3 /* CoreTelephony.framework */; };
+		B2CDB647179FDBEA000758B3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CDB646179FDBEA000758B3 /* CoreLocation.framework */; };
+		B2CDB649179FDBFA000758B3 /* Instabug.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B2CDB648179FDBFA000758B3 /* Instabug.bundle */; };
+		B2CDB64B179FDC05000758B3 /* Instabug.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CDB64A179FDC05000758B3 /* Instabug.framework */; };
+		B2CDB64D179FDC32000758B3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CDB64C179FDC32000758B3 /* OpenGLES.framework */; };
+		B2CDB64F179FDC38000758B3 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CDB64E179FDC38000758B3 /* GLKit.framework */; };
 		B2CE75F817140E5900663168 /* navbar.png in Resources */ = {isa = PBXBuildFile; fileRef = B2CE75F617140E5700663168 /* navbar.png */; };
 		B2CE75F917140E5900663168 /* navbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2CE75F717140E5800663168 /* navbar@2x.png */; };
 		B2CE7606171415BD00663168 /* baritem2.png in Resources */ = {isa = PBXBuildFile; fileRef = B2CE7604171415BC00663168 /* baritem2.png */; };
@@ -647,6 +653,12 @@
 		B2C9E6F116F4AEFA00B589E2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B2C9E6F316F4AF3B00B589E2 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		B2C9E6F516F4B37F00B589E2 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B2CDB644179FDBE1000758B3 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		B2CDB646179FDBEA000758B3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		B2CDB648179FDBFA000758B3 /* Instabug.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Instabug.bundle; path = Vendor/Instabug.bundle; sourceTree = "<group>"; };
+		B2CDB64A179FDC05000758B3 /* Instabug.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Instabug.framework; path = Vendor/Instabug.framework; sourceTree = "<group>"; };
+		B2CDB64C179FDC32000758B3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		B2CDB64E179FDC38000758B3 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		B2CE75F617140E5700663168 /* navbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbar.png; sourceTree = "<group>"; };
 		B2CE75F717140E5800663168 /* navbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar@2x.png"; sourceTree = "<group>"; };
 		B2CE7604171415BC00663168 /* baritem2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = baritem2.png; sourceTree = "<group>"; };
@@ -753,6 +765,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2CDB64F179FDC38000758B3 /* GLKit.framework in Frameworks */,
+				B2CDB64D179FDC32000758B3 /* OpenGLES.framework in Frameworks */,
+				B2CDB647179FDBEA000758B3 /* CoreLocation.framework in Frameworks */,
+				B2CDB645179FDBE1000758B3 /* CoreTelephony.framework in Frameworks */,
 				B2E68F5C172CE03100914B40 /* Twitter.framework in Frameworks */,
 				B25E45C516F99E4E005DB8FB /* AudioToolbox.framework in Frameworks */,
 				B2A75B2816F2235600F0CAB4 /* CoreData.framework in Frameworks */,
@@ -770,6 +786,7 @@
 				B240390316F080F9000632AA /* Foundation.framework in Frameworks */,
 				B240390516F080F9000632AA /* CoreGraphics.framework in Frameworks */,
 				DF34DC2017644508974D1734 /* libPods.a in Frameworks */,
+				B2CDB64B179FDC05000758B3 /* Instabug.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -809,6 +826,8 @@
 		B24038FF16F080F9000632AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8805C8C26C024483B1635E5F /* libPods.a */,
+				B2CDB648179FDBFA000758B3 /* Instabug.bundle */,
 				B2BA771116F0869F006C17F7 /* Accounts.framework */,
 				B2BA770716F08673006C17F7 /* AddressBook.framework */,
 				B2BA770516F08670006C17F7 /* AddressBookUI.framework */,
@@ -817,10 +836,13 @@
 				B2A75AD316F1EBEC00F0CAB4 /* AVFoundation.framework */,
 				B2A75B2716F2235600F0CAB4 /* CoreData.framework */,
 				B240390416F080F9000632AA /* CoreGraphics.framework */,
+				B2CDB646179FDBEA000758B3 /* CoreLocation.framework */,
+				B2CDB644179FDBE1000758B3 /* CoreTelephony.framework */,
 				B240390216F080F9000632AA /* Foundation.framework */,
-				8805C8C26C024483B1635E5F /* libPods.a */,
+				B2CDB64E179FDC38000758B3 /* GLKit.framework */,
+				B2CDB64A179FDC05000758B3 /* Instabug.framework */,
 				B2BA772116F08AB0006C17F7 /* MobileCoreServices.framework */,
-				B24CB2D71707333F00813B2C /* Pods.xcodeproj */,
+				B2CDB64C179FDC32000758B3 /* OpenGLES.framework */,
 				B2BA770B16F0868C006C17F7 /* QuartzCore.framework */,
 				B240392716F080FA000632AA /* SenTestingKit.framework */,
 				B2BA770D16F08693006C17F7 /* Social.framework */,
@@ -828,6 +850,7 @@
 				B2BA771F16F08AA7006C17F7 /* SystemConfiguration.framework */,
 				B2E68F5B172CE03100914B40 /* Twitter.framework */,
 				B240390016F080F9000632AA /* UIKit.framework */,
+				B24CB2D71707333F00813B2C /* Pods.xcodeproj */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1732,6 +1755,7 @@
 				B2027219179A9DD100CF9D66 /* clue_button_inactive.png in Resources */,
 				B202721A179A9DD100CF9D66 /* clue_button_active@2x.png in Resources */,
 				B202721B179A9DD100CF9D66 /* clue_button_active.png in Resources */,
+				B2CDB649179FDBFA000758B3 /* Instabug.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1990,6 +2014,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2013,6 +2041,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2112,6 +2144,10 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (

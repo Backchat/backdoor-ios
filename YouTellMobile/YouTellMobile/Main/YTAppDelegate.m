@@ -9,6 +9,7 @@
 
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
+#import <Instabug/Instabug.h>
 
 #import "YTAppDelegate.h"
 #import "YTGabViewController.h"
@@ -117,6 +118,9 @@ void uncaughtExceptionHandler(NSException *exception)
     
     [Mixpanel sharedInstanceWithToken:CONFIG_MIXPANEL_TOKEN];
     [[Mixpanel sharedInstance] track:@"Launched Application"];
+
+    [Instabug KickOffWithToken:@"1d4d2d4d4e561eb4c46a6180135c48ff" CaptureSource:InstabugCaptureSourceUIKit FeedbackEvent:InstabugFeedbackEventShake IsTrackingLocation:YES];
+
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
     
