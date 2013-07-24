@@ -7,9 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import <GPPSignIn.h>
-#import <GPPSignInButton.h>
-#import <GPPShare.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
+#import <GooglePlus/GooglePlus.h>
 
 @interface YTGPPHelper : NSObject <GPPSignInDelegate, GPPShareDelegate>
 

@@ -7,14 +7,9 @@
 
 #import <SVProgressHUD/SVProgressHUD.h>
 
-#import <GTLPlusConstants.h>
-#import <GPPURLHandler.h>
-#import <GTLServicePlus.h>
-#import <GTLQueryPlus.h>
-#import <GTLPlusPeopleFeed.h>
-#import <GTLPlusPerson.h>
-#import <GTMOAuth2Authentication.h>
-#import <GPPShare.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
+#import <GooglePlus/GooglePlus.h>
+
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
 #import <Instabug/Instabug.h>

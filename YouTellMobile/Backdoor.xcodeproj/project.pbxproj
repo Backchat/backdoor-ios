@@ -392,12 +392,12 @@
 			remoteGlobalIDString = 83103754AC58429E9D14784C;
 			remoteInfo = "Pods-UIImage-Categories";
 		};
-		B29B6ACD1782CCEE00E9E197 /* PBXContainerItemProxy */ = {
+		B2C61976179FE7DA0081EF03 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B24CB2D71707333F00813B2C /* Pods.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = C81091FEADED409DA4CCB4C1;
-			remoteInfo = "Pods-google-plus-ios-sdk";
+			remoteGlobalIDString = 6C99D7B56CB1403FA0218C52;
+			remoteInfo = "Pods-libwebp";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -948,7 +948,7 @@
 				B29B6AC81782CCEE00E9E197 /* libPods-SDWebImage.a */,
 				B29B6ACA1782CCEE00E9E197 /* libPods-SVProgressHUD.a */,
 				B29B6ACC1782CCEE00E9E197 /* libPods-UIImage-Categories.a */,
-				B29B6ACE1782CCEE00E9E197 /* libPods-google-plus-ios-sdk.a */,
+				B2C61977179FE7DA0081EF03 /* libPods-libwebp.a */,
 				B24CB2DC1707333F00813B2C /* libPods.a */,
 			);
 			name = Products;
@@ -1533,11 +1533,11 @@
 			remoteRef = B29B6ACB1782CCEE00E9E197 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B29B6ACE1782CCEE00E9E197 /* libPods-google-plus-ios-sdk.a */ = {
+		B2C61977179FE7DA0081EF03 /* libPods-libwebp.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "libPods-google-plus-ios-sdk.a";
-			remoteRef = B29B6ACD1782CCEE00E9E197 /* PBXContainerItemProxy */;
+			path = "libPods-libwebp.a";
+			remoteRef = B2C61976179FE7DA0081EF03 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

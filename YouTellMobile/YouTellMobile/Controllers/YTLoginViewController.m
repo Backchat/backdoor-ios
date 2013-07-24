@@ -7,7 +7,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#import <GPPSignInButton.h>
+#import <GooglePlus/GPPSignInButton.h>
 #import <Mixpanel.h>
 
 #import "YTLoginViewController.h"
