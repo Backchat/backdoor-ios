@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Facebook
+ * Copyright 2010-present Facebook.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 #import "FBUtility.h"
 #import "FBLogger.h"
 #import "FBSettings.h"
-#import "FBErrorUtility.h"
+#import "FBErrorUtility+Internal.h"
 #import "FBAccessTokenData.h"
 
 @interface FBSystemAccountStoreAdapter() {
@@ -171,6 +171,14 @@ static FBSystemAccountStoreAdapter* _singletonInstance = nil;
     
     //wrap the request call into a separate block to help with possibly block chaining below.
     void(^requestAccessBlock)(void) = ^{
+        if (!self.accountTypeFB) {
+            if (handler) {
+                handler(nil, [session errorLoginFailedWithReason:FBErrorLoginFailedReasonSystemError
+                                                       errorCode:nil
+                                                      innerError:nil]);
+            }
+            return;
+        }
         // we will attempt an iOS integrated facebook login
         [self.accountStore
          requestAccessToAccountsWithType:self.accountTypeFB

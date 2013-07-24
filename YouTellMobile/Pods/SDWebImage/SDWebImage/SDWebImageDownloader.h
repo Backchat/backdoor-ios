@@ -28,9 +28,15 @@ typedef enum
 
 typedef enum
 {
-    SDWebImageDownloaderFILOQueueMode,
-    SDWebImageDownloaderLIFOQueueMode
-} SDWebImageDownloaderQueueMode;
+    SDWebImageDownloaderFIFOExecutionOrder,
+    /**
+     * Default value. All download operations will execute in queue style (first-in-first-out).
+     */
+    SDWebImageDownloaderLIFOExecutionOrder
+    /**
+     * All download operations will execute in stack style (last-in-first-out).
+     */
+} SDWebImageDownloaderExecutionOrder;
 
 extern NSString *const SDWebImageDownloadStartNotification;
 extern NSString *const SDWebImageDownloadStopNotification;
@@ -46,9 +52,9 @@ typedef void(^SDWebImageDownloaderCompletedBlock)(UIImage *image, NSData *data, 
 @property (assign, nonatomic) NSInteger maxConcurrentDownloads;
 
 /**
- * Changes download operations unqueue mode. Default value is `SDWebImageDownloaderFILOQueueMode`.
+ * Changes download operations execution order. Default value is `SDWebImageDownloaderFIFOExecutionOrder`.
  */
-@property (assign, nonatomic) SDWebImageDownloaderQueueMode queueMode;
+@property (assign, nonatomic) SDWebImageDownloaderExecutionOrder executionOrder;
 
 + (SDWebImageDownloader *)sharedDownloader;
 
@@ -76,8 +82,8 @@ typedef void(^SDWebImageDownloaderCompletedBlock)(UIImage *image, NSData *data, 
  *
  * @param url The URL to the image to download
  * @param options The options to be used for this download
- * @param progress A block called repeatedly while the image is downloading
- * @param completed A block called once the download is completed.
+ * @param progressBlock A block called repeatedly while the image is downloading
+ * @param completedBlock A block called once the download is completed.
  *                  If the download succeeded, the image parameter is set, in case of error,
  *                  error parameter is set with the error. The last parameter is always YES
  *                  if SDWebImageDownloaderProgressiveDownload isn't use. With the

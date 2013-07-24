@@ -14,7 +14,6 @@ pod 'google-plus-ios-sdk'
 pod 'FlurrySDK'
 pod 'NoticeView'
 pod 'Mixpanel'
-pod 'Instabug'
 
 post_install do |installer|
   installer.project.targets.each do |target|
