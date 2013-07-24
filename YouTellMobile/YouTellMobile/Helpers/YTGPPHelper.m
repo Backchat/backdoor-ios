@@ -17,6 +17,7 @@
 #import <GPPShare.h>
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
+#import <Instabug/Instabug.h>
 
 #import "YTGPPHelper.h"
 #import "YTApiHelper.h"
@@ -111,6 +112,8 @@
         YTAppDelegate *delegate = [YTAppDelegate current];
         
         [[Mixpanel sharedInstance] identify:person.identifier];
+        [Instabug setUserDataString:person.identifier];
+
         
         if (delegate.deviceToken) {
             [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];

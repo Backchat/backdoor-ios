@@ -9,6 +9,7 @@
 
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
+#import <Instabug/Instabug.h>
 
 #import "YTAppDelegate.h"
 #import "YTFBHelper.h"
@@ -91,6 +92,7 @@
         }
         
         [[Mixpanel sharedInstance] identify:result[@"id"]];
+        [Instabug setUserDataString:result[@"id"]];
         
         if (delegate.deviceToken) {
             [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
