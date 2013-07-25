@@ -119,7 +119,7 @@ void uncaughtExceptionHandler(NSException *exception)
     [Mixpanel sharedInstanceWithToken:CONFIG_MIXPANEL_TOKEN];
     [[Mixpanel sharedInstance] track:@"Launched Application"];
 
-    [Instabug KickOffWithToken:@"1d4d2d4d4e561eb4c46a6180135c48ff" CaptureSource:InstabugCaptureSourceUIKit FeedbackEvent:InstabugFeedbackEventShake IsTrackingLocation:YES];
+    [Instabug KickOffWithToken:CONFIG_INSTABUG_TOKEN CaptureSource:InstabugCaptureSourceUIKit FeedbackEvent:InstabugFeedbackEventShake IsTrackingLocation:YES];
     [Instabug setButtonsColor:[UIColor colorWithRed:(26/255.0) green:(199/255.0) blue:(26/255.0) alpha:1.0]];
     [Instabug setButtonsFontColor:[UIColor colorWithRed:(255/255.0) green:(255/255.0) blue:(255/255.0) alpha:1.0]];
     [Instabug setHeaderColor:[UIColor colorWithRed:(16/255.0) green:(181/255.0) blue:(16/255.0) alpha:1.0]];

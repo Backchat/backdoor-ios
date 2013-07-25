@@ -399,6 +399,13 @@
 			remoteGlobalIDString = 6C99D7B56CB1403FA0218C52;
 			remoteInfo = "Pods-libwebp";
 		};
+		B2C6198717A1AE7D0081EF03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B24CB2D71707333F00813B2C /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CDC56A7F1F6A4D1FA8FDA3A7;
+			remoteInfo = "Pods-google-plus-ios-sdk";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -948,6 +955,7 @@
 				B29B6AC81782CCEE00E9E197 /* libPods-SDWebImage.a */,
 				B29B6ACA1782CCEE00E9E197 /* libPods-SVProgressHUD.a */,
 				B29B6ACC1782CCEE00E9E197 /* libPods-UIImage-Categories.a */,
+				B2C6198817A1AE7D0081EF03 /* libPods-google-plus-ios-sdk.a */,
 				B2C61977179FE7DA0081EF03 /* libPods-libwebp.a */,
 				B24CB2DC1707333F00813B2C /* libPods.a */,
 			);
@@ -1540,6 +1548,13 @@
 			remoteRef = B2C61976179FE7DA0081EF03 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		B2C6198817A1AE7D0081EF03 /* libPods-google-plus-ios-sdk.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-google-plus-ios-sdk.a";
+			remoteRef = B2C6198717A1AE7D0081EF03 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1950,6 +1965,7 @@
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461-mgbsap2s5bh61ae2nggh9h45djonk8qi.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"f71c198b697c5cdf67eab8c75922c9bf\\\"",
 					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"_Dev\\\"",
+					"CONFIG_INSTABUG_TOKEN=\\@\\\"48ab50d1954f8e535b291aec33208c67\\\"",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1992,6 +2008,7 @@
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"b773675a02695460a27af2b8c2d11d39\\\"",
 					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"\\\"",
+					"CONFIG_INSTABUG_TOKEN=\\@\\\"1d4d2d4d4e561eb4c46a6180135c48ff\\\"",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -2122,6 +2139,7 @@
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461-kiu3nt3onpdh8o89idagr66r1rgbh8k8.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"06e542f53ddbd2430aac9c4664e5903f\\\"",
 					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"_Stage\\\"",
+					"CONFIG_INSTABUG_TOKEN=\\@\\\"b4ecd67cdc36b9b646adbe69b8629acc\\\"",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
