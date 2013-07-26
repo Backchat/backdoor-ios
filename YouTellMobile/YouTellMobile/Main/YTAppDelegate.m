@@ -112,6 +112,8 @@ void uncaughtExceptionHandler(NSException *exception)
         [Flurry setDebugLogEnabled:YES];
         [Flurry setEventLoggingEnabled:YES];
     }
+    
+    [Flurry setCrashReportingEnabled:YES];
     [Flurry startSession:CONFIG_FLURRY_APP_TOKEN];
     
     [Mixpanel sharedInstanceWithToken:CONFIG_MIXPANEL_TOKEN];
