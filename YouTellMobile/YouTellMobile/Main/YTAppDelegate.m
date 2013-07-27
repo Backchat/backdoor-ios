@@ -10,6 +10,7 @@
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
 #import <Instabug/Instabug.h>
+#import <iRate.h>
 
 #import "YTAppDelegate.h"
 #import "YTGabViewController.h"
@@ -21,6 +22,7 @@
 #import "YTContactHelper.h"
 #import "YTHelper.h"
 #import "YTNotifHelper.h"
+#import "YTRateHelper.h"
 #import "YTConfig.h"
 
 void uncaughtExceptionHandler(NSException *exception)
@@ -127,6 +129,7 @@ void uncaughtExceptionHandler(NSException *exception)
     [Instabug setTextBackgroundColor:[UIColor colorWithRed:(249/255.0) green:(249/255.0) blue:(249/255.0) alpha:1.0]];
     [Instabug setTextFontColor:[UIColor colorWithRed:(82/255.0) green:(83/255.0) blue:(83/255.0) alpha:1.0]];
 
+    [[YTRateHelper sharedInstance] setup];
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
     
@@ -154,6 +157,8 @@ void uncaughtExceptionHandler(NSException *exception)
     } else {
         [self syncBasedOnView];
     }
+    
+    [[YTRateHelper sharedInstance] run];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

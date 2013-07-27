@@ -34,6 +34,7 @@ install_resource 'HockeySDK/Resources/HockeySDKResources.bundle'
 install_resource 'NoticeView/NoticeView/WBNoticeView/NoticeView.bundle'
 install_resource 'SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle'
 install_resource 'google-plus-ios-sdk/google-plus-ios-sdk-1.3.0/GooglePlus.bundle'
+install_resource 'iRate/iRate/iRate.bundle'
 
 rsync -avr --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 rm "$RESOURCES_TO_COPY"
