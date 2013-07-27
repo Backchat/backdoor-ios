@@ -84,6 +84,12 @@
 #define COCOAPODS_VERSION_MINOR_google_plus_ios_sdk 3
 #define COCOAPODS_VERSION_PATCH_google_plus_ios_sdk 0
 
+// iRate
+#define COCOAPODS_POD_AVAILABLE_iRate
+#define COCOAPODS_VERSION_MAJOR_iRate 1
+#define COCOAPODS_VERSION_MINOR_iRate 7
+#define COCOAPODS_VERSION_PATCH_iRate 5
+
 // libwebp
 #define COCOAPODS_POD_AVAILABLE_libwebp
 #define COCOAPODS_VERSION_MAJOR_libwebp 0

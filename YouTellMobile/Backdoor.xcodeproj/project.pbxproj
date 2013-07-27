@@ -186,6 +186,7 @@
 		B2BA777016F0B972006C17F7 /* privacy.html in Resources */ = {isa = PBXBuildFile; fileRef = B2BA776E16F0B972006C17F7 /* privacy.html */; };
 		B2BA777116F0B972006C17F7 /* terms.html in Resources */ = {isa = PBXBuildFile; fileRef = B2BA776F16F0B972006C17F7 /* terms.html */; };
 		B2BA777716F0D987006C17F7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B240390916F080F9000632AA /* InfoPlist.strings */; };
+		B2C6199217A312FF0081EF03 /* YTRateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C6199117A312FF0081EF03 /* YTRateHelper.m */; };
 		B2C9D12A16FDB238002DDE4F /* camera-hl.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C9D12616FDB238002DDE4F /* camera-hl.png */; };
 		B2C9D12B16FDB238002DDE4F /* camera-hl@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C9D12716FDB238002DDE4F /* camera-hl@2x.png */; };
 		B2C9D12C16FDB238002DDE4F /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C9D12816FDB238002DDE4F /* camera.png */; };
@@ -405,6 +406,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = CDC56A7F1F6A4D1FA8FDA3A7;
 			remoteInfo = "Pods-google-plus-ios-sdk";
+		};
+		B2C619A217A312FF0081EF03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B24CB2D71707333F00813B2C /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E2368B009E2D4E9DB4E2B707;
+			remoteInfo = "Pods-iRate";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -631,6 +639,8 @@
 		B2BA775E16F0AD0E006C17F7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		B2BA776E16F0B972006C17F7 /* privacy.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = privacy.html; path = Data/privacy.html; sourceTree = "<group>"; };
 		B2BA776F16F0B972006C17F7 /* terms.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = terms.html; path = Data/terms.html; sourceTree = "<group>"; };
+		B2C6199017A312FF0081EF03 /* YTRateHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTRateHelper.h; path = Helpers/YTRateHelper.h; sourceTree = "<group>"; };
+		B2C6199117A312FF0081EF03 /* YTRateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTRateHelper.m; path = Helpers/YTRateHelper.m; sourceTree = "<group>"; };
 		B2C9D12616FDB238002DDE4F /* camera-hl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-hl.png"; sourceTree = "<group>"; };
 		B2C9D12716FDB238002DDE4F /* camera-hl@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-hl@2x.png"; sourceTree = "<group>"; };
 		B2C9D12816FDB238002DDE4F /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
@@ -956,6 +966,7 @@
 				B29B6ACA1782CCEE00E9E197 /* libPods-SVProgressHUD.a */,
 				B29B6ACC1782CCEE00E9E197 /* libPods-UIImage-Categories.a */,
 				B2C6198817A1AE7D0081EF03 /* libPods-google-plus-ios-sdk.a */,
+				B2C619A317A312FF0081EF03 /* libPods-iRate.a */,
 				B2C61977179FE7DA0081EF03 /* libPods-libwebp.a */,
 				B24CB2DC1707333F00813B2C /* libPods.a */,
 			);
@@ -1237,6 +1248,8 @@
 				B2E68F5F172CE13A00914B40 /* YTTwitterHelper.m */,
 				B2C9E6E716F48D3E00B589E2 /* YTViewHelper.h */,
 				B2C9E6E816F48D3E00B589E2 /* YTViewHelper.m */,
+				B2C6199017A312FF0081EF03 /* YTRateHelper.h */,
+				B2C6199117A312FF0081EF03 /* YTRateHelper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1553,6 +1566,13 @@
 			fileType = archive.ar;
 			path = "libPods-google-plus-ios-sdk.a";
 			remoteRef = B2C6198717A1AE7D0081EF03 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B2C619A317A312FF0081EF03 /* libPods-iRate.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-iRate.a";
+			remoteRef = B2C619A217A312FF0081EF03 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1874,6 +1894,7 @@
 				3E9F69161761407D00374616 /* YTGabMessage.m in Sources */,
 				B29B6AEF17881E5C00E9E197 /* YTNewGabViewController.m in Sources */,
 				B29B6AF21788268F00E9E197 /* YTMainViewHelper.m in Sources */,
+				B2C6199217A312FF0081EF03 /* YTRateHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
