@@ -24,6 +24,7 @@
 #import "YTNotifHelper.h"
 #import "YTRateHelper.h"
 #import "YTConfig.h"
+#import "YTFriendNotifHelper.h"
 
 void uncaughtExceptionHandler(NSException *exception)
 {
@@ -137,7 +138,6 @@ void uncaughtExceptionHandler(NSException *exception)
         [YTAppDelegate current].userInfo[@"device_token"] = @"1"; //not like you can run multiple simulators...
     }
     
-
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
     if(gab_id != nil) { //we dont have an access_token yet?
         //update gab unread count
@@ -200,6 +200,11 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    if ([userInfo[@"kind"] isEqualToNumber:@1]) {
+        [[YTFriendNotifHelper sharedInstance] handleNotification:userInfo];
+        return;
+    }
+    
     if (!userInfo[@"gab_id"]) {
         NSString *message = userInfo[@"aps"][@"alert"];
         if (!message) {
