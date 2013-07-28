@@ -90,6 +90,12 @@
 #define COCOAPODS_VERSION_MINOR_iRate 7
 #define COCOAPODS_VERSION_PATCH_iRate 5
 
+// iVersion
+#define COCOAPODS_POD_AVAILABLE_iVersion
+#define COCOAPODS_VERSION_MAJOR_iVersion 1
+#define COCOAPODS_VERSION_MINOR_iVersion 10
+#define COCOAPODS_VERSION_PATCH_iVersion 6
+
 // libwebp
 #define COCOAPODS_POD_AVAILABLE_libwebp
 #define COCOAPODS_VERSION_MAJOR_libwebp 0
