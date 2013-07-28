@@ -274,6 +274,10 @@
     return data;
 }
 
+- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self.tableView tableView:self.tableView heightForRowAtIndexPath:indexPath];
+}
 
 - (void)singleTap:(UITapGestureRecognizer*)gesture
 {
