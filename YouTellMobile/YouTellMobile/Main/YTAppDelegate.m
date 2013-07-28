@@ -223,8 +223,10 @@ void uncaughtExceptionHandler(NSException *exception)
     
     [YTNotifHelper handleNotification:userInfo];
     
-    if ( application.applicationState != UIApplicationStateActive ) {
-        [YTViewHelper showGabWithId:userInfo[@"gab_id"]];
+    if (application.applicationState != UIApplicationStateActive) {
+        if ([YTModelHelper gabForId:userInfo[@"gab_id"]]) {
+            [YTViewHelper showGabWithId:userInfo[@"gab_id"]];
+        }
     }
     
     [YTApiHelper syncGabWithId:userInfo[@"gab_id"]];    

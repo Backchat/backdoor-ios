@@ -202,7 +202,9 @@
         dispatch_async(dispatch_get_main_queue(), ^() {
             NSLog(@"launch on login: %@", launch_on_login);
             
-            [YTViewHelper showGabWithId:launch_on_login];
+            if ([YTModelHelper gabForId:launch_on_login]) {
+                [YTViewHelper showGabWithId:launch_on_login];
+            }
             [YTApiHelper syncGabWithId:launch_on_login];
         });
         [[YTAppDelegate current].userInfo removeObjectForKey:@"launch_on_active_token"];
