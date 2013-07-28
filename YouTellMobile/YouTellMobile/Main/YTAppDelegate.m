@@ -11,6 +11,7 @@
 #import <Mixpanel.h>
 #import <Instabug/Instabug.h>
 #import <iRate.h>
+#import <iVersion/iVersion.h>
 
 #import "YTAppDelegate.h"
 #import "YTGabViewController.h"
@@ -43,6 +44,15 @@ void uncaughtExceptionHandler(NSException *exception)
 + (YTAppDelegate*)current
 {
     return (YTAppDelegate*)[UIApplication sharedApplication].delegate;
+}
+
++ (void)initialize
+{
+#ifdef CONFIGURATION_Release
+    [iVersion sharedInstance].appStoreID = CONFIG_APPLE_ID_INT;
+#else
+    [iVersion sharedInstance].checkAtLaunch = NO;
+#endif
 }
 
 - (void)signOut

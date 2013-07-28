@@ -415,6 +415,13 @@
 			remoteGlobalIDString = E2368B009E2D4E9DB4E2B707;
 			remoteInfo = "Pods-iRate";
 		};
+		B2C619B817A5A05A0081EF03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B24CB2D71707333F00813B2C /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F46F6BF86EEB424CA09CD3C5;
+			remoteInfo = "Pods-iVersion";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -970,6 +977,7 @@
 				B29B6ACC1782CCEE00E9E197 /* libPods-UIImage-Categories.a */,
 				B2C6198817A1AE7D0081EF03 /* libPods-google-plus-ios-sdk.a */,
 				B2C619A317A312FF0081EF03 /* libPods-iRate.a */,
+				B2C619B917A5A05A0081EF03 /* libPods-iVersion.a */,
 				B2C61977179FE7DA0081EF03 /* libPods-libwebp.a */,
 				B24CB2DC1707333F00813B2C /* libPods.a */,
 			);
@@ -1578,6 +1586,13 @@
 			fileType = archive.ar;
 			path = "libPods-iRate.a";
 			remoteRef = B2C619A217A312FF0081EF03 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B2C619B917A5A05A0081EF03 /* libPods-iVersion.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-iVersion.a";
+			remoteRef = B2C619B817A5A05A0081EF03 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
