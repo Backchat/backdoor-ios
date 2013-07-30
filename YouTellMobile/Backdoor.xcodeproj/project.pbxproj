@@ -69,8 +69,6 @@
 		B240392A16F080FA000632AA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B240390216F080F9000632AA /* Foundation.framework */; };
 		B240393216F080FA000632AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B240393016F080FA000632AA /* InfoPlist.strings */; };
 		B240393516F080FA000632AA /* YouTellMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B240393416F080FA000632AA /* YouTellMobileTests.m */; };
-		B24CB29116FF36AF00813B2C /* YTContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB28F16FF36AF00813B2C /* YTContactsViewController.m */; };
-		B24CB29216FF36AF00813B2C /* YTContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B24CB29016FF36AF00813B2C /* YTContactsViewController.xib */; };
 		B24CB2951701AE9C00813B2C /* YTGabPhotoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2941701AE9C00813B2C /* YTGabPhotoHelper.m */; };
 		B24CB2991701B1DD00813B2C /* YTPhotoSendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2971701B1DD00813B2C /* YTPhotoSendViewController.m */; };
 		B24CB29A1701B1DD00813B2C /* YTPhotoSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B24CB2981701B1DD00813B2C /* YTPhotoSendViewController.xib */; };
@@ -492,9 +490,6 @@
 		B240393116F080FA000632AA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B240393316F080FA000632AA /* YouTellMobileTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YouTellMobileTests.h; sourceTree = "<group>"; };
 		B240393416F080FA000632AA /* YouTellMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YouTellMobileTests.m; sourceTree = "<group>"; };
-		B24CB28E16FF36AF00813B2C /* YTContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTContactsViewController.h; sourceTree = "<group>"; };
-		B24CB28F16FF36AF00813B2C /* YTContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTContactsViewController.m; sourceTree = "<group>"; };
-		B24CB29016FF36AF00813B2C /* YTContactsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YTContactsViewController.xib; sourceTree = "<group>"; };
 		B24CB2931701AE9C00813B2C /* YTGabPhotoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabPhotoHelper.h; path = Helpers/YTGabPhotoHelper.h; sourceTree = "<group>"; };
 		B24CB2941701AE9C00813B2C /* YTGabPhotoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabPhotoHelper.m; path = Helpers/YTGabPhotoHelper.m; sourceTree = "<group>"; };
 		B24CB2961701B1DD00813B2C /* YTPhotoSendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPhotoSendViewController.h; sourceTree = "<group>"; };
@@ -1357,9 +1352,6 @@
 				B2225EFB173FCF7900A47F28 /* YTAbuseViewController.m */,
 				B2E68F461727160900914B40 /* YTBaseSettingsViewController.h */,
 				B2E68F471727160900914B40 /* YTBaseSettingsViewController.m */,
-				B24CB28E16FF36AF00813B2C /* YTContactsViewController.h */,
-				B24CB28F16FF36AF00813B2C /* YTContactsViewController.m */,
-				B24CB29016FF36AF00813B2C /* YTContactsViewController.xib */,
 				B2C9D13816FF3137002DDE4F /* YTFeedbackViewController.h */,
 				B2C9D13916FF3137002DDE4F /* YTFeedbackViewController.m */,
 				B2C9D13A16FF3137002DDE4F /* YTFeedbackViewController.xib */,
@@ -1645,7 +1637,6 @@
 				B2C9D15316FF3137002DDE4F /* YTMainViewController.xib in Resources */,
 				B2C9D15516FF3137002DDE4F /* YTSettingsViewController.xib in Resources */,
 				B2C9D15816FF3137002DDE4F /* YTWebViewController.xib in Resources */,
-				B24CB29216FF36AF00813B2C /* YTContactsViewController.xib in Resources */,
 				B24CB29A1701B1DD00813B2C /* YTPhotoSendViewController.xib in Resources */,
 				B24CB2B31702057D00813B2C /* bubbleMine.png in Resources */,
 				B24CB2B41702057D00813B2C /* bubbleMine@2x.png in Resources */,
@@ -1897,7 +1888,6 @@
 				B2C9D15416FF3137002DDE4F /* YTSettingsViewController.m in Sources */,
 				B2C9D15616FF3137002DDE4F /* YTViewController.m in Sources */,
 				B2C9D15716FF3137002DDE4F /* YTWebViewController.m in Sources */,
-				B24CB29116FF36AF00813B2C /* YTContactsViewController.m in Sources */,
 				B24CB2951701AE9C00813B2C /* YTGabPhotoHelper.m in Sources */,
 				B24CB2991701B1DD00813B2C /* YTPhotoSendViewController.m in Sources */,
 				B24CB2BD1702057D00813B2C /* NSBubbleData.m in Sources */,
