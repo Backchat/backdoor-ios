@@ -187,6 +187,12 @@
 		B2BA777116F0B972006C17F7 /* terms.html in Resources */ = {isa = PBXBuildFile; fileRef = B2BA776F16F0B972006C17F7 /* terms.html */; };
 		B2BA777716F0D987006C17F7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B240390916F080F9000632AA /* InfoPlist.strings */; };
 		B2C6199217A312FF0081EF03 /* YTRateHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C6199117A312FF0081EF03 /* YTRateHelper.m */; };
+<<<<<<< HEAD
+=======
+		B2C619A717A567D70081EF03 /* YTFriendNotifHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C619A617A567D70081EF03 /* YTFriendNotifHelper.m */; };
+		B2C619BC17A85CED0081EF03 /* get_clues_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C619BA17A85CED0081EF03 /* get_clues_btn.png */; };
+		B2C619BD17A85CED0081EF03 /* get_clues_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C619BB17A85CED0081EF03 /* get_clues_btn@2x.png */; };
+>>>>>>> 8365d7b... Add get clues button to the main view
 		B2C9D12A16FDB238002DDE4F /* camera-hl.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C9D12616FDB238002DDE4F /* camera-hl.png */; };
 		B2C9D12B16FDB238002DDE4F /* camera-hl@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C9D12716FDB238002DDE4F /* camera-hl@2x.png */; };
 		B2C9D12C16FDB238002DDE4F /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = B2C9D12816FDB238002DDE4F /* camera.png */; };
@@ -648,6 +654,13 @@
 		B2BA776F16F0B972006C17F7 /* terms.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = terms.html; path = Data/terms.html; sourceTree = "<group>"; };
 		B2C6199017A312FF0081EF03 /* YTRateHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTRateHelper.h; path = Helpers/YTRateHelper.h; sourceTree = "<group>"; };
 		B2C6199117A312FF0081EF03 /* YTRateHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTRateHelper.m; path = Helpers/YTRateHelper.m; sourceTree = "<group>"; };
+<<<<<<< HEAD
+=======
+		B2C619A517A567D70081EF03 /* YTFriendNotifHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTFriendNotifHelper.h; path = Helpers/YTFriendNotifHelper.h; sourceTree = "<group>"; };
+		B2C619A617A567D70081EF03 /* YTFriendNotifHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTFriendNotifHelper.m; path = Helpers/YTFriendNotifHelper.m; sourceTree = "<group>"; };
+		B2C619BA17A85CED0081EF03 /* get_clues_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = get_clues_btn.png; sourceTree = "<group>"; };
+		B2C619BB17A85CED0081EF03 /* get_clues_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "get_clues_btn@2x.png"; sourceTree = "<group>"; };
+>>>>>>> 8365d7b... Add get clues button to the main view
 		B2C9D12616FDB238002DDE4F /* camera-hl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-hl.png"; sourceTree = "<group>"; };
 		B2C9D12716FDB238002DDE4F /* camera-hl@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-hl@2x.png"; sourceTree = "<group>"; };
 		B2C9D12816FDB238002DDE4F /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
@@ -1052,10 +1065,6 @@
 		B2A75AD516F1ED7E00F0CAB4 /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				B2027214179A9DD100CF9D66 /* clue_button_inactive@2x.png */,
-				B2027215179A9DD100CF9D66 /* clue_button_inactive.png */,
-				B2027216179A9DD100CF9D66 /* clue_button_active@2x.png */,
-				B2027217179A9DD100CF9D66 /* clue_button_active.png */,
 				B2EF849E171DDDAB00EECBE7 /* avatar.gif */,
 				B29038091733D30A00A1F7D3 /* avatar4.png */,
 				B290380A1733D30A00A1F7D3 /* avatar4@2x.png */,
@@ -1103,6 +1112,10 @@
 				B2CE761917143F8100663168 /* cambtn@2x.png */,
 				B2A37BA41748F345006EAA5B /* clue_blank.png */,
 				B2A37BA51748F346006EAA5B /* clue_blank@2x.png */,
+				B2027217179A9DD100CF9D66 /* clue_button_active.png */,
+				B2027216179A9DD100CF9D66 /* clue_button_active@2x.png */,
+				B2027215179A9DD100CF9D66 /* clue_button_inactive.png */,
+				B2027214179A9DD100CF9D66 /* clue_button_inactive@2x.png */,
 				B2A37B7D1747EDB0006EAA5B /* clue_header.png */,
 				B2A37B7E1747EDB0006EAA5B /* clue_header@2x.png */,
 				B2A37B5D17475581006EAA5B /* clue_hidden2.png */,
@@ -1124,6 +1137,8 @@
 				B2225F2017456E4400A47F28 /* fc_twitter_active@2x.png */,
 				B2225F2117456E4400A47F28 /* fc_twitter_inactive.png */,
 				B2225F2217456E4400A47F28 /* fc_twitter_inactive@2x.png */,
+				B2C619BA17A85CED0081EF03 /* get_clues_btn.png */,
+				B2C619BB17A85CED0081EF03 /* get_clues_btn@2x.png */,
 				B2D84014175F44E000FAB33C /* gpp_tableitem2.png */,
 				B2D84015175F44E000FAB33C /* gpp_tableitem2@2x.png */,
 				3EE91598176815AE0090371C /* gpp_tableitem3.png */,
@@ -1806,6 +1821,8 @@
 				B202721A179A9DD100CF9D66 /* clue_button_active@2x.png in Resources */,
 				B202721B179A9DD100CF9D66 /* clue_button_active.png in Resources */,
 				B2CDB649179FDBFA000758B3 /* Instabug.bundle in Resources */,
+				B2C619BC17A85CED0081EF03 /* get_clues_btn.png in Resources */,
+				B2C619BD17A85CED0081EF03 /* get_clues_btn@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
