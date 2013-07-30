@@ -17,7 +17,6 @@
 #import "YTViewHelper.h"
 #import "YTFBHelper.h"
 #import "YTGPPHelper.h"
-#import "YTContactHelper.h"
 #import "YTHelper.h"
 #import "YTNotifHelper.h"
 #import "YTConfig.h"
@@ -52,7 +51,6 @@ void uncaughtExceptionHandler(NSException *exception)
     [YTModelHelper removeSettingsForKey:@"logged_in_acccess_token"];
     [YTFBHelper closeSession];
     [YTModelHelper changeStoreId:nil];
-    [[YTContactHelper sharedInstance] clearRandomizedFriendWithType:nil];
     [YTApiHelper resetUserInfo];
     [YTViewHelper showLogin];
     [YTViewHelper refreshViews];
@@ -83,12 +81,9 @@ void uncaughtExceptionHandler(NSException *exception)
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    
-    self.featuredUsers = @[];
-    
+        
     [YTApiHelper setup];
     [YTModelHelper setup];    
-    [[YTContactHelper sharedInstance] setup];
     [YTViewHelper setup];
     [YTFBHelper setup];
     [[YTGPPHelper sharedInstance] setup];

@@ -16,7 +16,6 @@
 #import "YTLoginViewController.h"
 #import "YTViewHelper.h"
 #import "YTApiHelper.h"
-#import "YTContactHelper.h"
 #import "YTModelHelper.h"
 #import "YTHelper.h"
 #import "YTConfig.h"
@@ -133,7 +132,7 @@
             return;
         }
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [[YTContactHelper sharedInstance] loadFacebookFriends:result[@"data"]];
+            //[[YTContactHelper sharedInstance] loadFacebookFriends:result[@"data"]];
         }];
 
     }];
