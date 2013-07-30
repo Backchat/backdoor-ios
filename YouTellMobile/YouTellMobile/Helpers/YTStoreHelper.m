@@ -64,10 +64,7 @@
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
 {
     [SVProgressHUD dismiss];
-    
-    if (!self.barButtonItem) {
-        return;
-    }
+
     
     showingProducts = true;
     NSArray *products = response.products;
@@ -93,7 +90,12 @@
     
     sheet.cancelButtonIndex = [sheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     
-    [sheet showFromBarButtonItem:self.barButtonItem animated:YES];
+    
+    if (self.barButtonItem) {
+        [sheet showFromBarButtonItem:self.barButtonItem animated:YES];
+    } else {
+        [sheet showInView:[YTAppDelegate current].navController.topViewController.view];
+    }
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error

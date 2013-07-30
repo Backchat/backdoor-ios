@@ -31,8 +31,9 @@
 #define SECTION_FRIENDS 1
 #define SECTION_MORE 2
 #define SECTION_SHARE 3
-#define SECTION_FEATURED 4
-#define SECTION_COUNT 5
+#define SECTION_CLUES 4
+#define SECTION_FEATURED 5
+#define SECTION_COUNT 6
 
 @interface YTMainViewController ()
 @property (nonatomic, retain) NSMutableArray* currentFeaturedUsers;
@@ -133,6 +134,7 @@
         case SECTION_FRIENDS: return [self numberOfFriendRows];
         case SECTION_MORE: return [self numberOfMoreRows];
         case SECTION_SHARE: return [self numberOfShareRows];
+        case SECTION_CLUES: return [self numberOfCluesRows];
         case SECTION_FEATURED: return [self numberOfFeaturedRows];
         default: return 0;
     }
@@ -182,6 +184,12 @@
     return 1;
 }
 
+- (NSInteger)numberOfCluesRows
+{
+    return 1;
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
@@ -189,6 +197,8 @@
         case SECTION_FRIENDS: return [self tableView:tableView cellForFriendAtRow:indexPath.row];
         case SECTION_MORE: return [self tableView:tableView cellForMoreAtRow:indexPath.row];
         case SECTION_SHARE: return [self tableView:tableView cellForShareAtRow:indexPath.row];
+        case SECTION_CLUES: return [self tableView:tableView cellForCluesAtRow:indexPath.row];
+
         case SECTION_FEATURED: return [self tableView:tableView cellForUserAtRow:indexPath.row];
         default: return nil;
     }
@@ -273,6 +283,21 @@
     return cell;
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForCluesAtRow:(NSInteger)row
+{
+    NSString *title = NSLocalizedString(@"Get Clues", nil);
+    NSString *subtitle = NSLocalizedString(@"Tap me to get more clues.", nil);
+    NSString *time = @"";
+    NSString *image = nil;
+    
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
+    
+    UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
+    [avatarView setImage:[UIImage imageNamed:@"get_clues_btn"]];
+    
+    return cell;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForMoreAtRow:(NSInteger)row
 {
     NSString *title = NSLocalizedString(@"Show More", nil);
@@ -313,11 +338,18 @@
         
         YTNewGabViewController *c = [YTNewGabViewController new];
         [[YTAppDelegate current].navController pushViewController:c animated:YES];
-    }    
+    }
     else if (indexPath.section == SECTION_SHARE) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Share Item"];
         [[YTSocialHelper sharedInstance] presentShareDialog];
-    }    
+    }
+    else if (indexPath.section == SECTION_CLUES) {
+        [[Mixpanel sharedInstance] track:@"Tapped Main View / Clues Item"];
+        if(![YTAppDelegate current].storeHelper) {
+            [YTAppDelegate current].storeHelper = [YTStoreHelper new];
+        }
+        [[YTAppDelegate current].storeHelper showFromBarButtonItem:nil];
+    }
     else if (indexPath.section == SECTION_FEATURED) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Featured Users Item"];
         NSDictionary *user = [YTAppDelegate current].featuredUsers[indexPath.row];
