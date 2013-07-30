@@ -31,8 +31,8 @@
         return cell;
     }
     
-    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ident];
-
+    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ident];
+    cell.textLabel.hidden = YES;
     
     UIImageView *avatarView = [[UIImageView alloc] init];
     avatarView.tag = 5;
@@ -101,6 +101,7 @@
         NSAttributedString *timeAttString = [YTHelper formatDateAttr:time size:12 color:[UIColor blueColor]];
         timeLabel.attributedText = timeAttString;
         timeSize = [timeAttString size];
+        timeSize.width = timeSize.width + 2;
     }
     CGFloat timeWidth = timeSize.width + 5;
     timeLabel.frame = CGRectMake(cell.bounds.size.width - timeWidth - 30, 5, timeWidth, timeSize.height);
@@ -121,7 +122,7 @@
     cell.detailTextLabel.text = @" ";
     
     imageView.frame = CGRectMake(5, (cell.frame.size.height - 18) / 2, 18, 18);
-    if (image) {
+    if (image && image.length > 0) {
         imageView.image = [YTHelper imageNamed:image];
         imageView.hidden = NO;
     } else {
@@ -129,7 +130,7 @@
         imageView.hidden = YES;
     }
         
-    if (avatar) {
+    if (avatar && avatar.length > 0) {
         if([avatar rangeOfString:@"http"].location == NSNotFound) {
             avatarView.image = [YTHelper imageNamed:avatar];
         }
@@ -142,19 +143,6 @@
         avatarView.hidden = YES;
     }
 
-    
-    [textLabel removeFromSuperview];
-    [cell.contentView addSubview:textLabel];
-    
-    [timeLabel removeFromSuperview];
-    [cell.contentView addSubview:timeLabel];
-    
-    [detTextLabel removeFromSuperview];
-    [cell.contentView addSubview:detTextLabel];
-    
-    [imageView removeFromSuperview];
-    [cell.contentView addSubview:imageView];
-    
     for (UIView *view in cell.contentView.subviews) {
         view.alpha = 1;
     }

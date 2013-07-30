@@ -9,6 +9,8 @@
 
 #import <FacebookSDK/FacebookSDK.h>
 
+#import "YTContacts.h"
+
 @interface YTFBHelper : NSObject
 
 + (void)setup;
@@ -19,5 +21,5 @@
 + (BOOL)handleOpenUrl:(NSURL*)url;
 + (void)presentFeedDialog;
 + (void)presentRequestDialogWithContact:(NSString*)contact complete:(void(^)())complete;
-
++ (void)fetchFriends:(void(^)(YTContacts* c))success;
 @end

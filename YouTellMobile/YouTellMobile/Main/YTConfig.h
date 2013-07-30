@@ -23,7 +23,7 @@
 #define CONFIG_DEBUG_FLURRY 0
 #define CONFIG_CRASH_BUTTON 0
 #define CONFIG_CLUES_BUTTON 0
-#define CONFIG_DEBUG_FEATURED 0
+#define CONFIG_DEBUG_FEATURED 1
 
 
 //api identification
