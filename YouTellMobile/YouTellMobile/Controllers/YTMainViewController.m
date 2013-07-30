@@ -214,6 +214,10 @@
     NSString *time = [YTHelper formatDate:[object valueForKey:@"updated_at"]];
     NSString *image = read ? nil : @"newgab2";
     NSString* avatar = (NSString*)[object valueForKey:@"related_avatar"];
+    if(avatar.length == 0) {
+        //anonymous side
+        avatar = @"avatar6";
+    }
     
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
                                                                            image:image
@@ -226,10 +230,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForUser:(YTFriend*)user
 {
-    NSLog(@"%@ %@ %@", tableView, user, user.isFault ? @"YES" : @"NO");
     NSString *title = user.name;
     bool featured = !user.isFriend;
-    NSLog(@"%@ %@ %@", tableView, user, user.isFault ? @"YES" : @"NO");
 
     NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation.", nil);
     NSString *time = featured ? NSLocalizedString(@"Featured", nil) : @"";
