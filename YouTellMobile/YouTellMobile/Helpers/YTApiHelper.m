@@ -497,8 +497,6 @@ static bool new_user = false;
         value = friend[@"social_id"];
     [data setValue:value forKey:@"value"];
     
-    [data setValue:NSLocalizedString(@"Facebook", nil) forKey:@"title"];
-
     [data setValue:friend[@"friend_id"] forKey:@"friend_id"];
     [data setValue:friend[@"id"] forKey:@"id"];
     [data setValue:friend[@"featured_id"] forKey:@"featured_id"];

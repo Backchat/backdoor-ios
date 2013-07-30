@@ -15,7 +15,6 @@
         <attribute name="last_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -51,7 +50,7 @@
     </entity>
     <elements>
         <element name="Clues" positionX="160" positionY="192" width="128" height="120"/>
-        <element name="Contacts" positionX="160" positionY="192" width="128" height="195"/>
+        <element name="Contacts" positionX="160" positionY="192" width="128" height="180"/>
         <element name="Gabs" positionX="160" positionY="192" width="128" height="210"/>
         <element name="Messages" positionX="160" positionY="192" width="128" height="210"/>
         <element name="Settings" positionX="160" positionY="192" width="128" height="75"/>
