@@ -23,7 +23,6 @@
 #import "YTAppDelegate.h"
 #import "YTModelHelper.h"
 #import "YTViewHelper.h"
-#import "YTContactHelper.h"
 #import "YTWebViewController.h"
 #import "YTPhotoViewController.h"
 #import "YTHelper.h"
@@ -34,6 +33,7 @@
 
 @interface YTGabViewController ()
 @property (nonatomic, retain) NSArray* messages;
+@property (nonatomic, retain) YTFriend* friend;
 @end
 
 //LINREVIEW this is actually the code for queuing and sending messages
@@ -54,6 +54,22 @@
 
 @implementation YTGabViewController
 
+- (id) initWithGab:(NSNumber*)gab_id
+{
+    if(self = [super initWithNibName:nil bundle:nil]) {
+        self.gab = [YTModelHelper gabForId:gab_id];
+    }
+    return self;
+}
+
+- (id) initWithFriend:(YTFriend*)f
+{
+    if(self = [super initWithNibName:nil bundle:nil]) {
+        self.friend = f;
+    }
+    return self;
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -67,24 +83,6 @@
 
 # pragma mark Interface initialization methods
 
-- (void)hideContactWidget
-{    
-    if (self.sendHelper.contactWidget.hidden == YES) {
-        return;
-    }
-        
-    UIView* contactWidget = self.sendHelper.contactWidget;
-    [UIView animateWithDuration:0.5 animations:^{
-        contactWidget.frame = CGRectMake(0, -contactWidget.frame.size.height, contactWidget.frame.size.width, contactWidget.frame.size.height);
-    } completion:^(BOOL finished) {
-        contactWidget.hidden = YES;
-    }];
-    
-    self.navigationItem.rightBarButtonItems = @[];
-    [self.navigationItem setHidesBackButton:NO animated:YES];
-}
-
-
 - (bool)fakeGab
 {
     if(self.gab == nil) return true;
@@ -92,13 +90,6 @@
     return g_id.integerValue < 0;
 }
 
-- (void)setGabId:(NSNumber*)gabId
-{
-    NSLog(@"set gab id: %@", gabId);
-    self.gab = [YTModelHelper gabForId:gabId];
-    
-    [self reloadData];
-}
 
 - (void)createAndSetGabWithData:(NSDictionary*)data
 {
@@ -113,19 +104,14 @@
         }
     }
     self.navigationController.viewControllers = views;
-    
+
+    //shouldn't this be setupView now?
     // Replace Cancel button with standard back button
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.hidesBackButton = NO;
-    
-    // FIXME: remove contact widget
-    [self hideContactWidget];
-    
-    [[YTContactHelper sharedInstance] filterRandomizedFriends];
-    //[YTViewHelper refreshViews];  Called by filterRandomizedFriends
 }
 
-- (void)loadGab
+- (void)setupView
 {
     if(self.gab) {
     
@@ -136,9 +122,7 @@
         if ([YTAppDelegate current].usesSplitView) {
             [YTAppDelegate current].currentMainViewController.selectedGabId = [self.gab valueForKey:@"id"];
         }
-        
-        [YTViewHelper refreshViews];
-        
+                
         BOOL gabSent = ![[self.gab valueForKey:@"sent"] isEqualToNumber:@0];
         
         if (!gabSent) {
@@ -184,12 +168,6 @@
 - (void)updateSendButton
 {
     [self.sendHelper updateButtons];
-}
-
-- (void)keyboardWillShowHide:(NSNotification *)notification hide:(BOOL)hide
-{
-    [super keyboardWillShowHide:notification hide:hide];
-    [self.sendHelper keyboardWillShowHide:notification];
 }
 
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
@@ -300,15 +278,12 @@
 {
     [super viewDidLoad];
     
-    //[self setBackgroundColor:[UIColor colorWithRed:0xfc/255.0 green:0xfc/255.0 blue:0xfc/255.0 alpha:1]];
     [self setBackgroundColor:[UIColor colorWithRed:0xed/255.0 green:0xec/255.0 blue:0xec/255.0 alpha:1]];
     
     self.inputView.image = [[YTHelper imageNamed:@"inputview3"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
     self.inputView.textView.layer.cornerRadius = 10;
     self.inputView.textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-    self.inputView.textView.layer.borderWidth = 1;
-    
-
+    self.inputView.textView.layer.borderWidth = 1;  
     
     self.photoHelper = [[YTGabPhotoHelper alloc] initWithGabView:self];
     self.clueHelper = [[YTGabClueHelper alloc] initWithGabView:self];
@@ -326,10 +301,15 @@
     [self.tableView addGestureRecognizer:rec];
     [self.tableView addGestureRecognizer:rec2];
     
-    [self loadGab];
+    [self setupView];
 
-    if(![self fakeGab] && [[self.gab valueForKey:@"needs_update"] boolValue])
-        [YTApiHelper syncGabWithId:[self.gab valueForKey:@"id"]];
+    if(![self fakeGab]) {
+        if([[self.gab valueForKey:@"needs_update"] boolValue])
+            [YTApiHelper syncGabWithId:[self.gab valueForKey:@"id"]];
+        else {
+            [self reloadData];
+        }
+    }
 }
 
 - (void)tapped
@@ -386,7 +366,6 @@
     if(!self.gab) {
         //first message!!
         //we need to fake up a gab, too.
-        NSDictionary* contact = self.sendHelper.contactWidget.selectedContact;
         NSNumber* val = [YTModelHelper nextFakeGabId];
         
         NSDateFormatter *formatter = [NSDateFormatter new];
@@ -398,16 +377,9 @@
             messageText = @"";
         
         //LINREVIEW dry with maincontroller
-        NSString* avatar_url = @"";
 
-        if ([contact[@"type"] isEqualToString:@"facebook"]) {
-            avatar_url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", contact[@"value"]];
-        } else if ([contact[@"type"] isEqualToString:@"gpp"]) {
-            avatar_url = [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=50", contact[@"value"]];
-        }
-        
-        NSDictionary* gabData = @{@"related_user_name": contact[@"name"],
-                                  @"related_avatar": avatar_url,
+        NSDictionary* gabData = @{@"related_user_name": self.friend.name,
+                                  @"related_avatar": self.friend.avatarUrl,
                                   @"sent":@true,
                                   @"clue_count":@0,
                                   @"id":val, @"total_count":@1, @"updated_at":dateStr,
@@ -471,114 +443,47 @@
     }
     else {
         //we need to start a new convo.
-        NSDictionary *contact = self.sendHelper.contactWidget.selectedContact;
 
-        if (![contact[@"type"] isEqualToString:@"facebook"] && ![contact[@"type"] isEqualToString:@"gpp"]) {
-            //LINREVIEW note that this never occurs right now because the contact picker doesn't allow
-            //non-fb people to show up
+        [[Mixpanel sharedInstance] track:@"Created Thread"];
+        
+        self.ongoingRequest = true;
+        NSMutableDictionary* params = [[NSMutableDictionary alloc] init];
+        
+        [params setValue:@{@"content": [message valueForKey:@"content"],
+         @"kind": [message valueForKey:@"kind"],
+         @"key": [message valueForKey:@"key"]} forKey:@"message"];
+        
+        if(self.friend.isFriend) {
+            [params setValue:@{@"id": self.friend.id} forKey:@"friendship"];
         }
         else {
-            [[Mixpanel sharedInstance] track:@"Created Thread"];
-            
-            self.ongoingRequest = true;
-            NSMutableDictionary* params = [[NSMutableDictionary alloc] init];
-
-            [params setValue:@{@"content": [message valueForKey:@"content"],
-             @"kind": [message valueForKey:@"kind"],
-             @"key": [message valueForKey:@"key"]} forKey:@"message"];
-            if(contact[@"id"]) {
-                [params setValue:@{@"id": contact[@"id"]} forKey:@"friendship"];
-            }
-            else {
-                [params setValue:@{@"id": contact[@"featured_id"]} forKey:@"featured"];
-            }
-            [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"POST" params:params
-                                       success:^(id JSON) {
-                                           //make it real!
-                                           id new_id = JSON[@"gab"][@"id"];
-                                           id old_id = [self.gab valueForKey:@"id"];
-                                           for(NSManagedObject* to in self.queuedMessages) {
-                                               [to setValue:new_id forKey:@"gab_id"];
-                                           }
-                                           [YTApiHelper deleteGab:old_id success:nil];
-                                           
-                                           self.gab = [YTModelHelper createOrUpdateGab:JSON[@"gab"]];
-                                           [self loadGab];
-                                           
-                                           [YTViewHelper refreshViews];
-                                           self.ongoingRequest = false;
-                                           [self handleNextQueuedMessage];
-                                           
+            [params setValue:@{@"id": self.friend.featured_id} forKey:@"featured"];
+        }
+        
+        [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"POST" params:params
+                                   success:^(id JSON) {
+                                       //make it real!
+                                       id new_id = JSON[@"gab"][@"id"];
+                                       id old_id = [self.gab valueForKey:@"id"];
+                                       for(NSManagedObject* to in self.queuedMessages) {
+                                           [to setValue:new_id forKey:@"gab_id"];
                                        }
-             
-                                       failure:^(id JSON) {
-                                           [YTViewHelper refreshViews];                                           
-                                           self.ongoingRequest = false;
-                                           [self handleNextQueuedMessage];
-                                           
-                                       }];
-        }
+                                       [YTApiHelper deleteGab:old_id success:nil];
+                                       
+                                       self.gab = [YTModelHelper createOrUpdateGab:JSON[@"gab"]];
+                                       [self setupView];
+                                       self.ongoingRequest = false;
+                                       [self handleNextQueuedMessage];
+                                       
+                                   }
+         
+                                   failure:^(id JSON) {
+                                       [YTViewHelper refreshViews];
+                                       self.ongoingRequest = false;
+                                       [self handleNextQueuedMessage];
+                                       
+                                   }];
     }
-}
-
-//TODO DRY this up and make it less ugly. we shouldn't use a delay and we should
-//add a block to the main thread
-
-- (void) showFBRequest
-{
-    NSDictionary *contact = self.sendHelper.contactWidget.selectedContact;
-    [YTFBHelper presentRequestDialogWithContact:contact[@"value"] complete:^{
-        [self dismiss];
-    }];
-}
-
-- (void) showGPPRequest
-{
-    [[YTGPPHelper sharedInstance] presentShareDialog];
-}
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{    
-    //at this point, some number of messages may be queued.
-    //we need to empty the unsent queue and cache messages.
-    //LINREVIEW is that the right UX?
-        
-    [self.queuedMessages removeAllObjects];
-    [YTApiHelper deleteGab:[self.gab valueForKey:@"id"] success:nil];
-    [YTViewHelper refreshViews];
-    
-    if(buttonIndex == 1) {
-        //"invite"
-        [[Mixpanel sharedInstance] track:@"Agreed To Invite Friend Instead Of Sending Message"];
-        
-        if ([[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"]) {
-            [self.inputView.textView resignFirstResponder]; //LINREVIEW brittle, no abstraction here
-            
-            //a half second delay is needed because of animation issues
-            [self performSelector:@selector(showFBRequest) withObject:nil afterDelay:0.5];
-            
-            [[Mixpanel sharedInstance] track:@"Agreed To Invite Facebook Friend Instead Of Sending Message"];
-
-        
-        } else {
-            //show the GPP generalized share
-            //TODO target the specific user
-            //a half second delay is needed because of animation issues
-            [self performSelector:@selector(showGPPRequest) withObject:nil afterDelay:0.5];
-            
-            [[Mixpanel sharedInstance] track:@"Agreed To Invite Google+ Friend Instead Of Sending Message"];
-
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"Sending messages to unregistered Google+ friends is not supported yet", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
-//            [alert show];
-            [self dismiss];            
-        }
-    }
-    else {
-        [[Mixpanel sharedInstance] track:@"Disagreed To Invite Friend Instead Of Sending Message"];
-
-        [self dismiss];
-    }
-
 }
 
 - (void)sendMessage:(NSManagedObject*)message

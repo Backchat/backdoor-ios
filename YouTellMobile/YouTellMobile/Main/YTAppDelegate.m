@@ -20,7 +20,6 @@
 #import "YTViewHelper.h"
 #import "YTFBHelper.h"
 #import "YTGPPHelper.h"
-#import "YTContactHelper.h"
 #import "YTHelper.h"
 #import "YTNotifHelper.h"
 #import "YTRateHelper.h"
@@ -69,8 +68,7 @@ void uncaughtExceptionHandler(NSException *exception)
     [YTFBHelper closeSession];
     
     [YTModelHelper changeStoreId:nil];
-    [[YTContactHelper sharedInstance] clearRandomizedFriendWithType:nil];
-    
+
     [YTApiHelper resetUserInfo];
     
     [YTViewHelper showLoginWithButtons];
@@ -102,12 +100,9 @@ void uncaughtExceptionHandler(NSException *exception)
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    
-    self.featuredUsers = @[];
-    
+        
     [YTApiHelper setup];
     [YTModelHelper setup];    
-    [[YTContactHelper sharedInstance] setup];
     [YTViewHelper setup];
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
 

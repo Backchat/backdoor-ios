@@ -48,10 +48,8 @@
 + (void)setUserAvailableClues:(NSNumber*)value;
 + (BOOL)userHasShared;
 
-+ (void)clearContactsWithType:(NSString*)type;
 + (void)addContactWithData:(NSDictionary*)data;
-+ (NSArray*)findContactsWithString:(NSString *)string;
-+ (NSManagedObject*)findContactWithType:(NSString *)type value:(NSString*)value;
++ (void)clearContactsWithSource:(NSString *)string;
 
 + (NSIndexPath*)indexPathForGab:(NSNumber*)gabId filter:(NSString*)filter;
 

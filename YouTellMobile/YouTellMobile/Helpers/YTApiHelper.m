@@ -23,7 +23,7 @@
 #import "YTApiHelper.h"
 #import "YTModelHelper.h"
 #import "YTViewHelper.h"
-#import "YTContactHelper.h"
+#import "YTFriends.h"
 #import "YTViewHelper.h"
 #import "YTTourViewController.h"
 
@@ -509,32 +509,88 @@ static bool new_user = false;
     } failure:nil];
 }
 
-+ (void)getFeaturedUsers
++ (void)addContact:(NSDictionary*)friend
+{    
+    NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+    [data setValue:friend[@"first_name"] forKey:@"first_name"];
+    [data setValue:friend[@"last_name"] forKey:@"last_name"];
+    
+    NSString* type = friend[@"type"];
+    if(!type)
+        type = friend[@"provider"];
+    [data setValue:type forKey:@"type"];
+    
+    NSString* value = friend[@"value"];
+    if(!value)
+        value = friend[@"social_id"];
+    [data setValue:value forKey:@"value"];
+    
+    [data setValue:NSLocalizedString(@"Facebook", nil) forKey:@"title"];
+
+    [data setValue:friend[@"friend_id"] forKey:@"friend_id"];
+    [data setValue:friend[@"id"] forKey:@"id"];
+    [data setValue:friend[@"featured_id"] forKey:@"featured_id"];
+    
+    NSString* source = [friend valueForKey:@"source"];
+    if(!source) {
+        if([friend valueForKey:@"id"]) {
+            source = @"friend";
+        }
+        else if([friend valueForKey:@"featured_id"]) {
+            source = @"featured";
+        }
+    }
+    
+    [data setValue:source forKey:@"source"];
+
+    NSString* full_name = friend[@"name"];
+    if(!full_name) {
+        full_name = [NSString stringWithFormat:@"%@ %@", friend[@"first_name"], friend[@"last_name"]];
+    }
+    [data setValue:full_name forKey:@"name"];
+    
+    [YTModelHelper addContactWithData:data];
+}
+
+
++ (void)getFeaturedUsers:(void(^)())success
 {
     if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"] && !CONFIG_DEBUG_FEATURED) {
-        [YTAppDelegate current].featuredUsers = @[];
         return;
     }
     
     [YTApiHelper sendJSONRequestToPath:@"/featured-users" method:@"GET" params:nil success:^(id JSON) {
-        [YTAppDelegate current].featuredUsers = JSON[@"users"];
-
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTViewHelper refreshViews];
-        }];
+        NSDictionary* users = JSON[@"users"];
+        if(!users)
+            return;
         
+        [YTModelHelper clearContactsWithSource:@"featured"];
+        
+        for (NSDictionary *u in users) {
+            [YTApiHelper addContact:u];
+        }
+
+        if(success)
+            success();                
     } failure:nil];
 }
 
-+ (void)getFriends
++ (void)getFriends:(void(^)())success
 {
     [YTApiHelper sendJSONRequestToPath:@"/friends" method:@"GET" params:nil success:^(id JSON) {
         
-        [[YTContactHelper sharedInstance] loadFriends:JSON[@"friends"]];
+        NSDictionary* friends = JSON[@"friends"];
+        if(!friends)
+            return;
+                
+        [YTModelHelper clearContactsWithSource:@"friend"];
 
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTViewHelper refreshViews];
-        }];
+        for (NSDictionary *friend in friends) {
+            [YTApiHelper addContact:friend];
+        }
+        
+        if(success)
+            success();
     } failure:nil];
 }
 

@@ -13,13 +13,15 @@
 #import <Mixpanel.h>
 
 #import "YTModelHelper.h"
-#import "YTContactHelper.h"
 #import "YTSocialHelper.h"
 #import "YTMainViewHelper.h"
 #import "YTHelper.h"
+#import "YTFriends.h"
 
 @interface YTNewGabViewController ()
-
+@property (strong, nonatomic) YTFriends* friends;
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UISearchBar *searchBar;
 @end
 
 @implementation YTNewGabViewController
@@ -37,7 +39,7 @@
 {
     [super viewDidLoad];
     
-    self.contacts = [[YTContactHelper sharedInstance] findContactsFlatWithString:@""];
+    self.friends = [[YTFriends alloc] init];
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height) style:UITableViewStylePlain];
     self.tableView.dataSource = self;
@@ -73,7 +75,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return self.contacts.count;
+        return self.friends.count;
     }
     
     if (section == 1) {
@@ -98,16 +100,18 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForUserAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *record = self.contacts[indexPath.row];
-    NSString *title = record[@"name"];
+    YTFriend* friend = [self.friends friendAtIndex:indexPath.row];
+    NSString *title = friend.name;
     NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation.", nil);
-    NSString *image = nil;
     NSString *time = @"";
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:[UIColor whiteColor]];
+    NSString* image = friend.isFriend ? nil : @"star2";
     
-    UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
-    [[YTContactHelper sharedInstance] showAvatarInImageView:avatarView forContact:record];
-    
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
+                                                                           image:image
+                                                                          avatar:friend.avatarUrl
+                             placeHolderImage:[YTHelper imageNamed:@"avatar6"]
+                             backgroundColor:nil];
+        
     return cell;
 }
 
@@ -116,14 +120,11 @@
     NSString *title = NSLocalizedString(@"Share", nil);
     NSString *subtitle = NSLocalizedString(@"Tap me to get more BD friends.", nil);
     NSString *time = @"";
-    NSString *image = nil;
+    NSString *image = @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png";
     
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:[UIColor whiteColor]];
-    
-    UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
-    
-    NSString *url = @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png";
-    [avatarView setImageWithURL:[NSURL URLWithString:url] placeholderImage:nil options:SDWebImageRefreshCached];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
+                                                                           image:@"" avatar:image placeHolderImage:[YTHelper imageNamed:@"avatar6"]
+                                                                 backgroundColor:nil];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -149,8 +150,7 @@
 
         [self.searchBar resignFirstResponder];
     
-        NSDictionary *contact = self.contacts[indexPath.row];
-        [YTViewHelper showGabWithReceiver:contact];
+        [YTViewHelper showGabWithFriend:[self.friends friendAtIndex:indexPath.row]];
         return;
     }
     
@@ -165,7 +165,7 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     [[Mixpanel sharedInstance] track:@"Used New Gab View / Search Bar"];
-    self.contacts = [[YTContactHelper sharedInstance] findContactsFlatWithString:searchText];
+    self.friends = [[YTFriends alloc] initWithSearchString:searchText];
     [self.tableView reloadData];
 }
 

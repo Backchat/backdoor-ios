@@ -229,7 +229,6 @@
 {
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
 
-
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Gabs"];
    
     NSError *error;
@@ -557,20 +556,18 @@ static int available_clues;
     return [[YTAppDelegate current].userInfo[@"settings"][@"has_shared"] boolValue];
 }
 
-+ (void)clearContactsWithType:(NSString *)type
++ (void)clearContactsWithSource:(NSString *)source
 {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Contacts"];
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
+    request.predicate = [NSPredicate predicateWithFormat:@"(source = %@)", source];
     NSError *error;
     NSArray *objects = [context executeFetchRequest:request error:&error];
-    
+
     for (NSManagedObject *object in objects) {
-        if (type == nil || [type isEqualToString:[object valueForKey:@"type"]]) {
-            [context deleteObject:object];
-        }
+        [context deleteObject:object];
     }
     
-    [context save:&error];
 }
 
 + (void)addContactWithData:(NSDictionary *)data
@@ -580,36 +577,6 @@ static int available_clues;
     for (NSString *key in [data allKeys]) {
         [object setValue:data[key] forKey:key];
     }    
-}
-
-+ (NSArray*)findContactsWithString:(NSString *)string
-{
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Contacts"];
-    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
-    
-    if (string && ![string isEqualToString:@""]) {
-        request.predicate = [NSPredicate predicateWithFormat:@"(name CONTAINS[cd] %@)", string];
-    }
-    
-    NSSortDescriptor *lastNameSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"last_name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
-    NSSortDescriptor *nameSortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
-    request.sortDescriptors = @[lastNameSortDescriptor, nameSortDescriptor];
-    
-    NSError *error;
-    return [context executeFetchRequest:request error:&error];
-}
-
-+ (NSManagedObject*)findContactWithType:(NSString *)type value:(NSString*)value;
-{
-    NSError *error;
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Contacts"];
-    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
-    request.predicate = [NSPredicate predicateWithFormat:@"(type = %@ AND value = %@)", type, value];
-    NSArray *objects = [context executeFetchRequest:request error:&error];
-    if(objects.count > 0)
-        return objects[0];
-    else
-        return nil;
 }
 
 + (NSString*)phoneForUid:(NSString*)uid

@@ -7,7 +7,7 @@
 
 #import "YTMainViewHelper.h"
 #import "YTHelper.h"
-
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <QuartzCore/QuartzCore.h>
 
 @implementation YTMainViewHelper
@@ -82,7 +82,8 @@
     return cell;
 }
 
-- (UITableViewCell *)cellWithTableView:(UITableView*)tableView title:(NSString*)title subtitle:(NSString*)subtitle time:(NSString*)time image:(NSString*)image backgroundColor:(UIColor*)backgroundColor
+- (UITableViewCell *)cellWithTableView:(UITableView*)tableView title:(NSString*)title subtitle:(NSString*)subtitle time:(NSString*)time
+                                 image:(NSString*)image avatar:(NSString*)avatar placeHolderImage:(UIImage*)placeHolderImage backgroundColor:(UIColor*)backgroundColor
 {
     UITableViewCell *cell = [self cellWithTableView:tableView];
     
@@ -90,7 +91,8 @@
     UILabel *textLabel = (UILabel*)[cell viewWithTag:2];
     UILabel *detTextLabel = (UILabel*)[cell viewWithTag:3];
     UIImageView *imageView = (UIImageView*)[cell viewWithTag:4];
-    
+    UIImageView* avatarView = (UIImageView*)[cell viewWithTag:5];
+
     // Update time label
     
     CGSize timeSize;
@@ -128,6 +130,20 @@
         imageView.image = nil;
         imageView.hidden = YES;
     }
+        
+    if (avatar) {
+        if([avatar rangeOfString:@"http"].location == NSNotFound) {
+            avatarView.image = [YTHelper imageNamed:avatar];
+        }
+        else {
+            [avatarView setImageWithURL:[NSURL URLWithString:avatar] placeholderImage:placeHolderImage options:SDWebImageRefreshCached];
+        }
+        avatarView.hidden = NO;
+    } else {
+        avatarView.image = nil;
+        avatarView.hidden = YES;
+    }
+
     
     [textLabel removeFromSuperview];
     [cell.contentView addSubview:textLabel];
