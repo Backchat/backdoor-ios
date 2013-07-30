@@ -237,7 +237,7 @@
     NSString *time = featured ? NSLocalizedString(@"Featured", nil) : @"";
     
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
-                                                                           image:@""
+                                                                           image:nil
                                                                           avatar:user.avatarUrl
                                                                 placeHolderImage:[YTHelper imageNamed:@"avatar6"]
                                                                  backgroundColor:nil];
@@ -248,7 +248,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForFriendAtRow:(NSInteger)row
 {
     YTFriend* f = [self.friends friendAtIndex:row];
-    NSLog(@"%@", f.name);
 
     UITableViewCell *cell = [self tableView:tableView cellForUser:f];
     
@@ -264,7 +263,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForUserAtRow:(NSInteger)row
 {
     YTFriend* c = [self.featuredUsers friendAtIndex:row];
-    NSLog(@"%@", c.name);
     return [self tableView:tableView cellForUser:c];
 }
 

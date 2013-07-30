@@ -161,7 +161,7 @@
     }];
 }
 
-+ (void)fetchFriends
++ (void)fetchFriends:(void(^)(YTContacts* c))success
 {
     FBRequest *request = [FBRequest requestForMyFriends];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -169,9 +169,23 @@
             NSLog(@"%@", error.debugDescription);
             return;
         }
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            //[[YTContactHelper sharedInstance] loadFacebookFriends:result[@"data"]];
-        }];
+        id friends = result[@"data"];
+        NSMutableArray* f = [NSMutableArray new];
+        if(friends) {
+            for(id friend in friends) {
+                YTContact* c = [YTContact new];
+                c.first_name = friend[@"first_name"];
+                c.last_name = friend[@"last_name"];
+                c.value = friend[@"id"];
+                c.type = @"facebook";
+
+                [f addObject: c];
+            }
+        }
+
+        if(success) {
+            success([[YTContacts alloc] initWithArray:f]);
+        }
 
     }];
 }

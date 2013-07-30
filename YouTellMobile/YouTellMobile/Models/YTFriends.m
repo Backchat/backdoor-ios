@@ -63,6 +63,17 @@
     return self;
 }
 
+- (YTFriend*) findFriendByValue:(NSString*)value
+{
+    //TODO use query?
+    for(YTFriend* f in self.items) {
+        if([f.value isEqualToString:value])
+            return f;
+    }
+    
+    return nil;
+}
+
 - (id)initWithSearchString:(NSString*)search
 {
     if(self = [super init]) {

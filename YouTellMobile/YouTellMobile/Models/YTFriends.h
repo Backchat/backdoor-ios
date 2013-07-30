@@ -17,4 +17,5 @@
 - (id)initWithFeaturedUsers;
 - (int) count;
 - (YTFriend*) friendAtIndex:(int)index;
+- (YTFriend*) findFriendByValue:(NSString*)value;
 @end

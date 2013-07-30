@@ -17,9 +17,13 @@
 #import "YTMainViewHelper.h"
 #import "YTHelper.h"
 #import "YTFriends.h"
+#import "YTFBHelper.h"
 
 @interface YTNewGabViewController ()
 @property (strong, nonatomic) YTFriends* friends;
+@property (strong, nonatomic) YTContacts* contacts;
+@property (strong, nonatomic) YTContacts* filteredContacts;
+
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UISearchBar *searchBar;
 @end
@@ -63,7 +67,17 @@
     [self.view addSubview:self.tableView];
     
     self.title = NSLocalizedString(@"New Message", nil);
+    
+    self.contacts = nil;
+    
+    [YTFBHelper fetchFriends:^(YTContacts *c) {
+        self.contacts = [[YTContacts alloc] initWithContacts:c excludingFriends:[[YTFriends alloc] init]];
+        self.filteredContacts = [[YTContacts alloc] initWithContacts:self.contacts withFilter:self.searchBar.text];
+        
+        [self.tableView reloadData];
+    }];
 }
+
 
 - (void)cancelButtonWasClicked
 {
@@ -74,28 +88,42 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return self.friends.count;
+    switch(section) {
+        case 0: return self.friends.count;
+        case 1:
+            if(self.contacts)
+                return self.filteredContacts.count;
+            else
+                return 0;
+        case 2: return 1;
+        default: return 0;
     }
-    
-    if (section == 1) {
-        return 1;
-    }
-    
-    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return [self tableView:tableView cellForUserAtIndexPath:indexPath];
+    switch(indexPath.section) {
+        case 0: return [self tableView:tableView cellForUserAtIndexPath:indexPath];
+        case 1: return [self tableView:tableView cellForContactAtIndexPath:indexPath];
+        case 2: return [self tableView:tableView cellForShareAtRow:0];
+        default: return nil;
     }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForContactAtIndexPath:(NSIndexPath *)indexPath
+{
+    YTContact* c = [self.filteredContacts contactAtIndex:indexPath.row];
+    NSString *title = c.name;
+    NSString *subtitle = NSLocalizedString(@"Tap to invite me to Backdoor", nil);
+    NSString *time = c.localizedType;
     
-    if (indexPath.section == 1) {
-        return [self tableView:tableView cellForShareAtRow:0];
-    }
-    
-    return nil;
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
+                                                                           image:nil
+                                                                          avatar:c.avatarUrl
+                                                                placeHolderImage:[YTHelper imageNamed:@"avatar6"]
+                             backgroundColor:[UIColor colorWithRed:234.0/255.0 green:242.0/255.0 blue:246.0/255.0 alpha:1.0]];
+
+    return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForUserAtIndexPath:(NSIndexPath *)indexPath
@@ -138,26 +166,26 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if (indexPath.section == 0) {
-        [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Friend Item"];
-
-        [self.searchBar resignFirstResponder];
-    
-        [YTViewHelper showGabWithFriend:[self.friends friendAtIndex:indexPath.row]];
-        return;
-    }
-    
-    if (indexPath.section == 1) {
-        [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Share Item"];
-        [[YTSocialHelper sharedInstance] presentShareDialog];
-        return;
+    switch(indexPath.section) {
+        case 0:
+            [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Friend Item"];
+            [YTViewHelper showGabWithFriend:[self.friends friendAtIndex:indexPath.row]];
+            return;
+        case 1:
+            //TODO
+        case 2:
+            [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Share Item"];
+            [[YTSocialHelper sharedInstance] presentShareDialog];
+            return;
+        default:
+            return;
     }
 }
 
@@ -166,6 +194,7 @@
 {
     [[Mixpanel sharedInstance] track:@"Used New Gab View / Search Bar"];
     self.friends = [[YTFriends alloc] initWithSearchString:searchText];
+    self.filteredContacts = [[YTContacts alloc] initWithContacts:self.contacts withFilter:searchText];
     [self.tableView reloadData];
 }
 
