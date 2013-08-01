@@ -7,6 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class YTContact;
+
 @interface YTApiHelper : NSObject
 
 + (void)setup;
@@ -56,5 +58,5 @@
 + (void)updateSettingsWithKey:(NSString*)key value:(id)value;
 + (void)checkUpdates;
 
-
++ (void)sendInviteText:(YTContact*)contact body:(NSString*)body success:(void(^)(id JSON))success;
 @end

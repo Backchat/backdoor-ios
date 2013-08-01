@@ -214,10 +214,6 @@
     NSString *time = [YTHelper formatDate:[object valueForKey:@"updated_at"]];
     NSString *image = read ? nil : @"newgab2";
     NSString* avatar = (NSString*)[object valueForKey:@"related_avatar"];
-    if(avatar.length == 0) {
-        //anonymous side
-        avatar = @"avatar6";
-    }
     
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
                                                                            image:image

@@ -27,6 +27,8 @@
 #import "YTViewHelper.h"
 #import "YTTourViewController.h"
 
+#import "YTContact.h"
+
 @implementation YTApiHelper
 
 + (void)setup
@@ -641,6 +643,21 @@ static bool new_user = false;
     NSString *title = NSLocalizedString(@"Maintenance mode", nil);
     NSString *message = NSLocalizedString(@"Our server is currently undergoing a scheduled maintenance. Please try again later.", nil);
     [YTViewHelper showAlertWithTitle:title message:message];
+}
+
++ (void)sendInviteText:(YTContact*)contact body:(NSString*)body success:(void(^)(id JSON))success
+{
+    [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Sending invite", nil)
+                                                 path:@"/invite" method:@"POST"
+                                               params:
+     @{@"invite": @{@"body": body},
+     @"contact": @{@"phone_number": contact.phone_number}}
+                                              success:^(id JSON) {
+                                                  if(success)
+                                                      success(JSON);
+                                              } failure:^(id JSON) {                                                  
+                                                  
+                                              }];
 }
 
 @end

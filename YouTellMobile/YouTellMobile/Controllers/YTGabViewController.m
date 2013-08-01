@@ -105,7 +105,6 @@
     }
     self.navigationController.viewControllers = views;
 
-    //shouldn't this be setupView now?
     // Replace Cancel button with standard back button
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.hidesBackButton = NO;
