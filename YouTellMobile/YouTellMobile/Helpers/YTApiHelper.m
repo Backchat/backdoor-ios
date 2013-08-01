@@ -620,7 +620,7 @@ static bool new_user = false;
 + (void)sendInviteText:(YTContact*)contact body:(NSString*)body success:(void(^)(id JSON))success
 {
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Sending invite", nil)
-                                                 path:@"/invite" method:@"POST"
+                                                 path:@"/invites" method:@"POST"
                                                params:
      @{@"invite": @{@"body": body},
      @"contact": @{@"phone_number": contact.phone_number}}
