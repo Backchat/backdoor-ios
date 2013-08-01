@@ -214,9 +214,6 @@
     } else {
         delegate.navController.viewControllers = @[controller];
         
-       // delegate.currentMainViewController = nil;
-       // delegate.currentGabViewController = nil;
-
         [YTViewHelper showFeedback];
     }
 

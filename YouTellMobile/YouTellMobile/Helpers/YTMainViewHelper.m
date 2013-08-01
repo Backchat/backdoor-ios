@@ -139,8 +139,14 @@
         }
         avatarView.hidden = NO;
     } else {
-        avatarView.image = nil;
-        avatarView.hidden = YES;
+        if(placeHolderImage) {
+            avatarView.image = placeHolderImage;
+            avatarView.hidden = NO;
+        }
+        else {
+            avatarView.image = nil;
+            avatarView.hidden = YES;
+        }
     }
 
     for (UIView *view in cell.contentView.subviews) {

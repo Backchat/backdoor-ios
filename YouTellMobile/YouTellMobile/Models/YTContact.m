@@ -13,6 +13,24 @@
 @synthesize first_name;
 @synthesize last_name;
 @synthesize value;
+@synthesize phone_number;
+@synthesize type;
+@synthesize image;
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    YTContact* copy = [[[self class] alloc] init];
+    
+    if (copy) {
+        copy.first_name = [self.first_name copyWithZone:zone];
+        copy.last_name = [self.last_name copyWithZone:zone];
+        copy.value = [self.value copyWithZone:zone];
+        copy.type = [self.type copyWithZone:zone];
+        copy.phone_number = [self.phone_number copyWithZone:zone];
+    }
+    
+    return copy;
+}
 
 - (NSString*) name
 {
@@ -39,7 +57,5 @@
     else
         return nil;
 }
-
-@synthesize type;
 
 @end

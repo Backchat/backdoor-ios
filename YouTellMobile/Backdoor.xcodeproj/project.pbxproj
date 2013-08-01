@@ -13,6 +13,10 @@
 		3E208B2317A7D076000FF02C /* YTFriends.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E208B2117A7D076000FF02C /* YTFriends.m */; };
 		3E5D6E2917A85D0300C45EEF /* YTContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D6E2517A85D0300C45EEF /* YTContact.m */; };
 		3E5D6E2A17A85D0300C45EEF /* YTContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D6E2817A85D0300C45EEF /* YTContacts.m */; };
+		3E5D6E2E17A87BC200C45EEF /* YTInviteContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D6E2C17A87BC100C45EEF /* YTInviteContactViewController.m */; };
+		3E5D6E2F17A87BC200C45EEF /* YTInviteContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5D6E2D17A87BC100C45EEF /* YTInviteContactViewController.xib */; };
+		3E5D6E3217A89EA900C45EEF /* YTAddressBookHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D6E3117A89EA800C45EEF /* YTAddressBookHelper.m */; };
+		3E5D6E3A17A8E45600C45EEF /* YTInviteContactComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E5D6E3917A8E45500C45EEF /* YTInviteContactComposeViewController.m */; };
 		3E9F69161761407D00374616 /* YTGabMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F69151761407C00374616 /* YTGabMessage.m */; };
 		3EE9159A176815AE0090371C /* gpp_tableitem3.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EE91598176815AE0090371C /* gpp_tableitem3.png */; };
 		3EE9159B176815AE0090371C /* gpp_tableitem3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EE91599176815AE0090371C /* gpp_tableitem3@2x.png */; };
@@ -404,6 +408,13 @@
 		3E5D6E2617A85D0300C45EEF /* YTContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTContact.h; path = Models/YTContact.h; sourceTree = "<group>"; };
 		3E5D6E2717A85D0300C45EEF /* YTContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTContacts.h; path = Models/YTContacts.h; sourceTree = "<group>"; };
 		3E5D6E2817A85D0300C45EEF /* YTContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTContacts.m; path = Models/YTContacts.m; sourceTree = "<group>"; };
+		3E5D6E2B17A87BC000C45EEF /* YTInviteContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTInviteContactViewController.h; sourceTree = "<group>"; };
+		3E5D6E2C17A87BC100C45EEF /* YTInviteContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTInviteContactViewController.m; sourceTree = "<group>"; };
+		3E5D6E2D17A87BC100C45EEF /* YTInviteContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YTInviteContactViewController.xib; sourceTree = "<group>"; };
+		3E5D6E3017A89EA700C45EEF /* YTAddressBookHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTAddressBookHelper.h; path = Helpers/YTAddressBookHelper.h; sourceTree = "<group>"; };
+		3E5D6E3117A89EA800C45EEF /* YTAddressBookHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTAddressBookHelper.m; path = Helpers/YTAddressBookHelper.m; sourceTree = "<group>"; };
+		3E5D6E3817A8E45400C45EEF /* YTInviteContactComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTInviteContactComposeViewController.h; sourceTree = "<group>"; };
+		3E5D6E3917A8E45500C45EEF /* YTInviteContactComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTInviteContactComposeViewController.m; sourceTree = "<group>"; };
 		3E9F69141761407C00374616 /* YTGabMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabMessage.h; path = Helpers/YTGabMessage.h; sourceTree = "<group>"; };
 		3E9F69151761407C00374616 /* YTGabMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabMessage.m; path = Helpers/YTGabMessage.m; sourceTree = "<group>"; };
 		3EE91598176815AE0090371C /* gpp_tableitem3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gpp_tableitem3.png; sourceTree = "<group>"; };
@@ -1215,6 +1226,8 @@
 				B2E68F5F172CE13A00914B40 /* YTTwitterHelper.m */,
 				B2C9E6E716F48D3E00B589E2 /* YTViewHelper.h */,
 				B2C9E6E816F48D3E00B589E2 /* YTViewHelper.m */,
+				3E5D6E3017A89EA700C45EEF /* YTAddressBookHelper.h */,
+				3E5D6E3117A89EA800C45EEF /* YTAddressBookHelper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1327,6 +1340,11 @@
 				B2C9D14816FF3137002DDE4F /* YTWebViewController.h */,
 				B2C9D14916FF3137002DDE4F /* YTWebViewController.m */,
 				B2C9D14A16FF3137002DDE4F /* YTWebViewController.xib */,
+				3E5D6E2B17A87BC000C45EEF /* YTInviteContactViewController.h */,
+				3E5D6E2C17A87BC100C45EEF /* YTInviteContactViewController.m */,
+				3E5D6E2D17A87BC100C45EEF /* YTInviteContactViewController.xib */,
+				3E5D6E3817A8E45400C45EEF /* YTInviteContactComposeViewController.h */,
+				3E5D6E3917A8E45500C45EEF /* YTInviteContactComposeViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1733,6 +1751,7 @@
 				B29B6AE8178755F800E9E197 /* newgab2.png in Resources */,
 				B29B6AEB178758AE00E9E197 /* more2.png in Resources */,
 				B29B6AEC178758AE00E9E197 /* more2@2x.png in Resources */,
+				3E5D6E2F17A87BC200C45EEF /* YTInviteContactViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1837,6 +1856,9 @@
 				3E208B2317A7D076000FF02C /* YTFriends.m in Sources */,
 				3E5D6E2917A85D0300C45EEF /* YTContact.m in Sources */,
 				3E5D6E2A17A85D0300C45EEF /* YTContacts.m in Sources */,
+				3E5D6E2E17A87BC200C45EEF /* YTInviteContactViewController.m in Sources */,
+				3E5D6E3217A89EA900C45EEF /* YTAddressBookHelper.m in Sources */,
+				3E5D6E3A17A8E45600C45EEF /* YTInviteContactComposeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 //
 
 #import "YTContacts.h"
+#import <AddressBook/AddressBook.h>
 
 @interface YTContacts ()
 @property (nonatomic, retain) NSMutableArray* contacts;

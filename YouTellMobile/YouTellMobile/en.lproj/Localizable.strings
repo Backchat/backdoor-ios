@@ -152,7 +152,9 @@
 "Input name for anonymous user" = "Input name for anonymous user";
 
 /* No comment provided by engineer. */
-"Invite" = "Share";
+"Invite" = "Invite";
+
+"Share" = "Share";
 
 /* No comment provided by engineer. */
 "Invite on Facebook" = "Invite on Facebook";

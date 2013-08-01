@@ -17,5 +17,4 @@
 - (id)initWithArray:(NSArray*)array;
 - (id)initWithContacts:(YTContacts*)contacts excludingFriends:(YTFriends*)friends;
 - (id)initWithContacts:(YTContacts*)contacts withFilter:(NSString*)filter;
-
 @end

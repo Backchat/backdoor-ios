@@ -18,6 +18,7 @@
 #import "YTHelper.h"
 #import "YTFriends.h"
 #import "YTFBHelper.h"
+#import "YTInviteContactViewController.h"
 
 @interface YTNewGabViewController ()
 @property (strong, nonatomic) YTFriends* friends;
@@ -26,6 +27,7 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UISearchBar *searchBar;
+@property (strong, nonatomic) UIActivityIndicatorView* spinner;
 @end
 
 @implementation YTNewGabViewController
@@ -35,6 +37,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
     }
     return self;
 }
@@ -65,10 +68,14 @@
     self.title = NSLocalizedString(@"New Message", nil);
     
     self.contacts = nil;
-    
+
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+               UIActivityIndicatorViewStyleGray];
+
     [YTFBHelper fetchFriends:^(YTContacts *c) {
         self.contacts = [[YTContacts alloc] initWithContacts:c excludingFriends:[[YTFriends alloc] init]];
         self.filteredContacts = [[YTContacts alloc] initWithContacts:self.contacts withFilter:self.searchBar.text];
+        
         
         [self.tableView reloadData];
     }];
@@ -90,7 +97,7 @@
             if(self.contacts)
                 return self.filteredContacts.count;
             else
-                return 0;
+                return 1;
         case 2: return 1;
         default: return 0;
     }
@@ -108,17 +115,40 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForContactAtIndexPath:(NSIndexPath *)indexPath
 {
-    YTContact* c = [self.filteredContacts contactAtIndex:indexPath.row];
-    NSString *title = c.name;
-    NSString *subtitle = NSLocalizedString(@"Tap to invite me to Backdoor", nil);
-    NSString *time = c.localizedType;
+    NSString *title = @"";
+    NSString *subtitle = @"";
+    NSString *time = @"";
+    NSString* avatarUrl = nil;
+    UIImage* placeHolder =nil;
+
+    if(self.contacts) {
+        YTContact* c = [self.filteredContacts contactAtIndex:indexPath.row];
+        title = c.name;
+        subtitle = NSLocalizedString(@"Send anonymous text to invite", nil);
+        time = c.localizedType;
+        placeHolder = [YTHelper imageNamed:@"avatar6"];
+        avatarUrl = c.avatarUrl;
+    }
     
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
                                                                            image:nil
-                                                                          avatar:c.avatarUrl
-                                                                placeHolderImage:[YTHelper imageNamed:@"avatar6"]];
+                                                                          avatar:avatarUrl
+                                                                placeHolderImage:placeHolder];
+    
     cell.backgroundView = [[UIView alloc] initWithFrame:cell.frame];
     cell.backgroundView.backgroundColor = [UIColor colorWithRed:234.0/255.0 green:242.0/255.0 blue:246.0/255.0 alpha:1.0];
+    
+    if(!self.contacts) {
+        int width = 32, height = 32;
+        self.spinner.frame = CGRectMake(
+                                   (self.view.frame.size.width - width) / 2,
+                                   (cell.frame.size.height - height) / 2,
+                                   width, height);
+        [self.spinner removeFromSuperview];
+        [cell addSubview:self.spinner];
+        [self.spinner startAnimating];        
+    }
+    
     return cell;
 }
 
@@ -133,7 +163,7 @@
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
                                                                            image:image
                                                                           avatar:friend.avatarUrl
-                             placeHolderImage:[YTHelper imageNamed:@"avatar6"]];
+                                                                placeHolderImage:[YTHelper imageNamed:@"avatar6"]];
         
     return cell;
 }
@@ -145,8 +175,13 @@
     NSString *time = @"";
     NSString *image = @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png";
     
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
-                                                                           image:@"" avatar:image placeHolderImage:[YTHelper imageNamed:@"avatar6"]];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView
+                                                                           title:title
+                                                                        subtitle:subtitle
+                                                                            time:time
+                                                                           image:nil
+                                                                          avatar:image
+                                                                placeHolderImage:nil];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -173,7 +208,13 @@
             [YTViewHelper showGabWithFriend:[self.friends friendAtIndex:indexPath.row]];
             return;
         case 1:
-            //TODO
+        {
+            [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Invite FB Friend Item"];
+            YTInviteContactViewController* invite = [YTInviteContactViewController new];
+            invite.contact = [self.filteredContacts contactAtIndex:indexPath.row];
+            [[YTAppDelegate current].navController pushViewController:invite animated:YES];
+            return;
+        }
         case 2:
             [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Share Item"];
             [[YTSocialHelper sharedInstance] presentShareDialog];
