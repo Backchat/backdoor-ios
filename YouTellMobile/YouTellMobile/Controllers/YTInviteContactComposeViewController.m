@@ -106,7 +106,7 @@
 {
     [super viewWillAppear:animated];
     self.phone.text = self.contact.phone_number;
-    self.textView.text = @"Someone you know wants you to try Backdoor! Anonymously message your friends. http://backdoor.com";
+    self.textView.text = @"Someone you know wants you to try Backdoor! Anonymously message your friends. http://backdoorapp.com";
     [self.textView becomeFirstResponder];
 }
 
