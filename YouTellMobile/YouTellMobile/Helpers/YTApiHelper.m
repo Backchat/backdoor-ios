@@ -45,6 +45,7 @@
     delegate.sentInfo = [NSMutableDictionary new];
     delegate.userInfo = [NSMutableDictionary new];
     delegate.userInfo[@"device_token"] = deviceToken;
+    delegate.userInfo[@"email"] = @"";
     delegate.userInfo[@"fb_data"] = [NSMutableDictionary new];
     delegate.userInfo[@"gpp_data"] = [NSMutableDictionary new];
     delegate.userInfo[@"settings"] = [NSMutableDictionary new];
@@ -209,7 +210,7 @@
         });
         [[YTAppDelegate current].userInfo removeObjectForKey:@"launch_on_active_token"];
     }
-    [self getFriends];
+    [self getFriends:nil];
 }
 
 + (void)login:(void(^)(id JSON))success
@@ -501,7 +502,7 @@ static bool new_user = false;
     } failure:nil];
 }
 
-+ (void)getFriends
++ (void)getFriends:(void(^)(id JSON))success
 {
     [YTApiHelper sendJSONRequestToPath:@"/friends" method:@"GET" params:nil success:^(id JSON) {
         
@@ -509,6 +510,10 @@ static bool new_user = false;
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [YTViewHelper refreshViews];
+            
+            if(success) {
+                success(JSON);
+            }
         }];
     } failure:nil];
 }

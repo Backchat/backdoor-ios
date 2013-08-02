@@ -79,6 +79,7 @@
         delegate.userInfo[@"provider"] = @"gpp";
         delegate.userInfo[@"access_token"] = auth.accessToken;
         delegate.userInfo[@"gpp_data"][@"email"] = auth.userEmail;
+        delegate.userInfo[@"email"] = auth.userEmail;
         [YTApiHelper login:^(id JSON) {
             [self fetchUserData];
         }];

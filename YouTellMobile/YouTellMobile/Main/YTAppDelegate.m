@@ -10,7 +10,7 @@
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
 #import <Instabug/Instabug.h>
-#import <iRate.h>
+#import <iRate/iRate.h>
 #import <iVersion/iVersion.h>
 
 #import "YTAppDelegate.h"

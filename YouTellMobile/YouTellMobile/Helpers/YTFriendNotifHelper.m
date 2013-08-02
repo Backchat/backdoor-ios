@@ -7,6 +7,8 @@
 //
 
 #import "YTFriendNotifHelper.h"
+#import "YTAppDelegate.h"
+#import "YTApiHelper.h"
 #import "YTContactHelper.h"
 
 #import "YTViewHelper.h"
@@ -27,17 +29,34 @@
 
 - (void)handleNotification:(NSDictionary *)data
 {
-    [[Mixpanel sharedInstance] track:@"Received A New Friend Notification"];
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    
+    NSString *receiverEmail = data[@"receiver_email"];
+    if (!receiverEmail || ![receiverEmail isEqualToString:delegate.userInfo[@"email"]]) {
+        return;
+    }
+    
+    [YTApiHelper getFriends:^(id JSON) {
+        
+        self.contact = [[YTContactHelper sharedInstance] findContactWithType:data[@"provider"] value:data[@"social_id"]];
+        
+        if (!self.contact) {
+            return;
+        }
+        
+        [[Mixpanel sharedInstance] track:@"Received A New Friend Notification"];
+        
+        NSString *messageFormat = NSLocalizedString(@"%@ just joined Backdoor! Send him a message!", nil);
+        NSString *name = self.contact[@"name"];
+        NSString *message = [NSString stringWithFormat:messageFormat, name];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles: NSLocalizedString(@"OK", nil), nil];
+        alert.delegate = self;
+        [alert show];
+        
+    }];
+    
 
-    NSString *messageFormat = NSLocalizedString(@"%@ just joined Backdoor! Send him a message!", nil);
-    NSString *name = data[@"name"];
-    NSString *message = [NSString stringWithFormat:messageFormat, name];
-    
-    self.data = data;
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles: NSLocalizedString(@"OK", nil), nil];
-    alert.delegate = self;
-    [alert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -48,14 +67,8 @@
     }
     
     [[Mixpanel sharedInstance] track:@"Agreed To Send A Message To A New Friend"];
-    
-    NSDictionary *contact = [[YTContactHelper sharedInstance] findContactWithType:self.data[@"provider"] value:self.data[@"social_id"]];
-    
-    if (!contact) {
-        return;
-    }
-    
-    [YTViewHelper showGabWithReceiver:contact];    
+
+    [YTViewHelper showGabWithReceiver:self.contact];
 }
 
 @end

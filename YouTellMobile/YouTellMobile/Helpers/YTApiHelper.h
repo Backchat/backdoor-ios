@@ -49,7 +49,7 @@
 + (void)buyCluesWithReceipt:(NSString *)receipt success:(void(^)(id JSON))success;
 + (void)getFreeCluesWithReason:(NSString *)reason;
 + (void)getFeaturedUsers;
-+ (void)getFriends;
++ (void)getFriends:(void(^)(id JSON))success;
 + (void)updateSettingsWithKey:(NSString*)key value:(id)value;
 + (void)checkUpdates;
 

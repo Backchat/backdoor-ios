@@ -116,7 +116,7 @@
     } else {
         if ([delegate.navController.topViewController isKindOfClass:[YTGabViewController class]]) {
             YTGabViewController *gabView = (YTGabViewController*)delegate.navController.topViewController;
-            if ([[gabView.gab valueForKey:@"id"] isEqualToNumber:gabId]) {
+            if (gabId && [[gabView.gab valueForKey:@"id"] isEqualToNumber:gabId]) {
                 return;
             }
         }

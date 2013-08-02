@@ -54,7 +54,7 @@
 {
     [YTApiHelper syncGabs];
     [YTApiHelper getFeaturedUsers];
-    [YTApiHelper getFriends];
+    [YTApiHelper getFriends:nil];
 }
 
 - (void)composeButtonWasClicked
