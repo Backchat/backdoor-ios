@@ -132,7 +132,7 @@
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             NSLog(@"Logged in as %@", result[@"name"]);
             delegate.userInfo[@"fb_data"] = [NSMutableDictionary dictionaryWithDictionary:result];
-            [YTModelHelper changeStoreId:result[@"email"]];
+            [YTModelHelper changeStoreId:email];
             [YTFBHelper fetchFamily];
             [YTFBHelper fetchInterests];
             [YTFBHelper fetchLikes];
