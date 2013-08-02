@@ -2184,7 +2184,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"_AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_=1",
-					CONFIGURATION_Release,
+					CONFIGURATION_Stage,
 					"CONFIG_URL=\\@\\\"https://backdoor-stage.herokuapp.com/\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461-kiu3nt3onpdh8o89idagr66r1rgbh8k8.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"06e542f53ddbd2430aac9c4664e5903f\\\"",
