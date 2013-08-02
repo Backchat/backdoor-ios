@@ -9,6 +9,9 @@
 
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
+#import <Instabug/Instabug.h>
+#import <iRate/iRate.h>
+#import <iVersion/iVersion.h>
 
 #import "YTAppDelegate.h"
 #import "YTGabViewController.h"

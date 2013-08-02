@@ -10,7 +10,7 @@
 
 @interface YTFriendNotifHelper : YTViewHelper <UIAlertViewDelegate>
 
-@property (strong, nonatomic) NSDictionary *data;
+@property (strong, nonatomic) NSDictionary *contact;
 
 + (YTFriendNotifHelper*)sharedInstance;
 - (void)handleNotification:(NSDictionary *)data;
