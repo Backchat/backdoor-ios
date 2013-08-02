@@ -108,6 +108,17 @@
             return;
         }
         
+        YTAppDelegate *delegate = [YTAppDelegate current];
+        NSString *email = delegate.userInfo[@"gpp_data"][@"email"];
+        
+        [[Mixpanel sharedInstance] identify:email];
+        [Instabug setUserDataString:email];
+
+        
+        if (delegate.deviceToken) {
+            [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
+        }
+        
         if ([person.gender isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];
             [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
@@ -118,7 +129,8 @@
         
         NSInteger age = [YTHelper ageWithBirthdayString:[person JSON][@"birthday"] format:@"yyyy-MM-dd"];
         
-        [[Mixpanel sharedInstance].people set:@{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName, @"$email": [YTAppDelegate current].userInfo[@"gpp_data"][@"email"], @"Age": [NSNumber numberWithInt:age], @"Google+ Id": person.identifier}];
+        NSDictionary *userData = @{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName, @"$email": email, @"Age": [NSNumber numberWithInt:age], @"Google+ Id": person.identifier};
+        [[Mixpanel sharedInstance].people set:userData];
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
         
        
