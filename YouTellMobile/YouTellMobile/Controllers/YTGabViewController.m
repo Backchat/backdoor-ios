@@ -373,13 +373,14 @@
 
 - (void)queueMessage:(NSString*)text ofKind:(NSInteger)kind
 {
+    NSDictionary* contact = self.sendHelper.contactWidget.selectedContact;
+
     /* everything is executed on the main thread. we have no need for a lock */
     YTGabMessage* message = [YTGabMessage messageWithContent:text andKind:kind];
     
     if(self.messages.count == 0) {
         //first message!!
         //we need to fake up a gab, too.
-        NSDictionary* contact = self.sendHelper.contactWidget.selectedContact;
         NSNumber* val = [YTModelHelper nextFakeGabId];
         
         NSDateFormatter *formatter = [NSDateFormatter new];

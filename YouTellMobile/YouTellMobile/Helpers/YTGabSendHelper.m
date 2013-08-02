@@ -108,6 +108,10 @@
 
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
+    if (!self.gabView.sendHelper.contactWidget.selectedContact) {
+        // It shouldn't happen in recent versions
+        return;
+    }
     [self.gabView.inputView.textView setText:nil];
     [self.gabView textViewDidChange:self.gabView.inputView.textView];
     [self.gabView queueMessage:text ofKind:YTMessageKindText];
