@@ -86,13 +86,23 @@
     //TODO need to keep on throwing up that message
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         
-        if (error) {
+        if (error || !result) {
             NSLog(@"%@", error.debugDescription);
             return;
         }
-        
-        [[Mixpanel sharedInstance] identify:result[@"id"]];
-        [Instabug setUserDataString:result[@"id"]];
+
+        NSString *uid = result[@"id"];
+
+        if (!uid) {
+            // FIXME: is it possible?
+            NSLog(@"Facebook returned no user id");
+            return;
+        }
+
+        NSString *email = result[@"email"] ? result[@"email"] : [NSString stringWithFormat:@"%@@facebook.com", uid];
+
+        [[Mixpanel sharedInstance] identify:email];
+        [Instabug setUserDataString:email];
         
         if (delegate.deviceToken) {
             [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
@@ -113,9 +123,13 @@
             [Flurry setAge:age];
             [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
         }
-        [[Mixpanel sharedInstance].people set:@{@"$email": result[@"email"], @"$first_name": result[@"first_name"], @"$last_name": result[@"last_name"], @"Facebook Id": result[@"id"]}];
+
+        NSString *firstName = result[@"first_name"] ? result[@"first_name"] : @"";
+        NSString *lastName = result[@"last_name"] ? result[@"last_name"] : @"";
+        NSDictionary *userData = @{@"$email": email, @"$first_name": firstName, @"$last_name": lastName, @"Facebook Id": uid};
+        [[Mixpanel sharedInstance].people set:userData];
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
-        
+
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             NSLog(@"Logged in as %@", result[@"name"]);
             delegate.userInfo[@"fb_data"] = [NSMutableDictionary dictionaryWithDictionary:result];
