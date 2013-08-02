@@ -48,10 +48,12 @@ void uncaughtExceptionHandler(NSException *exception)
 + (void)initialize
 {
 #ifdef CONFIGURATION_Release
+    NSLog(@"icheck");
     [iVersion sharedInstance].appStoreID = CONFIG_APPLE_ID_INT;
 #else
     [iVersion sharedInstance].checkAtLaunch = NO;
 #endif
+    [[YTRateHelper sharedInstance] setup];
 }
 
 - (void)signOut
@@ -139,7 +141,6 @@ void uncaughtExceptionHandler(NSException *exception)
     [Instabug setTextBackgroundColor:[UIColor colorWithRed:(249/255.0) green:(249/255.0) blue:(249/255.0) alpha:1.0]];
     [Instabug setTextFontColor:[UIColor colorWithRed:(82/255.0) green:(83/255.0) blue:(83/255.0) alpha:1.0]];
 
-    [[YTRateHelper sharedInstance] setup];
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
     
