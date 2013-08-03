@@ -14,6 +14,8 @@
 + (void)endRefreshing;
 
 + (void)showLogin;
++ (void)showLoginButtons:(int)which;
++ (void)showLoginFailed;
 + (void)hideLogin;
 + (void)showTerms;
 + (void)showPrivacy;

@@ -17,18 +17,26 @@
 #import "YTConfig.h"
 #import "YTHelper.h"
 
+@interface YTLoginViewController ()
+{
+    bool fbChecked;
+    bool gppChecked;
+}
+@end
 @implementation YTLoginViewController
 
 #pragma mark Custom methods
 
 - (IBAction)loginButtonWasPressed:(id)sender
 {
+    [self hideLoginButtons];
     [[Mixpanel sharedInstance] track:@"Tapped Facebook Login Button"];
     [YTFBHelper openSession];
 }
 
 - (IBAction)gppButtonWasPressed:(id)sender
 {
+    [self hideLoginButtons];
     [[Mixpanel sharedInstance] track:@"Tapped Google+ Login Button"];
     [[YTGPPHelper sharedInstance] signIn];
 }
@@ -163,7 +171,60 @@
     if (CONFIG_GPP_ENABLED) {
         [self.view addSubview:self.gppButton];
     }
+    
+    self.button.hidden = YES;
+    self.gppButton.hidden = YES;
+    fbChecked = gppChecked = false;
 }
 
+- (void)showLoginButtons:(int)which
+{
+    if(!self.button.hidden)
+        return;
+    
+    if(which == 1)
+        fbChecked = true;
+    if(which == 2)
+        gppChecked = true;
+    
+    if(!(fbChecked && gppChecked))
+        return;
+        
+    self.gppButton.alpha = 0;
+    self.button.alpha = 0;
+    self.button.hidden = NO;
+    
+    if (CONFIG_GPP_ENABLED) {
+        self.gppButton.hidden = NO;
+    }
+    [UIView animateWithDuration:1.0
+                          delay:0.0
+                        options: UIViewAnimationOptionAllowUserInteraction
+                     animations:^{
+                         self.button.alpha = 1.0;
+                         if (CONFIG_GPP_ENABLED) {
+                             self.gppButton.alpha = 1.0;
+                         }
+                     }
+                     completion:nil];
+}
+
+- (void) hideLoginButtons {
+    fbChecked = gppChecked = false;
+    
+    [UIView animateWithDuration:1.0
+                          delay:0.0
+                        options: UIViewAnimationOptionAllowUserInteraction
+                     animations:^{
+                         self.button.alpha = 0;
+                         if (CONFIG_GPP_ENABLED) {
+                             self.gppButton.alpha = 0;
+                         }
+                     }
+                     completion:^(BOOL cancelled) {
+                         self.button.hidden = YES;
+                         self.gppButton.hidden = YES;
+                     }];
+}
 
 @end
