@@ -85,30 +85,44 @@
     //TODO need to keep on throwing up that message
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         
-        if (error) {
+        if (error || !result) {
             NSLog(@"%@", error.debugDescription);
             return;
         }
         
-        if ([result[@"gender"] isEqualToString:@"male"]) {
-            [Flurry setGender:@"m"];
-            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
+        if(result[@"gender"]) {
+            if ([result[@"gender"] isEqualToString:@"male"]) {
+                [Flurry setGender:@"m"];
+                [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
+                
+            } else if ([result[@"gender"] isEqualToString:@"female"]) {
+                [Flurry setGender:@"f"];
+                [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
+            }
+        }
+        
+        if(result[@"birthday"]) {
+            NSInteger age = [YTHelper ageWithBirthdayString:result[@"birthday"] format:@"MM/dd/yyyy"];
+            
+            if (age > 0) {
+                [Flurry setAge:age];
+                [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
+            }
+        }
+        
 
-        } else if ([result[@"gender"] isEqualToString:@"female"]) {
-            [Flurry setGender:@"f"];
-            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
-        }
-        
-        NSInteger age = [YTHelper ageWithBirthdayString:result[@"birthday"] format:@"MM/dd/yyyy"];
-        
-        if (age > 0) {
-            [Flurry setAge:age];
-            [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
-        }
-        [[Mixpanel sharedInstance].people set:@{@"$email": result[@"email"], @"$first_name": result[@"first_name"], @"$last_name": result[@"last_name"], @"Facebook Id": result[@"id"]}];
+        id email = result[@"email"];
+        id first = result[@"first_name"];
+        id last = result[@"last_name"];
+        id fbid = result[@"id"];
+        if(email && first && last && fbid)
+            [[Mixpanel sharedInstance].people set:@{@"$email": email,
+             @"$first_name": first,
+             @"$last_name": last,
+             @"Facebook Id": fbid}];
+       
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
-        
-        
+                
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             NSLog(@"Logged in as %@", result[@"name"]);
             delegate.userInfo[@"fb_data"] = [NSMutableDictionary dictionaryWithDictionary:result];
