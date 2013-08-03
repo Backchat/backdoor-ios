@@ -142,6 +142,8 @@ void uncaughtExceptionHandler(NSException *exception)
     } else {
         [self syncBasedOnView];
     }
+    
+    [[FBSession activeSession] handleDidBecomeActive];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
