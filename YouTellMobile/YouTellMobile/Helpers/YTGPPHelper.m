@@ -42,6 +42,7 @@
 - (void)signOut
 {
     [[GPPSignIn sharedInstance] signOut];
+    [YTViewHelper showLoginButtons:2];
 }
 
 - (void)signIn
@@ -57,7 +58,9 @@
     signIn.delegate = self;
     signIn.shouldFetchGoogleUserEmail = YES;
     
-    [signIn trySilentAuthentication];
+    if(![signIn trySilentAuthentication]) {
+        [YTViewHelper showLoginButtons:2];
+    }
 }
 
 # pragma mark GPPSignInDelegate methods
@@ -65,10 +68,13 @@
 - (void)finishedWithAuth:(GTMOAuth2Authentication *)auth error:(NSError *)error
 {
     if (error) {
+        //failed, canceled, whatere
+        [YTViewHelper showLoginFailed];
         return;
     }
     
     if (!auth.accessToken || !auth.userEmail) {
+        [YTViewHelper showLoginFailed];        
         return;
     }
     

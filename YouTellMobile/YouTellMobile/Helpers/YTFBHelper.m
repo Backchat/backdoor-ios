@@ -28,6 +28,9 @@
     if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
         [YTFBHelper openSession];
     }
+    else {
+        [YTViewHelper showLoginButtons:1];
+    }
 }
 
 + (void)sessionOpened
@@ -47,7 +50,6 @@
     
     delegate.userInfo[@"access_token"] = token_data.accessToken;
     
-
     [YTApiHelper login:^(id JSON) {
         [YTFBHelper fetchUserData];
     }];
@@ -65,7 +67,7 @@
         case FBSessionStateClosedLoginFailed:
             [delegate.navController popToRootViewControllerAnimated:NO];
             [FBSession.activeSession closeAndClearTokenInformation];
-            [YTViewHelper showLogin];
+            [YTViewHelper showLoginFailed];
             break;
         default:
             break;
