@@ -468,7 +468,15 @@ static bool new_user = false;
         
         NSInteger count = [JSON[@"count"] integerValue];
         [YTModelHelper setUserAvailableClues:JSON[@"available_clues"]];
-        [YTAppDelegate current].userInfo[@"settings"][@"has_shared"] = [NSNumber numberWithBool:true];
+        
+        //more then likely, this ITC crash here is caused  by concurrency issues...
+        //a risky fix for this bug release. do something kind of sad here instead:
+        if([YTAppDelegate current].userInfo) {
+            if([YTAppDelegate current].userInfo[@"settings"]) {
+                [YTAppDelegate current].userInfo[@"settings"][@"has_shared"] = [NSNumber numberWithBool:true];
+            }
+        }
+        
         NSInteger total = [YTModelHelper userAvailableClues];
         
         if (count == 0) {
