@@ -355,7 +355,14 @@
     /* everything is executed on the main thread. we have no need for a lock */
     YTGabMessage* message = [YTGabMessage messageWithContent:text andKind:kind];
     
-    if(self.messages.count == 0) {
+    /*is this a new gab window? if it is, we don't have a gab.
+     1. We opened from main gab a gab -> we have a gabId -> we have a gab
+     2. We opened from an APN -> we have a gabID -> we have a gab
+     3. We opened from new gab -> we have a receiver -> we don't have a gab
+     4. we opened from main gab a friend or a featured -> we have a recv. -> we dont' have a gab
+    */
+
+    if(!self.gab) {
         //first message!!
         //we need to fake up a gab, too.
         NSDictionary* contact = self.sendHelper.contactWidget.selectedContact;
