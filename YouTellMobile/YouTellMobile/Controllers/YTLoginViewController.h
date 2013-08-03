@@ -23,5 +23,7 @@
 
 - (IBAction)loginButtonWasPressed:(id)sender;
 - (void) loginFailed;
+- (void) showLoginButtons:(int)which;
+- (void) hideLoginButtons;
 
 @end

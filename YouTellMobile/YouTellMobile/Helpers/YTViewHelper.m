@@ -89,6 +89,29 @@
     }
 }
 
++ (void)showLoginButtons:(int)which
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    
+    UIViewController *topViewController = [delegate.navController topViewController];
+    UIViewController *viewController = [topViewController presentedViewController];
+    
+    //TODO let's fix this properly in a nonhotfix
+    if (![viewController isKindOfClass:[YTLoginViewController class]]) {
+    } else {
+        YTLoginViewController *loginViewController = (YTLoginViewController*)viewController;
+        [loginViewController showLoginButtons:which];
+    }
+
+}
+
++ (void)showLoginFailed
+{
+    [YTViewHelper showLogin];
+    [YTViewHelper showLoginButtons:1];
+    [YTViewHelper showLoginButtons:2];
+}
+
 + (void)hideLogin
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
