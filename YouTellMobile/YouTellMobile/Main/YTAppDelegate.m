@@ -26,6 +26,7 @@
 #import "YTRateHelper.h"
 #import "YTConfig.h"
 #import "YTFriendNotifHelper.h"
+#import "YTSocialHelper.h"
 
 void uncaughtExceptionHandler(NSException *exception)
 {
@@ -70,7 +71,7 @@ void uncaughtExceptionHandler(NSException *exception)
     [YTModelHelper changeStoreId:nil];
     [[YTContactHelper sharedInstance] clearRandomizedFriendWithType:nil];
     [YTApiHelper resetUserInfo];
-    [YTViewHelper showLogin];
+    [[YTSocialHelper sharedInstance] setLoggedIn:nil loggedIn:NO];
     [YTViewHelper refreshViews];
 }
 
@@ -106,10 +107,13 @@ void uncaughtExceptionHandler(NSException *exception)
     [YTModelHelper setup];    
     [[YTContactHelper sharedInstance] setup];
     [YTViewHelper setup];
+    [[YTSocialHelper sharedInstance] setup];
+    
     [YTFBHelper setup];
     [[YTGPPHelper sharedInstance] setup];
-    [YTViewHelper showLogin];
-
+    
+    [[YTSocialHelper sharedInstance] enableLoginView:YES];
+    
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
 
     [manager configureWithIdentifier:CONFIG_HOCKEY_ID delegate:self];

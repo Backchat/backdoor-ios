@@ -15,6 +15,7 @@
 
 + (void)showLogin;
 + (void)hideLogin;
++ (void)toggleLogin:(BOOL)show;
 + (void)showTerms;
 + (void)showPrivacy;
 + (void)showGabWithId:(NSNumber*)gabId;
