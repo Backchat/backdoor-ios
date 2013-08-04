@@ -55,6 +55,11 @@ void uncaughtExceptionHandler(NSException *exception)
     [[YTContactHelper sharedInstance] clearRandomizedFriendWithType:nil];
     [YTApiHelper resetUserInfo];
     [YTViewHelper showLogin];
+    
+    //yeah, fix this better
+    [YTViewHelper showLoginButtons:1];
+    [YTViewHelper showLoginButtons:2];
+    
     [YTViewHelper refreshViews];
 }
 
@@ -90,9 +95,11 @@ void uncaughtExceptionHandler(NSException *exception)
     [YTModelHelper setup];    
     [[YTContactHelper sharedInstance] setup];
     [YTViewHelper setup];
+    [YTViewHelper showLogin];
+
+    //shwo login MUST be called before setup for FB/GPP
     [YTFBHelper setup];
     [[YTGPPHelper sharedInstance] setup];
-    [YTViewHelper showLogin];
 
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
 
@@ -142,6 +149,8 @@ void uncaughtExceptionHandler(NSException *exception)
     } else {
         [self syncBasedOnView];
     }
+    
+    [[FBSession activeSession] handleDidBecomeActive];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

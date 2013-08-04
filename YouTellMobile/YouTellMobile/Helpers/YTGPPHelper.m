@@ -42,6 +42,7 @@
 - (void)signOut
 {
     [[GPPSignIn sharedInstance] signOut];
+    [YTViewHelper showLoginButtons:2];
 }
 
 - (void)signIn
@@ -57,7 +58,9 @@
     signIn.delegate = self;
     signIn.shouldFetchGoogleUserEmail = YES;
     
-    [signIn trySilentAuthentication];
+    if(![signIn trySilentAuthentication]) {
+        [YTViewHelper showLoginButtons:2];
+    }
 }
 
 # pragma mark GPPSignInDelegate methods
@@ -65,10 +68,13 @@
 - (void)finishedWithAuth:(GTMOAuth2Authentication *)auth error:(NSError *)error
 {
     if (error) {
+        //failed, canceled, whatere
+        [YTViewHelper showLoginFailed];
         return;
     }
     
     if (!auth.accessToken || !auth.userEmail) {
+        [YTViewHelper showLoginFailed];        
         return;
     }
     
@@ -103,22 +109,35 @@
     
     [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLPlusPerson *person, NSError *error) {
         
-        if (error) {
+        if (error || !person) {
             NSLog(@"%@", error.debugDescription);
             return;
         }
         
-        if ([person.gender isEqualToString:@"male"]) {
-            [Flurry setGender:@"m"];
-            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
-        } else if ([person.gender isEqualToString:@"female"]) {
-            [Flurry setGender:@"f"];
-            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
+        if(person.gender) {
+            if ([person.gender isEqualToString:@"male"]) {
+                [Flurry setGender:@"m"];
+                [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
+            } else if ([person.gender isEqualToString:@"female"]) {
+                [Flurry setGender:@"f"];
+                [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
+            }
         }
         
-        NSInteger age = [YTHelper ageWithBirthdayString:[person JSON][@"birthday"] format:@"yyyy-MM-dd"];
+        id JSON = [person JSON];
+        if(JSON && JSON[@"birthday"]) {
+            NSInteger age = [YTHelper ageWithBirthdayString:JSON[@"birthday"] format:@"yyyy-MM-dd"];
         
-        [[Mixpanel sharedInstance].people set:@{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName, @"$email": [YTAppDelegate current].userInfo[@"gpp_data"][@"email"], @"Age": [NSNumber numberWithInt:age], @"Google+ Id": person.identifier}];
+            id email = nil;
+            
+            if([YTAppDelegate current].userInfo[@"gpp_data"])
+                email = [YTAppDelegate current].userInfo[@"gpp_data"][@"email"];
+            
+            [[Mixpanel sharedInstance].people set:@{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName,
+             @"$email": email,
+             @"Age": [NSNumber numberWithInt:age], @"Google+ Id": person.identifier}];
+        }
+        
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
         
        
