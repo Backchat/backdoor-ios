@@ -103,6 +103,22 @@
     [self showGabs];
 }
 
++ (void)toggleLogin:(BOOL)show
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    UIViewController *topViewController = [delegate.navController topViewController];
+    UIViewController *viewController = [topViewController presentedViewController];
+    BOOL isShowing = [viewController isKindOfClass:[YTLoginViewController class]];
+    
+    if (show && !isShowing) {
+        [YTViewHelper showLogin];
+    }
+    
+    if (!show && isShowing) {
+        [YTViewHelper hideLogin];
+    }
+}
+
 + (void)showGabWithId:(NSNumber*)gabId receiver:(NSDictionary*)receiver
 {
     YTGabViewController *controller = [YTGabViewController new];

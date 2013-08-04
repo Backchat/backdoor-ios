@@ -13,7 +13,7 @@
 
 + (void)setup;
 + (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error;
-+ (void)openSession;
++ (void)openSession:(BOOL)silent;
 + (void)closeSession;
 + (void)fetchUserData;
 + (BOOL)handleOpenUrl:(NSURL*)url;

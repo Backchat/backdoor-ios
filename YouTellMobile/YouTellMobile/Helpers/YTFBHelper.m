@@ -21,14 +21,13 @@
 #import "YTModelHelper.h"
 #import "YTHelper.h"
 #import "YTConfig.h"
+#import "YTSocialHelper.h"
 
 @implementation YTFBHelper
 
 + (void)setup
 {
-    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
-        [YTFBHelper openSession];
-    }
+    [YTFBHelper openSession:YES];
 }
 
 + (void)sessionOpened
@@ -48,7 +47,7 @@
     
     delegate.userInfo[@"access_token"] = token_data.accessToken;
     
-
+    
     [YTApiHelper login:^(id JSON) {
         [YTFBHelper fetchUserData];
     }];
@@ -66,7 +65,7 @@
         case FBSessionStateClosedLoginFailed:
             [delegate.navController popToRootViewControllerAnimated:NO];
             [FBSession.activeSession closeAndClearTokenInformation];
-            [YTViewHelper showLogin];
+            [[YTSocialHelper sharedInstance] setLoggedIn:@"fb" loggedIn:NO];
             break;
         default:
             break;
@@ -140,7 +139,8 @@
             [YTFBHelper fetchLikes];
             //actually logged in : important changestore ID above...
             [YTApiHelper postLogin];
-            [YTViewHelper hideLogin];
+            
+            [[YTSocialHelper sharedInstance] setLoggedIn:@"fb" loggedIn:YES];
 
         }];
     }];
@@ -225,31 +225,37 @@
     }    
 }
 
-+ (void)openSession
++ (void)openSession:(BOOL)silent
 {
     NSArray *perms = @[@"email", @"user_birthday", @"user_education_history", @"user_work_history", @"user_location", @"user_relationships", @"user_likes", @"user_interests"];
 
 
+    FBSession *session = [[FBSession alloc] initWithPermissions:perms];
+    [FBSession setActiveSession:session];
     
-   FBSession *session = [[FBSession alloc] initWithPermissions:perms];
-   [FBSession setActiveSession:session];
-    [session openWithBehavior:FBSessionLoginBehaviorWithFallbackToWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+    if (silent) {
         
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTFBHelper sessionStateChanged:session state:status error:error];
+        BOOL loggedIn = [FBSession openActiveSessionWithReadPermissions:perms allowLoginUI:NO completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [YTFBHelper sessionStateChanged:session state:status error:error];
+            }];
+            
         }];
         
-    }];
-    
-    return;
-    
-    [FBSession openActiveSessionWithReadPermissions:perms allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
+        [[YTSocialHelper sharedInstance] setLoggedIn:@"fb" loggedIn:loggedIn];
         
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTFBHelper sessionStateChanged:session state:state error:error];
+    } else {
+    
+        [session openWithBehavior:FBSessionLoginBehaviorWithFallbackToWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+        
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                [YTFBHelper sessionStateChanged:session state:status error:error];
+            }];
+        
         }];
         
-    }];
+    }
 }
 
 + (void)closeSession

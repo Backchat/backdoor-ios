@@ -46,6 +46,7 @@
     delegate.userInfo = [NSMutableDictionary new];
     delegate.userInfo[@"device_token"] = deviceToken;
     delegate.userInfo[@"email"] = @"";
+    
     delegate.userInfo[@"fb_data"] = [NSMutableDictionary new];
     delegate.userInfo[@"gpp_data"] = [NSMutableDictionary new];
     delegate.userInfo[@"settings"] = [NSMutableDictionary new];
@@ -95,7 +96,7 @@
 
 + (void) sendJSONRequestToPath:(NSString*)path method:(NSString*)method params:(NSDictionary*)params success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure
 {
-    
+
     AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[YTApiHelper baseUrl]];
     
     NSMutableDictionary *myParams = [[NSMutableDictionary alloc] initWithDictionary:params];
@@ -104,6 +105,13 @@
         [myParams setValue:access_token forKey:@"access_token"];
     }
     
+    if (!myParams[@"access_token"] && ![path isEqualToString:@"/login"]) {
+        if (failure != nil) {
+            failure(@{});
+        }
+        return;
+    }
+
     NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
         
     [request setTimeoutInterval:CONFIG_TIMEOUT];
@@ -315,7 +323,7 @@ static bool new_user = false;
     if ([delegate.autoSyncLock tryLock] == NO) {
         return;
     }
-          
+    
     [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"GET" params:nil
                                success:^(id JSON) {
                                    id gabs = JSON[@"gabs"];

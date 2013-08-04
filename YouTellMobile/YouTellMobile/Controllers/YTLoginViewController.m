@@ -24,7 +24,7 @@
 - (IBAction)loginButtonWasPressed:(id)sender
 {
     [[Mixpanel sharedInstance] track:@"Tapped Facebook Login Button"];
-    [YTFBHelper openSession];
+    [YTFBHelper openSession:NO];
 }
 
 - (IBAction)gppButtonWasPressed:(id)sender

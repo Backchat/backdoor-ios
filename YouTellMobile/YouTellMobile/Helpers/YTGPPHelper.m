@@ -22,6 +22,7 @@
 #import "YTAppDelegate.h"
 #import "YTContactHelper.h"
 #import "YTHelper.h"
+#import "YTSocialHelper.h"
 
 @implementation YTGPPHelper
 
@@ -53,6 +54,8 @@
     signIn.delegate = self;
     signIn.shouldFetchGoogleUserEmail = YES;
     
+    [[YTSocialHelper sharedInstance] setLoggedIn:@"gpp" loggedIn:signIn.hasAuthInKeychain];
+    
     [signIn trySilentAuthentication];
 }
 
@@ -61,14 +64,19 @@
 - (void)finishedWithAuth:(GTMOAuth2Authentication *)auth error:(NSError *)error
 {
     if (error) {
+        [[YTSocialHelper sharedInstance] setLoggedIn:@"gpp" loggedIn:NO];
         return;
     }
     
     if (!auth.accessToken || !auth.userEmail) {
+        [[YTSocialHelper sharedInstance] setLoggedIn:@"gpp" loggedIn:NO];
         return;
     }
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        
+        [[YTSocialHelper sharedInstance] setLoggedIn:@"gpp" loggedIn:YES];
+        
         [YTApiHelper resetUserInfo];
         
         [Flurry logEvent:@"Signed_In_With_Google+"];
@@ -86,7 +94,6 @@
         
         [YTModelHelper changeStoreId:auth.userEmail];
         [YTApiHelper postLogin];
-        [YTViewHelper hideLogin];
     }];
 }
 
