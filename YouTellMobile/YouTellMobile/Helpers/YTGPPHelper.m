@@ -100,7 +100,7 @@
     
     [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLPlusPerson *person, NSError *error) {
         
-        if (error) {
+        if (error || !person) {
             NSLog(@"%@", error.debugDescription);
             return;
         }
@@ -112,23 +112,39 @@
         [[Mixpanel sharedInstance] identify:email];
         [Instabug setUserDataString:email];
 
-        
         if (delegate.deviceToken) {
             [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
         }
         
-        if ([person.gender isEqualToString:@"male"]) {
-            [Flurry setGender:@"m"];
-            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
-        } else if ([person.gender isEqualToString:@"female"]) {
-            [Flurry setGender:@"f"];
-            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
+        if(person.gender) {
+            if ([person.gender isEqualToString:@"male"]) {
+                [Flurry setGender:@"m"];
+                [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
+            } else if ([person.gender isEqualToString:@"female"]) {
+                [Flurry setGender:@"f"];
+                [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
+            }
         }
         
-        NSInteger age = [YTHelper ageWithBirthdayString:[person JSON][@"birthday"] format:@"yyyy-MM-dd"];
+        id JSON = [person JSON];
+        if(JSON && JSON[@"birthday"]) {
+            NSInteger age = [YTHelper ageWithBirthdayString:JSON[@"birthday"] format:@"yyyy-MM-dd"];
         
+            id email = nil;
+            
+            if([YTAppDelegate current].userInfo[@"gpp_data"])
+                email = [YTAppDelegate current].userInfo[@"gpp_data"][@"email"];
+            
+            [[Mixpanel sharedInstance].people set:@{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName,
+             @"$email": email,
+             @"Age": [NSNumber numberWithInt:age], @"Google+ Id": person.identifier}];
+        }
+        
+<<<<<<< HEAD
         NSDictionary *userData = @{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName, @"$email": email, @"Age": [NSNumber numberWithInt:age], @"Google+ Id": person.identifier};
         [[Mixpanel sharedInstance].people set:userData];
+=======
+>>>>>>> lin-dev
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
         
        

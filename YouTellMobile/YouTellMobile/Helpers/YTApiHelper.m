@@ -244,7 +244,8 @@
                                                   //are we a new user? then show the tour:
                                                   NSNumber* num = JSON[@"user"][@"new_user"];
                                                   //we got settings!
-                                                  [YTAppDelegate current].userInfo[@"settings"] = JSON[@"user"][@"settings"];
+                                                  [YTAppDelegate current].userInfo[@"settings"] =
+                                                  [NSMutableDictionary dictionaryWithDictionary:JSON[@"user"][@"settings"]];
                                                    
                                                   if(num)
                                                       [YTApiHelper setNewUser:((num.integerValue == 1) || CONFIG_DEBUG_TOUR)];
@@ -472,6 +473,7 @@ static bool new_user = false;
         NSInteger count = [JSON[@"count"] integerValue];
         [YTModelHelper setUserAvailableClues:JSON[@"available_clues"]];
         [YTAppDelegate current].userInfo[@"settings"][@"has_shared"] = [NSNumber numberWithBool:true];
+
         NSInteger total = [YTModelHelper userAvailableClues];
         
         if (count == 0) {
