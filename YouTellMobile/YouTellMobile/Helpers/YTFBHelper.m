@@ -337,7 +337,6 @@
     }
     
     [FBSession.activeSession requestNewPublishPermissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone completionHandler:^(FBSession *session, NSError *error) {
-        
         if (error) {
             NSLog(@"%@", error.debugDescription);
             return;

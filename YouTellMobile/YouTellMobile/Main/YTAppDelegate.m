@@ -169,6 +169,7 @@ void uncaughtExceptionHandler(NSException *exception)
         [self syncBasedOnView];
     }
     
+    [[FBSession activeSession] handleDidBecomeActive];
     [[YTRateHelper sharedInstance] run];
 }
 
