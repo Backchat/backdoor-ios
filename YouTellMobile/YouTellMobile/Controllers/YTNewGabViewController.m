@@ -43,6 +43,8 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.sectionHeaderHeight = 0;
+    self.tableView.tableFooterView = [UIView new];
+    self.tableView.backgroundColor = [UIColor clearColor];
     
     self.searchBar = [UISearchBar new];
     [self.searchBar sizeToFit];
@@ -55,7 +57,8 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonWasClicked)];
     
     [self.view addSubview:self.tableView];
-    
+    self.view.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
+
     self.title = NSLocalizedString(@"New Message", nil);
 }
 
@@ -157,6 +160,10 @@
     }
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    cell.backgroundColor = [UIColor whiteColor];
+}
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
