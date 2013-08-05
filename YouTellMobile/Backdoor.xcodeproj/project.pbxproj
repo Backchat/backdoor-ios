@@ -118,6 +118,8 @@
 		B25E463E16F99FB3005DB8FB /* messageSent.aiff in Resources */ = {isa = PBXBuildFile; fileRef = B25E462416F99FB3005DB8FB /* messageSent.aiff */; };
 		B25E463F16F99FB3005DB8FB /* UIView+AnimationOptionsForCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = B25E462616F99FB3005DB8FB /* UIView+AnimationOptionsForCurve.m */; };
 		B25E464616F9F09A005DB8FB /* YTStoreHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B25E464516F9F09A005DB8FB /* YTStoreHelper.m */; };
+		B2649EA417B0485900FB5663 /* iVersion.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B2649EA117B0485900FB5663 /* iVersion.bundle */; };
+		B2649EA517B0485900FB5663 /* iVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = B2649EA317B0485900FB5663 /* iVersion.m */; };
 		B2653B5D170A188E008BA022 /* Icon-144.png in Resources */ = {isa = PBXBuildFile; fileRef = B2653B5C170A188E008BA022 /* Icon-144.png */; };
 		B2653B63170A1958008BA022 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B2653B62170A1958008BA022 /* Default.png */; };
 		B2653B65170A195F008BA022 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2653B64170A195F008BA022 /* Default@2x.png */; };
@@ -417,13 +419,6 @@
 			remoteGlobalIDString = E2368B009E2D4E9DB4E2B707;
 			remoteInfo = "Pods-iRate";
 		};
-		B2C619B817A5A05A0081EF03 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B24CB2D71707333F00813B2C /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F46F6BF86EEB424CA09CD3C5;
-			remoteInfo = "Pods-iVersion";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -567,6 +562,9 @@
 		B25E462616F99FB3005DB8FB /* UIView+AnimationOptionsForCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AnimationOptionsForCurve.m"; sourceTree = "<group>"; };
 		B25E464416F9F09A005DB8FB /* YTStoreHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTStoreHelper.h; path = Helpers/YTStoreHelper.h; sourceTree = "<group>"; };
 		B25E464516F9F09A005DB8FB /* YTStoreHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTStoreHelper.m; path = Helpers/YTStoreHelper.m; sourceTree = "<group>"; };
+		B2649EA117B0485900FB5663 /* iVersion.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = iVersion.bundle; sourceTree = "<group>"; };
+		B2649EA217B0485900FB5663 /* iVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iVersion.h; sourceTree = "<group>"; };
+		B2649EA317B0485900FB5663 /* iVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iVersion.m; sourceTree = "<group>"; };
 		B2653B5C170A188E008BA022 /* Icon-144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-144.png"; path = "../../Icon-144.png"; sourceTree = "<group>"; };
 		B2653B62170A1958008BA022 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../Default.png; sourceTree = "<group>"; };
 		B2653B64170A195F008BA022 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../../Default@2x.png"; sourceTree = "<group>"; };
@@ -981,7 +979,6 @@
 				B29B6ACC1782CCEE00E9E197 /* libPods-UIImage-Categories.a */,
 				B2C6198817A1AE7D0081EF03 /* libPods-google-plus-ios-sdk.a */,
 				B2C619A317A312FF0081EF03 /* libPods-iRate.a */,
-				B2C619B917A5A05A0081EF03 /* libPods-iVersion.a */,
 				B2C61977179FE7DA0081EF03 /* libPods-libwebp.a */,
 				B24CB2DC1707333F00813B2C /* libPods.a */,
 			);
@@ -1054,6 +1051,17 @@
 				B25E462416F99FB3005DB8FB /* messageSent.aiff */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		B2649EA017B0485900FB5663 /* iVersion */ = {
+			isa = PBXGroup;
+			children = (
+				B2649EA117B0485900FB5663 /* iVersion.bundle */,
+				B2649EA217B0485900FB5663 /* iVersion.h */,
+				B2649EA317B0485900FB5663 /* iVersion.m */,
+			);
+			name = iVersion;
+			path = Vendor/iVersion/iVersion;
 			sourceTree = "<group>";
 		};
 		B2A75AD516F1ED7E00F0CAB4 /* Media */ = {
@@ -1317,6 +1325,7 @@
 		B2BA776216F0AD18006C17F7 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				B2649EA017B0485900FB5663 /* iVersion */,
 				B24CB29B1702057D00813B2C /* UIBubbleTableView */,
 				B25E460316F99FB3005DB8FB /* JSMessagesTableViewController */,
 				B2BA774E16F0AD0E006C17F7 /* NSDate-TimeAgo */,
@@ -1592,13 +1601,6 @@
 			remoteRef = B2C619A217A312FF0081EF03 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B2C619B917A5A05A0081EF03 /* libPods-iVersion.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libPods-iVersion.a";
-			remoteRef = B2C619B817A5A05A0081EF03 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1817,6 +1819,7 @@
 				B2CDB649179FDBFA000758B3 /* Instabug.bundle in Resources */,
 				B2C619BC17A85CED0081EF03 /* get_clues_btn.png in Resources */,
 				B2C619BD17A85CED0081EF03 /* get_clues_btn@2x.png in Resources */,
+				B2649EA417B0485900FB5663 /* iVersion.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1921,6 +1924,8 @@
 				B29B6AEF17881E5C00E9E197 /* YTNewGabViewController.m in Sources */,
 				B29B6AF21788268F00E9E197 /* YTMainViewHelper.m in Sources */,
 				B2C6199217A312FF0081EF03 /* YTRateHelper.m in Sources */,
+				B2C619A717A567D70081EF03 /* YTFriendNotifHelper.m in Sources */,
+				B2649EA517B0485900FB5663 /* iVersion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
