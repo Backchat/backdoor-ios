@@ -11,7 +11,7 @@
 #import <Mixpanel.h>
 #import <Instabug/Instabug.h>
 #import <iRate/iRate.h>
-#import <iVersion/iVersion.h>
+#import <iVersion.h>
 
 #import "YTAppDelegate.h"
 #import "YTGabViewController.h"
@@ -49,7 +49,6 @@ void uncaughtExceptionHandler(NSException *exception)
 + (void)initialize
 {
 #ifdef CONFIGURATION_Release
-    NSLog(@"icheck");
     [iVersion sharedInstance].appStoreID = CONFIG_APPLE_ID_INT;
 #else
     [iVersion sharedInstance].checkAtLaunch = NO;
