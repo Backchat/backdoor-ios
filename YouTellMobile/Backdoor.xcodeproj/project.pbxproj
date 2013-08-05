@@ -1267,6 +1267,8 @@
 				B2C9E6E816F48D3E00B589E2 /* YTViewHelper.m */,
 				B2C6199017A312FF0081EF03 /* YTRateHelper.h */,
 				B2C6199117A312FF0081EF03 /* YTRateHelper.m */,
+				B2C619A517A567D70081EF03 /* YTFriendNotifHelper.h */,
+				B2C619A617A567D70081EF03 /* YTFriendNotifHelper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1921,6 +1923,7 @@
 				B29B6AEF17881E5C00E9E197 /* YTNewGabViewController.m in Sources */,
 				B29B6AF21788268F00E9E197 /* YTMainViewHelper.m in Sources */,
 				B2C6199217A312FF0081EF03 /* YTRateHelper.m in Sources */,
+				B2C619A717A567D70081EF03 /* YTFriendNotifHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
