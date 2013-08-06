@@ -40,20 +40,26 @@
     [[GPPSignIn sharedInstance] signOut];
 }
 
-- (void)signIn
-{
-    [[GPPSignIn sharedInstance] authenticate];
-}
-
-- (void)setup
+- (GPPSignIn*) getSignIn
 {
     GPPSignIn *signIn = [GPPSignIn sharedInstance];
     signIn.clientID = CONFIG_GPP_CLIENT_ID;
     signIn.scopes = @[kGTLAuthScopePlusLogin];
     signIn.delegate = self;
     signIn.shouldFetchGoogleUserEmail = YES;
-    
-    [signIn trySilentAuthentication];
+
+    return signIn;
+}
+
+- (void)requestAuth
+{
+
+    [[self getSignIn] authenticate];
+}
+
+- (bool)trySilentAuth
+{
+    return [[self getSignIn] trySilentAuthentication];
 }
 
 # pragma mark GPPSignInDelegate methods
@@ -85,7 +91,6 @@
         
         [YTModelHelper changeStoreId:auth.userEmail];
         [YTApiHelper postLogin];
-        [YTViewHelper hideLogin];
     }];
 }
 

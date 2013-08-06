@@ -58,18 +58,23 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)signOut
 {
+    [YTModelHelper removeSettingsForKey:@"logged_in_acccess_token"];
+    
     //TODO better?
     [[YTAppDelegate current].storeHelper disable];
     [YTAppDelegate current].storeHelper = nil;
     
     [[Mixpanel sharedInstance] track:@"Signed Out"];
+    
     [[YTGPPHelper sharedInstance] signOut];
-    [YTModelHelper removeSettingsForKey:@"logged_in_acccess_token"];
     [YTFBHelper closeSession];
+    
     [YTModelHelper changeStoreId:nil];
     [[YTContactHelper sharedInstance] clearRandomizedFriendWithType:nil];
+    
     [YTApiHelper resetUserInfo];
-    [YTViewHelper showLogin];
+    
+    [YTViewHelper showLoginWithButtons];
     [YTViewHelper refreshViews];
 }
 
@@ -105,10 +110,6 @@ void uncaughtExceptionHandler(NSException *exception)
     [YTModelHelper setup];    
     [[YTContactHelper sharedInstance] setup];
     [YTViewHelper setup];
-    [YTFBHelper setup];
-    [[YTGPPHelper sharedInstance] setup];
-    [YTViewHelper showLogin];
-
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
 
     [manager configureWithIdentifier:CONFIG_HOCKEY_ID delegate:self];
@@ -141,12 +142,33 @@ void uncaughtExceptionHandler(NSException *exception)
         [YTAppDelegate current].userInfo[@"device_token"] = @"1"; //not like you can run multiple simulators...
     }
     
+    [YTNotifHelper handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
 
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
-    if(gab_id != nil) { //we dont have an access_token yet?
-        //update gab unread count
-        [YTNotifHelper handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
-        [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
+
+    //we have a cached login token?
+    if(![YTApiHelper attemptCachedLogin]) {
+        //we do not, but we may have been authorized via FB/GPP.
+        //throw up the login window but without buttons, so the user
+        //sees something:
+        [YTViewHelper showLogin];
+
+        if(gab_id) {//do we need to launch a gab after logging in?
+            [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
+        }
+
+        bool logged_in = [YTFBHelper trySilentAuth];
+        if(!logged_in)
+            logged_in = [[YTGPPHelper sharedInstance] trySilentAuth];
+        
+        if(!logged_in)
+            [YTViewHelper showLoginWithButtons];
+    }
+    else {
+        if(gab_id) {
+            [YTApiHelper syncGabWithId:gab_id];
+            [YTViewHelper showGabWithId:gab_id];
+        }
     }
     
     return YES;
@@ -215,16 +237,21 @@ void uncaughtExceptionHandler(NSException *exception)
         return;
     }
     
-    [YTNotifHelper handleNotification:userInfo];
-    
-    if (application.applicationState != UIApplicationStateActive) {
-        if ([YTModelHelper gabForId:userInfo[@"gab_id"]]) {
-            [YTViewHelper showGabWithId:userInfo[@"gab_id"]];
+    id gab_id = userInfo[@"gab_id"];
+
+    if([YTApiHelper loggedIn]) {
+        [YTNotifHelper handleNotification:userInfo];
+        [YTApiHelper syncGabWithId:gab_id];
+        
+        if (application.applicationState != UIApplicationStateActive) {
+            if ([YTModelHelper gabForId:gab_id]) {
+                [YTViewHelper showGabWithId:gab_id];
+            }
         }
     }
-    
-    [YTApiHelper syncGabWithId:userInfo[@"gab_id"]];    
-
+    else {
+        [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
+    }
 }
 
 - (void) syncBasedOnView

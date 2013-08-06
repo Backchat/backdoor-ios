@@ -53,8 +53,9 @@
         delegate.window.rootViewController = delegate.navController;
     }
 
-    [YTViewHelper showGabs];
-    
+    YTMainViewController* mainController = [YTMainViewController new];
+    delegate.currentMainViewController = mainController;
+    [delegate.navController pushViewController:mainController animated:NO];
     [delegate.window makeKeyAndVisible];
 }
 
@@ -73,20 +74,35 @@
     [delegate.currentMainViewController.refreshControl endRefreshing];
 }
 
-+ (void)showLogin
++ (YTLoginViewController*) getOrCreateLoginView
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
     
     UIViewController *topViewController = [delegate.navController topViewController];
     UIViewController *viewController = [topViewController presentedViewController];
+    YTLoginViewController *loginViewController;
     
     if (![viewController isKindOfClass:[YTLoginViewController class]]) {
-        YTLoginViewController *loginViewController = [YTLoginViewController new];
+        loginViewController = [YTLoginViewController new];
         [topViewController presentViewController:loginViewController animated:NO completion:nil];
-    } else {
-        YTLoginViewController *loginViewController = (YTLoginViewController*)viewController;
-        [loginViewController loginFailed];
     }
+    else
+    {
+        loginViewController = (YTLoginViewController*)viewController;
+
+    }
+    
+    return loginViewController;
+}
+
++ (void)showLogin
+{
+    [self getOrCreateLoginView];
+}
+
++ (void)showLoginWithButtons
+{
+    [[self getOrCreateLoginView] showLoginButtons];
 }
 
 + (void)hideLogin
@@ -188,19 +204,13 @@
 + (void)showGabs
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
-    YTMainViewController *controller = [YTMainViewController new];
     
     if (!delegate.usesSplitView) {
-        
-        if ([delegate.navController.viewControllers count] == 0) {
-            delegate.navController.viewControllers = @[controller];
-            delegate.currentMainViewController = controller;
-        } else {
-            [delegate.navController popToRootViewControllerAnimated:YES];
-        }
-
-    } else {
+        [delegate.navController popToRootViewControllerAnimated:YES];
+    }
+    else {
         YTViewController *blank = [YTViewController new];
+        YTMainViewController *controller = [YTMainViewController new];
         delegate.detailsController.viewControllers = @[blank];
         delegate.navController.viewControllers = @[controller];
         delegate.currentMainViewController = controller;
