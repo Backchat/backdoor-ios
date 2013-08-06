@@ -26,6 +26,7 @@
 #import "YTContactHelper.h"
 #import "YTViewHelper.h"
 #import "YTTourViewController.h"
+#import <Block.h>
 
 @implementation YTApiHelper
 
@@ -210,6 +211,20 @@
     [self getFriends];
 }
 
+void(^cached_success)(id JSON);
+
++ (void)runPendingLogin
+{
+    NSLog(@"run pending login");
+
+    if(cached_success) {
+        NSLog(@"with real cached login");
+        void (^copy)(id) = cached_success;
+        cached_success = nil;
+        [YTApiHelper login:copy];
+    }
+}
+
 + (void)login:(void(^)(id JSON))success
 {
     NSString* local_access_token = [YTModelHelper settingsForKey:@"logged_in_access_token"];
@@ -226,12 +241,14 @@
     NSDictionary* params = [self userParams];
     NSString* device_token= [params valueForKey:@"device_token"];
     if(device_token == nil || device_token.length == 0)
+    {
+        //pending... we don't have a device token
+        //this fix is ugly
+        NSLog(@"caching login");
+        cached_success = success;
         return;
-        //this will occur when login is caleld as part of opening FB session, which occurs
-        //before getting the device_token from APN.
-        //this flow could only happen when you are not logged in yet, because when you log in,
-        //we have a valid access_token we store indefinitely.
-        //ultimately, login will be called again when the uesr hits a login button.
+    }
+
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Logging in", nil)
                                                  path:@"/login"
                                                method:@"POST" params:params
