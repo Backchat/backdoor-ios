@@ -180,11 +180,14 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     self.userInfo[@"device_token"] = [YTHelper hexStringFromData:deviceToken];
+    NSLog(@"got remote notification %@", self.userInfo[@"device_token"]);
+    [YTApiHelper runPendingLogin];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     if(![YTHelper simulatedEnvironment]) {
+        NSLog(@"clearing device token");
         self.userInfo[@"device_token"] = @"";
     }
 }
