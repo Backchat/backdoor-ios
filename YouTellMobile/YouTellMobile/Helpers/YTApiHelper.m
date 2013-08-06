@@ -58,7 +58,7 @@
     NSMutableDictionary *userInfo = delegate.userInfo;
     NSMutableDictionary *result = [NSMutableDictionary new];
     NSData *data;
-    if (!userInfo[@"access_token"]) {
+    if (![YTApiHelper loggedIn]) {
         return nil;
     }
     result[@"access_token"] = userInfo[@"access_token"];
@@ -197,19 +197,42 @@
     
     [YTModelHelper setSettingsForKey:@"logged_in_access_token" value:access_token];
 
+    [YTViewHelper hideLogin];
+
     NSNumber* launch_on_login = [YTAppDelegate current].userInfo[@"launch_on_active_token"];
+
     if(launch_on_login) {
-        dispatch_async(dispatch_get_main_queue(), ^() {
-            NSLog(@"launch on login: %@", launch_on_login);
+        NSLog(@"launch on login: %@", launch_on_login);
             
-            if ([YTModelHelper gabForId:launch_on_login]) {
-                [YTViewHelper showGabWithId:launch_on_login];
-            }
-            [YTApiHelper syncGabWithId:launch_on_login];
-        });
+        if ([YTModelHelper gabForId:launch_on_login]) {
+            [YTViewHelper showGabWithId:launch_on_login];
+        }
+        [YTApiHelper syncGabWithId:launch_on_login];
+
         [[YTAppDelegate current].userInfo removeObjectForKey:@"launch_on_active_token"];
     }
-    [self getFriends];
+    else {
+        [YTViewHelper showGabs];
+    }
+}
+
++ (bool)loggedIn
+{
+    NSString* token = [YTAppDelegate current].userInfo[@"access_token"];
+    return token && [token length] > 0;
+}
+
++ (bool)attemptCachedLogin
+{
+    NSString* local_access_token = [YTModelHelper settingsForKey:@"logged_in_access_token"];
+    if(local_access_token && local_access_token.length > 0)
+    {
+        [YTAppDelegate current].userInfo[@"access_token"] = local_access_token;
+        [YTApiHelper postLogin];
+        return true;
+    }
+    else
+        return false;
 }
 
 + (void)login:(void(^)(id JSON))success

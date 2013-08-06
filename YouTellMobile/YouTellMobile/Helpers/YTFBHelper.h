@@ -11,11 +11,10 @@
 
 @interface YTFBHelper : NSObject
 
-+ (void)setup;
-+ (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error;
-+ (void)openSession;
++ (bool)trySilentAuth;
++ (void)requestAuth;
+
 + (void)closeSession;
-+ (void)fetchUserData;
 + (BOOL)handleOpenUrl:(NSURL*)url;
 + (void)presentFeedDialog;
 + (void)presentRequestDialogWithContact:(NSString*)contact complete:(void(^)())complete;
