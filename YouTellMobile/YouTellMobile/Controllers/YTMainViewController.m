@@ -214,7 +214,7 @@
     NSString *time = [YTHelper formatDate:[object valueForKey:@"updated_at"]];
     NSString *image = read ? nil : @"newgab2";
 
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:nil];
 
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImageWithURL:[NSURL URLWithString:[object valueForKey:@"related_avatar"]] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
@@ -229,7 +229,7 @@
     NSString *time = featured ? NSLocalizedString(@"Featured", nil) : @"";
     NSString *image = featured ? @"star2" : nil;
     
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:nil];
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
 
     if ([user[@"type"] isEqualToString:@"facebook"]) {
@@ -273,7 +273,7 @@
     NSString *time = @"";
     NSString *image = nil;
     
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:nil];
     
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
 
@@ -290,7 +290,7 @@
     NSString *time = @"";
     NSString *image = nil;
     
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:nil];
     
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImage:[UIImage imageNamed:@"get_clues_btn"]];
@@ -305,7 +305,7 @@
     NSString *time = @"";
     NSString *image = nil;
     
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:nil];
     
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [avatarView setImage:[UIImage imageNamed:@"more2"]];

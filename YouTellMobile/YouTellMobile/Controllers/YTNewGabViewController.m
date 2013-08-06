@@ -49,11 +49,15 @@
     self.searchBar.delegate = self;
     self.searchBar.backgroundImage = [YTHelper imageNamed:@"navbar3"];
     self.tableView.tableHeaderView = self.searchBar;
+    self.tableView.tableFooterView = [UIView new];
+    self.tableView.backgroundColor = [UIColor clearColor];
 
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonWasClicked)];
     
+    self.view.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
+
     [self.view addSubview:self.tableView];
     
     self.title = NSLocalizedString(@"New Message", nil);
@@ -99,7 +103,7 @@
     NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation.", nil);
     NSString *image = nil;
     NSString *time = @"";
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:[UIColor whiteColor]];
     
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     [[YTContactHelper sharedInstance] showAvatarInImageView:avatarView forContact:record];
@@ -114,7 +118,7 @@
     NSString *time = @"";
     NSString *image = nil;
     
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:[UIColor whiteColor]];
     
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
     

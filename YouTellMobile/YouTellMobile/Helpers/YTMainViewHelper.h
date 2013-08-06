@@ -11,6 +11,6 @@
 
 + (YTMainViewHelper*)sharedInstance;
 - (UITableViewCell *)cellWithTableView:(UITableView*)tableView;
-- (UITableViewCell *)cellWithTableView:(UITableView*)tableView title:(NSString*)title subtitle:(NSString*)subtitle time:(NSString*)time image:(NSString*)image;
+- (UITableViewCell *)cellWithTableView:(UITableView*)tableView title:(NSString*)title subtitle:(NSString*)subtitle time:(NSString*)time image:(NSString*)image backgroundColor:(UIColor*)backgroundColor;
 
 @end
