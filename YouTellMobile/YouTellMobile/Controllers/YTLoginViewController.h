@@ -11,17 +11,5 @@
 
 
 @interface YTLoginViewController : YTViewController
-
-@property (strong, nonatomic) UIButton *button;
-@property (strong, nonatomic) UIButton *gppButton;
-
-@property (strong, nonatomic) UIView *bar;
-@property (strong, nonatomic) UIImageView *imageView;
-@property (strong, nonatomic) UIImage *image;
-@property (strong, nonatomic) UIImageView *logoView;
-
-
-- (IBAction)loginButtonWasPressed:(id)sender;
-- (void) loginFailed;
-
+- (void) showLoginButtons;
 @end

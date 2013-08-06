@@ -16,8 +16,8 @@
 
 - (BOOL)handleOpenURL:(NSURL*)url sourceApplication:(NSString*)sourceApplication annotation:(id)annotation;
 - (void)signOut;
-- (void)signIn;
-- (void)setup;
+- (bool)trySilentAuth;
+- (void)requestAuth;
 - (void)presentShareDialog;
 
 @property (strong, nonatomic) NSMutableArray *friends;

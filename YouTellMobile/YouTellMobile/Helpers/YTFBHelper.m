@@ -22,13 +22,33 @@
 #import "YTHelper.h"
 #import "YTConfig.h"
 
+@interface YTFBHelper ()
++ (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error;
++ (void)createSession;
++ (void)fetchUserData;
++ (NSArray*) perms;
+@end
+
 @implementation YTFBHelper
 
-+ (void)setup
++ (bool)trySilentAuth{
+    [YTFBHelper createSession];
+    return [FBSession openActiveSessionWithReadPermissions:[YTFBHelper perms]
+                                              allowLoginUI:NO
+                                         completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                                             [YTFBHelper sessionStateChanged:session state:status error:error];
+                                         }];
+}
+    
++ (void)requestAuth
 {
-    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
-        [YTFBHelper openSession];
-    }
+    [YTFBHelper createSession];
+    [[FBSession activeSession] openWithBehavior:FBSessionLoginBehaviorWithFallbackToWebView
+              completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                  [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                      [YTFBHelper sessionStateChanged:session state:status error:error];
+                  }];
+              }];
 }
 
 + (void)sessionOpened
@@ -48,7 +68,6 @@
     
     delegate.userInfo[@"access_token"] = token_data.accessToken;
     
-
     [YTApiHelper login:^(id JSON) {
         [YTFBHelper fetchUserData];
     }];
@@ -56,15 +75,14 @@
 
 + (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error
 {
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    
     switch(state) {
         case FBSessionStateOpen:
             [YTFBHelper sessionOpened];
             break;
         case FBSessionStateClosed:
+            break; //do nothing; signOut in AppDelegate handles all of this
         case FBSessionStateClosedLoginFailed:
-            [delegate.navController popToRootViewControllerAnimated:NO];
+            //login failed; show the login page just in case
             [FBSession.activeSession closeAndClearTokenInformation];
             [YTViewHelper showLogin];
             break;
@@ -140,8 +158,6 @@
             [YTFBHelper fetchLikes];
             //actually logged in : important changestore ID above...
             [YTApiHelper postLogin];
-            [YTViewHelper hideLogin];
-
         }];
     }];
 }
@@ -222,34 +238,21 @@
     
     if(likes && interest && family) {
         [YTApiHelper updateUserInfo:nil];
-    }    
+    }
 }
 
-+ (void)openSession
++ (NSArray*) perms
 {
-    NSArray *perms = @[@"email", @"user_birthday", @"user_education_history", @"user_work_history", @"user_location", @"user_relationships", @"user_likes", @"user_interests"];
+    return @[@"email", @"user_birthday", @"user_education_history",
+             @"user_work_history", @"user_location", @"user_relationships",
+             @"user_likes", @"user_interests"];
+}
 
-
++ (void)createSession;
+{
+    FBSession *session = [[FBSession alloc] initWithPermissions:[YTFBHelper perms]];
     
-   FBSession *session = [[FBSession alloc] initWithPermissions:perms];
-   [FBSession setActiveSession:session];
-    [session openWithBehavior:FBSessionLoginBehaviorWithFallbackToWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTFBHelper sessionStateChanged:session state:status error:error];
-        }];
-        
-    }];
-    
-    return;
-    
-    [FBSession openActiveSessionWithReadPermissions:perms allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTFBHelper sessionStateChanged:session state:state error:error];
-        }];
-        
-    }];
+    [FBSession setActiveSession:session];
 }
 
 + (void)closeSession

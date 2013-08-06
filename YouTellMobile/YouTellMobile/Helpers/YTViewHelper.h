@@ -14,6 +14,7 @@
 + (void)endRefreshing;
 
 + (void)showLogin;
++ (void)showLoginWithButtons;
 + (void)hideLogin;
 + (void)showTerms;
 + (void)showPrivacy;
