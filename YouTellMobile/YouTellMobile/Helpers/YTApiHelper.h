@@ -11,6 +11,7 @@
 
 + (void)setup;
 + (void)login:(void(^)(id JSON))success;
++ (void)runPendingLogin;
 + (void)postLogin;
 + (void)resetUserInfo;
 + (NSURL*)baseUrl;
