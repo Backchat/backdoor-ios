@@ -76,10 +76,13 @@
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
+    cell.backgroundView = [UIView new];
+    cell.backgroundView.backgroundColor = [UIColor clearColor];
+    
     return cell;
 }
 
-- (UITableViewCell *)cellWithTableView:(UITableView*)tableView title:(NSString*)title subtitle:(NSString*)subtitle time:(NSString*)time image:(NSString*)image
+- (UITableViewCell *)cellWithTableView:(UITableView*)tableView title:(NSString*)title subtitle:(NSString*)subtitle time:(NSString*)time image:(NSString*)image backgroundColor:(UIColor*)backgroundColor
 {
     UITableViewCell *cell = [self cellWithTableView:tableView];
     
@@ -141,6 +144,9 @@
     for (UIView *view in cell.contentView.subviews) {
         view.alpha = 1;
     }
+    
+    if(backgroundColor)
+        cell.backgroundView.backgroundColor = backgroundColor;
     
     return cell;
 }
