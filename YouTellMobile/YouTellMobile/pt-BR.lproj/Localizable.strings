@@ -1,3 +1,29 @@
+/* SMS stuff */
+"Send anonymous text to invite" = "Enviar mensagens anônimas para convidar";
+
+"Someone you know wants you to try Backdoor! Anonymously message your friends. http://backdoorapp.com" = "Alguém que você conhece esta te convidando para experimentar o Backdoor. Envie menssagens anonimas para seus amigos! http://backdoorapp.com";
+
+"Choose from my address book" = "Escolher entre os contatos";
+
+/* Update Alert */
+
+"New in this version" = "Novo nesta versão";
+"New version available" = "Uma nova versão do Backdoor está disponível";
+"Version %@" = "Versão %@";
+"OK" = "OK";
+"Ignore" = "Ignorar";
+"Download" = "Download";
+"Remind Me Later" = "Lembrar depois";
+
+/*iRate */
+
+"iRateMessageTitle" = "Avalie o %@";
+"iRateAppMessage" = "Se você gosta de usar o %@, você se importaria de tirar um momento para avaliá-lo? Não vai demorar mais que um minuto. Obrigado pelo apoio!";
+"iRateGameMessage" = "If you enjoy playing %@, would you mind taking a moment to rate it? It won’t take more than a minute. Thanks for your support!";
+"iRateCancelButton" = "Não, obrigado";
+"iRateRateButton" = "Avaliar agora";
+"iRateRemindButton" = "Lembrar-me depois";
+
 /* No comment provided by engineer. */
 "Tap me to start a new conversation." = "Me enviar uma nova conversa.";
 

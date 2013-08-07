@@ -1,3 +1,29 @@
+/* SMS stuff */
+"Send anonymous text to invite" = "Send anonymous text to invite";
+
+"Someone you know wants you to try Backdoor! Anonymously message your friends. http://backdoorapp.com" = "Someone you know wants you to try Backdoor! Anonymously message your friends. http://backdoorapp.com";
+
+"Choose from my address book" = "Choose from my address book";
+
+/* Update Alert */
+
+"New in this version" = "New in this version";
+"New version available" = "New version available";
+"Version %@" = "Version %@";
+"OK" = "OK";
+"Ignore" = "Ignore";
+"Download" = "Download";
+"Remind Me Later" = "Remind Me Later";
+
+/*iRate */
+
+"iRateMessageTitle" = "Rate %@";
+"iRateAppMessage" = "If you enjoy using %@, would you mind taking a moment to rate it? It won’t take more than a minute. Thanks for your support!";
+"iRateGameMessage" = "If you enjoy playing %@, would you mind taking a moment to rate it? It won’t take more than a minute. Thanks for your support!";
+"iRateCancelButton" = "No, Thanks";
+"iRateRateButton" = "Rate It Now";
+"iRateRemindButton" = "Remind Me Later";
+
 /* No comment provided by engineer. */
 "Tap me to start a new conversation." = "Tap me to start a new conversation.";
 
