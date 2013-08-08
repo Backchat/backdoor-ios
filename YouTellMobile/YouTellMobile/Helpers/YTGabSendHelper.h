@@ -7,8 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "YTContactWidget.h"
-
 @class YTGabViewController;
 @class YTContactWidget;
 
@@ -17,16 +15,13 @@ enum {
     YTMessageKindPhoto
 };
 
-@interface YTGabSendHelper : NSObject <YTContactWidgetDelegate, UITextFieldDelegate>
+@interface YTGabSendHelper : NSObject <UITextFieldDelegate>
 
 @property (weak, nonatomic) YTGabViewController *gabView;
 
-@property (strong, nonatomic) YTContactWidget *contactWidget;
-@property (strong, nonatomic) UITableView *contactTable;
 @property (strong, nonatomic) UIPopoverController *popover;
 
 - (id)initWithGabView:(YTGabViewController*)gabView;
 - (void)updateButtons;
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text;
-- (void)keyboardWillShowHide:(NSNotification *)notification;
 @end

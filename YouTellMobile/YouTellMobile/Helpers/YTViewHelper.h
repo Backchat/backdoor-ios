@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "YTFriend.h"
 
 @interface YTViewHelper : NSObject
 
@@ -19,8 +20,8 @@
 + (void)showTerms;
 + (void)showPrivacy;
 + (void)showGabWithId:(NSNumber*)gabId;
-+ (void)showGabWithReceiver:(NSDictionary*)receiver;
 + (void)showGab;
++ (void)showGabWithFriend:(YTFriend*)f;
 + (void)showFeedback;
 + (void)showGabs;
 + (void)showSettings;

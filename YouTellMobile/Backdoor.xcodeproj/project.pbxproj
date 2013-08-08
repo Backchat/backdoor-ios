@@ -10,6 +10,16 @@
 		372FA910171C83DA00E3BCB2 /* ipad-icon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 372FA90F171C83D900E3BCB2 /* ipad-icon2x.png */; };
 		372FA912171C83E500E3BCB2 /* ipad-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 372FA911171C83E500E3BCB2 /* ipad-icon.png */; };
 		3E9F69161761407D00374616 /* YTGabMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F69151761407C00374616 /* YTGabMessage.m */; };
+		3EB7BD1F17B432FA00FE0E5D /* choose_address_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */; };
+		3EB7BD2017B432FA00FE0E5D /* choose_address_book@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD1E17B432FA00FE0E5D /* choose_address_book@2x.png */; };
+		3EC93C5917B0ADAB007A29B2 /* YTFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C5617B0ADAB007A29B2 /* YTFriend.m */; };
+		3EC93C5A17B0ADAB007A29B2 /* YTFriends.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C5817B0ADAB007A29B2 /* YTFriends.m */; };
+		3EC93C6117B0AF9A007A29B2 /* YTContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C5E17B0AF9A007A29B2 /* YTContact.m */; };
+		3EC93C6217B0AF9A007A29B2 /* YTContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C6017B0AF9A007A29B2 /* YTContacts.m */; };
+		3EC93C7617B0B1FE007A29B2 /* YTAddressBookHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C7517B0B1FE007A29B2 /* YTAddressBookHelper.m */; };
+		3EC93C8C17B0B20B007A29B2 /* YTInviteContactComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C8817B0B20B007A29B2 /* YTInviteContactComposeViewController.m */; };
+		3EC93C8D17B0B20B007A29B2 /* YTInviteContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C8A17B0B20B007A29B2 /* YTInviteContactViewController.m */; };
+		3EC93C8E17B0B20B007A29B2 /* YTInviteContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EC93C8B17B0B20B007A29B2 /* YTInviteContactViewController.xib */; };
 		3EE9159A176815AE0090371C /* gpp_tableitem3.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EE91598176815AE0090371C /* gpp_tableitem3.png */; };
 		3EE9159B176815AE0090371C /* gpp_tableitem3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EE91599176815AE0090371C /* gpp_tableitem3@2x.png */; };
 		3EEC6FEE176BC7880045AF63 /* icon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EEC6FEB176BC7880045AF63 /* icon_57x57.png */; };
@@ -67,8 +77,6 @@
 		B240392A16F080FA000632AA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B240390216F080F9000632AA /* Foundation.framework */; };
 		B240393216F080FA000632AA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B240393016F080FA000632AA /* InfoPlist.strings */; };
 		B240393516F080FA000632AA /* YouTellMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B240393416F080FA000632AA /* YouTellMobileTests.m */; };
-		B24CB29116FF36AF00813B2C /* YTContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB28F16FF36AF00813B2C /* YTContactsViewController.m */; };
-		B24CB29216FF36AF00813B2C /* YTContactsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B24CB29016FF36AF00813B2C /* YTContactsViewController.xib */; };
 		B24CB2951701AE9C00813B2C /* YTGabPhotoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2941701AE9C00813B2C /* YTGabPhotoHelper.m */; };
 		B24CB2991701B1DD00813B2C /* YTPhotoSendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2971701B1DD00813B2C /* YTPhotoSendViewController.m */; };
 		B24CB29A1701B1DD00813B2C /* YTPhotoSendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B24CB2981701B1DD00813B2C /* YTPhotoSendViewController.xib */; };
@@ -239,8 +247,6 @@
 		B2D8400E175F410000FAB33C /* YTSocialHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D8400D175F410000FAB33C /* YTSocialHelper.m */; };
 		B2D84016175F44E000FAB33C /* gpp_tableitem2.png in Resources */ = {isa = PBXBuildFile; fileRef = B2D84014175F44E000FAB33C /* gpp_tableitem2.png */; };
 		B2D84017175F44E000FAB33C /* gpp_tableitem2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2D84015175F44E000FAB33C /* gpp_tableitem2@2x.png */; };
-		B2DBF9C616FB1BDE00FFC967 /* YTContactWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DBF9C516FB1BDE00FFC967 /* YTContactWidget.m */; };
-		B2DBF9C916FB2F4E00FFC967 /* YTContactHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B2DBF9C816FB2F4E00FFC967 /* YTContactHelper.m */; };
 		B2E68F2017266DFF00914B40 /* tour32.png in Resources */ = {isa = PBXBuildFile; fileRef = B2E68F1C17266DFF00914B40 /* tour32.png */; };
 		B2E68F2117266DFF00914B40 /* tour32@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2E68F1D17266DFF00914B40 /* tour32@2x.png */; };
 		B2E68F2217266DFF00914B40 /* fbsharebtn.png in Resources */ = {isa = PBXBuildFile; fileRef = B2E68F1E17266DFF00914B40 /* fbsharebtn.png */; };
@@ -425,6 +431,23 @@
 		372FA911171C83E500E3BCB2 /* ipad-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ipad-icon.png"; path = "../../ipad-icon.png"; sourceTree = "<group>"; };
 		3E9F69141761407C00374616 /* YTGabMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabMessage.h; path = Helpers/YTGabMessage.h; sourceTree = "<group>"; };
 		3E9F69151761407C00374616 /* YTGabMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabMessage.m; path = Helpers/YTGabMessage.m; sourceTree = "<group>"; };
+		3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = choose_address_book.png; sourceTree = "<group>"; };
+		3EB7BD1E17B432FA00FE0E5D /* choose_address_book@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "choose_address_book@2x.png"; sourceTree = "<group>"; };
+		3EC93C5517B0ADAB007A29B2 /* YTFriend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTFriend.h; sourceTree = "<group>"; };
+		3EC93C5617B0ADAB007A29B2 /* YTFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTFriend.m; sourceTree = "<group>"; };
+		3EC93C5717B0ADAB007A29B2 /* YTFriends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTFriends.h; sourceTree = "<group>"; };
+		3EC93C5817B0ADAB007A29B2 /* YTFriends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTFriends.m; sourceTree = "<group>"; };
+		3EC93C5D17B0AF9A007A29B2 /* YTContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTContact.h; sourceTree = "<group>"; };
+		3EC93C5E17B0AF9A007A29B2 /* YTContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTContact.m; sourceTree = "<group>"; };
+		3EC93C5F17B0AF9A007A29B2 /* YTContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTContacts.h; sourceTree = "<group>"; };
+		3EC93C6017B0AF9A007A29B2 /* YTContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTContacts.m; sourceTree = "<group>"; };
+		3EC93C7417B0B1FE007A29B2 /* YTAddressBookHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTAddressBookHelper.h; path = Helpers/YTAddressBookHelper.h; sourceTree = "<group>"; };
+		3EC93C7517B0B1FE007A29B2 /* YTAddressBookHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTAddressBookHelper.m; path = Helpers/YTAddressBookHelper.m; sourceTree = "<group>"; };
+		3EC93C8717B0B20B007A29B2 /* YTInviteContactComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTInviteContactComposeViewController.h; sourceTree = "<group>"; };
+		3EC93C8817B0B20B007A29B2 /* YTInviteContactComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTInviteContactComposeViewController.m; sourceTree = "<group>"; };
+		3EC93C8917B0B20B007A29B2 /* YTInviteContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTInviteContactViewController.h; sourceTree = "<group>"; };
+		3EC93C8A17B0B20B007A29B2 /* YTInviteContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTInviteContactViewController.m; sourceTree = "<group>"; };
+		3EC93C8B17B0B20B007A29B2 /* YTInviteContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YTInviteContactViewController.xib; sourceTree = "<group>"; };
 		3EE91598176815AE0090371C /* gpp_tableitem3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gpp_tableitem3.png; sourceTree = "<group>"; };
 		3EE91599176815AE0090371C /* gpp_tableitem3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gpp_tableitem3@2x.png"; sourceTree = "<group>"; };
 		3EEC6FEB176BC7880045AF63 /* icon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_57x57.png; sourceTree = SOURCE_ROOT; };
@@ -488,9 +511,6 @@
 		B240393116F080FA000632AA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B240393316F080FA000632AA /* YouTellMobileTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YouTellMobileTests.h; sourceTree = "<group>"; };
 		B240393416F080FA000632AA /* YouTellMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YouTellMobileTests.m; sourceTree = "<group>"; };
-		B24CB28E16FF36AF00813B2C /* YTContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTContactsViewController.h; sourceTree = "<group>"; };
-		B24CB28F16FF36AF00813B2C /* YTContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTContactsViewController.m; sourceTree = "<group>"; };
-		B24CB29016FF36AF00813B2C /* YTContactsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YTContactsViewController.xib; sourceTree = "<group>"; };
 		B24CB2931701AE9C00813B2C /* YTGabPhotoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabPhotoHelper.h; path = Helpers/YTGabPhotoHelper.h; sourceTree = "<group>"; };
 		B24CB2941701AE9C00813B2C /* YTGabPhotoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabPhotoHelper.m; path = Helpers/YTGabPhotoHelper.m; sourceTree = "<group>"; };
 		B24CB2961701B1DD00813B2C /* YTPhotoSendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPhotoSendViewController.h; sourceTree = "<group>"; };
@@ -711,10 +731,6 @@
 		B2D8400D175F410000FAB33C /* YTSocialHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTSocialHelper.m; path = Helpers/YTSocialHelper.m; sourceTree = "<group>"; };
 		B2D84014175F44E000FAB33C /* gpp_tableitem2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gpp_tableitem2.png; sourceTree = "<group>"; };
 		B2D84015175F44E000FAB33C /* gpp_tableitem2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gpp_tableitem2@2x.png"; sourceTree = "<group>"; };
-		B2DBF9C416FB1BDE00FFC967 /* YTContactWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTContactWidget.h; path = Widgets/YTContactWidget.h; sourceTree = "<group>"; };
-		B2DBF9C516FB1BDE00FFC967 /* YTContactWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTContactWidget.m; path = Widgets/YTContactWidget.m; sourceTree = "<group>"; };
-		B2DBF9C716FB2F4E00FFC967 /* YTContactHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTContactHelper.h; path = Helpers/YTContactHelper.h; sourceTree = "<group>"; };
-		B2DBF9C816FB2F4E00FFC967 /* YTContactHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTContactHelper.m; path = Helpers/YTContactHelper.m; sourceTree = "<group>"; };
 		B2E68F1C17266DFF00914B40 /* tour32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tour32.png; sourceTree = "<group>"; };
 		B2E68F1D17266DFF00914B40 /* tour32@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tour32@2x.png"; sourceTree = "<group>"; };
 		B2E68F1E17266DFF00914B40 /* fbsharebtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fbsharebtn.png; sourceTree = "<group>"; };
@@ -829,6 +845,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3EC93C5417B0ADAB007A29B2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3EC93C5D17B0AF9A007A29B2 /* YTContact.h */,
+				3EC93C5E17B0AF9A007A29B2 /* YTContact.m */,
+				3EC93C5F17B0AF9A007A29B2 /* YTContacts.h */,
+				3EC93C6017B0AF9A007A29B2 /* YTContacts.m */,
+				3EC93C5517B0ADAB007A29B2 /* YTFriend.h */,
+				3EC93C5617B0ADAB007A29B2 /* YTFriend.m */,
+				3EC93C5717B0ADAB007A29B2 /* YTFriends.h */,
+				3EC93C5817B0ADAB007A29B2 /* YTFriends.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		B24038F416F080F9000632AA = {
 			isa = PBXGroup;
 			children = (
@@ -884,6 +915,7 @@
 		B240390616F080F9000632AA /* YouTellMobile */ = {
 			isa = PBXGroup;
 			children = (
+				3EC93C5417B0ADAB007A29B2 /* Models */,
 				B2C9D13416FF3137002DDE4F /* Controllers */,
 				B2DBF9C316FB1BC100FFC967 /* Widgets */,
 				B2A75AD516F1ED7E00F0CAB4 /* Media */,
@@ -1064,6 +1096,8 @@
 		B2A75AD516F1ED7E00F0CAB4 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */,
+				3EB7BD1E17B432FA00FE0E5D /* choose_address_book@2x.png */,
 				B2EF849E171DDDAB00EECBE7 /* avatar.gif */,
 				B29038091733D30A00A1F7D3 /* avatar4.png */,
 				B290380A1733D30A00A1F7D3 /* avatar4@2x.png */,
@@ -1236,10 +1270,10 @@
 		B2BA772416F093B7006C17F7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				3EC93C7417B0B1FE007A29B2 /* YTAddressBookHelper.h */,
+				3EC93C7517B0B1FE007A29B2 /* YTAddressBookHelper.m */,
 				B2BA772516F0940B006C17F7 /* YTApiHelper.h */,
 				B2BA772616F0940B006C17F7 /* YTApiHelper.m */,
-				B2DBF9C716FB2F4E00FFC967 /* YTContactHelper.h */,
-				B2DBF9C816FB2F4E00FFC967 /* YTContactHelper.m */,
 				B2C9E6EA16F491C300B589E2 /* YTFBHelper.h */,
 				B2C9E6EB16F491C300B589E2 /* YTFBHelper.m */,
 				B24CB2C71703136900813B2C /* YTGabClueHelper.h */,
@@ -1343,13 +1377,15 @@
 		B2C9D13416FF3137002DDE4F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3EC93C8717B0B20B007A29B2 /* YTInviteContactComposeViewController.h */,
+				3EC93C8817B0B20B007A29B2 /* YTInviteContactComposeViewController.m */,
+				3EC93C8917B0B20B007A29B2 /* YTInviteContactViewController.h */,
+				3EC93C8A17B0B20B007A29B2 /* YTInviteContactViewController.m */,
+				3EC93C8B17B0B20B007A29B2 /* YTInviteContactViewController.xib */,
 				B2225EFA173FCF7900A47F28 /* YTAbuseViewController.h */,
 				B2225EFB173FCF7900A47F28 /* YTAbuseViewController.m */,
 				B2E68F461727160900914B40 /* YTBaseSettingsViewController.h */,
 				B2E68F471727160900914B40 /* YTBaseSettingsViewController.m */,
-				B24CB28E16FF36AF00813B2C /* YTContactsViewController.h */,
-				B24CB28F16FF36AF00813B2C /* YTContactsViewController.m */,
-				B24CB29016FF36AF00813B2C /* YTContactsViewController.xib */,
 				B2C9D13816FF3137002DDE4F /* YTFeedbackViewController.h */,
 				B2C9D13916FF3137002DDE4F /* YTFeedbackViewController.m */,
 				B2C9D13A16FF3137002DDE4F /* YTFeedbackViewController.xib */,
@@ -1357,6 +1393,11 @@
 				B2C9D13C16FF3137002DDE4F /* YTGabViewController.m */,
 				B2E68F4917271AD600914B40 /* YTHelpSettingsViewController.h */,
 				B2E68F4A17271AD600914B40 /* YTHelpSettingsViewController.m */,
+				3E5D6E3817A8E45400C45EEF /* YTInviteContactComposeViewController.h */,
+				3E5D6E3917A8E45500C45EEF /* YTInviteContactComposeViewController.m */,
+				3E5D6E2B17A87BC000C45EEF /* YTInviteContactViewController.h */,
+				3E5D6E2C17A87BC100C45EEF /* YTInviteContactViewController.m */,
+				3E5D6E2D17A87BC100C45EEF /* YTInviteContactViewController.xib */,
 				B2E68F4F17271FAB00914B40 /* YTInviteSettingsViewController.h */,
 				B2E68F5017271FAB00914B40 /* YTInviteSettingsViewController.m */,
 				B2C9D13D16FF3137002DDE4F /* YTLoginViewController.h */,
@@ -1395,8 +1436,6 @@
 		B2DBF9C316FB1BC100FFC967 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
-				B2DBF9C416FB1BDE00FFC967 /* YTContactWidget.h */,
-				B2DBF9C516FB1BDE00FFC967 /* YTContactWidget.m */,
 				B291102B170B057100A8508D /* YTLoginButton.h */,
 				B291102C170B057100A8508D /* YTLoginButton.m */,
 				B29037EE17325B4C00A1F7D3 /* YTFBLikeButton.h */,
@@ -1637,7 +1676,6 @@
 				B2C9D15316FF3137002DDE4F /* YTMainViewController.xib in Resources */,
 				B2C9D15516FF3137002DDE4F /* YTSettingsViewController.xib in Resources */,
 				B2C9D15816FF3137002DDE4F /* YTWebViewController.xib in Resources */,
-				B24CB29216FF36AF00813B2C /* YTContactsViewController.xib in Resources */,
 				B24CB29A1701B1DD00813B2C /* YTPhotoSendViewController.xib in Resources */,
 				B24CB2B31702057D00813B2C /* bubbleMine.png in Resources */,
 				B24CB2B41702057D00813B2C /* bubbleMine@2x.png in Resources */,
@@ -1817,6 +1855,9 @@
 				B2C619BC17A85CED0081EF03 /* get_clues_btn.png in Resources */,
 				B2C619BD17A85CED0081EF03 /* get_clues_btn@2x.png in Resources */,
 				B2649EA417B0485900FB5663 /* iVersion.bundle in Resources */,
+				3EC93C8E17B0B20B007A29B2 /* YTInviteContactViewController.xib in Resources */,
+				3EB7BD1F17B432FA00FE0E5D /* choose_address_book.png in Resources */,
+				3EB7BD2017B432FA00FE0E5D /* choose_address_book@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1882,8 +1923,6 @@
 				B25E462C16F99FB3005DB8FB /* NSString+JSMessagesView.m in Sources */,
 				B25E463F16F99FB3005DB8FB /* UIView+AnimationOptionsForCurve.m in Sources */,
 				B25E464616F9F09A005DB8FB /* YTStoreHelper.m in Sources */,
-				B2DBF9C616FB1BDE00FFC967 /* YTContactWidget.m in Sources */,
-				B2DBF9C916FB2F4E00FFC967 /* YTContactHelper.m in Sources */,
 				B2C9D14D16FF3137002DDE4F /* YTFeedbackViewController.m in Sources */,
 				B2C9D14F16FF3137002DDE4F /* YTGabViewController.m in Sources */,
 				B2C9D15016FF3137002DDE4F /* YTLoginViewController.m in Sources */,
@@ -1891,7 +1930,6 @@
 				B2C9D15416FF3137002DDE4F /* YTSettingsViewController.m in Sources */,
 				B2C9D15616FF3137002DDE4F /* YTViewController.m in Sources */,
 				B2C9D15716FF3137002DDE4F /* YTWebViewController.m in Sources */,
-				B24CB29116FF36AF00813B2C /* YTContactsViewController.m in Sources */,
 				B24CB2951701AE9C00813B2C /* YTGabPhotoHelper.m in Sources */,
 				B24CB2991701B1DD00813B2C /* YTPhotoSendViewController.m in Sources */,
 				B24CB2BD1702057D00813B2C /* NSBubbleData.m in Sources */,
@@ -1922,6 +1960,13 @@
 				B29B6AF21788268F00E9E197 /* YTMainViewHelper.m in Sources */,
 				B2C6199217A312FF0081EF03 /* YTRateHelper.m in Sources */,
 				B2649EA517B0485900FB5663 /* iVersion.m in Sources */,
+				3EC93C5917B0ADAB007A29B2 /* YTFriend.m in Sources */,
+				3EC93C5A17B0ADAB007A29B2 /* YTFriends.m in Sources */,
+				3EC93C6117B0AF9A007A29B2 /* YTContact.m in Sources */,
+				3EC93C6217B0AF9A007A29B2 /* YTContacts.m in Sources */,
+				3EC93C7617B0B1FE007A29B2 /* YTAddressBookHelper.m in Sources */,
+				3EC93C8C17B0B20B007A29B2 /* YTInviteContactComposeViewController.m in Sources */,
+				3EC93C8D17B0B20B007A29B2 /* YTInviteContactViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2224,8 +2269,8 @@
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = Backdoor;
-				PROVISIONING_PROFILE = "49E070CB-7260-4759-A9F6-69A20E037DD7";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "49E070CB-7260-4759-A9F6-69A20E037DD7";
+				PROVISIONING_PROFILE = "08336552-1B54-4D62-AE58-12383E1D9DE5";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08336552-1B54-4D62-AE58-12383E1D9DE5";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
