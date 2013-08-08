@@ -6,8 +6,11 @@
 //  Copyright (c) 2013 4WT. All rights reserved.
 //
 
-#import "YTInviteContactComposeViewController.h"
 #import <QuartzCore/QuartzCore.h>
+
+#import <Mixpanel.h>
+
+#import "YTInviteContactComposeViewController.h"
 #import "YTViewHelper.h"
 #import "YTApiHelper.h"
 #import "YTHelper.h"
@@ -93,6 +96,8 @@
 
 - (void)sendPressed:(UIButton*)sender
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Compose Invite View / Send Button"];
+
     [YTApiHelper sendInviteText:self.contact body:self.textView.text success:^(id JSON) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invite sent", nil)
                                                         message:NSLocalizedString(@"Your anonymous invite has been sent!", nil)

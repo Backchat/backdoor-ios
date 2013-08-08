@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 4WT. All rights reserved.
 //
 
+#import <Mixpanel.h>
+
 #import "YTInviteContactViewController.h"
 #import "YTContacts.h"
 #import <AddressBook/AddressBook.h>
@@ -132,12 +134,16 @@
     switch(indexPath.section) {
         case 0:
         {
+            [[Mixpanel sharedInstance] track:@"Tapped Invite Contact View / Contact Item"];
+
             YTContact* c = [self.possibleContacts contactAtIndex:indexPath.row];
             [self showInviteViewForContact:c];
             return;
         }
         case 1:
         {
+            [[Mixpanel sharedInstance] track:@"Tapped Invite Contact View / Address Book Item"];
+
             ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
             picker.displayedProperties = @[[NSNumber numberWithInt:kABPersonPhoneProperty]];
             picker.peoplePickerDelegate = self;
