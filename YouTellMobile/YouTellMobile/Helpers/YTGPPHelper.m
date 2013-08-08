@@ -134,8 +134,12 @@
             [Flurry setAge:age];
             [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
         }
-        
-        NSDictionary *userData = @{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName, @"$email": email, @"Google+ Id": person.identifier};
+
+        NSString *firstName = person.name.givenName ? person.name.givenName : @"";
+        NSString *lastName = person.name.familyName ? person.name.familyName : @"";
+        NSString *uid = person.identifier ? person.identifier : @"";
+
+        NSDictionary *userData = @{@"$first_name": firstName, @"$last_name": lastName, @"$email": email, @"Google+ Id": uid};
         [[Mixpanel sharedInstance].people set:userData];
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
         
