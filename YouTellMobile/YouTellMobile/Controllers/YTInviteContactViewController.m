@@ -36,6 +36,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
+
     self.headerLabel.text = [NSString stringWithFormat:NSLocalizedString(@"What's %@'s number?", nil),
                         self.contact.name];
     
@@ -50,6 +52,7 @@
                                           self.view.frame.size.width,
                                           self.view.frame.size.height - self.contactsTable.frame.origin.y);
     
+    if(self.contact)
     [YTAddressBookHelper fetchContactsFromAddressBookByContact:self.contact
                                                        success:^(YTContacts *c) {
                                                            self.possibleContacts = c;
@@ -90,8 +93,6 @@
         title = c.name;
         subtitle = c.phone_number;
         image = c.image;
-        if(!image)
-            image = [YTHelper imageNamed:@"avatar6"];
     }
     else {
         image = [YTHelper imageNamed:@"choose_address_book"];

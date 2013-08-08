@@ -7,6 +7,13 @@
 //
 
 #import "YTContact.h"
+#import "YTHelper.h"
+
+@interface YTContact ()
+{
+    UIImage* _image;
+}
+@end
 
 @implementation YTContact
 
@@ -15,7 +22,13 @@
 @synthesize value;
 @synthesize phone_number;
 @synthesize type;
-@synthesize image;
+
+- (id)init
+{
+    if(self = [super init])
+        _image = nil;
+    return self;
+}
 
 - (id)copyWithZone:(NSZone *)zone
 {
@@ -27,6 +40,7 @@
         copy.value = [self.value copyWithZone:zone];
         copy.type = [self.type copyWithZone:zone];
         copy.phone_number = [self.phone_number copyWithZone:zone];
+        copy->_image  = [_image copy];
     }
     
     return copy;
@@ -58,4 +72,15 @@
         return nil;
 }
 
+- (UIImage*) image {
+    if(_image)
+        return _image;
+    else
+        return [YTHelper imageNamed:@"avatar6"];
+}
+
+- (void) setImage:(UIImage *)image
+{
+    _image = image;
+}
 @end
