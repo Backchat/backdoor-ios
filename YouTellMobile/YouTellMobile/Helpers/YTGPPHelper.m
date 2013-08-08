@@ -113,12 +113,7 @@
         NSString *email = delegate.userInfo[@"gpp_data"][@"email"];
         
         [[Mixpanel sharedInstance] identify:email];
-        [Instabug setUserDataString:email];
 
-        
-        if (delegate.deviceToken) {
-            [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
-        }
         
         if ([person.gender isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];

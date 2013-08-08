@@ -101,11 +101,7 @@
         NSString *email = result[@"email"] ? result[@"email"] : [NSString stringWithFormat:@"%@@facebook.com", uid];
 
         [[Mixpanel sharedInstance] identify:email];
-        [Instabug setUserDataString:email];
-        
-        if (delegate.deviceToken) {
-            [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
-        }
+
         
         if ([result[@"gender"] isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];
