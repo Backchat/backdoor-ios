@@ -47,14 +47,26 @@
 
 + (YTContacts*) contactsFromAddressBook:(ABAddressBookRef) addressBook withContact:(YTContact*)contact
 {
-    CFArrayRef people = ABAddressBookCopyPeopleWithName(addressBook, (__bridge CFStringRef)contact.name);
+    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
             
     NSMutableArray* contacts = [[NSMutableArray alloc] init];
     for(CFIndex i=0;i<CFArrayGetCount(people);i++) {
         ABRecordRef* person = (ABRecordRef*) CFArrayGetValueAtIndex(people, i);
-        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
         NSString* first_name = (__bridge_transfer NSString*) ABRecordCopyValue(person, kABPersonFirstNameProperty);
         NSString* last_name = (__bridge_transfer NSString*) ABRecordCopyValue(person, kABPersonLastNameProperty);
+        
+        /*
+         substring match on first OR last name */
+        NSStringCompareOptions opt = NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch|NSWidthInsensitiveSearch;
+        if(
+           [first_name rangeOfString:contact.first_name options:opt].location == NSNotFound &&
+           [first_name rangeOfString:contact.last_name options:opt].location == NSNotFound &&
+           [last_name rangeOfString:contact.first_name options:opt].location == NSNotFound &&
+           [last_name rangeOfString:contact.last_name options:opt].location == NSNotFound)
+            continue;
+
+        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
+
         UIImage *image = nil;
         if(ABPersonHasImageData(person)) {
             NSData *imageData = (__bridge_transfer NSData*)ABPersonCopyImageData(person);
@@ -64,8 +76,8 @@
         for (CFIndex i = 0; i < ABMultiValueGetCount(phoneNumbers); i++) {
             NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, i);
             YTContact* c = [contact copy];
-            c.first_name = first_name;
-            c.last_name = last_name;
+            c.first_name = first_name ? first_name : @"";
+            c.last_name = last_name ? last_name : @"";
             c.phone_number = phoneNumber;
             c.image = [image copy];
             [contacts addObject:c];
