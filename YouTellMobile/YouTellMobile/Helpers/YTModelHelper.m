@@ -112,6 +112,35 @@
     [context save:&error];
 }
 
++ (void)setJSONSettingsForKey:(NSString*)key value:(id)value
+{
+    NSError *error;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:value options:0 error:&error];
+    
+    if (error) {
+        return;
+    }
+    
+    NSString *string = [data base64String];
+    
+    [YTModelHelper setSettingsForKey:key value:string];
+}
+
++ (id)jsonSettingsForKey:(NSString*)key
+{
+    NSError *error;
+    NSString *string = [YTModelHelper settingsForKey:key];
+    
+    if (!string) {
+        return nil;
+    }
+    
+    NSData *data = [NSData dataWithBase64String:string];
+    id object = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    
+    return error ? nil : object;
+}
+
 + (NSManagedObject*)findOrCreateWithId:(NSString*)oId entityName:(NSString*)entityName context:(NSManagedObjectContext*)context
 {
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:entityName];

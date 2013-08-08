@@ -104,8 +104,7 @@ void uncaughtExceptionHandler(NSException *exception)
 {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
-    self.featuredUsers = @[];
-    
+   
     [YTApiHelper setup];
     [YTModelHelper setup];    
     [[YTContactHelper sharedInstance] setup];

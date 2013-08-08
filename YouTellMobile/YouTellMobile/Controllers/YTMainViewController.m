@@ -27,12 +27,12 @@
 #import "YTFBHelper.h"
 
 
-#define SECTION_GABS 0
-#define SECTION_FRIENDS 1
-#define SECTION_MORE 2
-#define SECTION_SHARE 3
-#define SECTION_CLUES 4
-#define SECTION_FEATURED 5
+#define SECTION_GABS 1
+#define SECTION_FRIENDS 2
+#define SECTION_MORE 3
+#define SECTION_SHARE 4
+#define SECTION_CLUES 5
+#define SECTION_FEATURED 0
 #define SECTION_COUNT 6
 
 @interface YTMainViewController ()
@@ -159,7 +159,7 @@
 
 - (NSInteger)numberOfFeaturedRows
 {
-    return [[YTAppDelegate current].featuredUsers count];
+    return [YTContactHelper sharedInstance].filteredFeaturedUsers.count;
 }
 
 - (NSInteger)numberOfMoreRows
@@ -262,7 +262,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForUserAtRow:(NSInteger)row
 {
-    NSDictionary *user = [YTAppDelegate current].featuredUsers[row];
+    NSDictionary *user = [YTContactHelper sharedInstance].filteredFeaturedUsers[row];
     return [self tableView:tableView cellForUser:user featured:YES];
 }
 
@@ -352,7 +352,7 @@
     }
     else if (indexPath.section == SECTION_FEATURED) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Featured Users Item"];
-        NSDictionary *user = [YTAppDelegate current].featuredUsers[indexPath.row];
+        NSDictionary *user = [YTContactHelper sharedInstance].filteredFeaturedUsers[indexPath.row];
         [YTViewHelper showGabWithReceiver:user];
     }
     
@@ -366,7 +366,7 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == SECTION_GABS) {
+    if (indexPath.section == SECTION_GABS || indexPath.section == SECTION_FEATURED) {
         return YES;
     } else {
         return NO;
@@ -375,7 +375,9 @@
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
+    if (indexPath.section == SECTION_GABS) {
+        return UITableViewCellEditingStyleDelete;
+    } else if (indexPath.section == SECTION_FEATURED) {
         return UITableViewCellEditingStyleDelete;
     } else {
         return UITableViewCellEditingStyleNone;
@@ -392,11 +394,17 @@
         return;
     }
     
-    NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row filter:self.searchBar.text];
-    [YTApiHelper deleteGab:[object valueForKey:@"id"] success:^(id JSON) {
-        [[YTContactHelper sharedInstance] filterRandomizedFriends];
+    if (indexPath.section == SECTION_GABS) {
+        NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row filter:self.searchBar.text];
+        [YTApiHelper deleteGab:[object valueForKey:@"id"] success:^(id JSON) {
+            [[YTContactHelper sharedInstance] filterRandomizedFriends];
         // [tableView reloadData];   Called by filterRandomizedFriends
-    }];
+        }];
+    } else if (indexPath.section == SECTION_FEATURED) {
+        NSDictionary *user = [YTContactHelper sharedInstance].filteredFeaturedUsers[indexPath.row];
+        [[YTContactHelper sharedInstance] deleteFeaturedUser:user];
+        [tableView reloadData];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
