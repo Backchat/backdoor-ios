@@ -20,7 +20,6 @@
 #import "YTViewHelper.h"
 #import "YTModelHelper.h"
 #import "YTAppDelegate.h"
-#import "YTContactHelper.h"
 #import "YTHelper.h"
 
 @implementation YTGPPHelper
@@ -178,7 +177,7 @@
             [self fetchFriendsWithPageToken:peopleFeed.nextPageToken];
         } else {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [[YTContactHelper sharedInstance] loadGPPFriends:self.friends];
+                //[[YTContactHelper sharedInstance] loadGPPFriends:self.friends];
             }];
         }
     }];
