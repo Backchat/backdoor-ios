@@ -39,12 +39,17 @@
     self.headerLabel.text = [NSString stringWithFormat:NSLocalizedString(@"What's %@'s number?", nil),
                         self.contact.name];
     
-    self.title = NSLocalizedString(@"Invite", nil);
+    self.title = NSLocalizedString(@"New Invite", nil);
     //cancel please
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonWasClicked)];
 
+    self.contactsTable.frame = CGRectMake(self.contactsTable.frame.origin.x,
+                                          self.contactsTable.frame.origin.y,
+                                          self.view.frame.size.width,
+                                          self.view.frame.size.height - self.contactsTable.frame.origin.y);
+    
     [YTAddressBookHelper fetchContactsFromAddressBookByContact:self.contact
                                                        success:^(YTContacts *c) {
                                                            self.possibleContacts = c;
@@ -88,21 +93,26 @@
         if(!image)
             image = [YTHelper imageNamed:@"avatar6"];
     }
-
+    else {
+        image = [YTHelper imageNamed:@"choose_address_book"];
+    }
     cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
                                                           image:nil
                                                          avatar:nil
                                                placeHolderImage:image
-                                                backgroundColor:nil];
+                                                backgroundColor:[UIColor whiteColor]];
 
     if(indexPath.section == 1) {
         //for some reason, iOS is not letting us have two cell types in the same UITableView, though that
         //should be just fine. urgh.
         UILabel *textLabel = (UILabel*)[cell viewWithTag:3];
         textLabel.text = @"Choose from my address book";
-        textLabel.frame = CGRectMake(0,(60-17)/2, self.view.frame.size.width, 17);
-        textLabel.font = [UIFont systemFontOfSize:17.0];
-        textLabel.textAlignment = NSTextAlignmentCenter;
+        CGFloat fontsize = 15;
+        textLabel.frame = CGRectMake(textLabel.frame.origin.x,
+                                     (60-fontsize)/2,
+                                     self.view.frame.size.width  - textLabel.frame.origin.x,
+                                     fontsize);
+        textLabel.font = [UIFont systemFontOfSize:fontsize];
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
