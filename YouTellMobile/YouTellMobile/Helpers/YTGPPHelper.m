@@ -22,6 +22,12 @@
 #import "YTAppDelegate.h"
 #import "YTHelper.h"
 
+@interface YTGPPHelper ()
+{
+    bool reauthenticating;
+}
+@end
+
 @implementation YTGPPHelper
 
 + (YTGPPHelper*)sharedInstance
@@ -52,12 +58,19 @@
 
 - (void)requestAuth
 {
-
+    reauthenticating = false;
     [[self getSignIn] authenticate];
+}
+
+- (void)reauth
+{
+    reauthenticating = true;
+    [[self getSignIn] trySilentAuthentication];
 }
 
 - (bool)trySilentAuth
 {
+    reauthenticating = false;
     return [[self getSignIn] trySilentAuthentication];
 }
 
@@ -72,6 +85,11 @@
     if (!auth.accessToken || !auth.userEmail) {
         return;
     }
+    
+    //ultimately, we do in fact want to update social data here, but not yet
+    //we need to refactor out changestoreid and postlogin first.
+    if(reauthenticating)
+        return;
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [YTApiHelper resetUserInfo];

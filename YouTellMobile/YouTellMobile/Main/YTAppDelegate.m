@@ -159,6 +159,9 @@ void uncaughtExceptionHandler(NSException *exception)
             [YTViewHelper showLoginWithButtons];
     }
     else {
+        /* we do, but we still need to reauth our social media. */
+        [YTFBHelper reauth];
+        [[YTGPPHelper sharedInstance] reauth];
         if(gab_id) {
             [YTApiHelper syncGabWithId:gab_id];
             [YTViewHelper showGabWithId:gab_id];

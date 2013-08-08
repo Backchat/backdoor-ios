@@ -15,6 +15,7 @@
 
 + (bool)trySilentAuth;
 + (void)requestAuth;
++ (void)reauth;
 
 + (void)closeSession;
 + (BOOL)handleOpenUrl:(NSURL*)url;

@@ -30,6 +30,19 @@
 
 @implementation YTFBHelper
 
++ (void)reauth {
+    [YTFBHelper createSession];
+    [FBSession openActiveSessionWithReadPermissions:[YTFBHelper perms]
+                                       allowLoginUI:NO
+                                  completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                                      //do not call sessionState, because sessionOpened resets user info
+                                      //we should actually also update FB information here
+                                      //do NOT call fetchUserData until we refactor out the postLogin and the
+                                      //changestoreID
+                                         }];
+
+}
+
 + (bool)trySilentAuth{
     [YTFBHelper createSession];
     return [FBSession openActiveSessionWithReadPermissions:[YTFBHelper perms]
