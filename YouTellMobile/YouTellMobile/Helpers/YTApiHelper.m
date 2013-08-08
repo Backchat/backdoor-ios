@@ -512,12 +512,12 @@ static bool new_user = false;
 + (void)getFeaturedUsers
 {
     if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"] && !CONFIG_DEBUG_FEATURED) {
-        [YTAppDelegate current].featuredUsers = @[];
+        [[YTContactHelper sharedInstance] setFeaturedUsers:@[]];
         return;
     }
     
     [YTApiHelper sendJSONRequestToPath:@"/featured-users" method:@"GET" params:nil success:^(id JSON) {
-        [YTAppDelegate current].featuredUsers = JSON[@"users"];
+        [[YTContactHelper sharedInstance] setFeaturedUsers:JSON[@"users"]];
 
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [YTViewHelper refreshViews];

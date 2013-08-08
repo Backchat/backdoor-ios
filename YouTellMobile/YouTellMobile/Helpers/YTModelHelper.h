@@ -20,6 +20,8 @@
 + (NSString*)settingsForKey:(NSString*)key;
 + (void)setSettingsForKey:(NSString*)key value:(id)value;
 + (void)removeSettingsForKey:(NSString*)key;
++ (void)setJSONSettingsForKey:(NSString*)key value:(id)value;
++ (id)jsonSettingsForKey:(NSString*)key;
 
 + (NSManagedObject *)objectForRow:(NSInteger)row entityName:(NSString*)entityName predicate:(NSPredicate*)predicate sortDescriptor:(NSSortDescriptor*)sortDescriptor;
 + (NSInteger)objectCount:(NSString*)entityName predicate:(NSPredicate*)predicate;

@@ -11,6 +11,8 @@
 
 @property (strong, nonatomic) NSMutableArray *randomizedFriends;
 @property (strong, nonatomic) NSArray *filteredRandomizedFriends;
+@property (strong, nonatomic) NSArray *featuredUsers;
+@property (strong, nonatomic) NSArray *filteredFeaturedUsers;
 
 + (YTContactHelper*)sharedInstance;
 - (void)setup;
@@ -25,6 +27,10 @@
 - (NSArray*)findContactsWithString:(NSString*)string grouped:(BOOL)grouped;
 - (NSDictionary*)findContactWithType:(NSString*)type value:(NSString*)value;
 - (void)showAvatarInImageView:(UIImageView *)imageView forContact:(NSDictionary*)contact;
+
+- (void)setFeaturedUsers:(NSArray *)featuredUsers;
+- (void)deleteFeaturedUser:(NSDictionary*)user;
+- (void)filterFeaturedUsers;
 
 @end
 

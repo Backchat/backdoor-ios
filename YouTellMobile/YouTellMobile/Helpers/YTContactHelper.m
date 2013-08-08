@@ -13,6 +13,7 @@
 #import "YTModelHelper.h"
 #import "YTViewHelper.h"
 #import "YTHelper.h"
+#import "YTConfig.h"
 #import "YTFBHelper.h"
 
 @implementation YTContactHelper
@@ -32,6 +33,11 @@
     [self loadAddressBook];
     self.randomizedFriends = [NSMutableArray new];
     self.filteredRandomizedFriends = [NSArray new];
+    
+    if (CONFIG_DEBUG_FEATURED) {
+        [YTModelHelper setSettingsForKey:@"deleted_featured_users" value:nil];
+    }
+    [self setFeaturedUsers:@[]];
     
     NSArray *contacts = [self findContactsFlatWithString:@""];
     [self addRandomizedFriends:contacts];
@@ -390,6 +396,45 @@
     } else {
         [imageView setImage:nil];
     }
+}
+
+- (void)setFeaturedUsers:(NSArray *)featuredUsers
+{
+    _featuredUsers = featuredUsers;
+    [self filterFeaturedUsers];
+}
+
+- (void)deleteFeaturedUser:(NSDictionary *)user
+{
+    NSMutableArray *array = [YTModelHelper jsonSettingsForKey:@"deleted_featured_users"];
+    
+    if (!array) {
+        array = [NSMutableArray new];
+    }
+    
+    [array addObject:user[@"value"]];
+    
+    [YTModelHelper setJSONSettingsForKey:@"deleted_featured_users" value:array];
+    
+    [self filterFeaturedUsers];
+}
+
+- (void)filterFeaturedUsers
+{
+    NSMutableArray *result = [NSMutableArray new];
+    
+    NSMutableArray *array = [YTModelHelper jsonSettingsForKey:@"deleted_featured_users"];
+    
+    NSSet *deleted = array ? [NSSet setWithArray:array] : [NSSet new];
+    
+    for(NSDictionary *item in self.featuredUsers) {
+        if ([deleted containsObject:item[@"value"]]) {
+            continue;
+        }
+        [result addObject:item];
+    }
+    
+    self.filteredFeaturedUsers = result;
 }
 
 @end
