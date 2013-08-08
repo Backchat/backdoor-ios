@@ -63,7 +63,7 @@
 {
     switch(section) {
         case 0:
-            return self.possibleContacts.count;
+            return MIN(self.possibleContacts.count, 3);
         case 1:
             return 1;
         default:
