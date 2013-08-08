@@ -111,7 +111,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.textView.text = @"Someone you know wants you to try Backdoor! Anonymously message your friends. http://backdoorapp.com";
+    NSString* personalizedURL = @"http://bkdr.me";
+    NSString* msgText = [NSString stringWithFormat:@"%@ %@",
+                         NSLocalizedString(@"Someone you know wants you to try Backdoor! Anonymously message your friends.", nil),
+                         personalizedURL];
+    self.textView.text = msgText;
     [[YTMainViewHelper sharedInstance] setCellValuesInView:self.contactView
                                                      title:self.contact.name
                                                   subtitle:self.contact.phone_number
