@@ -24,6 +24,7 @@
 - (NSArray*)findContactsFlatWithString:(NSString*)string;
 - (NSArray*)findContactsWithString:(NSString*)string grouped:(BOOL)grouped;
 - (NSDictionary*)findContactWithType:(NSString*)type value:(NSString*)value;
+- (NSString*)avatarUrlForContact:(NSDictionary*)contact;
 - (void)showAvatarInImageView:(UIImageView *)imageView forContact:(NSDictionary*)contact;
 
 @end

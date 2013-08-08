@@ -232,15 +232,7 @@
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:nil];
     UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
 
-    if ([user[@"type"] isEqualToString:@"facebook"]) {
-        NSString *urls = [YTFBHelper avatarUrlWithFBId:user[@"value"]];
-        [avatarView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
-    } else if ([user[@"type"] isEqualToString:@"gpp"]) {
-        NSString *urls = [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=50", user[@"value"]];
-        [avatarView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
-    } else {
-        [avatarView setImage:nil];
-    }
+    [[YTContactHelper sharedInstance] showAvatarInImageView:avatarView forContact:user];
     
     return cell;
 }

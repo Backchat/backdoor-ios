@@ -31,6 +31,7 @@
 #import "YTGabMessage.h"
 #import "YTNewGabViewController.h"
 #import "YTGPPHelper.h"
+#import "YTSocialHelper.h"
 
 @interface YTGabViewController ()
 @property (nonatomic, retain) NSArray* messages;
@@ -397,15 +398,9 @@
         if(kind == YTMessageKindPhoto)
             messageText = @"";
         
-        //LINREVIEW dry with maincontroller
-        NSString* avatar_url = @"";
+        NSString *avatar_url = [[YTContactHelper sharedInstance] avatarUrlForContact:contact];
+        avatar_url = avatar_url ? avatar_url : @"";
 
-        if ([contact[@"type"] isEqualToString:@"facebook"]) {
-            avatar_url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", contact[@"value"]];
-        } else if ([contact[@"type"] isEqualToString:@"gpp"]) {
-            avatar_url = [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=50", contact[@"value"]];
-        }
-        
         NSDictionary* gabData = @{@"related_user_name": contact[@"name"],
                                   @"related_avatar": avatar_url,
                                   @"sent":@true,

@@ -14,6 +14,7 @@
 #import "YTViewHelper.h"
 #import "YTHelper.h"
 #import "YTFBHelper.h"
+#import "YTSocialHelper.h"
 
 @implementation YTContactHelper
 
@@ -379,16 +380,29 @@
     }
 }
 
+- (NSString*)avatarUrlForContact:(NSDictionary*)contact
+{
+    NSString *res;
+    
+    if ([contact[@"type"] isEqualToString:@"facebook"]) {
+        res = [YTFBHelper avatarUrlWithFBId:contact[@"value"]];
+    } else if ([contact[@"type"] isEqualToString:@"gpp"]) {
+        res = [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=90", contact[@"value"]];
+    } else {
+        res = nil;
+    }
+    
+    return res;
+}
+
 - (void)showAvatarInImageView:(UIImageView *)imageView forContact:(NSDictionary*)contact
 {
-    if ([contact[@"type"] isEqualToString:@"facebook"]) {
-        NSString *urls = [YTFBHelper avatarUrlWithFBId:contact[@"value"]];
-        [imageView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
-    } else if ([contact[@"type"] isEqualToString:@"gpp"]) {
-        NSString *urls = [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=50", contact[@"value"]];
-        [imageView setImageWithURL:[NSURL URLWithString:urls] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
+    NSString *url = [[YTContactHelper sharedInstance] avatarUrlForContact:contact];
+    
+    if (url) {
+        [imageView setImageWithURL:[NSURL URLWithString:url] placeholderImage:[YTHelper imageNamed:@"avatar6"] options:SDWebImageRefreshCached];
     } else {
-        [imageView setImage:nil];
+        [imageView setImage:[YTHelper imageNamed:@"avatar6"]];
     }
 }
 
