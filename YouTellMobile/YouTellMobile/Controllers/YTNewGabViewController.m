@@ -142,9 +142,10 @@
 
     if(!self.contacts) {
         int width = 32, height = 32;
+        int rowHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath];
         self.spinner.frame = CGRectMake(
                                    (self.view.frame.size.width - width) / 2,
-                                   (cell.frame.size.height - height) / 2,
+                                   (rowHeight - height)/2,
                                    width, height);
         [self.spinner removeFromSuperview];
         [cell addSubview:self.spinner];
