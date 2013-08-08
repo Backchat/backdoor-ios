@@ -232,7 +232,7 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    [[Mixpanel sharedInstance] track:@"Used New Gab View / Search Bar"];
+    //[[Mixpanel sharedInstance] track:@"Used New Gab View / Search Bar"];
     self.friends = [[YTFriends alloc] initWithSearchString:searchText];
     self.filteredContacts = [[YTContacts alloc] initWithContacts:self.contacts withFilter:searchText];
     [self.tableView reloadData];

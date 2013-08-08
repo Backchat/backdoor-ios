@@ -215,7 +215,7 @@
 
 + (void)showSettings
 {
-    [[Mixpanel sharedInstance] track:@"Tapped Settings Button"];
+    //[[Mixpanel sharedInstance] track:@"Tapped Settings Button"];
     YTAppDelegate *delegate = [YTAppDelegate current];
     YTSettingsViewController *controller = [YTSettingsViewController new];
 

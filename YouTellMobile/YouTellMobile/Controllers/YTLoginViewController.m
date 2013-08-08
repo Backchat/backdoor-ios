@@ -40,13 +40,13 @@
 
 - (void)loginButtonWasPressed:(id)sender
 {
-    [[Mixpanel sharedInstance] track:@"Tapped Facebook Login Button"];
+    //[[Mixpanel sharedInstance] track:@"Tapped Facebook Login Button"];
     [YTFBHelper requestAuth];
 }
 
 - (void)gppButtonWasPressed:(id)sender
 {
-    [[Mixpanel sharedInstance] track:@"Tapped Google+ Login Button"];
+    //[[Mixpanel sharedInstance] track:@"Tapped Google+ Login Button"];
     [[YTGPPHelper sharedInstance] requestAuth];
 }
 

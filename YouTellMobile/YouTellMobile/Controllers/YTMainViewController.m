@@ -44,7 +44,7 @@
 
 - (void)refreshWasRequested
 {
-    [[Mixpanel sharedInstance] track:@"Dragged Refresh Control"];
+    //[[Mixpanel sharedInstance] track:@"Dragged Refresh Control"];
     [self doRefresh];
 }
 
@@ -313,7 +313,7 @@
     
     if (indexPath.section == SECTION_GABS) {
         NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row  filter:self.searchBar.text];
-        [[Mixpanel sharedInstance] track:@"Tapped Main View / Thread Item"];
+        //[[Mixpanel sharedInstance] track:@"Tapped Main View / Thread Item"];
         self.selectedGabId = [object valueForKey:@"id"];
         [YTViewHelper showGabWithId:self.selectedGabId];
     }
