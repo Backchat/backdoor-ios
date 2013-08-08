@@ -182,9 +182,16 @@
                 [f addObject: c];
             }
         }
+        
+        //immediately sort the array by first_name
+        NSArray* sorted_f = [f sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            NSString *first = [(YTContact*)a first_name];
+            NSString *second = [(YTContact*)b first_name];
+            return [first compare:second];
+        }];
 
         if(success) {
-            success([[YTContacts alloc] initWithArray:f]);
+            success([[YTContacts alloc] initWithArray:sorted_f]);
         }
 
     }];
