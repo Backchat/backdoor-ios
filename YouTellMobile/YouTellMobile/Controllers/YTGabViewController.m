@@ -30,7 +30,6 @@
 #import "YTGabMessage.h"
 #import "YTNewGabViewController.h"
 #import "YTGPPHelper.h"
-#import "YTSocialHelper.h"
 
 @interface YTGabViewController ()
 @property (nonatomic, retain) NSArray* messages;
