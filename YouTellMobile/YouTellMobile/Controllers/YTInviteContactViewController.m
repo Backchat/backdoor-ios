@@ -53,8 +53,9 @@
                                           self.contactsTable.frame.origin.y,
                                           self.view.frame.size.width,
                                           self.view.frame.size.height - self.contactsTable.frame.origin.y);
+    self.contactsTable.tableFooterView = [UIView new];
+    self.contactsTable.backgroundColor = [UIColor clearColor];
     
-    if(self.contact)
     [YTAddressBookHelper fetchContactsFromAddressBookByContact:self.contact
                                                        success:^(YTContacts *c) {
                                                            self.possibleContacts = c;
