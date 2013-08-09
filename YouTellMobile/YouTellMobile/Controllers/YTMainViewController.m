@@ -25,12 +25,12 @@
 #import "YTTourViewController.h"
 #import "YTFriends.h"
 
-#define SECTION_GABS 0
-#define SECTION_FRIENDS 1
-#define SECTION_MORE 2
-#define SECTION_SHARE 3
-#define SECTION_CLUES 4
-#define SECTION_FEATURED 5
+#define SECTION_FEATURED 0
+#define SECTION_GABS 1
+#define SECTION_FRIENDS 2
+#define SECTION_MORE 3
+#define SECTION_SHARE 4
+#define SECTION_CLUES 5
 #define SECTION_COUNT 6
 
 @interface YTMainViewController ()
@@ -363,7 +363,7 @@
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
+    if (indexPath.section == SECTION_GABS) {
         return UITableViewCellEditingStyleDelete;
     } else {
         return UITableViewCellEditingStyleNone;
