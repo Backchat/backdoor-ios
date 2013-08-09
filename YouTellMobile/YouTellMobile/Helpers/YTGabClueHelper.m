@@ -8,6 +8,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import <UIButton+WebCache.h>
+#import <Mixpanel.h>
 
 #import "YTGabClueHelper.h"
 
@@ -126,6 +127,8 @@
 
 - (void)actionButtonWasPressed:(id)sender
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Gab View / Clue Button"];
+
     [self.gabView.view.window endEditing:YES];;
 
     UILabel *label;
