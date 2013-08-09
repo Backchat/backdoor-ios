@@ -32,7 +32,6 @@
 
 @property (strong, nonatomic) NSMutableDictionary *userInfo;
 @property (strong, nonatomic) NSMutableDictionary *sentInfo;
-@property (strong, nonatomic) NSArray *featuredUsers;
 @property (strong, nonatomic) NSMutableDictionary *deliveredMessages;
 
 

@@ -119,20 +119,16 @@
     [self showGabs];
 }
 
-+ (void)showGabWithId:(NSNumber*)gabId receiver:(NSDictionary*)receiver
++ (void)makeGabViewControllerTop: (YTGabViewController*) controller
 {
-    YTGabViewController *controller = [YTGabViewController new];
-    controller.gabId = gabId;
-    
     YTAppDelegate *delegate = [YTAppDelegate current];
-
     
     if (delegate.usesSplitView) {
         [YTViewHelper loadDetailsController:controller];
     } else {
         if ([delegate.navController.topViewController isKindOfClass:[YTGabViewController class]]) {
             YTGabViewController *gabView = (YTGabViewController*)delegate.navController.topViewController;
-            if ([[gabView.gab valueForKey:@"id"] isEqualToNumber:gabId]) {
+            if (gabView.gab && controller.gab && [[gabView.gab valueForKey:@"id"] isEqualToNumber:[controller.gab valueForKey:@"id"]]) {
                 return;
             }
         }
@@ -144,24 +140,20 @@
         [delegate.navController pushViewController:controller animated:YES];
     }
     
-    if (receiver) {
-        [controller.sendHelper.contactWidget selectContact:receiver];
-        [controller.inputView.textView becomeFirstResponder];
-    } else if (!gabId) {
-        [controller.sendHelper.contactWidget.textField becomeFirstResponder];
-    }
-    
     delegate.currentGabViewController = controller;
 }
 
 + (void)showGabWithId:(NSNumber*)gabId
 {
-    [YTViewHelper showGabWithId:gabId receiver:nil];
+    YTGabViewController *controller = [[YTGabViewController alloc] initWithGab:gabId];
+    [YTViewHelper makeGabViewControllerTop:controller];
 }
 
-+ (void)showGabWithReceiver:(NSDictionary*)receiver
++ (void)showGabWithFriend:(YTFriend*)f
 {
-    [YTViewHelper showGabWithId:nil receiver:receiver];
+    YTGabViewController* controller = [[YTGabViewController alloc] initWithFriend:f];
+    [YTViewHelper makeGabViewControllerTop:controller];
+ 
 }
 
 + (void)showGab
@@ -223,7 +215,6 @@
 
 + (void)showSettings
 {
-    [[Mixpanel sharedInstance] track:@"Tapped Settings Button"];
     YTAppDelegate *delegate = [YTAppDelegate current];
     YTSettingsViewController *controller = [YTSettingsViewController new];
 
@@ -232,9 +223,6 @@
     } else {
         delegate.navController.viewControllers = @[controller];
         
-       // delegate.currentMainViewController = nil;
-       // delegate.currentGabViewController = nil;
-
         [YTViewHelper showFeedback];
     }
 

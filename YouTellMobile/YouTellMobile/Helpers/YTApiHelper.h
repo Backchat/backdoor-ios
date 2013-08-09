@@ -7,6 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class YTContact;
+
 @interface YTApiHelper : NSObject
 
 + (void)setup;
@@ -51,10 +53,10 @@
 + (void)requestClue:(NSNumber*)gabId number:(NSNumber*)number success:(void(^)(id JSON))success;
 + (void)buyCluesWithReceipt:(NSString *)receipt success:(void(^)(id JSON))success;
 + (void)getFreeCluesWithReason:(NSString *)reason;
-+ (void)getFeaturedUsers;
-+ (void)getFriends;
++ (void)getFeaturedUsers:(void(^)())success;
++ (void)getFriends:(void(^)())success;
 + (void)updateSettingsWithKey:(NSString*)key value:(id)value;
 + (void)checkUpdates;
 
-
++ (void)sendInviteText:(YTContact*)contact body:(NSString*)body success:(void(^)(id JSON))success;
 @end
