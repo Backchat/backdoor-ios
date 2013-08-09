@@ -230,12 +230,13 @@
 
     NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation.", nil);
     NSString *time = featured ? NSLocalizedString(@"Featured", nil) : @"";
-    
+    NSString *image = featured ? @"star2" : nil;
+
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
-                                                                           image:nil
-                                                                          avatar:user.avatarUrl
-                                                                placeHolderImage:[YTHelper imageNamed:@"avatar6"]
-                                                                 backgroundColor:nil];
+                                                                            image:image
+                                                                           avatar:user.avatarUrl
+                                                                 placeHolderImage:[YTHelper imageNamed:@"avatar6"]
+                                                                  backgroundColor:nil];
     
     return cell;
 }
