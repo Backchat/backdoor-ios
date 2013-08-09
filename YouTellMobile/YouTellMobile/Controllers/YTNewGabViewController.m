@@ -167,7 +167,7 @@
                                                                            image:image
                                                                           avatar:friend.avatarUrl
 								placeHolderImage:[YTHelper imageNamed:@"avatar6"]
-								 backgroundColor:nil];
+								 backgroundColor:[UIColor whiteColor]];
         
     return cell;
 }
@@ -186,7 +186,7 @@
                                                                            image:nil
                                                                           avatar:image
                                                                 placeHolderImage:nil
-                                                                 backgroundColor:nil];
+                                                                 backgroundColor:[UIColor whiteColor]];
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
