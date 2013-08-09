@@ -12,15 +12,14 @@
 #import "YTViewController.h"
 #import "YTGabViewController.h"
 #import "YTStoreHelper.h"
-#import "YTContactWidget.h"
 #import "YTGabPhotoHelper.h"
 #import "YTGabClueHelper.h"
 #import "YTGabSendHelper.h"
 #import "YTGabTagHelper.h"
 #import <CoreData/CoreData.h>
+#import "YTFriend.h"
 
-
-@interface YTGabViewController : JSMessagesViewController <UINavigationControllerDelegate, UIBubbleTableViewDataSource, UIAlertViewDelegate>
+@interface YTGabViewController : JSMessagesViewController <UINavigationControllerDelegate, UIBubbleTableViewDataSource>
 
 @property (strong, nonatomic) YTGabPhotoHelper *photoHelper;
 @property (strong, nonatomic) YTGabClueHelper *clueHelper;
@@ -28,12 +27,14 @@
 @property (strong, nonatomic) YTGabTagHelper *tagHelper;
 @property (strong, nonatomic) UIPopoverController *popover;
 
-- (void)loadGab;
+//TODO
+@property (nonatomic, retain) NSManagedObject* gab;
+
+- (id) initWithGab:(NSNumber*)gab_id;
+- (id) initWithFriend:(YTFriend*)f;
+
 - (void)reloadData;
 - (void)dismiss;
-- (void)setGabId:(NSNumber*)gabId;
-
-@property (nonatomic, retain) NSManagedObject* gab;
 
 //LINREVIEW this is ugly we need to refactor the send queue code into a different helper
 - (void)queueMessage:(NSString*)text ofKind:(NSInteger)kind;

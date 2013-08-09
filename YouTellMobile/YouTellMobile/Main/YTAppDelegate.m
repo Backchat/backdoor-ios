@@ -10,8 +10,8 @@
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
 #import <Instabug/Instabug.h>
-#import <iRate.h>
-#import <iVersion/iVersion.h>
+#import <iRate/iRate.h>
+#import <iVersion.h>
 
 #import "YTAppDelegate.h"
 #import "YTGabViewController.h"
@@ -20,7 +20,6 @@
 #import "YTViewHelper.h"
 #import "YTFBHelper.h"
 #import "YTGPPHelper.h"
-#import "YTContactHelper.h"
 #import "YTHelper.h"
 #import "YTNotifHelper.h"
 #import "YTRateHelper.h"
@@ -48,7 +47,6 @@ void uncaughtExceptionHandler(NSException *exception)
 + (void)initialize
 {
 #ifdef CONFIGURATION_Release
-    NSLog(@"icheck");
     [iVersion sharedInstance].appStoreID = CONFIG_APPLE_ID_INT;
 #else
     [iVersion sharedInstance].checkAtLaunch = NO;
@@ -70,8 +68,7 @@ void uncaughtExceptionHandler(NSException *exception)
     [YTFBHelper closeSession];
     
     [YTModelHelper changeStoreId:nil];
-    [[YTContactHelper sharedInstance] clearRandomizedFriendWithType:nil];
-    
+
     [YTApiHelper resetUserInfo];
     
     [YTViewHelper showLoginWithButtons];
@@ -103,12 +100,9 @@ void uncaughtExceptionHandler(NSException *exception)
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    
-    self.featuredUsers = @[];
-    
+        
     [YTApiHelper setup];
     [YTModelHelper setup];    
-    [[YTContactHelper sharedInstance] setup];
     [YTViewHelper setup];
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
 
@@ -165,6 +159,9 @@ void uncaughtExceptionHandler(NSException *exception)
             [YTViewHelper showLoginWithButtons];
     }
     else {
+        /* we do, but we still need to reauth our social media. */
+        [YTFBHelper reauth];
+        [[YTGPPHelper sharedInstance] reauth];
         if(gab_id) {
             [YTApiHelper syncGabWithId:gab_id];
             [YTViewHelper showGabWithId:gab_id];

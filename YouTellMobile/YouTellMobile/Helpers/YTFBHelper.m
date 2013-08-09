@@ -17,7 +17,6 @@
 #import "YTLoginViewController.h"
 #import "YTViewHelper.h"
 #import "YTApiHelper.h"
-#import "YTContactHelper.h"
 #import "YTModelHelper.h"
 #import "YTHelper.h"
 #import "YTConfig.h"
@@ -30,6 +29,19 @@
 @end
 
 @implementation YTFBHelper
+
++ (void)reauth {
+    [YTFBHelper createSession];
+    [FBSession openActiveSessionWithReadPermissions:[YTFBHelper perms]
+                                       allowLoginUI:NO
+                                  completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                                      //do not call sessionState, because sessionOpened resets user info
+                                      //we should actually also update FB information here
+                                      //do NOT call fetchUserData until we refactor out the postLogin and the
+                                      //changestoreID
+                                         }];
+
+}
 
 + (bool)trySilentAuth{
     [YTFBHelper createSession];
@@ -162,7 +174,7 @@
     }];
 }
 
-+ (void)fetchFriends
++ (void)fetchFriends:(void(^)(YTContacts* c))success
 {
     FBRequest *request = [FBRequest requestForMyFriends];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -170,9 +182,30 @@
             NSLog(@"%@", error.debugDescription);
             return;
         }
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [[YTContactHelper sharedInstance] loadFacebookFriends:result[@"data"]];
+        id friends = result[@"data"];
+        NSMutableArray* f = [NSMutableArray new];
+        if(friends) {
+            for(id friend in friends) {
+                YTContact* c = [YTContact new];
+                c.first_name = friend[@"first_name"];
+                c.last_name = friend[@"last_name"];
+                c.value = friend[@"id"];
+                c.type = @"facebook";
+
+                [f addObject: c];
+            }
+        }
+        
+        //immediately sort the array by first_name
+        NSArray* sorted_f = [f sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            NSString *first = [(YTContact*)a first_name];
+            NSString *second = [(YTContact*)b first_name];
+            return [first compare:second];
         }];
+
+        if(success) {
+            success([[YTContacts alloc] initWithArray:sorted_f]);
+        }
 
     }];
 }

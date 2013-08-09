@@ -15,7 +15,6 @@ pod 'FlurrySDK'
 pod 'NoticeView'
 pod 'Mixpanel'
 pod 'iRate'
-pod 'iVersion'
 
 post_install do |installer|
   installer.project.targets.each do |target|

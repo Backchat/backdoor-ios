@@ -61,7 +61,7 @@
 
     UIBarButtonItem *rateItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Rate", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(rateButtonWasClicked)];
     
-    UIBarButtonItem *inviteItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Invite", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(shareButtonWasClicked)];
+    UIBarButtonItem *inviteItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Share", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(shareButtonWasClicked)];
     
     NSMutableArray *items = [NSMutableArray arrayWithArray:@[logoutItem]];
     
@@ -82,7 +82,6 @@
 
 - (void)showNotifications
 {
-    [[Mixpanel sharedInstance] track:@"Tapped Notification Settings Button"];
     [YTViewHelper loadSettingsController:[[YTNotificationSettingsViewController alloc]init]];
 }
 
@@ -95,13 +94,11 @@
 
 - (void)showPrivacy
 {
-    [[Mixpanel sharedInstance] track:@"Tapped Privacy & Abuse Settings Button"];
     [YTViewHelper loadSettingsController:[[YTPrivacySettingsViewController alloc]init]];
 }
 
 - (void)showHelp
 {
-    [[Mixpanel sharedInstance] track:@"Tapped About Us Settings Button"];
     [YTViewHelper loadSettingsController:[[YTHelpSettingsViewController alloc] init]];
 }
 
