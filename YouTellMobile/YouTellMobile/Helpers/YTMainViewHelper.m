@@ -97,6 +97,8 @@
     
     if(backgroundColor)
         cell.backgroundView.backgroundColor = backgroundColor;
+    else
+        cell.backgroundView.backgroundColor = [UIColor clearColor];
     
     return cell;
 }
