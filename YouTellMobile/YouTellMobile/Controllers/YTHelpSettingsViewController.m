@@ -50,8 +50,6 @@
 
 - (void)showUpdate
 {
-    //[[Mixpanel sharedInstance] track:@"Tapped Update Backdoor Button"];
-
     if ([YTHelper appStoreEnvironment] || [YTHelper simulatedEnvironment]) {
         [YTApiHelper checkUpdates];
     } else {
@@ -69,13 +67,11 @@
 
 - (void)showLegal
 {
-    //[[Mixpanel sharedInstance] track:@"Tapped Legal Button"];
     [self openURL:CONFIG_HELP_LEGAL_URL title:NSLocalizedString(@"Legal", nil)];
 }
 
 - (void)showAbout
 {
-    //[[Mixpanel sharedInstance] track:@"Tapped About Us Button"];
     [self openURL:CONFIG_HELP_ABOUT_URL title:NSLocalizedString(@"About Us", nil)];
 }
 

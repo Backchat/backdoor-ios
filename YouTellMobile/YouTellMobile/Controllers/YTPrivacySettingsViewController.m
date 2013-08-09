@@ -38,7 +38,6 @@
 
 - (void)showPolicy
 {
-    //[[Mixpanel sharedInstance] track:@"Tapped Privacy Policy Button"];
     [self openURL:CONFIG_PRIVACY_POLICY_URL title:NSLocalizedString(@"Privacy Policy", nil)];
 }
 

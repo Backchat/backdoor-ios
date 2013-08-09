@@ -82,7 +82,6 @@
 
 - (void)showNotifications
 {
-    //[[Mixpanel sharedInstance] track:@"Tapped Notification Settings Button"];
     [YTViewHelper loadSettingsController:[[YTNotificationSettingsViewController alloc]init]];
 }
 
@@ -95,13 +94,11 @@
 
 - (void)showPrivacy
 {
-    //[[Mixpanel sharedInstance] track:@"Tapped Privacy & Abuse Settings Button"];
     [YTViewHelper loadSettingsController:[[YTPrivacySettingsViewController alloc]init]];
 }
 
 - (void)showHelp
 {
-    //[[Mixpanel sharedInstance] track:@"Tapped About Us Settings Button"];
     [YTViewHelper loadSettingsController:[[YTHelpSettingsViewController alloc] init]];
 }
 
