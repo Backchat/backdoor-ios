@@ -7,16 +7,12 @@
 
 #import <SVProgressHUD/SVProgressHUD.h>
 
-#import <GTLPlusConstants.h>
-#import <GPPURLHandler.h>
-#import <GTLServicePlus.h>
-#import <GTLQueryPlus.h>
-#import <GTLPlusPeopleFeed.h>
-#import <GTLPlusPerson.h>
-#import <GTMOAuth2Authentication.h>
-#import <GPPShare.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
+#import <GooglePlus/GooglePlus.h>
+
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
+#import <Instabug/Instabug.h>
 
 #import "YTGPPHelper.h"
 #import "YTApiHelper.h"
@@ -24,8 +20,13 @@
 #import "YTViewHelper.h"
 #import "YTModelHelper.h"
 #import "YTAppDelegate.h"
-#import "YTContactHelper.h"
 #import "YTHelper.h"
+
+@interface YTGPPHelper ()
+{
+    bool reauthenticating;
+}
+@end
 
 @implementation YTGPPHelper
 
@@ -44,20 +45,33 @@
     [[GPPSignIn sharedInstance] signOut];
 }
 
-- (void)signIn
-{
-    [[GPPSignIn sharedInstance] authenticate];
-}
-
-- (void)setup
+- (GPPSignIn*) getSignIn
 {
     GPPSignIn *signIn = [GPPSignIn sharedInstance];
     signIn.clientID = CONFIG_GPP_CLIENT_ID;
     signIn.scopes = @[kGTLAuthScopePlusLogin];
     signIn.delegate = self;
     signIn.shouldFetchGoogleUserEmail = YES;
-    
-    [signIn trySilentAuthentication];
+
+    return signIn;
+}
+
+- (void)requestAuth
+{
+    reauthenticating = false;
+    [[self getSignIn] authenticate];
+}
+
+- (void)reauth
+{
+    reauthenticating = true;
+    [[self getSignIn] trySilentAuthentication];
+}
+
+- (bool)trySilentAuth
+{
+    reauthenticating = false;
+    return [[self getSignIn] trySilentAuthentication];
 }
 
 # pragma mark GPPSignInDelegate methods
@@ -71,6 +85,11 @@
     if (!auth.accessToken || !auth.userEmail) {
         return;
     }
+    
+    //ultimately, we do in fact want to update social data here, but not yet
+    //we need to refactor out changestoreid and postlogin first.
+    if(reauthenticating)
+        return;
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [YTApiHelper resetUserInfo];
@@ -90,7 +109,6 @@
         
         [YTModelHelper changeStoreId:auth.userEmail];
         [YTApiHelper postLogin];
-        [YTViewHelper hideLogin];
     }];
 }
 
@@ -104,16 +122,21 @@
     
     [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLPlusPerson *person, NSError *error) {
         
-        if (error) {
+        if (error || !person) {
             NSLog(@"%@", error.debugDescription);
             return;
         }
         
         YTAppDelegate *delegate = [YTAppDelegate current];
+
         NSString *email = delegate.userInfo[@"gpp_data"][@"email"];
         
         [[Mixpanel sharedInstance] identify:email];
+        [Instabug setUserDataString:email];
 
+        if (delegate.deviceToken) {
+            [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
+        }
         
         if ([person.gender isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];
@@ -123,9 +146,19 @@
             [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
         }
         
-        NSInteger age = [YTHelper ageWithBirthdayString:[person JSON][@"birthday"] format:@"yyyy-MM-dd"];
+        NSInteger age = [YTHelper ageWithBirthdayString:person.birthday format:@"yyyy-MM-dd"];
         
-        NSDictionary *userData = @{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName, @"$email": email, @"Age": [NSNumber numberWithInt:age], @"Google+ Id": person.identifier};
+        if (age > 0) {
+            [Flurry setAge:age];
+            [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
+        }
+
+        NSString *firstName = person.name.givenName ? person.name.givenName : @"";
+        NSString *lastName = person.name.familyName ? person.name.familyName : @"";
+        NSString *uid = person.identifier ? person.identifier : @"";
+
+        NSDictionary *userData = @{@"$first_name": firstName, @"$last_name": lastName, @"$email": email, @"Google+ Id": uid};
+
         [[Mixpanel sharedInstance].people set:userData];
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
         
@@ -163,7 +196,7 @@
             [self fetchFriendsWithPageToken:peopleFeed.nextPageToken];
         } else {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                [[YTContactHelper sharedInstance] loadGPPFriends:self.friends];
+                //[[YTContactHelper sharedInstance] loadGPPFriends:self.friends];
             }];
         }
     }];

@@ -186,7 +186,7 @@
     NSBubbleData *data = [[self.bubbleSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
     CGFloat statusHeight = (data.status.length > 0) ? 20 : 0;
     return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom + statusHeight, self.showAvatars ? 52 : 0) + 8;
-}
+} 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

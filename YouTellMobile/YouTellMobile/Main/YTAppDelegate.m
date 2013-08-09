@@ -9,6 +9,9 @@
 
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
+#import <Instabug/Instabug.h>
+#import <iRate/iRate.h>
+#import <iVersion.h>
 
 #import "YTAppDelegate.h"
 #import "YTGabViewController.h"
@@ -17,9 +20,9 @@
 #import "YTViewHelper.h"
 #import "YTFBHelper.h"
 #import "YTGPPHelper.h"
-#import "YTContactHelper.h"
 #import "YTHelper.h"
 #import "YTNotifHelper.h"
+#import "YTRateHelper.h"
 #import "YTConfig.h"
 #import "YTFriendNotifHelper.h"
 
@@ -42,20 +45,34 @@ void uncaughtExceptionHandler(NSException *exception)
     return (YTAppDelegate*)[UIApplication sharedApplication].delegate;
 }
 
++ (void)initialize
+{
+#ifdef CONFIGURATION_Release
+    [iVersion sharedInstance].appStoreID = CONFIG_APPLE_ID_INT;
+#else
+    [iVersion sharedInstance].checkAtLaunch = NO;
+#endif
+    [[YTRateHelper sharedInstance] setup];
+}
+
 - (void)signOut
 {
+    [YTModelHelper removeSettingsForKey:@"logged_in_acccess_token"];
+    
     //TODO better?
     [[YTAppDelegate current].storeHelper disable];
     [YTAppDelegate current].storeHelper = nil;
     
     [[Mixpanel sharedInstance] track:@"Signed Out"];
+    
     [[YTGPPHelper sharedInstance] signOut];
-    [YTModelHelper removeSettingsForKey:@"logged_in_acccess_token"];
     [YTFBHelper closeSession];
+    
     [YTModelHelper changeStoreId:nil];
-    [[YTContactHelper sharedInstance] clearRandomizedFriendWithType:nil];
+
     [YTApiHelper resetUserInfo];
-    [YTViewHelper showLogin];
+    
+    [YTViewHelper showLoginWithButtons];
     [YTViewHelper refreshViews];
 }
 
@@ -84,17 +101,10 @@ void uncaughtExceptionHandler(NSException *exception)
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-    
-    self.featuredUsers = @[];
-    
+        
     [YTApiHelper setup];
     [YTModelHelper setup];    
-    [[YTContactHelper sharedInstance] setup];
     [YTViewHelper setup];
-    [YTFBHelper setup];
-    [[YTGPPHelper sharedInstance] setup];
-    [YTViewHelper showLogin];
-
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
 
     [manager configureWithIdentifier:CONFIG_HOCKEY_ID delegate:self];
@@ -112,10 +122,14 @@ void uncaughtExceptionHandler(NSException *exception)
         [Flurry setDebugLogEnabled:YES];
         [Flurry setEventLoggingEnabled:YES];
     }
+    
+    [Flurry setCrashReportingEnabled:YES];
     [Flurry startSession:CONFIG_FLURRY_APP_TOKEN];
     
     [Mixpanel sharedInstanceWithToken:CONFIG_MIXPANEL_TOKEN];
     [[Mixpanel sharedInstance] track:@"Launched Application"];
+
+    [Instabug KickOffWithToken:CONFIG_INSTABUG_TOKEN CaptureSource:InstabugCaptureSourceUIKit FeedbackEvent:InstabugFeedbackEventShake IsTrackingLocation:YES];
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
     
@@ -123,11 +137,36 @@ void uncaughtExceptionHandler(NSException *exception)
         [YTAppDelegate current].userInfo[@"device_token"] = @"1"; //not like you can run multiple simulators...
     }
     
+    [YTNotifHelper handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
+
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
-    if(gab_id != nil) { //we dont have an access_token yet?
-        //update gab unread count
-        [YTNotifHelper handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
-        [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
+
+    //we have a cached login token?
+    if(![YTApiHelper attemptCachedLogin]) {
+        //we do not, but we may have been authorized via FB/GPP.
+        //throw up the login window but without buttons, so the user
+        //sees something:
+        [YTViewHelper showLogin];
+
+        if(gab_id) {//do we need to launch a gab after logging in?
+            [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
+        }
+
+        bool logged_in = [YTFBHelper trySilentAuth];
+        if(!logged_in)
+            logged_in = [[YTGPPHelper sharedInstance] trySilentAuth];
+        
+        if(!logged_in)
+            [YTViewHelper showLoginWithButtons];
+    }
+    else {
+        /* we do, but we still need to reauth our social media. */
+        [YTFBHelper reauth];
+        [[YTGPPHelper sharedInstance] reauth];
+        if(gab_id) {
+            [YTApiHelper syncGabWithId:gab_id];
+            [YTViewHelper showGabWithId:gab_id];
+        }
     }
     
     return YES;
@@ -142,6 +181,9 @@ void uncaughtExceptionHandler(NSException *exception)
     } else {
         [self syncBasedOnView];
     }
+    
+    [[FBSession activeSession] handleDidBecomeActive];
+    [[YTRateHelper sharedInstance] run];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -171,6 +213,7 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     self.userInfo[@"device_token"] = [YTHelper hexStringFromData:deviceToken];
+    self.deviceToken = deviceToken;
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
@@ -188,17 +231,30 @@ void uncaughtExceptionHandler(NSException *exception)
     }
     
     if (!userInfo[@"gab_id"]) {
+        NSString *message = userInfo[@"aps"][@"alert"];
+        if (!message) {
+            return;
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+        [alert show];
         return;
     }
     
-    [YTNotifHelper handleNotification:userInfo];
-    
-    if ( application.applicationState != UIApplicationStateActive ) {
-        [YTViewHelper showGabWithId:userInfo[@"gab_id"]];
-    }
-    
-    [YTApiHelper syncGabWithId:userInfo[@"gab_id"]];    
+    id gab_id = userInfo[@"gab_id"];
 
+    if([YTApiHelper loggedIn]) {
+        [YTNotifHelper handleNotification:userInfo];
+        [YTApiHelper syncGabWithId:gab_id];
+        
+        if (application.applicationState != UIApplicationStateActive) {
+            if ([YTModelHelper gabForId:gab_id]) {
+                [YTViewHelper showGabWithId:gab_id];
+            }
+        }
+    }
+    else {
+        [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
+    }
 }
 
 - (void) syncBasedOnView

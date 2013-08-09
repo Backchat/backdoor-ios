@@ -8,6 +8,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import <UIButton+WebCache.h>
+#import <Mixpanel.h>
 
 #import "YTGabClueHelper.h"
 
@@ -126,6 +127,8 @@
 
 - (void)actionButtonWasPressed:(id)sender
 {
+    [[Mixpanel sharedInstance] track:@"Tapped Gab View / Clue Button"];
+
     [self.gabView.view.window endEditing:YES];;
 
     UILabel *label;
@@ -229,10 +232,11 @@
     
     UIButton *buyButton = [[UIButton alloc] init];
     buyButton.tag = 11;
-    [buyButton setBackgroundImage:[YTHelper imageNamed:@"clue_button"] forState:UIControlStateNormal];
+    [buyButton setBackgroundImage:[YTHelper imageNamed:@"clue_button_inactive"] forState:UIControlStateNormal];
+    [buyButton setBackgroundImage:[YTHelper imageNamed:@"clue_button_active"] forState:UIControlStateHighlighted];
     frame.origin.y = height;
-    frame.size.width = 278;
-    frame.size.height = 45;
+    frame.size.width = 280;
+    frame.size.height = 40;
     frame.origin.x = (width - frame.size.width) / 2;
     buyButton.frame = frame;
     [buyButton setTitle:NSLocalizedString(@"Buy clues", nil) forState:UIControlStateNormal];
@@ -251,10 +255,11 @@
     
     UIButton *cancelButton = [[UIButton alloc] init];
     cancelButton.tag = 12;
-    [cancelButton setBackgroundImage:[YTHelper imageNamed:@"clue_button"] forState:UIControlStateNormal];
+    [cancelButton setBackgroundImage:[YTHelper imageNamed:@"clue_button_inactive"] forState:UIControlStateNormal];
+    [cancelButton setBackgroundImage:[YTHelper imageNamed:@"clue_button_active"] forState:UIControlStateHighlighted];
     frame.origin.y = height;
-    frame.size.width = 278;
-    frame.size.height = 45;
+    frame.size.width = 280;
+    frame.size.height = 40;
     frame.origin.x = (width - frame.size.width) / 2;
     cancelButton.frame = frame;
     [cancelButton setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];

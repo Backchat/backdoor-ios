@@ -6,6 +6,7 @@
 //
 
 #define CONFIG_APPLE_ID @"659951602"
+#define CONFIG_APPLE_ID_INT 659951602
 #define CONFIG_MODEL @"YTModel17"
 
 //app behaviors 
@@ -18,12 +19,17 @@
 #define CONFIG_GPP_ENABLED 1
 #define CONFIG_MAX_CLUES_PER_GAB 5
 
+//rating
+#define CONFIG_RATING_USES 7
+#define CONFIG_RATING_USES_DELAYED 10
+#define CONFIG_RATING_USES_CANCELLED 30
+
 //app debugging
 #define CONFIG_DEBUG_TOUR 0
 #define CONFIG_DEBUG_FLURRY 0
 #define CONFIG_CRASH_BUTTON 0
 #define CONFIG_CLUES_BUTTON 0
-#define CONFIG_DEBUG_FEATURED 0
+#define CONFIG_DEBUG_FEATURED 1
 
 
 //api identification

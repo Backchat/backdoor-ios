@@ -8,8 +8,8 @@
 
 #import "SDImageCache.h"
 #import "SDWebImageDecoder.h"
+#import "UIImage+MultiFormat.h"
 #import <CommonCrypto/CommonDigest.h>
-#import "SDWebImageDecoder.h"
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
@@ -19,6 +19,7 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
 
 @property (strong, nonatomic) NSCache *memCache;
 @property (strong, nonatomic) NSString *diskCachePath;
+@property (strong, nonatomic) NSMutableArray *customPaths;
 @property (SDDispatchQueueSetterSementics, nonatomic) dispatch_queue_t ioQueue;
 
 @end
@@ -82,9 +83,33 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
     SDDispatchQueueRelease(_ioQueue);
 }
 
+- (void)addReadOnlyCachePath:(NSString *)path
+{
+    if (!self.customPaths)
+    {
+        self.customPaths = NSMutableArray.new;
+    }
+
+    if (![self.customPaths containsObject:path])
+    {
+        [self.customPaths addObject:path];
+    }
+}
+
 #pragma mark SDImageCache (private)
 
-- (NSString *)cachePathForKey:(NSString *)key
+- (NSString *)cachePathForKey:(NSString *)key inPath:(NSString *)path
+{
+    NSString *filename = [self cachedFileNameForKey:key];
+    return [path stringByAppendingPathComponent:filename];
+}
+
+- (NSString *)defaultCachePathForKey:(NSString *)key
+{
+    return [self cachePathForKey:key inPath:self.diskCachePath];
+}
+
+- (NSString *)cachedFileNameForKey:(NSString *)key
 {
     const char *str = [key UTF8String];
     unsigned char r[CC_MD5_DIGEST_LENGTH];
@@ -92,7 +117,7 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
     NSString *filename = [NSString stringWithFormat:@"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
                           r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[13], r[14], r[15]];
 
-    return [self.diskCachePath stringByAppendingPathComponent:filename];
+    return filename;
 }
 
 #pragma mark ImageCache
@@ -134,7 +159,7 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
                     [fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
                 }
 
-                [fileManager createFileAtPath:[self cachePathForKey:key] contents:data attributes:nil];
+                [fileManager createFileAtPath:[self defaultCachePathForKey:key] contents:data attributes:nil];
             }
         });
     }
@@ -165,8 +190,7 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
     }
     
     // Second check the disk cache...
-    UIImage *diskImage = [UIImage decodedImageWithImage:SDScaledImageForPath(key, [NSData dataWithContentsOfFile:[self cachePathForKey:key]])];
-    
+    UIImage *diskImage = [self diskImageForKey:key];
     if (diskImage)
     {
         CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
@@ -174,6 +198,48 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
     }
     
     return diskImage;
+}
+
+- (NSData *)diskImageDataBySearchingAllPathsForKey:(NSString *)key
+{
+    NSString *defaultPath = [self defaultCachePathForKey:key];
+    NSData *data = [NSData dataWithContentsOfFile:defaultPath];
+    if (data)
+    {
+        return data;
+    }
+
+    for (NSString *path in self.customPaths)
+    {
+        NSString *filePath = [self cachePathForKey:key inPath:path];
+        NSData *imageData = [NSData dataWithContentsOfFile:filePath];
+        if (imageData) {
+            return imageData;
+        }
+    }
+
+    return nil;
+}
+
+- (UIImage *)diskImageForKey:(NSString *)key
+{
+    NSData *data = [self diskImageDataBySearchingAllPathsForKey:key];
+    if (data)
+    {
+        UIImage *image = [UIImage sd_imageWithData:data];
+        image = [self scaledImageForKey:key image:image];
+        image = [UIImage decodedImageWithImage:image];
+        return image;
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+- (UIImage *)scaledImageForKey:(NSString *)key image:(UIImage *)image
+{
+    return SDScaledImageForKey(key, image);
 }
 
 - (void)queryDiskCacheForKey:(NSString *)key done:(void (^)(UIImage *image, SDImageCacheType cacheType))doneBlock
@@ -196,18 +262,20 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
 
     dispatch_async(self.ioQueue, ^
     {
-        UIImage *diskImage = [UIImage decodedImageWithImage:SDScaledImageForPath(key, [NSData dataWithContentsOfFile:[self cachePathForKey:key]])];
-
-        if (diskImage)
+        @autoreleasepool
         {
-            CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
-            [self.memCache setObject:diskImage forKey:key cost:cost];
+            UIImage *diskImage = [self diskImageForKey:key];
+            if (diskImage)
+            {
+                CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
+                [self.memCache setObject:diskImage forKey:key cost:cost];
+            }
+
+            dispatch_async(dispatch_get_main_queue(), ^
+            {
+                doneBlock(diskImage, SDImageCacheTypeDisk);
+            });
         }
-
-        dispatch_async(dispatch_get_main_queue(), ^
-        {
-            doneBlock(diskImage, SDImageCacheTypeDisk);
-        });
     });
 }
 
@@ -229,7 +297,7 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
     {
         dispatch_async(self.ioQueue, ^
         {
-            [[NSFileManager defaultManager] removeItemAtPath:[self cachePathForKey:key] error:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:[self defaultCachePathForKey:key] error:nil];
         });
     }
 }
@@ -255,38 +323,84 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
 {
     dispatch_async(self.ioQueue, ^
     {
-        NSDate *expirationDate = [NSDate dateWithTimeIntervalSinceNow:-self.maxCacheAge];
-        // convert NSString path to NSURL path
+        NSFileManager *fileManager = [NSFileManager defaultManager];
         NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];
-        // build an enumerator by also prefetching file properties we want to read
-        NSDirectoryEnumerator *fileEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:diskCacheURL
-                                                                     includingPropertiesForKeys:@[ NSURLIsDirectoryKey, NSURLContentModificationDateKey ]
-                                                                                        options:NSDirectoryEnumerationSkipsHiddenFiles
-                                                                                   errorHandler:NULL];
+        NSArray *resourceKeys = @[ NSURLIsDirectoryKey, NSURLContentModificationDateKey, NSURLTotalFileAllocatedSizeKey ];
+
+        // This enumerator prefetches useful properties for our cache files.
+        NSDirectoryEnumerator *fileEnumerator = [fileManager enumeratorAtURL:diskCacheURL
+                                                  includingPropertiesForKeys:resourceKeys
+                                                                     options:NSDirectoryEnumerationSkipsHiddenFiles
+                                                                errorHandler:NULL];
+
+        NSDate *expirationDate = [NSDate dateWithTimeIntervalSinceNow:-self.maxCacheAge];
+        NSMutableDictionary *cacheFiles = [NSMutableDictionary dictionary];
+        unsigned long long currentCacheSize = 0;
+
+        // Enumerate all of the files in the cache directory.  This loop has two purposes:
+        //
+        //  1. Removing files that are older than the expiration date.
+        //  2. Storing file attributes for the size-based cleanup pass.
         for (NSURL *fileURL in fileEnumerator)
         {
-            // skip folder
-            NSNumber *isDirectory;
-            [fileURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
-            if ([isDirectory boolValue])
+            NSDictionary *resourceValues = [fileURL resourceValuesForKeys:resourceKeys error:NULL];
+
+            // Skip directories.
+            if ([resourceValues[NSURLIsDirectoryKey] boolValue])
             {
                 continue;
             }
-            
-            // compare file date with the max age
-            NSDate *fileModificationDate;
-            [fileURL getResourceValue:&fileModificationDate forKey:NSURLContentModificationDateKey error:NULL];
-            if ([[fileModificationDate laterDate:expirationDate] isEqualToDate:expirationDate])
+
+            // Remove files that are older than the expiration date;
+            NSDate *modificationDate = resourceValues[NSURLContentModificationDateKey];
+            if ([[modificationDate laterDate:expirationDate] isEqualToDate:expirationDate])
             {
-                [[NSFileManager defaultManager] removeItemAtURL:fileURL error:nil];
+                [fileManager removeItemAtURL:fileURL error:nil];
+                continue;
+            }
+
+            // Store a reference to this file and account for its total size.
+            NSNumber *totalAllocatedSize = resourceValues[NSURLTotalFileAllocatedSizeKey];
+            currentCacheSize += [totalAllocatedSize unsignedLongLongValue];
+            [cacheFiles setObject:resourceValues forKey:fileURL];
+        }
+
+        // If our remaining disk cache exceeds a configured maximum size, perform a second
+        // size-based cleanup pass.  We delete the oldest files first.
+        if (self.maxCacheSize > 0 && currentCacheSize > self.maxCacheSize)
+        {
+            // Target half of our maximum cache size for this cleanup pass.
+            const unsigned long long desiredCacheSize = self.maxCacheSize / 2;
+
+            // Sort the remaining cache files by their last modification time (oldest first).
+            NSArray *sortedFiles = [cacheFiles keysSortedByValueWithOptions:NSSortConcurrent
+                                                            usingComparator:^NSComparisonResult(id obj1, id obj2)
+            {
+                return [obj1[NSURLContentModificationDateKey] compare:obj2[NSURLContentModificationDateKey]];
+            }];
+
+            // Delete files until we fall below our desired cache size.
+            for (NSURL *fileURL in sortedFiles)
+            {
+                if ([fileManager removeItemAtURL:fileURL error:nil])
+                {
+                    NSDictionary *resourceValues = cacheFiles[fileURL];
+                    NSNumber *totalAllocatedSize = resourceValues[NSURLTotalFileAllocatedSizeKey];
+                    currentCacheSize -= [totalAllocatedSize unsignedLongLongValue];
+
+                    if (currentCacheSize < desiredCacheSize)
+                    {
+                        break;
+                    }
+                }
             }
         }
     });
 }
 
--(int)getSize
+-(unsigned long long)getSize
 {
-    int size = 0;
+    unsigned long long size = 0;
     NSDirectoryEnumerator *fileEnumerator = [[NSFileManager defaultManager] enumeratorAtPath:self.diskCachePath];
     for (NSString *fileName in fileEnumerator)
     {

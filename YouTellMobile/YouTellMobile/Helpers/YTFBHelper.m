@@ -9,6 +9,7 @@
 
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
+#import <Instabug/Instabug.h>
 
 #import "YTAppDelegate.h"
 #import "YTFBHelper.h"
@@ -16,18 +17,50 @@
 #import "YTLoginViewController.h"
 #import "YTViewHelper.h"
 #import "YTApiHelper.h"
-#import "YTContactHelper.h"
 #import "YTModelHelper.h"
 #import "YTHelper.h"
 #import "YTConfig.h"
 
+@interface YTFBHelper ()
++ (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error;
++ (void)createSession;
++ (void)fetchUserData;
++ (NSArray*) perms;
+@end
+
 @implementation YTFBHelper
 
-+ (void)setup
++ (void)reauth {
+    [YTFBHelper createSession];
+    [FBSession openActiveSessionWithReadPermissions:[YTFBHelper perms]
+                                       allowLoginUI:NO
+                                  completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                                      //do not call sessionState, because sessionOpened resets user info
+                                      //we should actually also update FB information here
+                                      //do NOT call fetchUserData until we refactor out the postLogin and the
+                                      //changestoreID
+                                         }];
+
+}
+
++ (bool)trySilentAuth{
+    [YTFBHelper createSession];
+    return [FBSession openActiveSessionWithReadPermissions:[YTFBHelper perms]
+                                              allowLoginUI:NO
+                                         completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                                             [YTFBHelper sessionStateChanged:session state:status error:error];
+                                         }];
+}
+    
++ (void)requestAuth
 {
-    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded) {
-        [YTFBHelper openSession];
-    }
+    [YTFBHelper createSession];
+    [[FBSession activeSession] openWithBehavior:FBSessionLoginBehaviorWithFallbackToWebView
+              completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+                  [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                      [YTFBHelper sessionStateChanged:session state:status error:error];
+                  }];
+              }];
 }
 
 + (void)sessionOpened
@@ -47,7 +80,6 @@
     
     delegate.userInfo[@"access_token"] = token_data.accessToken;
     
-
     [YTApiHelper login:^(id JSON) {
         [YTFBHelper fetchUserData];
     }];
@@ -55,15 +87,14 @@
 
 + (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error
 {
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    
     switch(state) {
         case FBSessionStateOpen:
             [YTFBHelper sessionOpened];
             break;
         case FBSessionStateClosed:
+            break; //do nothing; signOut in AppDelegate handles all of this
         case FBSessionStateClosedLoginFailed:
-            [delegate.navController popToRootViewControllerAnimated:NO];
+            //login failed; show the login page just in case
             [FBSession.activeSession closeAndClearTokenInformation];
             [YTViewHelper showLogin];
             break;
@@ -102,11 +133,16 @@
 
         [[Mixpanel sharedInstance] identify:email];
 
+        [Instabug setUserDataString:email];
+        
+        if (delegate.deviceToken) {
+            [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
+        }
         
         if ([result[@"gender"] isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];
             [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
-
+            
         } else if ([result[@"gender"] isEqualToString:@"female"]) {
             [Flurry setGender:@"f"];
             [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
@@ -135,13 +171,11 @@
             [YTFBHelper fetchLikes];
             //actually logged in : important changestore ID above...
             [YTApiHelper postLogin];
-            [YTViewHelper hideLogin];
-
         }];
     }];
 }
 
-+ (void)fetchFriends
++ (void)fetchFriends:(void(^)(YTContacts* c))success
 {
     FBRequest *request = [FBRequest requestForMyFriends];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -149,9 +183,30 @@
             NSLog(@"%@", error.debugDescription);
             return;
         }
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [[YTContactHelper sharedInstance] loadFacebookFriends:result[@"data"]];
+        id friends = result[@"data"];
+        NSMutableArray* f = [NSMutableArray new];
+        if(friends) {
+            for(id friend in friends) {
+                YTContact* c = [YTContact new];
+                c.first_name = friend[@"first_name"];
+                c.last_name = friend[@"last_name"];
+                c.value = friend[@"id"];
+                c.type = @"facebook";
+
+                [f addObject: c];
+            }
+        }
+        
+        //immediately sort the array by first_name
+        NSArray* sorted_f = [f sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            NSString *first = [(YTContact*)a first_name];
+            NSString *second = [(YTContact*)b first_name];
+            return [first compare:second];
         }];
+
+        if(success) {
+            success([[YTContacts alloc] initWithArray:sorted_f]);
+        }
 
     }];
 }
@@ -217,34 +272,21 @@
     
     if(likes && interest && family) {
         [YTApiHelper updateUserInfo:nil];
-    }    
+    }
 }
 
-+ (void)openSession
++ (NSArray*) perms
 {
-    NSArray *perms = @[@"email", @"user_birthday", @"user_education_history", @"user_work_history", @"user_location", @"user_relationships", @"user_likes", @"user_interests"];
+    return @[@"email", @"user_birthday", @"user_education_history",
+             @"user_work_history", @"user_location", @"user_relationships",
+             @"user_likes", @"user_interests"];
+}
 
-
++ (void)createSession;
+{
+    FBSession *session = [[FBSession alloc] initWithPermissions:[YTFBHelper perms]];
     
-   FBSession *session = [[FBSession alloc] initWithPermissions:perms];
-   [FBSession setActiveSession:session];
-    [session openWithBehavior:FBSessionLoginBehaviorWithFallbackToWebView completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTFBHelper sessionStateChanged:session state:status error:error];
-        }];
-        
-    }];
-    
-    return;
-    
-    [FBSession openActiveSessionWithReadPermissions:perms allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTFBHelper sessionStateChanged:session state:state error:error];
-        }];
-        
-    }];
+    [FBSession setActiveSession:session];
 }
 
 + (void)closeSession
@@ -279,23 +321,52 @@
         @"link": CONFIG_SHARE_URL,
         @"picture": @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png"
     };
-    
-    [FBWebDialogs presentFeedDialogModallyWithSession:nil parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
-        
-        if (error != nil) {
-            NSLog(@"%@", error.debugDescription);
-            return;
-        }
-        
-        if (result == FBWebDialogResultDialogNotCompleted || [resultURL.absoluteString isEqualToString:@"fbconnect://success"]) {
-            return;
-        }
-        
-        [YTApiHelper getFreeCluesWithReason:@"fbshare"];
-        
-        [[Mixpanel sharedInstance] track:@"Shared On Facebook"];
-    }];
 
+    FBShareDialogParams *fbparams = [[FBShareDialogParams alloc] init];
+    fbparams.name = params[@"name"];
+    fbparams.caption = params[@"caption"];
+    fbparams.description = params[@"description"];
+    fbparams.link = [NSURL URLWithString:params[@"link"]];
+    fbparams.picture = [NSURL URLWithString:params[@"picture"]];
+    
+    if ([FBDialogs canPresentShareDialogWithParams:fbparams]) {
+        
+        [FBDialogs presentShareDialogWithParams:fbparams clientState:nil handler:^(FBAppCall *call, NSDictionary *results, NSError *error) {
+            
+            if (error != nil) {
+                NSLog(@"%@", error.debugDescription);
+                return;
+            }
+            
+            if (![results[@"completionGesture"] isEqualToString:@"post"]) {
+                [[Mixpanel sharedInstance] track:@"Cancelled Facebook Share"];
+                return;
+            }
+
+            [YTApiHelper getFreeCluesWithReason:@"fbshare"];
+            [[Mixpanel sharedInstance] track:@"Shared On Facebook"];
+        }];
+        
+    } else {
+
+        [FBWebDialogs presentFeedDialogModallyWithSession:nil parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+        
+            if (error != nil) {
+                NSLog(@"%@", error.debugDescription);
+                return;
+            }
+        
+            if (result == FBWebDialogResultDialogNotCompleted || [resultURL.absoluteString isEqualToString:@"fbconnect://success"]) {
+                [[Mixpanel sharedInstance] track:@"Cancelled Facebook Share"];
+                return;
+            }
+        
+            [YTApiHelper getFreeCluesWithReason:@"fbshare"];
+            [[Mixpanel sharedInstance] track:@"Shared On Facebook"];
+        }];
+        
+    }
+    
 }
 
 + (void)presentFeedDialog
@@ -318,7 +389,6 @@
     }
     
     [FBSession.activeSession requestNewPublishPermissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone completionHandler:^(FBSession *session, NSError *error) {
-        
         if (error) {
             NSLog(@"%@", error.debugDescription);
             return;
@@ -362,6 +432,14 @@
         [[Mixpanel sharedInstance] track:@"Invited Friend On Facebook"];
         [[Mixpanel sharedInstance] track:@"Invited Friend"];
     }];
+}
+
++ (NSString*)avatarUrlWithFBId:(NSString*)FBId
+{
+    CGFloat scale = [UIScreen mainScreen].scale;
+    NSInteger size = (scale == 1.0) ? 45 : 90;
+    NSString *url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=%d&height=%d", FBId, size, size];
+    return url;
 }
 
 @end

@@ -28,10 +28,10 @@
 @property (weak, nonatomic) YTGabViewController *currentGabViewController;
 
 @property (assign) BOOL usesSplitView;
+@property (strong, nonatomic) NSData *deviceToken;
 
 @property (strong, nonatomic) NSMutableDictionary *userInfo;
 @property (strong, nonatomic) NSMutableDictionary *sentInfo;
-@property (strong, nonatomic) NSArray *featuredUsers;
 @property (strong, nonatomic) NSMutableDictionary *deliveredMessages;
 
 

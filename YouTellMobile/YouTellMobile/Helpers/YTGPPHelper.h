@@ -7,9 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import <GPPSignIn.h>
-#import <GPPSignInButton.h>
-#import <GPPShare.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
+#import <GooglePlus/GooglePlus.h>
 
 @interface YTGPPHelper : NSObject <GPPSignInDelegate, GPPShareDelegate>
 
@@ -17,9 +16,10 @@
 
 - (BOOL)handleOpenURL:(NSURL*)url sourceApplication:(NSString*)sourceApplication annotation:(id)annotation;
 - (void)signOut;
-- (void)signIn;
-- (void)setup;
+- (bool)trySilentAuth;
+- (void)requestAuth;
 - (void)presentShareDialog;
+- (void)reauth;
 
 @property (strong, nonatomic) NSMutableArray *friends;
 

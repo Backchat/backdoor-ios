@@ -53,8 +53,9 @@
         delegate.window.rootViewController = delegate.navController;
     }
 
-    [YTViewHelper showGabs];
-    
+    YTMainViewController* mainController = [YTMainViewController new];
+    delegate.currentMainViewController = mainController;
+    [delegate.navController pushViewController:mainController animated:NO];
     [delegate.window makeKeyAndVisible];
 }
 
@@ -73,20 +74,35 @@
     [delegate.currentMainViewController.refreshControl endRefreshing];
 }
 
-+ (void)showLogin
++ (YTLoginViewController*) getOrCreateLoginView
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
     
     UIViewController *topViewController = [delegate.navController topViewController];
     UIViewController *viewController = [topViewController presentedViewController];
+    YTLoginViewController *loginViewController;
     
     if (![viewController isKindOfClass:[YTLoginViewController class]]) {
-        YTLoginViewController *loginViewController = [YTLoginViewController new];
+        loginViewController = [YTLoginViewController new];
         [topViewController presentViewController:loginViewController animated:NO completion:nil];
-    } else {
-        YTLoginViewController *loginViewController = (YTLoginViewController*)viewController;
-        [loginViewController loginFailed];
     }
+    else
+    {
+        loginViewController = (YTLoginViewController*)viewController;
+
+    }
+    
+    return loginViewController;
+}
+
++ (void)showLogin
+{
+    [self getOrCreateLoginView];
+}
+
++ (void)showLoginWithButtons
+{
+    [[self getOrCreateLoginView] showLoginButtons];
 }
 
 + (void)hideLogin
@@ -103,20 +119,16 @@
     [self showGabs];
 }
 
-+ (void)showGabWithId:(NSNumber*)gabId receiver:(NSDictionary*)receiver
++ (void)makeGabViewControllerTop: (YTGabViewController*) controller
 {
-    YTGabViewController *controller = [YTGabViewController new];
-    controller.gabId = gabId;
-    
     YTAppDelegate *delegate = [YTAppDelegate current];
-
     
     if (delegate.usesSplitView) {
         [YTViewHelper loadDetailsController:controller];
     } else {
         if ([delegate.navController.topViewController isKindOfClass:[YTGabViewController class]]) {
             YTGabViewController *gabView = (YTGabViewController*)delegate.navController.topViewController;
-            if (gabId && [[gabView.gab valueForKey:@"id"] isEqualToNumber:gabId]) {
+            if (gabView.gab && controller.gab && [[gabView.gab valueForKey:@"id"] isEqualToNumber:[controller.gab valueForKey:@"id"]]) {
                 return;
             }
         }
@@ -128,24 +140,20 @@
         [delegate.navController pushViewController:controller animated:YES];
     }
     
-    if (receiver) {
-        [controller.sendHelper.contactWidget selectContact:receiver];
-        [controller.inputView.textView becomeFirstResponder];
-    } else if (!gabId) {
-        [controller.sendHelper.contactWidget.textField becomeFirstResponder];
-    }
-    
     delegate.currentGabViewController = controller;
 }
 
 + (void)showGabWithId:(NSNumber*)gabId
 {
-    [YTViewHelper showGabWithId:gabId receiver:nil];
+    YTGabViewController *controller = [[YTGabViewController alloc] initWithGab:gabId];
+    [YTViewHelper makeGabViewControllerTop:controller];
 }
 
-+ (void)showGabWithReceiver:(NSDictionary*)receiver
++ (void)showGabWithFriend:(YTFriend*)f
 {
-    [YTViewHelper showGabWithId:nil receiver:receiver];
+    YTGabViewController* controller = [[YTGabViewController alloc] initWithFriend:f];
+    [YTViewHelper makeGabViewControllerTop:controller];
+ 
 }
 
 + (void)showGab
@@ -188,19 +196,13 @@
 + (void)showGabs
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
-    YTMainViewController *controller = [YTMainViewController new];
     
     if (!delegate.usesSplitView) {
-        
-        if ([delegate.navController.viewControllers count] == 0) {
-            delegate.navController.viewControllers = @[controller];
-            delegate.currentMainViewController = controller;
-        } else {
-            [delegate.navController popToRootViewControllerAnimated:YES];
-        }
-
-    } else {
+        [delegate.navController popToRootViewControllerAnimated:YES];
+    }
+    else {
         YTViewController *blank = [YTViewController new];
+        YTMainViewController *controller = [YTMainViewController new];
         delegate.detailsController.viewControllers = @[blank];
         delegate.navController.viewControllers = @[controller];
         delegate.currentMainViewController = controller;
@@ -213,7 +215,6 @@
 
 + (void)showSettings
 {
-    [[Mixpanel sharedInstance] track:@"Tapped Settings Button"];
     YTAppDelegate *delegate = [YTAppDelegate current];
     YTSettingsViewController *controller = [YTSettingsViewController new];
 
@@ -222,9 +223,6 @@
     } else {
         delegate.navController.viewControllers = @[controller];
         
-       // delegate.currentMainViewController = nil;
-       // delegate.currentGabViewController = nil;
-
         [YTViewHelper showFeedback];
     }
 
