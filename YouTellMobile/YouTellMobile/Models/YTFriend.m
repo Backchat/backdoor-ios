@@ -19,10 +19,10 @@
 - (NSString*) avatarUrl
 {
     if ([self.type isEqualToString:@"facebook"]) {
-        return [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", self.value];
+        return [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=90&height=90", self.value];
     }
     else if([self.type isEqualToString:@"gpp"]) {
-        return [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=50", self.value];
+        return [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=90", self.value];
     }
     else
         return nil;

@@ -230,11 +230,13 @@
 
     NSString *subtitle = NSLocalizedString(@"Tap me to start a new conversation.", nil);
     NSString *time = featured ? NSLocalizedString(@"Featured", nil) : @"";
-    
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:image backgroundColor:nil];
-    UIImageView *avatarView = (UIImageView*)[cell viewWithTag:5];
+    NSString *image = featured ? @"star2" : nil;
 
-    [[YTContactHelper sharedInstance] showAvatarInImageView:avatarView forContact:user];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
+                                                                            image:image
+                                                                           avatar:user.avatarUrl
+                                                                 placeHolderImage:[YTHelper imageNamed:@"avatar6"]
+                                                                  backgroundColor:nil];
     
     return cell;
 }
