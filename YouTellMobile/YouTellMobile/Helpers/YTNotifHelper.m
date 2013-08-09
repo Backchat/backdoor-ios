@@ -33,6 +33,8 @@
 + (void)handleNotification:(NSDictionary*)userInfo;
 {
 
+    if(!userInfo)
+        return;
     
     // FIXME: Use custom sound instead
     if ([YTNotifHelper soundEnabled]) {
