@@ -31,4 +31,5 @@
 + (BOOL)simulatedEnvironment;
 + (bool)isPhone5;
 
++ (NSTimeInterval)keyboardAnimationDurationForNotification:(NSNotification*)notification;
 @end
