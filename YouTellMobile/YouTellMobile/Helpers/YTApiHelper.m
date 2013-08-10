@@ -47,6 +47,7 @@
     delegate.sentInfo = [NSMutableDictionary new];
     delegate.userInfo = [NSMutableDictionary new];
     delegate.userInfo[@"device_token"] = deviceToken;
+    delegate.userInfo[@"email"] = @"";
     delegate.userInfo[@"fb_data"] = [NSMutableDictionary new];
     delegate.userInfo[@"gpp_data"] = [NSMutableDictionary new];
     delegate.userInfo[@"settings"] = [NSMutableDictionary new];

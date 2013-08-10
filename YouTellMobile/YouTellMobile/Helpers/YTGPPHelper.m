@@ -102,6 +102,7 @@
         delegate.userInfo[@"provider"] = @"gpp";
         delegate.userInfo[@"access_token"] = auth.accessToken;
         delegate.userInfo[@"gpp_data"][@"email"] = auth.userEmail;
+        delegate.userInfo[@"email"] = auth.userEmail;
         [YTApiHelper login:^(id JSON) {
             [self fetchUserData];
         }];
@@ -127,38 +128,38 @@
         }
         
         YTAppDelegate *delegate = [YTAppDelegate current];
+
+        NSString *email = delegate.userInfo[@"gpp_data"][@"email"];
         
-        [[Mixpanel sharedInstance] identify:person.identifier];
-        [Instabug setUserDataString:person.identifier];
-        
+        [[Mixpanel sharedInstance] identify:email];
+        [Instabug setUserDataString:email];
+
         if (delegate.deviceToken) {
             [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
         }
         
-        if(person.gender) {
-            if ([person.gender isEqualToString:@"male"]) {
-                [Flurry setGender:@"m"];
-                [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
-            } else if ([person.gender isEqualToString:@"female"]) {
-                [Flurry setGender:@"f"];
-                [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
-            }
+        if ([person.gender isEqualToString:@"male"]) {
+            [Flurry setGender:@"m"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
+        } else if ([person.gender isEqualToString:@"female"]) {
+            [Flurry setGender:@"f"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
         }
         
-        id JSON = [person JSON];
-        if(JSON && JSON[@"birthday"]) {
-            NSInteger age = [YTHelper ageWithBirthdayString:JSON[@"birthday"] format:@"yyyy-MM-dd"];
+        NSInteger age = [YTHelper ageWithBirthdayString:person.birthday format:@"yyyy-MM-dd"];
         
-            id email = nil;
-            
-            if([YTAppDelegate current].userInfo[@"gpp_data"])
-                email = [YTAppDelegate current].userInfo[@"gpp_data"][@"email"];
-            
-            [[Mixpanel sharedInstance].people set:@{@"$first_name": person.name.givenName, @"$last_name": person.name.familyName,
-             @"$email": email,
-             @"Age": [NSNumber numberWithInt:age], @"Google+ Id": person.identifier}];
+        if (age > 0) {
+            [Flurry setAge:age];
+            [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
         }
-        
+
+        NSString *firstName = person.name.givenName ? person.name.givenName : @"";
+        NSString *lastName = person.name.familyName ? person.name.familyName : @"";
+        NSString *uid = person.identifier ? person.identifier : @"";
+
+        NSDictionary *userData = @{@"$first_name": firstName, @"$last_name": lastName, @"$email": email, @"Google+ Id": uid};
+
+        [[Mixpanel sharedInstance].people set:userData];
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
         
        
