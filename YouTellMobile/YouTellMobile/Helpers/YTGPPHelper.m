@@ -88,8 +88,10 @@
     
     //ultimately, we do in fact want to update social data here, but not yet
     //we need to refactor out changestoreid and postlogin first.
-    if(reauthenticating)
+    if(reauthenticating) {
+        [YTAppDelegate current].userInfo[@"provider"] = @"gpp";
         return;
+    }
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         [YTApiHelper resetUserInfo];
