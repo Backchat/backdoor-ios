@@ -39,7 +39,9 @@
                                       //we should actually also update FB information here
                                       //do NOT call fetchUserData until we refactor out the postLogin and the
                                       //changestoreID
-                                         }];
+                                      //we need to actually call POST / to get our entire user state ... later
+                                      [YTAppDelegate current].userInfo[@"provider"] = @"facebook";
+                                  }];
 
 }
 
