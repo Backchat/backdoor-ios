@@ -12,6 +12,8 @@
 		3E9F69161761407D00374616 /* YTGabMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F69151761407C00374616 /* YTGabMessage.m */; };
 		3EB7BD1F17B432FA00FE0E5D /* choose_address_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */; };
 		3EB7BD2017B432FA00FE0E5D /* choose_address_book@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD1E17B432FA00FE0E5D /* choose_address_book@2x.png */; };
+		3EB7BD4F17B5744300FE0E5D /* enter_phone_number@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD4D17B5744300FE0E5D /* enter_phone_number@2x.png */; };
+		3EB7BD5017B5744300FE0E5D /* enter_phone_number.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD4E17B5744300FE0E5D /* enter_phone_number.png */; };
 		3EC93C5917B0ADAB007A29B2 /* YTFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C5617B0ADAB007A29B2 /* YTFriend.m */; };
 		3EC93C5A17B0ADAB007A29B2 /* YTFriends.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C5817B0ADAB007A29B2 /* YTFriends.m */; };
 		3EC93C6117B0AF9A007A29B2 /* YTContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C5E17B0AF9A007A29B2 /* YTContact.m */; };
@@ -433,6 +435,8 @@
 		3E9F69151761407C00374616 /* YTGabMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabMessage.m; path = Helpers/YTGabMessage.m; sourceTree = "<group>"; };
 		3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = choose_address_book.png; sourceTree = "<group>"; };
 		3EB7BD1E17B432FA00FE0E5D /* choose_address_book@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "choose_address_book@2x.png"; sourceTree = "<group>"; };
+		3EB7BD4D17B5744300FE0E5D /* enter_phone_number@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "enter_phone_number@2x.png"; sourceTree = "<group>"; };
+		3EB7BD4E17B5744300FE0E5D /* enter_phone_number.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = enter_phone_number.png; sourceTree = "<group>"; };
 		3EC93C5517B0ADAB007A29B2 /* YTFriend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTFriend.h; sourceTree = "<group>"; };
 		3EC93C5617B0ADAB007A29B2 /* YTFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTFriend.m; sourceTree = "<group>"; };
 		3EC93C5717B0ADAB007A29B2 /* YTFriends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTFriends.h; sourceTree = "<group>"; };
@@ -1096,6 +1100,8 @@
 		B2A75AD516F1ED7E00F0CAB4 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				3EB7BD4D17B5744300FE0E5D /* enter_phone_number@2x.png */,
+				3EB7BD4E17B5744300FE0E5D /* enter_phone_number.png */,
 				3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */,
 				3EB7BD1E17B432FA00FE0E5D /* choose_address_book@2x.png */,
 				B2EF849E171DDDAB00EECBE7 /* avatar.gif */,
@@ -1393,11 +1399,6 @@
 				B2C9D13C16FF3137002DDE4F /* YTGabViewController.m */,
 				B2E68F4917271AD600914B40 /* YTHelpSettingsViewController.h */,
 				B2E68F4A17271AD600914B40 /* YTHelpSettingsViewController.m */,
-				3E5D6E3817A8E45400C45EEF /* YTInviteContactComposeViewController.h */,
-				3E5D6E3917A8E45500C45EEF /* YTInviteContactComposeViewController.m */,
-				3E5D6E2B17A87BC000C45EEF /* YTInviteContactViewController.h */,
-				3E5D6E2C17A87BC100C45EEF /* YTInviteContactViewController.m */,
-				3E5D6E2D17A87BC100C45EEF /* YTInviteContactViewController.xib */,
 				B2E68F4F17271FAB00914B40 /* YTInviteSettingsViewController.h */,
 				B2E68F5017271FAB00914B40 /* YTInviteSettingsViewController.m */,
 				B2C9D13D16FF3137002DDE4F /* YTLoginViewController.h */,
@@ -1858,6 +1859,8 @@
 				3EC93C8E17B0B20B007A29B2 /* YTInviteContactViewController.xib in Resources */,
 				3EB7BD1F17B432FA00FE0E5D /* choose_address_book.png in Resources */,
 				3EB7BD2017B432FA00FE0E5D /* choose_address_book@2x.png in Resources */,
+				3EB7BD4F17B5744300FE0E5D /* enter_phone_number@2x.png in Resources */,
+				3EB7BD5017B5744300FE0E5D /* enter_phone_number.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2259,6 +2262,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
