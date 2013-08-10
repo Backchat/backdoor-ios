@@ -26,8 +26,10 @@
 #import "YTFriends.h"
 #import "YTViewHelper.h"
 #import "YTTourViewController.h"
-
+#import "YTGPPHelper.h"
+#import "YTFBHelper.h"
 #import "YTContact.h"
+#import "YTSocialHelper.h"
 
 @implementation YTApiHelper
 
@@ -36,6 +38,17 @@
     [YTAppDelegate current].autoSyncLock = [NSLock new];
     [YTApiHelper resetUserInfo];
     [YTAppDelegate current].deliveredMessages = [NSMutableDictionary new];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:YTDeviceTokenAcquired
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      NSLog(@"device token -> try login again");
+                                                      if([YTAppDelegate current].userInfo[@"access_token"]) {
+                                                          NSLog(@"has access_token-> trying again");
+                                                          [YTApiHelper login];
+                                                      }
+                                                  }];
 }
 
 + (void)resetUserInfo
@@ -60,21 +73,15 @@
     NSMutableDictionary *userInfo = delegate.userInfo;
     NSMutableDictionary *result = [NSMutableDictionary new];
     NSData *data;
-    if (![YTApiHelper loggedIn]) {
-        return nil;
-    }
+        
     result[@"access_token"] = userInfo[@"access_token"];
     result[@"provider"] = userInfo[@"provider"];
-    //if (userInfo[@"fb_data"] && ![userInfo[@"fb_data"] isEqual:sentInfo[@"fb_data"]]) {
+    
     data = [NSJSONSerialization dataWithJSONObject:[NSDictionary dictionaryWithDictionary:userInfo[@"fb_data"]] options:NSJSONWritingPrettyPrinted error:nil];
     result[@"fb_data"] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
-    //}
-    //if (userInfo[@"gpp_data"] && ![userInfo[@"gpp_data"] isEqual:sentInfo[@"gpp_data"]]) {
     data = [NSJSONSerialization dataWithJSONObject:[NSDictionary dictionaryWithDictionary:userInfo[@"gpp_data"]] options:NSJSONWritingPrettyPrinted error:nil];
     result[@"gpp_data"] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    //}
-    
 
     result[@"device_token"] = userInfo[@"device_token"];
     return result;
@@ -198,7 +205,8 @@
     NSString* access_token = [YTAppDelegate current].userInfo[@"access_token"];
     
     [YTModelHelper setSettingsForKey:@"logged_in_access_token" value:access_token];
-
+    [YTModelHelper setSettingsForKey:@"logged_in_provider" value:[YTAppDelegate current].userInfo[@"provider"]];
+    
     [YTViewHelper hideLogin];
 
     NSNumber* launch_on_login = [YTAppDelegate current].userInfo[@"launch_on_active_token"];
@@ -218,51 +226,91 @@
     }
 }
 
+//refactor these stupid static bools out soon
+static bool loggedIn;
 + (bool)loggedIn
 {
-    NSString* token = [YTAppDelegate current].userInfo[@"access_token"];
-    return token && [token length] > 0;
+    return loggedIn;
+}
+
++ (void)logout
+{
+    loggedIn = false;
+    [YTModelHelper removeSettingsForKey:@"logged_in_acccess_token"];
+    [YTModelHelper removeSettingsForKey:@"logged_in_provider"];
+    
+    //TODO better?
+    [[YTAppDelegate current].storeHelper disable];
+    [YTAppDelegate current].storeHelper = nil;
+    
+    [[Mixpanel sharedInstance] track:@"Signed Out"];
+    
+    [[YTSocialHelper sharedInstance] logoutProviders];
+    
+    [YTModelHelper changeStoreId:nil];
+    
+    [YTApiHelper resetUserInfo];
+    
+    [YTViewHelper showLoginWithButtons];
+    [YTViewHelper refreshViews];
 }
 
 + (bool)attemptCachedLogin
 {
     NSString* local_access_token = [YTModelHelper settingsForKey:@"logged_in_access_token"];
-    if(local_access_token && local_access_token.length > 0)
+    NSString* logged_in_provider = [YTModelHelper settingsForKey:@"logged_in_provider"];
+    
+    if(local_access_token && local_access_token.length > 0 &&
+       logged_in_provider && logged_in_provider.length > 0)
     {
         [YTAppDelegate current].userInfo[@"access_token"] = local_access_token;
+        loggedIn = true;
+        /* we do, but we still need to reauth our social media. */
+        [[YTSocialHelper sharedInstance] reauthProviders];
         [YTApiHelper postLogin];
+        //TODO do full fireLogin once we get the fetchUserData to work right
         return true;
     }
     else
         return false;
 }
 
-+ (void)login:(void(^)(id JSON))success
++ (void)fireLoginSuccess
 {
-    NSString* local_access_token = [YTModelHelper settingsForKey:@"logged_in_access_token"];
-    if(local_access_token && local_access_token.length > 0)
-    {
-        ///already logged in
-        [YTAppDelegate current].userInfo[@"access_token"] = local_access_token;
-        if(success) {
-            success(@{});
-        }
+    [[NSNotificationCenter defaultCenter] postNotificationName:YTLoginSuccess object:nil];
+}
+
+/* Login can be called by two things:
+ * device token acquired -> login
+ * social provider:authed -> login
+ */
++ (void)login
+{
+    if([YTApiHelper loggedIn]) {
+        NSLog(@"already loggedin ");
         return;
     }
     
+    if([YTApiHelper attemptCachedLogin]) {
+        NSLog(@"logged in via cached access token");
+        return;
+    }    
+    
     NSDictionary* params = [self userParams];
     NSString* device_token= [params valueForKey:@"device_token"];
-    if(device_token == nil || device_token.length == 0)
+    if(device_token == nil || device_token.length == 0) {
+        //this might only occur if login is called so fast that didRegister... didn't get called yet
+        //it will, at some point, get called since we call registerFor... in the main appdelegate.
+        //we listen to the YTDeviceTokenAcquired so we will recall ourselves
+        NSLog(@"login before devicetoken");
         return;
-        //this will occur when login is caleld as part of opening FB session, which occurs
-        //before getting the device_token from APN.
-        //this flow could only happen when you are not logged in yet, because when you log in,
-        //we have a valid access_token we store indefinitely.
-        //ultimately, login will be called again when the uesr hits a login button.
+    }
+
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Logging in", nil)
                                                  path:@"/login"
                                                method:@"POST" params:params
                                               success:^(id JSON) {
+                                                  loggedIn = true;
                                                   //we must have successfully logged in = we must be ok with server
                                                   [YTApiHelper hideNetworkErrorAlert];
                                                   //are we a new user? then show the tour:
@@ -274,9 +322,7 @@
                                                   if(num)
                                                       [YTApiHelper setNewUser:((num.integerValue == 1) || CONFIG_DEBUG_TOUR)];
                                                   
-                                                  if(success) {
-                                                      success(JSON);
-                                                  }
+                                                  [YTApiHelper fireLoginSuccess];
                                               }
                                               failure:nil];
 
@@ -661,3 +707,5 @@ static bool new_user = false;
 }
 
 @end
+
+NSString* const YTLoginSuccess = @"YTLoginSuccess";

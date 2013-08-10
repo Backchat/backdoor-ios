@@ -13,5 +13,7 @@
 - (BOOL)isGPP;
 - (BOOL)isFacebook;
 - (void)presentShareDialog;
-
+- (void)fetchUserData;
+- (void)reauthProviders;
+- (void)logoutProviders;
 @end

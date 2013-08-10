@@ -23,5 +23,5 @@
 + (void)presentRequestDialogWithContact:(NSString*)contact complete:(void(^)())complete;
 + (NSString*)avatarUrlWithFBId:(NSString*)FBId;
 + (void)fetchFriends:(void(^)(YTContacts* c))success;
-
++ (void)fetchUserData;
 @end
