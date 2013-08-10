@@ -218,7 +218,7 @@
                                                                            image:image
                                                                           avatar:avatar
                                                                 placeHolderImage:[YTHelper imageNamed:@"avatar6"]
-                                                                 backgroundColor:nil];
+                                                                 backgroundColor:[UIColor whiteColor]];
 
     return cell;
 }
@@ -236,7 +236,7 @@
                                                                             image:image
                                                                            avatar:user.avatarUrl
                                                                  placeHolderImage:[YTHelper imageNamed:@"avatar6"]
-                                                                  backgroundColor:nil];
+                                                                  backgroundColor:[UIColor whiteColor]];
     
     return cell;
 }
@@ -271,7 +271,7 @@
     
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:@""
                                                                           avatar:image placeHolderImage:nil
-                                                                 backgroundColor:nil];
+                                                                 backgroundColor:[UIColor whiteColor]];
     
     return cell;
 }
@@ -287,7 +287,7 @@
                                                                            title:title subtitle:subtitle time:time
                                                                            image:image
                                                                           avatar:@"get_clues_btn" placeHolderImage:nil
-                                                                 backgroundColor:nil];
+                                                                 backgroundColor:[UIColor whiteColor]];
     
     return cell;
 }
@@ -307,10 +307,10 @@
 
 # pragma mark UITableViewDelegate methods
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.searchBar resignFirstResponder];
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
     if (indexPath.section == SECTION_GABS) {
         NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row  filter:self.searchBar.text];
         self.selectedGabId = [object valueForKey:@"id"];
@@ -319,7 +319,7 @@
     else if (indexPath.section == SECTION_FRIENDS) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Friend Item"];
         [YTViewHelper showGabWithFriend:[self.friends friendAtIndex:indexPath.row]];
-    }    
+    }
     else if (indexPath.section == SECTION_MORE) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / More Item"];
         [self.searchBar resignFirstResponder];
@@ -342,13 +342,7 @@
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Featured Users Item"];
         [YTViewHelper showGabWithFriend:[self.featuredUsers friendAtIndex:indexPath.row]];
     }
-    
-    return nil;
-}
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    cell.backgroundColor = [UIColor whiteColor];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
