@@ -12,10 +12,10 @@
 @interface YTApiHelper : NSObject
 
 + (void)setup;
-+ (void)login:(void(^)(id JSON))success;
++ (void)login;
 + (bool)attemptCachedLogin;
 + (bool)loggedIn;
-
++ (void)logout;
 + (void)postLogin;
 + (void)resetUserInfo;
 + (NSURL*)baseUrl;
@@ -60,3 +60,5 @@
 
 + (void)sendInviteText:(YTContact*)contact body:(NSString*)body success:(void(^)(id JSON))success;
 @end
+
+extern NSString* const YTLoginSuccess;

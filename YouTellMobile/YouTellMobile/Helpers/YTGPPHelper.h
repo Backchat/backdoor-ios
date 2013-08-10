@@ -20,7 +20,6 @@
 - (void)requestAuth;
 - (void)presentShareDialog;
 - (void)reauth;
-
-@property (strong, nonatomic) NSMutableArray *friends;
+- (void)fetchUserData;
 
 @end

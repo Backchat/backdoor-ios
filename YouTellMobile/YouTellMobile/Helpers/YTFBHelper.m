@@ -80,9 +80,7 @@
     
     delegate.userInfo[@"access_token"] = token_data.accessToken;
     
-    [YTApiHelper login:^(id JSON) {
-        [YTFBHelper fetchUserData];
-    }];
+    [YTApiHelper login];
 }
 
 + (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error

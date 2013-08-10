@@ -53,7 +53,7 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", nil) style:UIBarButtonItemStyleDone target:[YTViewHelper class] action:@selector(showGabs)];
 
-    UIBarButtonItem *logoutItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Logout", nil) style:UIBarButtonItemStyleBordered target:[YTAppDelegate current] action:@selector(signOut)];
+    UIBarButtonItem *logoutItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Logout", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(signOut)];
     
     UIBarButtonItem *crashItem = [[UIBarButtonItem alloc] initWithTitle:@"Crash" style:UIBarButtonItemStyleBordered target:self action:@selector(crash)];
     
@@ -79,6 +79,10 @@
     self.navigationItem.rightBarButtonItems = items;
 }
 
+- (void)signOut
+{
+    [YTApiHelper logout];
+}
 
 - (void)showNotifications
 {
