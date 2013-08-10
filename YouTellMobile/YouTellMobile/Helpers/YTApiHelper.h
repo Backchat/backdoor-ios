@@ -53,8 +53,8 @@
 + (void)requestClue:(NSNumber*)gabId number:(NSNumber*)number success:(void(^)(id JSON))success;
 + (void)buyCluesWithReceipt:(NSString *)receipt success:(void(^)(id JSON))success;
 + (void)getFreeCluesWithReason:(NSString *)reason;
-+ (void)getFeaturedUsers:(void(^)())success;
-+ (void)getFriends:(void(^)())success;
++ (void)getFeaturedUsers;
++ (void)getFriends;
 + (void)updateSettingsWithKey:(NSString*)key value:(id)value;
 + (void)checkUpdates;
 

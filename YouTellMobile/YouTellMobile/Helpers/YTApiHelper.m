@@ -116,6 +116,9 @@
         
     [request setTimeoutInterval:CONFIG_TIMEOUT];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+        [NSThread sleepForTimeInterval:2.0];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             
             [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
@@ -135,6 +138,7 @@
             
         }];
         
+        });
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -557,49 +561,7 @@ static bool new_user = false;
     } failure:nil];
 }
 
-+ (void)addContact:(NSDictionary*)friend
-{    
-    NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-    [data setValue:friend[@"first_name"] forKey:@"first_name"];
-    [data setValue:friend[@"last_name"] forKey:@"last_name"];
-    
-    NSString* type = friend[@"type"];
-    if(!type)
-        type = friend[@"provider"];
-    [data setValue:type forKey:@"type"];
-    
-    NSString* value = friend[@"value"];
-    if(!value)
-        value = friend[@"social_id"];
-    [data setValue:value forKey:@"value"];
-    
-    [data setValue:friend[@"friend_id"] forKey:@"friend_id"];
-    [data setValue:friend[@"id"] forKey:@"id"];
-    [data setValue:friend[@"featured_id"] forKey:@"featured_id"];
-    
-    NSString* source = [friend valueForKey:@"source"];
-    if(!source) {
-        if([friend valueForKey:@"id"]) {
-            source = @"friend";
-        }
-        else if([friend valueForKey:@"featured_id"]) {
-            source = @"featured";
-        }
-    }
-    
-    [data setValue:source forKey:@"source"];
-
-    NSString* full_name = friend[@"name"];
-    if(!full_name) {
-        full_name = [NSString stringWithFormat:@"%@ %@", friend[@"first_name"], friend[@"last_name"]];
-    }
-    [data setValue:full_name forKey:@"name"];
-    
-    [YTModelHelper addContactWithData:data];
-}
-
-
-+ (void)getFeaturedUsers:(void(^)())success
++ (void)getFeaturedUsers
 {
     if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"] && !CONFIG_DEBUG_FEATURED) {
         return;
@@ -610,33 +572,18 @@ static bool new_user = false;
         if(!users)
             return;
         
-        [YTModelHelper clearContactsWithSource:@"featured"];
-        
-        for (NSDictionary *u in users) {
-            [YTApiHelper addContact:u];
-        }
-
-        if(success)
-            success();                
+        [YTFriends parseFriendsOfType:YTFeaturedFriendType withJSON:users];
     } failure:nil];
 }
 
-+ (void)getFriends:(void(^)())success
++ (void)getFriends
 {
     [YTApiHelper sendJSONRequestToPath:@"/friends" method:@"GET" params:nil success:^(id JSON) {
-        
         NSDictionary* friends = JSON[@"friends"];
         if(!friends)
             return;
-                
-        [YTModelHelper clearContactsWithSource:@"friend"];
-
-        for (NSDictionary *friend in friends) {
-            [YTApiHelper addContact:friend];
-        }
         
-        if(success)
-            success();
+        [YTFriends parseFriendsOfType:YTFriendType withJSON:friends];
     } failure:nil];
 }
 
