@@ -9,6 +9,7 @@
 #import "YTGPPHelper.h"
 #import "YTFBHelper.h"
 #import "YTAppDelegate.h"
+#import "YTModelHelper.h"
 
 @implementation YTSocialHelper
 
@@ -39,6 +40,31 @@
     } else if ([self isFacebook]) {
         [YTFBHelper presentFeedDialog];
     }
+}
+
+- (void)fetchUserData
+{
+    if([self isGPP]) {
+        [[YTGPPHelper sharedInstance] fetchUserData];
+    }
+    else {
+        [YTFBHelper fetchUserData];
+    }
+}
+
+- (void)reauthProviders
+{
+    NSString* whichProvider = [YTModelHelper settingsForKey:@"logged_in_provider"];
+    if([whichProvider isEqualToString:@"facebook"])
+        [YTFBHelper reauth];
+    else
+        [[YTGPPHelper sharedInstance] reauth];
+}
+
+- (void)logoutProviders
+{
+    [[YTGPPHelper sharedInstance] signOut];
+    [YTFBHelper closeSession];
 }
 
 @end

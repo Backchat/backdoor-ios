@@ -24,6 +24,7 @@
 #import "YTNotifHelper.h"
 #import "YTRateHelper.h"
 #import "YTConfig.h"
+#import "YTSocialHelper.h"
 
 void uncaughtExceptionHandler(NSException *exception)
 {
@@ -44,6 +45,14 @@ void uncaughtExceptionHandler(NSException *exception)
     return (YTAppDelegate*)[UIApplication sharedApplication].delegate;
 }
 
+- (id) init {
+    if(self = [super init]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loggedIn:) name:YTLoginSuccess
+                                                   object:nil];
+    }
+    return self;
+}
+
 + (void)initialize
 {
 #ifdef CONFIGURATION_Release
@@ -54,25 +63,9 @@ void uncaughtExceptionHandler(NSException *exception)
     [[YTRateHelper sharedInstance] setup];
 }
 
-- (void)signOut
+- (void)loggedIn:(NSNotification*)note
 {
-    [YTModelHelper removeSettingsForKey:@"logged_in_acccess_token"];
-    
-    //TODO better?
-    [[YTAppDelegate current].storeHelper disable];
-    [YTAppDelegate current].storeHelper = nil;
-    
-    [[Mixpanel sharedInstance] track:@"Signed Out"];
-    
-    [[YTGPPHelper sharedInstance] signOut];
-    [YTFBHelper closeSession];
-    
-    [YTModelHelper changeStoreId:nil];
-
-    [YTApiHelper resetUserInfo];
-    
-    [YTViewHelper showLoginWithButtons];
-    [YTViewHelper refreshViews];
+    [[YTSocialHelper sharedInstance] fetchUserData];
 }
 
 # pragma mark UISplitViewControllerDelegate methods
@@ -159,9 +152,6 @@ void uncaughtExceptionHandler(NSException *exception)
             [YTViewHelper showLoginWithButtons];
     }
     else {
-        /* we do, but we still need to reauth our social media. */
-        [YTFBHelper reauth];
-        [[YTGPPHelper sharedInstance] reauth];
         if(gab_id) {
             [YTApiHelper syncGabWithId:gab_id];
             [YTViewHelper showGabWithId:gab_id];
@@ -212,7 +202,9 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     self.userInfo[@"device_token"] = [YTHelper hexStringFromData:deviceToken];
+    NSLog(@"device token %@", self.userInfo[@"device_token"]);
     self.deviceToken = deviceToken;
+    [[NSNotificationCenter defaultCenter] postNotificationName:YTDeviceTokenAcquired object:nil];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
@@ -272,5 +264,6 @@ void uncaughtExceptionHandler(NSException *exception)
 
 #pragma mark - Core Data stack
 
-
 @end
+
+NSString* const YTDeviceTokenAcquired = @"YTDeviceTokenAcquired";

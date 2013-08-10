@@ -102,9 +102,7 @@
         delegate.userInfo[@"provider"] = @"gpp";
         delegate.userInfo[@"access_token"] = auth.accessToken;
         delegate.userInfo[@"gpp_data"][@"email"] = auth.userEmail;
-        [YTApiHelper login:^(id JSON) {
-            [self fetchUserData];
-        }];
+        [YTApiHelper login];
         
         [YTModelHelper changeStoreId:auth.userEmail];
         [YTApiHelper postLogin];
@@ -171,6 +169,7 @@
     }];
 }
 
+/* TODO: this is not used yet */
 - (void)fetchFriendsWithPageToken:(NSString*)pageToken
 {
     GTLServicePlus *service = [GTLServicePlus new];
@@ -181,7 +180,7 @@
     query.pageToken = pageToken;
     
     if (!pageToken) {
-        self.friends = [NSMutableArray new];
+        //self.friends = [NSMutableArray new];
     }
     
     [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLPlusPeopleFeed *peopleFeed, NSError *error) {
@@ -189,7 +188,7 @@
             NSLog(@"%@", error.debugDescription);
             return;
         }
-        [self.friends addObjectsFromArray:[peopleFeed JSON][@"items"]];
+        //[self.friends addObjectsFromArray:[peopleFeed JSON][@"items"]];
 
         if (peopleFeed.nextPageToken) {
             [self fetchFriendsWithPageToken:peopleFeed.nextPageToken];

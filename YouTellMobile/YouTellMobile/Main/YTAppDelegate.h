@@ -40,7 +40,8 @@
 
 @property (strong, atomic) NSLock *autoSyncLock;
 
-- (void)signOut;
 + (YTAppDelegate*)current;
 
 @end
+
+extern NSString* const YTDeviceTokenAcquired;
