@@ -45,9 +45,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.friends = [[YTFriends alloc] init];
-    
+        
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height) style:UITableViewStylePlain];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -72,19 +70,36 @@
     self.title = NSLocalizedString(@"New Message", nil);
     
     self.contacts = nil;
-
+    self.filteredContacts = nil;
+    
     self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
                UIActivityIndicatorViewStyleGray];
 
+    self.friends = [[YTFriends alloc] init];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshFriends:)
+                                                 name:YTFriendNotification object:nil];
+    
     [YTFBHelper fetchFriends:^(YTContacts *c) {
-        self.contacts = [[YTContacts alloc] initWithContacts:c excludingFriends:[[YTFriends alloc] init]];
-        self.filteredContacts = [[YTContacts alloc] initWithContacts:self.contacts withFilter:self.searchBar.text];
-        
-        
-        [self.tableView reloadData];
+        self.contacts = c;
+        [self refreshFriends:nil];
     }];
 }
 
+- (void)refreshFriends:(NSNotification*)note
+{
+    self.friends = [[YTFriends alloc] initWithSearchString:self.searchBar.text];
+    
+    if([self.friends hasValidData]) {
+        YTContacts* contacts = [[YTContacts alloc] initWithContacts:self.contacts excludingFriends:[[YTFriends alloc] init]];
+        self.filteredContacts = [[YTContacts alloc] initWithContacts:contacts withFilter:self.searchBar.text];
+    }
+    else {
+        self.filteredContacts = nil;
+    }
+    
+    [self.tableView reloadData];
+}
 
 - (void)cancelButtonWasClicked
 {
@@ -98,7 +113,7 @@
     switch(section) {
         case 0: return self.friends.count;
         case 1:
-            if(self.contacts)
+            if(self.filteredContacts)
                 return self.filteredContacts.count;
             else
                 return 1;
@@ -125,7 +140,7 @@
     NSString* avatarUrl = nil;
     UIImage* placeHolder =nil;
 
-    if(self.contacts) {
+    if(self.filteredContacts) {
         YTContact* c = [self.filteredContacts contactAtIndex:indexPath.row];
         title = c.name;
         subtitle = NSLocalizedString(@"Send anonymous text to invite", nil);
@@ -140,7 +155,7 @@
                                                                 placeHolderImage:placeHolder
                              backgroundColor:[UIColor colorWithRed:234.0/255.0 green:242.0/255.0 blue:246.0/255.0 alpha:1.0]];
 
-    if(!self.contacts) {
+    if(!self.filteredContacts) {
         int width = 32, height = 32;
         int rowHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath];
         self.spinner.frame = CGRectMake(
@@ -215,6 +230,7 @@
         case 1:
         {
             [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Invite FB Friend Item"];
+
             YTInviteContactViewController* invite = [YTInviteContactViewController new];
             invite.contact = [self.filteredContacts contactAtIndex:indexPath.row];
             [[YTAppDelegate current].navController pushViewController:invite animated:YES];
@@ -229,12 +245,17 @@
     }
 }
 
+- (NSIndexPath*) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == 1 && !self.filteredContacts)
+        return nil;
+    else
+        return indexPath;
+}
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    self.friends = [[YTFriends alloc] initWithSearchString:searchText];
-    self.filteredContacts = [[YTContacts alloc] initWithContacts:self.contacts withFilter:searchText];
-    [self.tableView reloadData];
+    [self refreshFriends:nil];
 }
 
 

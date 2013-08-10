@@ -556,29 +556,6 @@ static int available_clues;
     return [[YTAppDelegate current].userInfo[@"settings"][@"has_shared"] boolValue];
 }
 
-+ (void)clearContactsWithSource:(NSString *)source
-{
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Contacts"];
-    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
-    request.predicate = [NSPredicate predicateWithFormat:@"(source = %@)", source];
-    NSError *error;
-    NSArray *objects = [context executeFetchRequest:request error:&error];
-
-    for (NSManagedObject *object in objects) {
-        [context deleteObject:object];
-    }
-    
-}
-
-+ (void)addContactWithData:(NSDictionary *)data
-{
-    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
-    NSObject *object = [NSEntityDescription insertNewObjectForEntityForName:@"Contacts" inManagedObjectContext:context];
-    for (NSString *key in [data allKeys]) {
-        [object setValue:data[key] forKey:key];
-    }    
-}
-
 + (NSString*)phoneForUid:(NSString*)uid
 {
     NSString *key = [NSString stringWithFormat:@"facebook_%@", uid];
