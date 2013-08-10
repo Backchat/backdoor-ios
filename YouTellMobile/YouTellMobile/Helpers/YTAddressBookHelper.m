@@ -47,24 +47,14 @@
 
 + (YTContacts*) contactsFromAddressBook:(ABAddressBookRef) addressBook withContact:(YTContact*)contact
 {
-    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
-            
+    CFArrayRef people = ABAddressBookCopyPeopleWithName(addressBook, (__bridge CFStringRef)contact.name);
+    
     NSMutableArray* contacts = [[NSMutableArray alloc] init];
     for(CFIndex i=0;i<CFArrayGetCount(people);i++) {
         ABRecordRef* person = (ABRecordRef*) CFArrayGetValueAtIndex(people, i);
         NSString* first_name = (__bridge_transfer NSString*) ABRecordCopyValue(person, kABPersonFirstNameProperty);
         NSString* last_name = (__bridge_transfer NSString*) ABRecordCopyValue(person, kABPersonLastNameProperty);
         
-        /*
-         substring match on first OR last name */
-        NSStringCompareOptions opt = NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch|NSWidthInsensitiveSearch;
-        if(
-           [first_name rangeOfString:contact.first_name options:opt].location == NSNotFound &&
-           [first_name rangeOfString:contact.last_name options:opt].location == NSNotFound &&
-           [last_name rangeOfString:contact.first_name options:opt].location == NSNotFound &&
-           [last_name rangeOfString:contact.last_name options:opt].location == NSNotFound)
-            continue;
-
         ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
 
         UIImage *image = nil;
