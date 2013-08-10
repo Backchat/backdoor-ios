@@ -199,4 +199,13 @@
     return [UIImage imageNamed:imageName];
 }
 
++ (NSTimeInterval)keyboardAnimationDurationForNotification:(NSNotification*)notification
+{
+    NSDictionary* info = [notification userInfo];
+    NSValue* value = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval duration = 0;
+    [value getValue:&duration];
+    return duration;
+}
+
 @end

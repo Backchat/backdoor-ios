@@ -21,6 +21,10 @@
 @interface YTInviteContactViewController ()
 @property (nonatomic, retain) YTContacts* possibleContacts;
 @property (nonatomic, retain) YTInviteContactComposeViewController* compose;
+@property (nonatomic, retain) UITextField* phoneField;
+@property (nonatomic, retain) UIButton* phoneGo;
+@property (nonatomic, retain) UITableViewCell* phoneCell;
+@property (nonatomic, retain) NSString* enterLiteral;
 @end
 
 
@@ -62,8 +66,132 @@
                                                            [self.contactsTable reloadData];
                                                        }];
     
-    self.compose = [[YTInviteContactComposeViewController alloc] init];    
+    self.compose = [[YTInviteContactComposeViewController alloc] init];
+    
+    self.phoneField = nil;
+    self.phoneGo = nil;
+    
+    self.phoneCell = [[UITableViewCell alloc] init];
+    
+    [[YTMainViewHelper sharedInstance] addCellSubViewsToView:self.phoneCell.contentView];
+    [[YTMainViewHelper sharedInstance] setCellValuesInView:self.phoneCell
+                                                     title:nil
+                                                  subtitle:nil
+                                                      time:nil
+                                                     image:nil
+                                                    avatar:nil
+                                          placeHolderImage:[YTHelper imageNamed:@"enter_phone_number"]];
+    UILabel *textLabel = (UILabel*)[self.phoneCell viewWithTag:3];
+    CGRect frame = CGRectMake(textLabel.frame.origin.x, 20,
+                              self.view.frame.size.width - textLabel.frame.origin.x,
+                              20);
+    self.phoneField = [[UITextField alloc] initWithFrame:frame];
+    self.phoneField.keyboardType = UIKeyboardTypePhonePad;
+    self.phoneField.font = [UIFont systemFontOfSize:15];
+    [self.phoneCell.contentView addSubview:self.phoneField];
+    self.enterLiteral = NSLocalizedString(@"Enter a phone number", nil);
+    self.phoneField.text = self.enterLiteral;
+    
+    self.phoneCell.backgroundView = [UIView new];
+    self.phoneCell.backgroundView.backgroundColor = [UIColor whiteColor];
+    [self.phoneField addTarget:self action:@selector(phoneFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
+    self.phoneGo = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    NSString* title = @"Invite";
+    self.phoneGo.frame = CGRectMake(250, 17,
+                                    50, 25);
+    self.phoneGo.alpha = 0.0;
+    [self.phoneGo setTitle:title forState:UIControlStateNormal];
+    [self.phoneGo setTitle:title forState:UIControlStateHighlighted];
+    [self.phoneGo setTitle:title forState:UIControlStateDisabled];
+    [self.phoneGo setBackgroundImage:[YTHelper imageNamed:@"clue_button_inactive"] forState:UIControlStateNormal];
+    [self.phoneGo setBackgroundImage:[YTHelper imageNamed:@"clue_button_active"] forState:UIControlStateHighlighted];
+    [self.phoneGo setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.phoneGo setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+
+    [self.phoneCell.contentView addSubview:self.phoneGo];
+    [self.phoneGo addTarget:self action:@selector(phoneGo:) forControlEvents:UIControlEventTouchUpInside];
+
+    textLabel.hidden = YES;
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self.phoneField resignFirstResponder];
+    self.phoneField.text = self.enterLiteral;
+    self.phoneGo.alpha = 0.0;
+    [self.contactsTable setContentOffset:CGPointMake(0, 0) animated:NO];
+}
+
+- (void)keyboardWillShow:(NSNotification*)note
+{
+    UIView* cell = self.phoneCell;
+    CGPoint origin = cell.frame.origin;
+    CGPoint o = CGPointMake(0, origin.y);
+    self.phoneField.text = @"";
+    [UIView animateWithDuration:[YTHelper keyboardAnimationDurationForNotification:note]
+                     animations:^{
+                         [self.contactsTable setContentOffset:o animated:NO];
+                     } completion:^(BOOL finished) {
+                     }];
+}
+
+- (void)keyboardWillHide:(NSNotification*)note
+{
+    self.phoneField.text = self.enterLiteral;
+    self.phoneGo.alpha = 0.0;
+    
+    [UIView animateWithDuration:[YTHelper keyboardAnimationDurationForNotification:note]
+                     animations:^{
+                         [self.contactsTable setContentOffset:CGPointMake(0, 0) animated:NO];
+                     } completion:^(BOOL finished) {
+                     }];
+
+}
+
+- (void)phoneButtonToggle:(BOOL)state
+{
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         self.phoneGo.alpha = state ? 1.0 : 0.0;
+                     }
+                     completion:^(BOOL finished){
+                     }];
+}
+
+- (void)phoneFieldDidChange:(NSNotification*)note
+{
+    if(![self.phoneField.text isEqualToString:@"Enter a phone number"] &&
+       self.phoneField.text.length > 0) {
+        [self phoneButtonToggle:TRUE];
+    }
+    else {
+        [self phoneButtonToggle:FALSE];
+    }
+}
+
+- (void)phoneGo:(NSNotification*)note
+{
+    NSString* phone = self.phoneField.text;
+    YTContact* c = [self.contact copy];
+    c.phone_number = phone;
+    [self showInviteViewForContact:c];
+}
+
 
 - (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -71,7 +199,7 @@
         case 0:
             return MIN(self.possibleContacts.count, 3);
         case 1:
-            return 1;
+            return 2;
         default:
             return 0;
     }
@@ -98,8 +226,15 @@
         image = c.image;
     }
     else {
-        image = [YTHelper imageNamed:@"choose_address_book"];
+        if(indexPath.row == 0) {
+            //choose address book
+            image = [YTHelper imageNamed:@"choose_address_book"];
+        }
+        else {
+            return self.phoneCell;
+        }
     }
+    
     cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
                                                           image:nil
                                                          avatar:nil
@@ -110,22 +245,35 @@
         //for some reason, iOS is not letting us have two cell types in the same UITableView, though that
         //should be just fine. urgh.
         UILabel *textLabel = (UILabel*)[cell viewWithTag:3];
-        textLabel.text = @"Choose from my address book";
         CGFloat fontsize = 15;
         textLabel.frame = CGRectMake(textLabel.frame.origin.x,
-                                     (60-fontsize)/2,
+                                     20,
                                      self.view.frame.size.width  - textLabel.frame.origin.x,
                                      fontsize);
+        textLabel.text = @"Choose from my address book";
+        textLabel.numberOfLines = 1;
         textLabel.font = [UIFont systemFontOfSize:fontsize];
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    
+
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 60;
+}
+
+- (NSIndexPath*)tableView:(UITableView*)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == 1 && indexPath.row == 1)
+    {
+        [[Mixpanel sharedInstance] track:@"Tapped Invite Contact View / Phone Number entry"];
+        [self.phoneField becomeFirstResponder];
+        return nil;
+    }
+    else
+        return indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -143,22 +291,28 @@
         }
         case 1:
         {
-            [[Mixpanel sharedInstance] track:@"Tapped Invite Contact View / Address Book Item"];
-
-            ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
-            picker.displayedProperties = @[[NSNumber numberWithInt:kABPersonPhoneProperty]];
-            picker.peoplePickerDelegate = self;
-            [picker.navigationBar setBackgroundImage:[YTHelper imageNamed:@"navbar3"] forBarMetrics:UIBarMetricsDefault];
-            [self presentModalViewController:picker animated:YES];
+            if(indexPath.row == 0) {
+                [[Mixpanel sharedInstance] track:@"Tapped Invite Contact View / Address Book Item"];
+                
+                ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
+                picker.displayedProperties = @[[NSNumber numberWithInt:kABPersonPhoneProperty]];
+                picker.peoplePickerDelegate = self;
+                [picker.navigationBar setBackgroundImage:[YTHelper imageNamed:@"navbar3"] forBarMetrics:UIBarMetricsDefault];
+                [self presentModalViewController:picker animated:YES];
+            }
 
             return;
         }
     }
     
 }
+
 - (void) cancelButtonWasClicked
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if([self.phoneField isFirstResponder])
+        [self.phoneField resignFirstResponder];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -175,7 +329,6 @@
 
 - (void)showInviteViewForContact:(YTContact*)c
 {
-    NSLog(@"%@ - %@", c.name, c.phone_number);
     self.compose.contact = c;
     [[YTAppDelegate current].navController pushViewController:self.compose animated:YES];
 }
