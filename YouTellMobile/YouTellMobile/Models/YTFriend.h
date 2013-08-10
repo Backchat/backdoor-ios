@@ -18,4 +18,8 @@
 
 @property (nonatomic, strong, readonly) NSString* avatarUrl;
 @property (nonatomic, assign, readonly) bool isFriend;
+
++ (YTFriend*)addFriend:(id)JSON;
 @end
+extern NSString* const YTFeaturedFriendType;
+extern NSString* const YTFriendType;

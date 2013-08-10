@@ -50,14 +50,8 @@
 - (void)doRefresh
 {
     [YTApiHelper syncGabs];
-    [YTApiHelper getFeaturedUsers:^() {
-        self.featuredUsers = [[YTFriends alloc] initWithFeaturedUsers];
-        [self reloadData];
-    }];
-    [YTApiHelper getFriends:^() {
-        self.friends = [[YTFriends alloc] initWithSearchStringRandomized:@""];
-        [self reloadData];
-    }];
+    [YTApiHelper getFeaturedUsers];
+    [YTApiHelper getFriends];
 }
 
 - (void)composeButtonWasClicked
@@ -70,9 +64,9 @@
     [[YTAppDelegate current].navController pushViewController:c animated:YES];
 }
 
+//TODO eventually get rid of this
 - (void)reloadData
 {
-
     [self.tableView reloadData];
 }
 
@@ -113,6 +107,22 @@
    // self.title = NSLocalizedString(@"Backdoor", nil);
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[YTHelper imageNamed:@"navbartitle4"]];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFriends:)
+                                                 name:YTFriendNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFeaturedFriends:)
+                                                 name:YTFeaturedFriendNotification object:nil];
+}
+
+- (void)updateFriends:(NSNotification*)note
+{
+    self.friends = [[YTFriends alloc] initWithSearchStringRandomized:@""];
+    [self.tableView reloadData];
+}
+
+- (void)updateFeaturedFriends:(NSNotification*)note
+{
+    self.featuredUsers = [[YTFriends alloc] initWithFeaturedUsers];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning

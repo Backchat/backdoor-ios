@@ -7,6 +7,7 @@
 //
 
 #import "YTFriend.h"
+#import "YTAppDelegate.h"
 
 @implementation YTFriend
 @dynamic name;
@@ -30,7 +31,60 @@
 
 - (bool)isFriend
 {
-    return [self.source isEqualToString:@"friend"];
+    return [self.source isEqualToString:YTFriendType];
+}
+
++ (YTFriend*)addFriend:(id)friendJSON
+{
+    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
+    YTFriend *friend = [NSEntityDescription insertNewObjectForEntityForName:@"Contacts" inManagedObjectContext:context];
+
+    [friend setValue:friendJSON[@"first_name"] forKey:@"first_name"];
+    [friend setValue:friendJSON[@"last_name"] forKey:@"last_name"];
+    
+    NSString* type = friendJSON[@"type"];
+    if(!type)
+        type = friendJSON[@"provider"];
+    [friend setValue:type forKey:@"type"];
+    
+    NSString* value = friendJSON[@"value"];
+    if(!value)
+        value = friendJSON[@"social_id"];
+    [friend setValue:value forKey:@"value"];
+    
+    [friend setValue:friendJSON[@"friend_id"] forKey:@"friend_id"];
+    [friend setValue:friendJSON[@"id"] forKey:@"id"];
+    [friend setValue:friendJSON[@"featured_id"] forKey:@"featured_id"];
+    
+    NSString* source = [friendJSON valueForKey:@"source"];
+    if(source) {
+        if([source isEqualToString:@"friend"])
+            source = YTFriendType;
+        else
+            source = YTFeaturedFriendType;
+    }
+    else {
+        if([friendJSON valueForKey:@"id"]) {
+            source = YTFriendType;
+        }
+        else if([friendJSON valueForKey:@"featured_id"]) {
+            source = YTFeaturedFriendType;
+        }
+    }
+    
+    [friend setValue:source forKey:@"source"];
+    
+    NSString* full_name = friendJSON[@"name"];
+    if(!full_name) {
+        full_name = [NSString stringWithFormat:@"%@ %@", friendJSON[@"first_name"], friendJSON[@"last_name"]];
+    }
+    
+    [friend setValue:full_name forKey:@"name"];
+    
+    return friend;
 }
 
 @end
+
+NSString* const YTFeaturedFriendType = @"YTFeaturedFriendType";
+NSString* const YTFriendType = @"YTFriendType";

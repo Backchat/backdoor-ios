@@ -44,9 +44,11 @@
 {
     if(self = [super init]) {
         self.contacts = [NSMutableArray new];
-        for(YTContact* c in contacts.contacts) {
-            if(![friends findFriendByValue:c.value])
-                [self.contacts addObject:c];
+        if(contacts) {
+            for(YTContact* c in contacts.contacts) {
+                if(![friends findFriendByValue:c.value])
+                    [self.contacts addObject:c];
+            }
         }
     }
     
