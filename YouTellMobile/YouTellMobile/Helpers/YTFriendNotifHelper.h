@@ -2,15 +2,15 @@
 //  YTFriendNotifHelper.h
 //  Backdoor
 //
-//  Created by Łukasz S on 7/28/13.
-//  Copyright (c) 2013 4WT. All rights reserved.
+//  Copyright (c) 2013 Backdoor LLC. All rights reserved.
 //
 
 #import "YTViewHelper.h"
+#import "YTFriend.h"
 
 @interface YTFriendNotifHelper : YTViewHelper <UIAlertViewDelegate>
 
-@property (strong, nonatomic) NSDictionary *contact;
+@property (strong, nonatomic) YTFriend *friend;
 
 + (YTFriendNotifHelper*)sharedInstance;
 - (void)handleNotification:(NSDictionary *)data;

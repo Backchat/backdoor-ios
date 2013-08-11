@@ -2,14 +2,13 @@
 //  YTFriendNotifHelper.m
 //  Backdoor
 //
-//  Created by Łukasz S on 7/28/13.
-//  Copyright (c) 2013 4WT. All rights reserved.
+//  Copyright (c) 2013 Backdoor LLC. All rights reserved.
 //
 
 #import "YTFriendNotifHelper.h"
 #import "YTAppDelegate.h"
 #import "YTApiHelper.h"
-#import "YTContactHelper.h"
+#import "YTFriends.h"
 
 #import "YTViewHelper.h"
 
@@ -36,18 +35,20 @@
         return;
     }
     
-    [YTApiHelper getFriends:^(id JSON) {
+    [YTApiHelper getFriends:^{
         
-        self.contact = [[YTContactHelper sharedInstance] findContactWithType:data[@"provider"] value:data[@"social_id"]];
+        YTFriends *friends = [[YTFriends alloc] init];
         
-        if (!self.contact) {
+        self.friend = [friends findFriendByValue:data[@"social_id"]];
+        
+        if (!self.friend) {
             return;
         }
         
         [[Mixpanel sharedInstance] track:@"Received A New Friend Notification"];
         
         NSString *messageFormat = NSLocalizedString(@"%@ just joined Backdoor! Send him a message!", nil);
-        NSString *name = self.contact[@"name"];
+        NSString *name = self.friend.name;
         NSString *message = [NSString stringWithFormat:messageFormat, name];
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles: NSLocalizedString(@"OK", nil), nil];
@@ -68,7 +69,7 @@
     
     [[Mixpanel sharedInstance] track:@"Agreed To Send A Message To A New Friend"];
 
-    [YTViewHelper showGabWithReceiver:self.contact];
+    [YTViewHelper showGabWithFriend:self.friend];
 }
 
 @end

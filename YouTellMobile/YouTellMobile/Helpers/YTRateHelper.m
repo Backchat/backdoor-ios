@@ -2,8 +2,7 @@
 //  YTRateHelper.m
 //  Backdoor
 //
-//  Created by Łukasz S on 7/26/13.
-//  Copyright (c) 2013 4WT. All rights reserved.
+//  Copyright (c) 2013 Backdoor LLC. All rights reserved.
 //
 
 #import "YTRateHelper.h"
