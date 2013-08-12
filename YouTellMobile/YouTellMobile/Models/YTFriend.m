@@ -84,6 +84,21 @@
     return friend;
 }
 
++ (YTFriend*)findByID:(id)ID
+{
+    NSFetchRequest* request = [[NSFetchRequest alloc] initWithEntityName:@"Contacts"];
+    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
+    
+    request.predicate = [NSPredicate predicateWithFormat:@"(id = %@)", ID];
+    
+    NSError *error;
+    NSArray* objects = [context executeFetchRequest:request error:&error];
+    if ([objects count] == 0) {
+        return nil;
+    }
+    return objects[0];
+}
+
 @end
 
 NSString* const YTFeaturedFriendType = @"YTFeaturedFriendType";

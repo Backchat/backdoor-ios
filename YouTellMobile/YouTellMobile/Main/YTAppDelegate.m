@@ -24,6 +24,7 @@
 #import "YTNotifHelper.h"
 #import "YTRateHelper.h"
 #import "YTConfig.h"
+#import "YTFriendNotifHelper.h"
 #import "YTSocialHelper.h"
 
 void uncaughtExceptionHandler(NSException *exception)
@@ -216,6 +217,11 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    if ([userInfo[@"kind"] isEqualToNumber:@1]) {
+        [[YTFriendNotifHelper sharedInstance] handleNotification:userInfo];
+        return;
+    }
+    
     if (!userInfo[@"gab_id"]) {
         NSString *message = userInfo[@"aps"][@"alert"];
         if (!message) {
