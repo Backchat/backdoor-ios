@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		372FA910171C83DA00E3BCB2 /* ipad-icon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 372FA90F171C83D900E3BCB2 /* ipad-icon2x.png */; };
 		372FA912171C83E500E3BCB2 /* ipad-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 372FA911171C83E500E3BCB2 /* ipad-icon.png */; };
+		3E02287917B960AC00BE05AF /* YTFriendNotifHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E02287817B960AC00BE05AF /* YTFriendNotifHelper.m */; };
 		3E9F69161761407D00374616 /* YTGabMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F69151761407C00374616 /* YTGabMessage.m */; };
 		3EB7BD1F17B432FA00FE0E5D /* choose_address_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */; };
 		3EB7BD2017B432FA00FE0E5D /* choose_address_book@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD1E17B432FA00FE0E5D /* choose_address_book@2x.png */; };
@@ -431,6 +432,8 @@
 /* Begin PBXFileReference section */
 		372FA90F171C83D900E3BCB2 /* ipad-icon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ipad-icon2x.png"; path = "../../ipad-icon2x.png"; sourceTree = "<group>"; };
 		372FA911171C83E500E3BCB2 /* ipad-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ipad-icon.png"; path = "../../ipad-icon.png"; sourceTree = "<group>"; };
+		3E02287717B960AC00BE05AF /* YTFriendNotifHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTFriendNotifHelper.h; path = Helpers/YTFriendNotifHelper.h; sourceTree = "<group>"; };
+		3E02287817B960AC00BE05AF /* YTFriendNotifHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTFriendNotifHelper.m; path = Helpers/YTFriendNotifHelper.m; sourceTree = "<group>"; };
 		3E9F69141761407C00374616 /* YTGabMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabMessage.h; path = Helpers/YTGabMessage.h; sourceTree = "<group>"; };
 		3E9F69151761407C00374616 /* YTGabMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabMessage.m; path = Helpers/YTGabMessage.m; sourceTree = "<group>"; };
 		3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = choose_address_book.png; sourceTree = "<group>"; };
@@ -1276,6 +1279,8 @@
 		B2BA772416F093B7006C17F7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				3E02287717B960AC00BE05AF /* YTFriendNotifHelper.h */,
+				3E02287817B960AC00BE05AF /* YTFriendNotifHelper.m */,
 				3EC93C7417B0B1FE007A29B2 /* YTAddressBookHelper.h */,
 				3EC93C7517B0B1FE007A29B2 /* YTAddressBookHelper.m */,
 				B2BA772516F0940B006C17F7 /* YTApiHelper.h */,
@@ -1970,6 +1975,7 @@
 				3EC93C7617B0B1FE007A29B2 /* YTAddressBookHelper.m in Sources */,
 				3EC93C8C17B0B20B007A29B2 /* YTInviteContactComposeViewController.m in Sources */,
 				3EC93C8D17B0B20B007A29B2 /* YTInviteContactViewController.m in Sources */,
+				3E02287917B960AC00BE05AF /* YTFriendNotifHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
