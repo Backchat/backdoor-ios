@@ -41,9 +41,16 @@
 
 - (void)updateFriends:(NSNotification*)note
 {
-    self.friend = [YTFriend findByID:self.notifiedFriendship];
-    if(!self.friend)
+    self.friend = nil;
+    
+    if (self.notifiedFriendship) {
+        self.friend = [YTFriend findByID:self.notifiedFriendship];
+        self.notifiedFriendship = nil;
+    }
+    
+    if (!self.friend) {
         return;
+    }
     
     [[Mixpanel sharedInstance] track:@"Received A New Friend Notification"];
     
