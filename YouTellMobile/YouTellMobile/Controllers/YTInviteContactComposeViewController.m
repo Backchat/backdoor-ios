@@ -62,7 +62,7 @@
     
     UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(30,10, 80, 17)];
     label.backgroundColor = [UIColor clearColor];
-    label.text = @"To";
+    label.text = NSLocalizedString(@"To", nil);
     label.textColor = [UIColor colorWithRed:0.435 green:0.435 blue:0.435 alpha:1];
     [self.contactView addSubview:label];
 

@@ -1,3 +1,13 @@
+"To" = "Para";
+
+"Compose" = "Compor Menssagem";
+
+"What's %@'s number?" = "Qual o numero de %@?";
+
+"Enter a phone number" = "Digitar o número de telefone";
+
+"Tap me to get more clues." = "Clique aqui para comprar creditos de pistas.";
+
 /* SMS stuff */
 "Send anonymous text to invite" = "Enviar mensagens anônimas para convidar";
 
@@ -71,6 +81,9 @@
 
 /* No comment provided by engineer. */
 "Buy clues" = "Comprar pistas";
+
+/* No comment provided by engineer. */
+"Get Clues" = "Comprar Pistas";
 
 /* No comment provided by engineer. */
 "Cancel" = "Cancelar";

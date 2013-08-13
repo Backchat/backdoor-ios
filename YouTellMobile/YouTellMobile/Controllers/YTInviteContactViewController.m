@@ -250,7 +250,7 @@
                                      20,
                                      self.view.frame.size.width  - textLabel.frame.origin.x,
                                      fontsize);
-        textLabel.text = @"Choose from my address book";
+        textLabel.text = NSLocalizedString(@"Choose from my address book", nil);
         textLabel.numberOfLines = 1;
         textLabel.font = [UIFont systemFontOfSize:fontsize];
         cell.accessoryType = UITableViewCellAccessoryNone;

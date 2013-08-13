@@ -1,3 +1,13 @@
+"To" = "To";
+
+"Compose" = "Compose";
+
+"What's %@'s number?" = "What's %@'s number?";
+
+"Enter a phone number" = "Enter a phone number";
+
+"Tap me to get more clues." = "Tap me to get more clues.";
+
 /* SMS stuff */
 "Send anonymous text to invite" = "Send anonymous text to invite";
 
@@ -68,6 +78,9 @@
 
 /* No comment provided by engineer. */
 "Buy clues" = "Get Clues";
+
+/* No comment provided by engineer. */
+"Get Clues" = "Get Clues";
 
 /* No comment provided by engineer. */
 "Cancel" = "Cancel";
