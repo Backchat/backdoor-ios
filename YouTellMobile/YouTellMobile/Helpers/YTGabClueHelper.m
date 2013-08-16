@@ -245,7 +245,7 @@
     [sheetView addSubview:buyButton];
     [buyButton addTarget:self action:@selector(buyCluesButtonWasPressed) forControlEvents:UIControlEventTouchUpInside];
     
-    if ([YTModelHelper userAvailableClues] == 0) {
+    if ([self shouldDisplayBuyButton]) {
         height += 50;
     } else {
         buyButton.hidden = YES;
@@ -330,7 +330,7 @@
 
 - (void)updateBuyButton
 {
-    BOOL doshow = ([YTModelHelper userAvailableClues] == 0);
+    BOOL doshow = [self shouldDisplayBuyButton];
     
     UIView *sheetView = self.sheet.sheetView;
     UIButton *buyButton = (UIButton*)[sheetView viewWithTag:11];
@@ -366,6 +366,12 @@
         buyButton.hidden = !doshow;
     }];
     
+}
+
+- (BOOL)shouldDisplayBuyButton
+{
+    // return ([YTModelHelper userAvailableClues] == 0);
+    return YES;
 }
 
 - (NSDictionary*)parseClueValue:(NSDictionary *)clue
