@@ -228,8 +228,7 @@ void uncaughtExceptionHandler(NSException *exception)
         [YTNotifHelper handleNotification:userInfo];
         YTGab* gab = [YTGab gabForId:gab_id];
         //we absolutely know we need to update, irregardless of state
-        gab.needs_update = @true;
-        [gab update];
+        [gab update:YES];
         NSLog(@"updating %@", gab);
         if (application.applicationState != UIApplicationStateActive) {
             [YTViewHelper showGab:gab];

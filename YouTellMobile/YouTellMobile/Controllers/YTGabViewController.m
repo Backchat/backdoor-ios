@@ -325,7 +325,7 @@
 - (void)appActivated:(NSNotification*)note
 {
     if(self.view.window && !self.friend)
-        [self.gab update];
+        [self.gab update:YES];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -335,7 +335,7 @@
     if(self.gab) {
         [self showSpinner];
         
-        [self.gab update];
+        [self.gab update:YES];
     
         if(self.gab.messageCount != 0) {
             [self.tableView reloadData];

@@ -164,11 +164,9 @@
     return gab;
 }
 
-- (void)update
-{    
-    if([self isFakeGab] || !self.needs_update.boolValue)
-        [[NSNotificationCenter defaultCenter] postNotificationName:YTGabUpdated object:self];
-    else {
+- (void) update:(BOOL)force
+{
+    if(![self isFakeGab] && (force || self.needs_update.boolValue)) {
         [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@", self.id]
                                     method:@"GET" params:@{@"extended":@true}
                                    success:^(id JSON) {
@@ -177,6 +175,9 @@
                                    }
                                    failure:nil];
     }
+    else
+        [[NSNotificationCenter defaultCenter] postNotificationName:YTGabUpdated object:self];
+
 }
 
 - (YTGabMessage*) createNewMessage:(NSString*)content ofKind:(NSInteger)kind

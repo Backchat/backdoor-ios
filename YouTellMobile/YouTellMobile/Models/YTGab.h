@@ -21,7 +21,7 @@ enum {
 
 - (bool) isFakeGab;
 - (void) clearUnread;
-- (void) update;
+- (void) update:(BOOL)force;
 
 - (void) tag:(NSString*)string;
 
