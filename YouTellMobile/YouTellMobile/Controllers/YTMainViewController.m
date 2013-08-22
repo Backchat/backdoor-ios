@@ -39,7 +39,7 @@
 @property (nonatomic, retain) YTFriends* featuredUsers;
 @property (nonatomic, retain) YTGabs* gabs;
 @property (strong, nonatomic) UISearchBar *searchBar;
-
+@property (strong, nonatomic) UITapGestureRecognizer* tapTableGesture;
 - (void)refreshWasRequested;
 - (void)composeButtonWasClicked;
 
@@ -120,6 +120,21 @@
                                                  name:YTGabUpdated object:nil];
     
     self.tableView.contentOffset = CGPointMake(0, self.searchBar.frame.size.height);
+    
+    self.tapTableGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                   action:@selector(cancelSearch:)];
+    [self.tapTableGesture setNumberOfTapsRequired:1];
+    self.tapTableGesture.enabled = false;
+    [self.tableView addGestureRecognizer: self.tapTableGesture];
+}
+
+- (void)cancelSearch:(UITapGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        if ([recognizer.view isKindOfClass: [UITableView class]]) {
+            [self.searchBar resignFirstResponder];
+        }
+    }
 }
 
 - (void)updateGabs:(NSNotification*)note
@@ -320,6 +335,12 @@
     return cell;
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if([self.searchBar isFirstResponder])
+        [self.searchBar resignFirstResponder];
+}
+
 # pragma mark UITableViewDelegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -400,7 +421,17 @@
     //self.friends = [[YTFriends alloc] initWithSearchString:searchText];
     [self.tableView reloadData];
 }
-     
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    self.tapTableGesture.enabled = true;
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    self.tapTableGesture.enabled = false;
+}
+
 - (void)viewDidUnload {
     [self setTableView:nil];
     [super viewDidUnload];
