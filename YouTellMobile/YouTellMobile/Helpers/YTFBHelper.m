@@ -431,16 +431,5 @@
     }];
 }
 
-+ (NSString*)avatarUrlWithFBId:(NSString*)FBId
-{
-    /*
-    CGFloat scale = [UIScreen mainScreen].scale;
-    NSInteger size = (scale == 1.0) ? 45 : 90;
-     */
-    
-    NSInteger size = 90;
-    NSString *url = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=%d&height=%d", FBId, size, size];
-    return url;
-}
 
 @end
