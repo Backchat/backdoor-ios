@@ -109,14 +109,29 @@
 
     YTGab *gab = [YTGab gabForId:JSON[@"id"]];
     
-    gab.related_user_name = JSON[@"related_user_name"];
-    gab.related_avatar = JSON[@"related_avatar"];
-    gab.content_cache = JSON[@"content_cache"];
-    gab.content_summary = JSON[@"content_summary"];
-    gab.unread_count = JSON[@"unread_count"];
-    gab.total_count = JSON[@"total_count"];
-    gab.clue_count = JSON[@"clue_count"];
-    gab.sent = JSON[@"sent"];
+    if(JSON[@"related_user_name"])
+        gab.related_user_name = JSON[@"related_user_name"];
+    
+    if(JSON[@"related_avatar"])
+        gab.related_avatar = JSON[@"related_avatar"];
+    
+    if(JSON[@"content_cache"])
+        gab.content_cache = JSON[@"content_cache"];
+    
+    if(JSON[@"content_summary"])
+        gab.content_summary = JSON[@"content_summary"];
+    
+    if(JSON[@"unread_count"])
+        gab.unread_count = JSON[@"unread_count"];
+    
+    if(JSON[@"total_count"])
+        gab.total_count = JSON[@"total_count"];
+    
+    if(JSON[@"clue_count"])
+        gab.clue_count = JSON[@"clue_count"];
+    
+    if(JSON[@"sent"])
+        gab.sent = JSON[@"sent"];
         
     NSDate* old_update = gab.updated_at;
     NSDate* new_date = [YTHelper parseDate:JSON[@"updated_at"]];

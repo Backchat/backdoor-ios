@@ -73,6 +73,15 @@
 
 #pragma mark UIViewController methods
 
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    //the order of shit could have changed while we were on a gab.
+    [self updateGabs:nil];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -115,9 +124,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGabs:)
                                                  name:YTGabsUpdatedNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGabs:)
-                                                 name:YTGabUpdated object:nil];
+
+    //the other actions on gabs happen while on other pages: this is an assumption that will change
+    //if SPLITCODE is on again...
     
     self.tableView.contentOffset = CGPointMake(0, self.searchBar.frame.size.height);
     
@@ -141,7 +150,8 @@
 {
     self.gabs = [[YTGabs alloc] initWithSearchString:self.searchBar.text];
     [self.tableView reloadData];
-    [self.refreshControl endRefreshing];
+    if(note)
+        [self.refreshControl endRefreshing];
 }
 
 - (void)updateFriends:(NSNotification*)note

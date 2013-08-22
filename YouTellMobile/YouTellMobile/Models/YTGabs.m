@@ -52,6 +52,11 @@
     return [self.items objectAtIndex:index];
 }
 
+- (int)indexForGab:(YTGab*)gab
+{
+    return [self.items indexOfObject:gab];
+}
+
 - (int) count
 {
     return self.items.count;

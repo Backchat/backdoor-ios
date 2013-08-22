@@ -14,6 +14,7 @@
 - (id) initWithSearchString:(NSString*)search;
 - (id) init;
 - (YTGab*) gabAtIndex:(int)index;
+- (int)indexForGab:(YTGab*)gab;
 
 + (int) totalGabCount;
 + (void) deleteGab:(YTGab*)gab;

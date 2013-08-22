@@ -40,6 +40,15 @@
                                    
                                    YTGabMessage* msg = [YTGabMessage parse:JSON[@"message"]];
                                    
+                                   if(JSON[@"gab"]) {
+                                       //we may be hitting an old server, in which case we degrade to 'slow update'
+                                       //since we just parsed this message, we know that we are "up to date" as of the message
+                                       //creation:
+                                       YTGab* gab = [YTGab gabForId:JSON[@"gab"][@"id"]];
+                                       gab.updated_at = msg.created_at;
+                                       gab = [YTGab updateGab:JSON[@"gab"]];
+                                   }
+                                   
                                    NSNumber *gabSent = [NSNumber numberWithBool:![msg.sent isEqualToNumber:@0]];
                                    
                                    [Flurry logEvent:@"Sent_Message" withParameters:@{@"kind":msg.kind}];
