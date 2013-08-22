@@ -3,7 +3,6 @@
 //  YouTellMobile
 //
 //  Copyright (c) 2013 Backdoor LLC. All rights reserved.
-//LINREVIEW: refactor contactWidget out of Sendhelper into here
 
 #import <AVFoundation/AVFoundation.h>
 #import <CoreData/CoreData.h>
@@ -46,7 +45,9 @@
 
 - (void) setGab:(YTGab*) gab
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:YTGabUpdated object:gab];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:YTGabMessageUpdated object:gab];
+    
     self->_gab = gab;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(gabUpdated:)
@@ -311,7 +312,20 @@
     self.navigationItem.rightBarButtonItems = nil;
     self.title = nil;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appActivated:) name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
     [self setupView];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)appActivated:(NSNotification*)note
+{
+    if(self.view.window && !self.friend)
+        [self.gab update];
 }
 
 - (void) viewDidAppear:(BOOL)animated

@@ -34,7 +34,6 @@ void uncaughtExceptionHandler(NSException *exception)
 }
 
 @interface YTAppDelegate ()
-- (void)syncBasedOnView;
 @end
 
 @implementation YTAppDelegate
@@ -163,14 +162,6 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    static BOOL firstTime = YES;
-    
-    if (firstTime) {
-        firstTime = NO;
-    } else {
-        [self syncBasedOnView];
-    }
-    
     [[FBSession activeSession] handleDidBecomeActive];
     [[YTRateHelper sharedInstance] run];
 }
@@ -246,20 +237,6 @@ void uncaughtExceptionHandler(NSException *exception)
     }
     else {
         [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
-    }
-}
-
-- (void) syncBasedOnView
-{
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    
-    if (delegate.currentMainViewController) {
-        [delegate.currentMainViewController doRefresh];
-    }
-    
-    if([delegate.navController.topViewController isKindOfClass:[YTGabViewController class]]) {
-        YTGabViewController* controller = (YTGabViewController*)delegate.navController.topViewController;
-        [controller.gab update];
     }
 }
 

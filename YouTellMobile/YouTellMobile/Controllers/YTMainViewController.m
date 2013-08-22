@@ -42,7 +42,7 @@
 @property (strong, nonatomic) UITapGestureRecognizer* tapTableGesture;
 - (void)refreshWasRequested;
 - (void)composeButtonWasClicked;
-
+- (void)doRefresh;
 @end
 
 @implementation YTMainViewController
@@ -128,6 +128,9 @@
     //the other actions on gabs happen while on other pages: this is an assumption that will change
     //if SPLITCODE is on again...
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appActivated:) name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+    
     self.tableView.contentOffset = CGPointMake(0, self.searchBar.frame.size.height);
     
     self.tapTableGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
@@ -135,6 +138,17 @@
     [self.tapTableGesture setNumberOfTapsRequired:1];
     self.tapTableGesture.enabled = false;
     [self.tableView addGestureRecognizer: self.tapTableGesture];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)appActivated:(NSNotification*)note
+{
+    if(self.view.window)
+        [self doRefresh];
 }
 
 - (void)cancelSearch:(UITapGestureRecognizer *)recognizer

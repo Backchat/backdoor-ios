@@ -10,5 +10,4 @@
 #import "YTViewController.h"
 
 @interface YTMainViewController : UITableViewController  <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
-- (void)doRefresh;
 @end
