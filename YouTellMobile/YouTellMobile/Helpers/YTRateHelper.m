@@ -42,15 +42,18 @@
     
     NSInteger uses = [defs integerForKey:key];
     
+    if(uses == CONFIG_RATING_USES_CANCELLED)
+        return;
+    
     uses -= 1;
     
     if (uses <= 0) {
         [[iRate sharedInstance] promptForRating];
-        uses = 1;
     }
-    
-    [defs setInteger:uses forKey:key];
-
+    else {
+        [defs setInteger:uses forKey:key];
+        [defs synchronize];
+    }
 }
 
 - (void)iRateCouldNotConnectToAppStore:(NSError *)error
@@ -58,6 +61,7 @@
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     NSString *key = @"rate_remaining_uses";
     [defs setInteger:1 forKey:key];
+    [defs synchronize];
 }
 
 - (void)iRateUserDidDeclineToRateApp
@@ -66,6 +70,7 @@
     NSString *key = @"rate_remaining_uses";
     [defs setInteger:CONFIG_RATING_USES_CANCELLED forKey:key];
     [[Mixpanel sharedInstance] track:@"Declined Rate Request"];
+    [defs synchronize];
 
 }
 
@@ -75,6 +80,7 @@
     NSString *key = @"rate_remaining_uses";
     [defs setInteger:CONFIG_RATING_USES_DELAYED forKey:key];
     [[Mixpanel sharedInstance] track:@"Delayed Rate Request"];
+    [defs synchronize];
 
 }
 
@@ -82,8 +88,10 @@
 {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     NSString *key = @"rate_remaining_uses";
-    [defs setInteger:999999999 forKey:key];
+    [defs setInteger:CONFIG_RATING_USES_CANCELLED forKey:key];
     [[Mixpanel sharedInstance] track:@"Accepted Rate Request"];
+    [defs synchronize];
+    
 }
 
 
