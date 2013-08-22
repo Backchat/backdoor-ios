@@ -37,9 +37,6 @@
 
 @property (strong, nonatomic) YTStoreHelper *storeHelper;
 
-
-@property (strong, atomic) NSLock *autoSyncLock;
-
 + (YTAppDelegate*)current;
 
 @end

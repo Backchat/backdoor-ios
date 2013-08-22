@@ -36,7 +36,6 @@
 
 + (void)setup
 {
-    [YTAppDelegate current].autoSyncLock = [NSLock new];
     [YTApiHelper resetUserInfo];
     [YTAppDelegate current].deliveredMessages = [NSMutableDictionary new];
     
