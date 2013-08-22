@@ -6,6 +6,7 @@
 //
 
 #import "YTViewHelper.h"
+#import "YTGab.h"
 
 @interface YTMainViewHelper : YTViewHelper
 
@@ -16,4 +17,6 @@ image:(NSString*)image avatar:(NSString*)avatar placeHolderImage:(UIImage*)place
 - (void)addCellSubViewsToView:(UIView*)view;
 - (void)setCellValuesInView:(UIView*)view title:(NSString*)title subtitle:(NSString*)subtitle time:(NSString*)time
                       image:(NSString*)image avatar:(NSString*)avatar placeHolderImage:(UIImage*)placeHolderImage;
+
+- (UITableViewCell*) cellWithGab:(YTGab*)gab andTableView:(UITableView*)tableView;
 @end

@@ -7,11 +7,11 @@
 
 #import <Foundation/Foundation.h>
 #import "YTFriend.h"
+#import "YTGab.h"
 
 @interface YTViewHelper : NSObject
 
 + (void)setup;
-+ (void)refreshViews;
 + (void)endRefreshing;
 
 + (void)showLogin;
@@ -19,8 +19,8 @@
 + (void)hideLogin;
 + (void)showTerms;
 + (void)showPrivacy;
-+ (void)showGabWithId:(NSNumber*)gabId;
-+ (void)showGab;
++ (void)showGab:(YTGab*)gab;
++ (void)showGabWithGabId:(NSNumber*)gab_id;
 + (void)showGabWithFriend:(YTFriend*)f;
 + (void)showFeedback;
 + (void)showGabs;

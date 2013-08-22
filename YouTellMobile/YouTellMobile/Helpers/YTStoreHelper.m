@@ -148,7 +148,6 @@
     [YTApiHelper buyCluesWithReceipt:[transaction.transactionReceipt base64String] success:^(id JSON) {
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 
-        [YTViewHelper refreshViews];
         NSInteger count = [YTModelHelper userAvailableClues];
         NSNumber *inc = [NSNumber numberWithInteger:(count - prevCount)];
         [Flurry logEvent:@"Bought_Clues" withParameters:@{@"count": inc}];

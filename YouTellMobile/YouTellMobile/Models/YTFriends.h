@@ -18,8 +18,8 @@
 - (int) count;
 - (YTFriend*) friendAtIndex:(int)index;
 - (YTFriend*) findFriendByValue:(NSString*)value;
-- (bool)hasValidData;
-+ (void)parseFriendsOfType:(NSString*)type withJSON:(id)JSON;
++ (bool)hasValidData;
++ (void)updateFriendsOfType:(NSString*)type;
 @end
 
 extern NSString* const YTFriendNotification;

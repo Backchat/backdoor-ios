@@ -45,6 +45,13 @@
     return [NSDate dateWithTimeInterval:seconds sinceDate:utcDate];
 }
 
++ (NSDate*)localDateInUtcDate:(NSDate*)localDate
+{
+    NSTimeZone *tz = [NSTimeZone defaultTimeZone];
+    NSInteger seconds = [tz secondsFromGMTForDate:localDate];
+    return [NSDate dateWithTimeInterval:-seconds sinceDate:localDate];
+}
+
 + (NSString *)formatDate:(NSDate*)date
 {
     NSDate *localDate = [YTHelper localDateFromUtcDate:date];

@@ -90,7 +90,7 @@
 {
     self.friends = [[YTFriends alloc] initWithSearchString:self.searchBar.text];
     
-    if([self.friends hasValidData]) {
+    if([YTFriends hasValidData]) {
         YTContacts* contacts = [[YTContacts alloc] initWithContacts:self.contacts excludingFriends:[[YTFriends alloc] init]];
         self.filteredContacts = [[YTContacts alloc] initWithContacts:contacts withFilter:self.searchBar.text];
     }

@@ -20,7 +20,7 @@
 @property (nonatomic, assign, readonly) bool isFriend;
 
 + (YTFriend*)findByID:(id)ID;
-+ (YTFriend*)addFriend:(id)JSON;
++ (YTFriend*)updateFriend:(id)JSON;
 @end
 extern NSString* const YTFeaturedFriendType;
 extern NSString* const YTFriendType;

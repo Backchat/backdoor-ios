@@ -8,6 +8,8 @@
 
 #import "YTFriends.h"
 #import "YTAppDelegate.h"
+#import "YTConfig.h"
+#import "YTApiHelper.h"
 
 @interface YTFriends ()
 {
@@ -100,47 +102,65 @@ static bool validData = false;
     return [self.items objectAtIndex:index];
 }
 
-- (bool)hasValidData
++ (bool)hasValidData
 {
     return validData;
 }
 
-+ (void)clearWithSource:(NSString *)source
++ (void)updateFriendsOfType:(NSString *)type
 {
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Contacts"];
-    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
-    request.predicate = [NSPredicate predicateWithFormat:@"(source = %@)", source];
-    NSError *error;
-    NSArray *objects = [context executeFetchRequest:request error:&error];
+    NSString* path, *object;
     
-    for (NSManagedObject *object in objects) {
-        [context deleteObject:object];
-    }
-    
-}
-
-+ (void)parseFriendsOfType:(NSString *)type withJSON:(id)JSON
-{
-    if(type == YTFriendType)
-        validData = true;
-    
-    [YTFriends clearWithSource:type];
-
-    for (NSDictionary *u in JSON) {
-        [YTFriend addFriend:u];
-    }
-    
-    NSString* notificationName = nil;
-    
-    if (type == YTFeaturedFriendType) {
-        notificationName = YTFeaturedFriendNotification;
+    if(type == YTFriendType) {
+        path = @"/friends";
+        object = @"friends";
     }
     else {
-        notificationName = YTFriendNotification;
+        if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"] && !CONFIG_DEBUG_FEATURED) {
+            return;
+        }
+        
+        path = @"/featured-users";
+        object = @"users";
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
-                                                        object:nil];
+    [YTApiHelper sendJSONRequestToPath:path method:@"GET" params:nil success:^(id JSON) {
+        NSDictionary* fs = JSON[object];
+        if(!fs)
+            return;
+            
+        if(type == YTFriendType)
+            validData = true;
+        
+        //we also need to check for friends that were deleted.
+        NSFetchRequest* request = [[NSFetchRequest alloc] initWithEntityName:@"Contacts"];
+        NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
+        request.predicate = [NSPredicate predicateWithFormat:@"(source = %@)", type];
+        
+        NSError *error;
+        NSMutableArray* allFriends = [NSMutableArray arrayWithArray:[context executeFetchRequest:request error:&error]];
+
+        for (NSDictionary *u in fs) {
+            YTFriend* f = [YTFriend updateFriend:u];
+            [allFriends removeObject:f];
+        }
+        
+        for(YTFriend* f in allFriends) {
+            [context deleteObject:f];
+        }
+        
+        NSString* notificationName = nil;
+        
+        if (type == YTFeaturedFriendType) {
+            notificationName = YTFeaturedFriendNotification;
+        }
+        else {
+            notificationName = YTFriendNotification;
+        }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName
+                                                            object:nil];
+    } failure:nil];
 }
 
 @end

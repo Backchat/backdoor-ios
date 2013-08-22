@@ -32,32 +32,37 @@
 #import "YTGPPHelper.h"
 
 @interface YTGabViewController ()
-@property (nonatomic, retain) NSArray* messages;
 @property (nonatomic, retain) YTFriend* friend;
-@end
+@property (strong, nonatomic) UIActivityIndicatorView* backgroundSpinner;
+@property (strong, nonatomic) UIActivityIndicatorView* rowSpinner;
 
-//LINREVIEW this is actually the code for queuing and sending messages
-@interface YTGabViewController ()
-@property (nonatomic, retain) NSMutableArray* queuedMessages;
-@property (nonatomic, assign) bool ongoingRequest;
-
-- (void)queueMessage:(NSString*)text ofKind:(NSInteger)kind;
-- (void)processMessage:(NSManagedObject*)message;
-
-- (void)sendMessage:(NSManagedObject*)message;
-
-- (NSManagedObject*)addMessageLocally:(YTGabMessage*)message;
-
-- (void)handleNextQueuedMessage;
-- (bool)fakeGab;
+@property (strong, nonatomic) YTGabPhotoHelper *photoHelper;
+@property (strong, nonatomic) YTGabTagHelper *tagHelper;
+@property (weak, nonatomic) UIActivityIndicatorView* spinner;
+@property (strong, nonatomic) UIView* footerView;
 @end
 
 @implementation YTGabViewController
 
-- (id) initWithGab:(NSNumber*)gab_id
+- (void) setGab:(YTGab*) gab
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    self->_gab = gab;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(gabUpdated:)
+                                                 name:YTGabUpdated
+                                               object:gab];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(gabMessagesUpdated:)
+                                                 name:YTGabMessageUpdated
+                                               object:gab];
+    
+}
+
+- (id) initWithGab:(YTGab*) gab
 {
     if(self = [super initWithNibName:nil bundle:nil]) {
-        self.gab = [YTModelHelper gabForId:gab_id];
+        self.gab = gab;
     }
     return self;
 }
@@ -73,119 +78,105 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.queuedMessages = [[NSMutableArray alloc] init];
-        self.messages = [[NSMutableArray alloc] init];
-        self.ongoingRequest = false;
-        self.gab = nil;
     }
     return self;
 }
 
 # pragma mark Interface initialization methods
-
-- (bool)fakeGab
-{
-    if(self.gab == nil) return true;
-    NSNumber* g_id = [self.gab valueForKey:@"id"];
-    return g_id.integerValue < 0;
-}
-
-
-- (void)createAndSetGabWithData:(NSDictionary*)data
-{
-    self.gab = [YTModelHelper createOrUpdateGab:data];
-
-    // Remove New Gab view from the stack, so the back button points to the Main view again
-    NSMutableArray *views = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
-    for (UIViewController *c in views) {
-        if ([c isKindOfClass:[YTNewGabViewController class]]) {
-            [views removeObject:c];
-            break;
-        }
-    }
-    self.navigationController.viewControllers = views;
-
-    // Replace Cancel button with standard back button
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.hidesBackButton = NO;
-}
-
 - (void)setupView
 {
-    if(self.gab) {
-    
-        if ([[self.gab valueForKey:@"sent"] isEqualToNumber:@0]) {
-            [self.clueHelper setupClueButton];
+    if(!self.friend) {
+        if([self.gab isFakeGab] || self.gab.total_count.integerValue > 0) {
+            //this means we have at least the minimium data to create the toolbar;
+            self.title = self.gab.gabTitle;
+
+            if (!self.gab.sent.boolValue) {
+                self.navigationItem.rightBarButtonItems = @[[self.clueHelper setupClueButton],[self.tagHelper setupTagButton]];
+            }
+            else {
+                self.navigationItem.rightBarButtonItems = nil;
+                [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateNormal];
+                [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateDisabled];
+            }
         }
+        /*TODO SPLIT if ([YTAppDelegate current].usesSplitView) {
+         [YTAppDelegate current].currentMainViewController.selectedGabId = [self.gab valueForKey:@"id"];
+         }*/
         
-        if ([YTAppDelegate current].usesSplitView) {
-            [YTAppDelegate current].currentMainViewController.selectedGabId = [self.gab valueForKey:@"id"];
-        }
-                
-        BOOL gabSent = ![[self.gab valueForKey:@"sent"] isEqualToNumber:@0];
         
-        if (!gabSent) {
-            [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateNormal];
-            [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateDisabled];
-        }
+        self.navigationItem.hidesBackButton = NO;
     }
     else {
         self.title = NSLocalizedString(@"New Message", nil);
         
-        if (![[YTAppDelegate current] usesSplitView]) {
-            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
-            self.navigationItem.hidesBackButton = YES;
+        // Remove New Gab view from the stack, so the back button points to the Main view again
+        NSMutableArray *views = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+        for (UIViewController *c in views) {
+            if ([c isKindOfClass:[YTNewGabViewController class]]) {
+                [views removeObject:c];
+                break;
+            }
         }
-    }
+        self.navigationController.viewControllers = views;
 
+        /* TODO SPLIT if (![[YTAppDelegate current] usesSplitView]) */
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
+        self.navigationItem.hidesBackButton = YES;
+    }
 }
 
-- (void)reloadData
+- (void)dismiss
 {
-    if(self.gab) {
-        id gab_id = [self.gab valueForKey:@"id"];
-        
-        self.messages = [YTModelHelper messagesForGab:gab_id];
-        NSLog(@"reload screen with messages %d", self.messages.count);
-
-        NSString *title = [self.gab valueForKey:@"related_user_name"];
-        BOOL hasTitle = title && [title length] > 0;
-        BOOL sent = [[self.gab valueForKey:@"sent"] isEqualToNumber:@0];
-        
-        self.title = hasTitle ? title : @"???";
-        
-        [self.tagHelper setupTagButton:sent];
-        
-        [self.tableView reloadData];
-        
-        [YTApiHelper clearUnread:gab_id];
-
-        [self scrollToBottomAnimated:YES];
-    }
+    [[Mixpanel sharedInstance] track:@"Cancelled Thread Compose"];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)updateSendButton
 {
-    [self.sendHelper updateButtons];
+    self.inputView.sendButton.enabled = ([self.inputView.textView.text trimWhitespace].length > 0);
+    self.inputView.cameraButton.enabled = true;
 }
 
 - (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
-    [self.sendHelper sendPressed:sender withText:text];    
+    [self.inputView.textView setText:nil];
+    [self textViewDidChange:self.inputView.textView];
+    
+    [self postNewMessage:text ofKind:YTMessageKindText];
+}
+    
+- (void)postNewMessage:(NSString*)content ofKind:(int)kind
+{
+    if(self.gab) {
+        [self.gab postNewMessage:content ofKind:kind];
+    }
+    else {
+        self.gab = [YTGab createGabWithFriend:self.friend
+                                   andMessage:content ofKind:kind];
+        //remove the friend object.
+        self.friend = nil;
+        //we should now remove the cancel button, and also 
+        
+        [self setupView];
+        [self.tableView reloadData];
+    }
 }
 
 #pragma mark UIBubbleTableViewDataSource
 
 - (NSInteger)rowsForBubbleTable:(UIBubbleTableView *)tableView
 {
-    return self.messages.count;
+    if(self.gab)
+        return self.gab.messageCount;
+    else
+        return 0;
 }
 
 - (NSBubbleData*)bubbleTableView:(UIBubbleTableView *)tableView dataForRow:(NSInteger)row
 {
-    NSManagedObject *object = self.messages[row];
-    BOOL sent = ![[object valueForKey:@"sent"] isEqualToNumber:@0];
-    BOOL gabSent = ![[self.gab valueForKey:@"sent"] isEqualToNumber:@0];
+    YTGabMessage *message = [self.gab messageAtIndex:row];
+    BOOL sent = message.sent.boolValue;
+    BOOL gabSent = self.gab.sent.boolValue;
     NSBubbleType type;
     
     if (sent && gabSent) {
@@ -198,23 +189,22 @@
         type = BubbleTypeSomeoneElse;
     }
 
-    NSDate *date = [object valueForKey:@"created_at"];
-    NSDate *localDate = [YTHelper localDateFromUtcDate:date];
+    NSDate *localDate = [YTHelper localDateFromUtcDate:message.created_at];
     NSString *text;
-    UIImage *image;
     NSBubbleData *data;
     
-    if ([object valueForKey:@"kind"] == [NSNumber numberWithInteger:YTMessageKindText]) {
+    if (message.kind.integerValue == YTMessageKindText) {
+        //is this ever used? TODO
         NSDictionary *messages = @{
             @"ERROR_SMS_DELIVERY": NSLocalizedString(@"Sorry, we couldn't deliver your message. Please make sure to enter correct phone number", nil),
             @"ERROR_SMS_PHOTO_DELIVERY": NSLocalizedString(@"Sorry, We couldn't deliver your message. Photo messages to unregistered users are not supported yet", nil)
         };
-        text = [object valueForKey:@"content"];
+        
+        text = message.content;
         if (messages[text] != nil) { text = messages[text]; }
         data = [NSBubbleData dataWithTextView:text date:localDate type:type];
-    } else if ([object valueForKey:@"kind"] == [NSNumber numberWithInteger:YTMessageKindPhoto]) {
-        image = [YTModelHelper imageForMessage:object];
-        data = [NSBubbleData dataWithImage:image date:localDate type:type];
+    } else if (message.kind.integerValue == YTMessageKindPhoto) {
+        data = [NSBubbleData dataWithImage:message.image date:localDate type:type];
         
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
         [data.view addGestureRecognizer:singleTap];
@@ -225,9 +215,10 @@
         data = [NSBubbleData dataWithTextView:@"" date:localDate type:type];
     }
     
-    NSInteger status = [[object valueForKey:@"status"] integerValue];
+    NSInteger status = message.status.integerValue;
     if (status == MESSAGE_STATUS_READY) {
-        NSString *key = [object valueForKey:@"key"];
+        NSString *key = message.key;
+        //TODO wtf is this deliveredmessage 
         NSDate *deliveredAt = [YTAppDelegate current].deliveredMessages[key];
         
         if (deliveredAt != nil) {
@@ -260,7 +251,7 @@
 {
     UIView *view = [gesture.view hitTest:[gesture locationInView:gesture.view] withEvent:nil];
     NSInteger row = view.tag;
-    NSManagedObject *object = self.messages[row];
+    NSManagedObject *object = [self.gab messageAtIndex:row];
     NSString *secret = [object valueForKey:@"secret"];
     NSURL *baseUrl = [YTApiHelper baseUrl];
     NSString *urlString = [NSString stringWithFormat:@"%@images?secret=%@", baseUrl, secret];
@@ -286,13 +277,30 @@
     
     self.photoHelper = [[YTGabPhotoHelper alloc] initWithGabView:self];
     self.clueHelper = [[YTGabClueHelper alloc] initWithGabView:self];
-    self.sendHelper = [[YTGabSendHelper alloc] initWithGabView:self];
     self.tagHelper = [[YTGabTagHelper alloc] initWithGabView:self];
  
     self.tableView.bubbleDataSource = self;
     self.tableView.snapInterval = 120;
     self.tableView.typingBubble = NSBubbleTypingTypeNobody;
     self.tableView.delegate = self;
+    
+    self.backgroundSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [self.backgroundSpinner setColor:[UIColor grayColor]];
+    
+    self.rowSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [self.rowSpinner setColor:[UIColor grayColor]];
+    
+    int spinnerSize = self.backgroundSpinner.bounds.size.height;
+    int height = self.view.frame.size.height - spinnerSize - self.inputView.frame.size.height;
+    self.backgroundSpinner.frame = CGRectMake((self.view.frame.size.width - spinnerSize)/2.0,
+                                    height/2.0 - self.view.frame.origin.y, spinnerSize, spinnerSize);
+    [self.view addSubview:self.backgroundSpinner];
+    
+    spinnerSize = self.rowSpinner.bounds.size.height;
+    self.footerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width, spinnerSize + 7)];
+    self.rowSpinner.frame = CGRectMake((self.view.frame.size.width - spinnerSize)/2.0,
+                                    0, spinnerSize, spinnerSize);
+    [self.footerView addSubview:self.rowSpinner];
 
     UITapGestureRecognizer *rec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
     UISwipeGestureRecognizer *rec2 = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
@@ -300,15 +308,65 @@
     [self.tableView addGestureRecognizer:rec];
     [self.tableView addGestureRecognizer:rec2];
     
+    self.navigationItem.rightBarButtonItems = nil;
+    self.title = nil;
+    
     [self setupView];
+}
 
-    if(![self fakeGab]) {
-        if([[self.gab valueForKey:@"needs_update"] boolValue])
-            [YTApiHelper syncGabWithId:[self.gab valueForKey:@"id"]];
-        else {
-            [self reloadData];
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+        
+    if(self.gab) {
+        [self showSpinner];
+        
+        [self.gab update];
+    
+        if(self.gab.messageCount != 0) {
+            [self.tableView reloadData];
+            [self scrollToFooter];
         }
+
+        [self.gab clearUnread];
     }
+    else {
+        [self.inputView.textView becomeFirstResponder];
+    }
+}
+
+- (void) showSpinner
+{
+    if(self.gab.messageCount != 0)
+    {
+        self.spinner = self.rowSpinner;
+    }
+    else {
+        self.spinner = self.backgroundSpinner;
+    }
+
+    if(self.spinner == self.rowSpinner) {
+        //we have to show the row spinny
+        self.tableView.tableFooterView = self.footerView;
+    }
+    
+    [self.spinner startAnimating];
+}
+
+- (void) stopSpinner
+{
+    [self.spinner stopAnimating];
+
+    if(self.spinner == self.rowSpinner) {
+        self.tableView.tableFooterView = nil;
+    }
+}
+
+- (void) scrollToFooter
+{
+    CGPoint newContentOffset = CGPointMake(0, MAX(0,[self.tableView contentSize].height - self.tableView.bounds.size.height));
+    
+    [self.tableView setContentOffset:newContentOffset animated:YES];
 }
 
 - (void)tapped
@@ -319,11 +377,58 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     [self.inputView.textView resignFirstResponder];
+
+}
+
+- (void)keyboardWillShowHide:(NSNotification *)notification hide:(BOOL)hide
+{
+    /* copied from parent so we can animate the background spinner as needed*/
+    /* also, don't animate anything if we are showing the tag helper */
+    if(self.tagHelper.alertView.visible)
+        return;
+    
+    CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	//UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+	double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    [UIView animateWithDuration:duration
+                          delay:0.0f
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         CGFloat keyboardY = [self.view convertRect:keyboardRect fromView:nil].origin.y;
+                         if (hide) {
+                             keyboardY = self.view.frame.size.height;
+                             //  keyboardY += keyboardRect.size.height;
+                         }
+                         
+                         CGRect inputViewFrame = self.inputView.frame;
+                         self.inputView.frame = CGRectMake(inputViewFrame.origin.x,
+                                                           keyboardY - inputViewFrame.size.height,
+                                                           inputViewFrame.size.width,
+                                                           inputViewFrame.size.height);
+                         
+                         UIEdgeInsets insets = UIEdgeInsetsMake(0.0f,
+                                                                0.0f,
+                                                                self.view.frame.size.height - self.inputView.frame.origin.y - self.inputView.bounds.size.height,
+                                                                0.0f);
+                         
+                         self.tableView.contentInset = insets;
+                         self.tableView.scrollIndicatorInsets = insets;
+                         
+                         int spinnerSize = self.backgroundSpinner.bounds.size.height;
+                         int height = keyboardY - spinnerSize - self.inputView.frame.size.height;
+                         self.backgroundSpinner.frame = CGRectMake((self.view.frame.size.width - spinnerSize)/2.0,
+                                                                   height/2.0 - self.view.frame.origin.y, spinnerSize, spinnerSize);
+
+                     }
+                     completion:^(BOOL finished) {
+                     }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    //TODO remove currentgabviewcontroller
     [YTAppDelegate current].currentGabViewController = nil;
 }
 
@@ -338,187 +443,21 @@
     return NO;
 }
 
-- (void)dismiss
+- (void)gabUpdated:(NSNotification*) note
 {
-    [[Mixpanel sharedInstance] track:@"Cancelled Thread Compose"];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void) updateState {
-    [YTViewHelper refreshViews];
-    
+    NSLog(@"gab updated");
+    [self setupView];
+    [self.tableView reloadData];
+    [self stopSpinner];
     [self scrollToBottomAnimated:YES];
 }
 
-- (void)queueMessage:(NSString*)text ofKind:(NSInteger)kind
+- (void)gabMessagesUpdated:(NSNotification*)note
 {
-    /* everything is executed on the main thread. we have no need for a lock */
-    YTGabMessage* message = [YTGabMessage messageWithContent:text andKind:kind];
-    
-    /*is this a new gab window? if it is, we don't have a gab.
-     1. We opened from main gab a gab -> we have a gabId -> we have a gab
-     2. We opened from an APN -> we have a gabID -> we have a gab
-     3. We opened from new gab -> we have a receiver -> we don't have a gab
-     4. we opened from main gab a friend or a featured -> we have a recv. -> we dont' have a gab
-    */
+    NSLog(@"gab messages updated");
 
-    if(!self.gab) {
-        //first message!!
-        //we need to fake up a gab, too.
-        NSNumber* val = [YTModelHelper nextFakeGabId];
-        
-        NSDateFormatter *formatter = [NSDateFormatter new];
-        formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-        NSString* dateStr = [formatter stringFromDate:[NSDate date]];
-
-        NSString* messageText = [text copy];
-        if(kind == YTMessageKindPhoto)
-            messageText = @"";
-        
-        //LINREVIEW dry with maincontroller
-
-        NSDictionary* gabData = @{@"related_user_name": self.friend.name,
-                                  @"related_avatar": self.friend.avatarUrl,
-                                  @"sent":@true,
-                                  @"clue_count":@0,
-                                  @"id":val, @"total_count":@1, @"updated_at":dateStr,
-                                  @"unread_count":@0, @"content_summary":messageText};
-        
-        [self createAndSetGabWithData:gabData];
-    }
-    
-    NSManagedObject* messageObject = [self addMessageLocally:message];
-    
-    if(!self.ongoingRequest) {
-        [self processMessage:messageObject];
-    }
-    else {
-        [self.queuedMessages addObject:messageObject];
-    }
-}
-
-- (void)handleNextQueuedMessage
-{
-    if([self.queuedMessages count] != 0) {
-        NSManagedObject* message = (NSManagedObject*)[self.queuedMessages objectAtIndex:0];
-        [self.queuedMessages removeObjectAtIndex:0];
-        [self processMessage:message];
-    }
-}
-
-- (NSManagedObject*)addMessageLocally:(YTGabMessage*)message
-{    
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    NSString *key = [YTHelper randString:8];
-    
-    params[@"content"] = message.content;
-    params[@"kind"] = [NSNumber numberWithInteger:message.kind];
-    params[@"key"] = key;
-    params[@"gab_id"] = [self.gab valueForKey:@"id"];
-    
-    NSManagedObject *lastMessage = [YTModelHelper messagesForGab:[self.gab valueForKey:@"id"]].lastObject;
-    NSDate* date;
-    if(!lastMessage) {
-        //very first message.
-        date = [NSDate date];
-    }
-    else {
-        date = [lastMessage valueForKey:@"created_at"];
-        date = [date dateByAddingTimeInterval:5];
-    }
-    params[@"created_at"] = date;
-
-    NSManagedObject* messageObject = [YTModelHelper createMessage:params];
-
-    [YTViewHelper refreshViews];
-    
-    return messageObject;
-}
-
-- (void)processMessage:(NSManagedObject*)message
-{
-    if (![self fakeGab]) {
-        [self sendMessage:message];
-    }
-    else {
-        //we need to start a new convo.
-
-        [[Mixpanel sharedInstance] track:@"Created Thread"];
-        
-        self.ongoingRequest = true;
-        NSMutableDictionary* params = [[NSMutableDictionary alloc] init];
-        
-        [params setValue:@{@"content": [message valueForKey:@"content"],
-         @"kind": [message valueForKey:@"kind"],
-         @"key": [message valueForKey:@"key"]} forKey:@"message"];
-        
-        if(self.friend.isFriend) {
-            [params setValue:@{@"id": self.friend.id} forKey:@"friendship"];
-        }
-        else {
-            [params setValue:@{@"id": self.friend.featured_id} forKey:@"featured"];
-        }
-        
-        [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"POST" params:params
-                                   success:^(id JSON) {
-                                       //make it real!
-                                       id new_id = JSON[@"gab"][@"id"];
-                                       id old_id = [self.gab valueForKey:@"id"];
-                                       for(NSManagedObject* to in self.queuedMessages) {
-                                           [to setValue:new_id forKey:@"gab_id"];
-                                       }
-                                       [YTApiHelper deleteGab:old_id success:nil];
-                                       
-                                       self.gab = [YTModelHelper createOrUpdateGab:JSON[@"gab"]];
-                                       [self setupView];
-                                       self.ongoingRequest = false;
-                                       [self handleNextQueuedMessage];
-                                       
-                                   }
-         
-                                   failure:^(id JSON) {
-                                       [YTViewHelper refreshViews];
-                                       self.ongoingRequest = false;
-                                       [self handleNextQueuedMessage];
-                                       
-                                   }];
-    }
-}
-
-- (void)sendMessage:(NSManagedObject*)message
-{
-    NSDictionary* params = [message dictionaryWithValuesForKeys:message.entity.attributesByName.allKeys];
-
-    NSString* key = params[@"key"];
-    NSNumber* gab_id = [message valueForKey:@"gab_id"];
-    
-    self.ongoingRequest = true;
-
-    [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@/messages", gab_id]
-                                method:@"POST" params:params
-                               success:^(id JSON) {
-                                   [YTAppDelegate current].deliveredMessages[key] = [NSDate date];                                   
-                                   
-                                   [YTModelHelper updateMessage:JSON[@"message"]];
-                                   [self updateState];
-                                   
-                                   NSNumber *gabSent = [NSNumber numberWithBool:![[self.gab valueForKey:@"sent"] isEqualToNumber:@0]];
-
-                                   [Flurry logEvent:@"Sent_Message" withParameters:@{@"kind":params[@"kind"]}];
-                                   [[Mixpanel sharedInstance] track:@"Sent Message" properties:@{@"Anonymous": gabSent}];
-                                   
-                                   self.ongoingRequest = false;
-                                   [self handleNextQueuedMessage];
-                               }
-     
-                               failure:^(id JSON) {
-                                   [YTModelHelper failMessage:key];
-                                   [YTViewHelper refreshViews];
-                                   
-                                   self.ongoingRequest = false;
-                                   [self handleNextQueuedMessage];
-                                   
-                               }];
+    [self.tableView reloadData];
+    [self scrollToBottomAnimated:YES];
 }
 
 @end

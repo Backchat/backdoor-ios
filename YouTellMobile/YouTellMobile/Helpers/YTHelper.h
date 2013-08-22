@@ -13,6 +13,7 @@
 @interface YTHelper : NSObject
 
 + (NSDate *)localDateFromUtcDate:(NSDate*)utcDate;
++ (NSDate*)localDateInUtcDate:(NSDate*)localDate;
 + (NSString *)formatDate:(NSDate*)date;
 + (NSAttributedString *)formatDateAttr:(NSString*)date size:(CGFloat)size color:(UIColor*)color;
 

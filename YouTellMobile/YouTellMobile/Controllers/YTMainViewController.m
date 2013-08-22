@@ -24,6 +24,7 @@
 #import "YTMainViewHelper.h"
 #import "YTTourViewController.h"
 #import "YTFriends.h"
+#import "YTGabs.h"
 
 #define SECTION_FEATURED 0
 #define SECTION_GABS 1
@@ -36,6 +37,12 @@
 @interface YTMainViewController ()
 @property (nonatomic, retain) YTFriends* friends;
 @property (nonatomic, retain) YTFriends* featuredUsers;
+@property (nonatomic, retain) YTGabs* gabs;
+@property (strong, nonatomic) UISearchBar *searchBar;
+
+- (void)refreshWasRequested;
+- (void)composeButtonWasClicked;
+
 @end
 
 @implementation YTMainViewController
@@ -49,9 +56,9 @@
 
 - (void)doRefresh
 {
-    [YTApiHelper syncGabs];
-    [YTApiHelper getFeaturedUsers];
-    [YTApiHelper getFriends];
+    [YTGabs updateGabs];
+    [YTFriends updateFriendsOfType:YTFriendType];
+    [YTFriends updateFriendsOfType:YTFeaturedFriendType];
 }
 
 - (void)composeButtonWasClicked
@@ -64,19 +71,14 @@
     [[YTAppDelegate current].navController pushViewController:c animated:YES];
 }
 
-//TODO eventually get rid of this
-- (void)reloadData
-{
-    [self.tableView reloadData];
-}
-
-
 #pragma mark UIViewController methods
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self doRefresh];
     [super viewDidAppear:animated];
+    
+    [self doRefresh];
+
     if([YTApiHelper isNewUser]) {
         [YTApiHelper setNewUser:FALSE];
         [YTTourViewController show];
@@ -104,13 +106,27 @@
     self.refreshControl = [UIRefreshControl new];
     [self.refreshControl addTarget:self action:@selector(refreshWasRequested) forControlEvents:UIControlEventValueChanged];
     
-   // self.title = NSLocalizedString(@"Backdoor", nil);
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[YTHelper imageNamed:@"navbartitle4"]];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFriends:)
                                                  name:YTFriendNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFeaturedFriends:)
                                                  name:YTFeaturedFriendNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGabs:)
+                                                 name:YTGabsUpdatedNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGabs:)
+                                                 name:YTGabUpdated object:nil];
+    
+    self.tableView.contentOffset = CGPointMake(0, self.searchBar.frame.size.height);
+}
+
+- (void)updateGabs:(NSNotification*)note
+{
+    self.gabs = [[YTGabs alloc] initWithSearchString:self.searchBar.text];
+    [self.tableView reloadData];
+    [self.refreshControl endRefreshing];
 }
 
 - (void)updateFriends:(NSNotification*)note
@@ -152,12 +168,12 @@
 
 - (NSInteger)numberOfGabRows
 {
-    return [YTModelHelper gabCountWithFilter:self.searchBar.text];
+    return [self.gabs count];
 }
 
 - (NSInteger)numberOfFriendRows
 {
-    if ([YTModelHelper gabCountWithFilter:@""] >= CONFIG_MAX_CONVERSATION_COUNT_FOR_GHOST_FRIENDS) {
+    if ([YTGabs totalGabCount] >= CONFIG_MAX_CONVERSATION_COUNT_FOR_GHOST_FRIENDS) {
         return 0;
     }
     
@@ -174,7 +190,7 @@
 
 - (NSInteger)numberOfMoreRows
 {
-    if ([YTModelHelper gabCountWithFilter:@""] >= CONFIG_MAX_CONVERSATION_COUNT_FOR_GHOST_FRIENDS) {
+    if ([YTGabs totalGabCount] >= CONFIG_MAX_CONVERSATION_COUNT_FOR_GHOST_FRIENDS) {
         return 0;
     }
     
@@ -186,7 +202,7 @@
 
 - (NSInteger)numberOfShareRows
 {
-    if ([YTModelHelper gabCountWithFilter:@""] >= CONFIG_MAX_CONVERSATION_COUNT_FOR_GHOST_FRIENDS) {
+    if ([YTGabs totalGabCount] >= CONFIG_MAX_CONVERSATION_COUNT_FOR_GHOST_FRIENDS) {
         return 0;
     }
     
@@ -215,20 +231,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForGabAtRow:(NSInteger)row
 {
-    NSManagedObject *object = [YTModelHelper gabForRow:row  filter:self.searchBar.text];
-
-    BOOL read = [[object valueForKey:@"unread_count"] isEqualToNumber:@0];
-    NSString *title = [YTModelHelper userNameForGab:object];
-    NSString *subtitle = [object valueForKey:@"content_summary"];
-    NSString *time = [YTHelper formatDate:[object valueForKey:@"updated_at"]];
-    NSString *image = read ? nil : @"newgab2";
-    NSString* avatar = (NSString*)[object valueForKey:@"related_avatar"];
+    YTGab *object = [self.gabs gabAtIndex:row];
     
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time
-                                                                           image:image
-                                                                          avatar:avatar
-                                                                placeHolderImage:[YTHelper imageNamed:@"avatar6"]
-                                                                 backgroundColor:[UIColor whiteColor]];
+    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithGab:object andTableView:tableView];
 
     return cell;
 }
@@ -322,9 +327,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     if (indexPath.section == SECTION_GABS) {
-        NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row  filter:self.searchBar.text];
-        self.selectedGabId = [object valueForKey:@"id"];
-        [YTViewHelper showGabWithId:self.selectedGabId];
+        YTGab *gab = [self.gabs gabAtIndex:indexPath.row];
+        [YTViewHelper showGab:gab];
     }
     else if (indexPath.section == SECTION_FRIENDS) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Friend Item"];
@@ -373,20 +377,13 @@
     }
 }
 
-- (void)tableView:(UITableView *)tableView didEndEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
-}
-
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle != UITableViewCellEditingStyleDelete) {
         return;
     }
     
-    NSManagedObject *object = [YTModelHelper gabForRow:indexPath.row filter:self.searchBar.text];
-    [YTApiHelper deleteGab:[object valueForKey:@"id"] success:^(id JSON) {
-        [tableView reloadData];
-    }];
+    [YTGabs deleteGab:[self.gabs gabAtIndex:indexPath.row]];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -399,8 +396,9 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     [[Mixpanel sharedInstance] track:@"Used Thread Search Bar"];
+    self.gabs = [[YTGabs alloc] initWithSearchString:searchText];
     //self.friends = [[YTFriends alloc] initWithSearchString:searchText];
-    [self reloadData];
+    [self.tableView reloadData];
 }
      
 - (void)viewDidUnload {

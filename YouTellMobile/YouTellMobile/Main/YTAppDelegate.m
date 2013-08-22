@@ -154,8 +154,7 @@ void uncaughtExceptionHandler(NSException *exception)
     }
     else {
         if(gab_id) {
-            [YTApiHelper syncGabWithId:gab_id];
-            [YTViewHelper showGabWithId:gab_id];
+            [YTViewHelper showGabWithGabId:gab_id];
         }
     }
     
@@ -236,12 +235,13 @@ void uncaughtExceptionHandler(NSException *exception)
 
     if([YTApiHelper loggedIn]) {
         [YTNotifHelper handleNotification:userInfo];
-        [YTApiHelper syncGabWithId:gab_id];
-        
+        YTGab* gab = [YTGab gabForId:gab_id];
+        //we absolutely know we need to update, irregardless of state
+        gab.needs_update = @true;
+        [gab update];
+        NSLog(@"updating %@", gab);
         if (application.applicationState != UIApplicationStateActive) {
-            if ([YTModelHelper gabForId:gab_id]) {
-                [YTViewHelper showGabWithId:gab_id];
-            }
+            [YTViewHelper showGab:gab];
         }
     }
     else {
@@ -252,20 +252,15 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void) syncBasedOnView
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
-    NSNumber* gab_id = nil;
     
-    if (delegate.currentMainViewController && delegate.currentMainViewController.selectedGabId) {
-        gab_id = delegate.currentMainViewController.selectedGabId;
+    if (delegate.currentMainViewController) {
+        [delegate.currentMainViewController doRefresh];
     }
     
-    if (delegate.currentGabViewController && delegate.currentGabViewController.gab) {
-        gab_id = [delegate.currentGabViewController.gab valueForKey:@"id"];
+    if([delegate.navController.topViewController isKindOfClass:[YTGabViewController class]]) {
+        YTGabViewController* controller = (YTGabViewController*)delegate.navController.topViewController;
+        [controller.gab update];
     }
-    
-    if(gab_id) {
-        [YTApiHelper syncGabWithId:gab_id];
-    }
-
 }
 
 #pragma mark - Core Data stack

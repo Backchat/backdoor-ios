@@ -21,34 +21,13 @@
 + (void)setSettingsForKey:(NSString*)key value:(id)value;
 + (void)removeSettingsForKey:(NSString*)key;
 
-+ (NSManagedObject *)objectForRow:(NSInteger)row entityName:(NSString*)entityName predicate:(NSPredicate*)predicate sortDescriptor:(NSSortDescriptor*)sortDescriptor;
-+ (NSInteger)objectCount:(NSString*)entityName predicate:(NSPredicate*)predicate;
-
-+ (NSManagedObject *)gabForRow:(NSInteger)row filter:(NSString*)filter;
-+ (NSInteger)gabCountWithFilter:(NSString*)filter;
-+ (NSSet*)gabReceiverNames;
-+ (NSManagedObject*)gabForId:(NSNumber*)gabId;
-+ (void)clearGab:(NSNumber*)gabId;
-+ (NSString*)userNameForGab:(NSManagedObject*)gab;
-+ (NSManagedObject*)createOrUpdateGab:(id)data;
-+ (NSNumber*)nextFakeGabId;
 + (void)updateUnreadCount;
-
-//+ (NSManagedObject *)messageForRow:(NSInteger)row gabId:(id)gabId;
-+ (NSArray*)messagesForGab:(id)gabId;
-+ (NSInteger)messageCount:(id)gabId;
-+ (UIImage*)imageForMessage:(NSManagedObject*)message;
-+ (NSManagedObject*)createMessage:(NSDictionary*)data;
-+ (NSManagedObject*)updateMessage:(id)data;
-+ (void)failMessage:(NSString*)key;
 
 + (NSDictionary*)cluesForGab:(NSNumber*)gabId;
 + (NSManagedObject*)createOrUpdateClue:(NSDictionary*)data;
 + (NSInteger)userAvailableClues;
 + (void)setUserAvailableClues:(NSNumber*)value;
 + (BOOL)userHasShared;
-
-+ (NSIndexPath*)indexPathForGab:(NSNumber*)gabId filter:(NSString*)filter;
 
 + (NSURL*)modelURL;
 + (NSURL*)storeURL;

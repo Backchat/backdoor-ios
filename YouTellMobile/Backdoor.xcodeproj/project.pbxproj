@@ -10,7 +10,9 @@
 		372FA910171C83DA00E3BCB2 /* ipad-icon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 372FA90F171C83D900E3BCB2 /* ipad-icon2x.png */; };
 		372FA912171C83E500E3BCB2 /* ipad-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 372FA911171C83E500E3BCB2 /* ipad-icon.png */; };
 		3E02287917B960AC00BE05AF /* YTFriendNotifHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E02287817B960AC00BE05AF /* YTFriendNotifHelper.m */; };
-		3E9F69161761407D00374616 /* YTGabMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F69151761407C00374616 /* YTGabMessage.m */; };
+		3E9F221717C30D610035589A /* YTGab.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F221617C30D610035589A /* YTGab.m */; };
+		3E9F222917C30E3A0035589A /* YTGabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F222817C30E3A0035589A /* YTGabs.m */; };
+		3E9F222C17C3F3430035589A /* YTGabMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F222B17C3F3420035589A /* YTGabMessage.m */; };
 		3EB7BD1F17B432FA00FE0E5D /* choose_address_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */; };
 		3EB7BD2017B432FA00FE0E5D /* choose_address_book@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD1E17B432FA00FE0E5D /* choose_address_book@2x.png */; };
 		3EB7BD4F17B5744300FE0E5D /* enter_phone_number@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EB7BD4D17B5744300FE0E5D /* enter_phone_number@2x.png */; };
@@ -28,6 +30,8 @@
 		3EEC6FEE176BC7880045AF63 /* icon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EEC6FEB176BC7880045AF63 /* icon_57x57.png */; };
 		3EEC6FEF176BC7880045AF63 /* icon_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EEC6FEC176BC7880045AF63 /* icon_72.png */; };
 		3EEC6FF0176BC7880045AF63 /* icon_114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EEC6FED176BC7880045AF63 /* icon_114x114.png */; };
+		3EF2FDB117C4F43000D52F89 /* YTGabMessageDeliveryOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2FDB017C4F43000D52F89 /* YTGabMessageDeliveryOperation.m */; };
+		3EF2FDC317C5027900D52F89 /* YTGabPostOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EF2FDC217C5027800D52F89 /* YTGabPostOperation.m */; };
 		B2027218179A9DD100CF9D66 /* clue_button_inactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2027214179A9DD100CF9D66 /* clue_button_inactive@2x.png */; };
 		B2027219179A9DD100CF9D66 /* clue_button_inactive.png in Resources */ = {isa = PBXBuildFile; fileRef = B2027215179A9DD100CF9D66 /* clue_button_inactive.png */; };
 		B202721A179A9DD100CF9D66 /* clue_button_active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2027216179A9DD100CF9D66 /* clue_button_active@2x.png */; };
@@ -99,7 +103,6 @@
 		B24CB2C01702057D00813B2C /* UIBubbleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2AF1702057D00813B2C /* UIBubbleTableViewCell.m */; };
 		B24CB2C11702057D00813B2C /* UIBubbleTypingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2B21702057D00813B2C /* UIBubbleTypingTableViewCell.m */; };
 		B24CB2C91703136A00813B2C /* YTGabClueHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2C81703136900813B2C /* YTGabClueHelper.m */; };
-		B24CB2CC1703198200813B2C /* YTGabSendHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2CB1703198200813B2C /* YTGabSendHelper.m */; };
 		B24CB2D317046DF300813B2C /* YTPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B24CB2D117046DF100813B2C /* YTPhotoViewController.m */; };
 		B24CB2D417046DF300813B2C /* YTPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B24CB2D217046DF200813B2C /* YTPhotoViewController.xib */; };
 		B25E45C516F99E4E005DB8FB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B25E45C416F99E4E005DB8FB /* AudioToolbox.framework */; };
@@ -434,8 +437,12 @@
 		372FA911171C83E500E3BCB2 /* ipad-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ipad-icon.png"; path = "../../ipad-icon.png"; sourceTree = "<group>"; };
 		3E02287717B960AC00BE05AF /* YTFriendNotifHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTFriendNotifHelper.h; path = Helpers/YTFriendNotifHelper.h; sourceTree = "<group>"; };
 		3E02287817B960AC00BE05AF /* YTFriendNotifHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTFriendNotifHelper.m; path = Helpers/YTFriendNotifHelper.m; sourceTree = "<group>"; };
-		3E9F69141761407C00374616 /* YTGabMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabMessage.h; path = Helpers/YTGabMessage.h; sourceTree = "<group>"; };
-		3E9F69151761407C00374616 /* YTGabMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabMessage.m; path = Helpers/YTGabMessage.m; sourceTree = "<group>"; };
+		3E9F221517C30D610035589A /* YTGab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTGab.h; sourceTree = "<group>"; };
+		3E9F221617C30D610035589A /* YTGab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTGab.m; sourceTree = "<group>"; };
+		3E9F222717C30E3A0035589A /* YTGabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTGabs.h; sourceTree = "<group>"; };
+		3E9F222817C30E3A0035589A /* YTGabs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTGabs.m; sourceTree = "<group>"; };
+		3E9F222A17C3F3420035589A /* YTGabMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTGabMessage.h; sourceTree = "<group>"; };
+		3E9F222B17C3F3420035589A /* YTGabMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTGabMessage.m; sourceTree = "<group>"; };
 		3EB7BD1D17B432FA00FE0E5D /* choose_address_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = choose_address_book.png; sourceTree = "<group>"; };
 		3EB7BD1E17B432FA00FE0E5D /* choose_address_book@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "choose_address_book@2x.png"; sourceTree = "<group>"; };
 		3EB7BD4D17B5744300FE0E5D /* enter_phone_number@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "enter_phone_number@2x.png"; sourceTree = "<group>"; };
@@ -460,6 +467,10 @@
 		3EEC6FEB176BC7880045AF63 /* icon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_57x57.png; sourceTree = SOURCE_ROOT; };
 		3EEC6FEC176BC7880045AF63 /* icon_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_72.png; sourceTree = SOURCE_ROOT; };
 		3EEC6FED176BC7880045AF63 /* icon_114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_114x114.png; sourceTree = SOURCE_ROOT; };
+		3EF2FDAF17C4F43000D52F89 /* YTGabMessageDeliveryOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabMessageDeliveryOperation.h; path = Helpers/YTGabMessageDeliveryOperation.h; sourceTree = "<group>"; };
+		3EF2FDB017C4F43000D52F89 /* YTGabMessageDeliveryOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabMessageDeliveryOperation.m; path = Helpers/YTGabMessageDeliveryOperation.m; sourceTree = "<group>"; };
+		3EF2FDC117C5027800D52F89 /* YTGabPostOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabPostOperation.h; path = Helpers/YTGabPostOperation.h; sourceTree = "<group>"; };
+		3EF2FDC217C5027800D52F89 /* YTGabPostOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabPostOperation.m; path = Helpers/YTGabPostOperation.m; sourceTree = "<group>"; };
 		8805C8C26C024483B1635E5F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A8F36B8198B40769F476A03 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		B2027214179A9DD100CF9D66 /* clue_button_inactive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clue_button_inactive@2x.png"; sourceTree = "<group>"; };
@@ -546,8 +557,6 @@
 		B24CB2B21702057D00813B2C /* UIBubbleTypingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleTypingTableViewCell.m; sourceTree = "<group>"; };
 		B24CB2C71703136900813B2C /* YTGabClueHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabClueHelper.h; path = Helpers/YTGabClueHelper.h; sourceTree = "<group>"; };
 		B24CB2C81703136900813B2C /* YTGabClueHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabClueHelper.m; path = Helpers/YTGabClueHelper.m; sourceTree = "<group>"; };
-		B24CB2CA1703198200813B2C /* YTGabSendHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTGabSendHelper.h; path = Helpers/YTGabSendHelper.h; sourceTree = "<group>"; };
-		B24CB2CB1703198200813B2C /* YTGabSendHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTGabSendHelper.m; path = Helpers/YTGabSendHelper.m; sourceTree = "<group>"; };
 		B24CB2D017046DF100813B2C /* YTPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPhotoViewController.h; sourceTree = "<group>"; };
 		B24CB2D117046DF100813B2C /* YTPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTPhotoViewController.m; sourceTree = "<group>"; };
 		B24CB2D217046DF200813B2C /* YTPhotoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YTPhotoViewController.xib; sourceTree = "<group>"; };
@@ -855,6 +864,8 @@
 		3EC93C5417B0ADAB007A29B2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3E9F222A17C3F3420035589A /* YTGabMessage.h */,
+				3E9F222B17C3F3420035589A /* YTGabMessage.m */,
 				3EC93C5D17B0AF9A007A29B2 /* YTContact.h */,
 				3EC93C5E17B0AF9A007A29B2 /* YTContact.m */,
 				3EC93C5F17B0AF9A007A29B2 /* YTContacts.h */,
@@ -863,6 +874,10 @@
 				3EC93C5617B0ADAB007A29B2 /* YTFriend.m */,
 				3EC93C5717B0ADAB007A29B2 /* YTFriends.h */,
 				3EC93C5817B0ADAB007A29B2 /* YTFriends.m */,
+				3E9F221517C30D610035589A /* YTGab.h */,
+				3E9F221617C30D610035589A /* YTGab.m */,
+				3E9F222717C30E3A0035589A /* YTGabs.h */,
+				3E9F222817C30E3A0035589A /* YTGabs.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1289,12 +1304,8 @@
 				B2C9E6EB16F491C300B589E2 /* YTFBHelper.m */,
 				B24CB2C71703136900813B2C /* YTGabClueHelper.h */,
 				B24CB2C81703136900813B2C /* YTGabClueHelper.m */,
-				3E9F69141761407C00374616 /* YTGabMessage.h */,
-				3E9F69151761407C00374616 /* YTGabMessage.m */,
 				B24CB2931701AE9C00813B2C /* YTGabPhotoHelper.h */,
 				B24CB2941701AE9C00813B2C /* YTGabPhotoHelper.m */,
-				B24CB2CA1703198200813B2C /* YTGabSendHelper.h */,
-				B24CB2CB1703198200813B2C /* YTGabSendHelper.m */,
 				B2EF84A01720766100EECBE7 /* YTGabTagHelper.h */,
 				B2EF84A11720766300EECBE7 /* YTGabTagHelper.m */,
 				B2EF84611715392900EECBE7 /* YTGPPHelper.h */,
@@ -1317,6 +1328,10 @@
 				B2C9E6E816F48D3E00B589E2 /* YTViewHelper.m */,
 				B2C6199017A312FF0081EF03 /* YTRateHelper.h */,
 				B2C6199117A312FF0081EF03 /* YTRateHelper.m */,
+				3EF2FDAF17C4F43000D52F89 /* YTGabMessageDeliveryOperation.h */,
+				3EF2FDB017C4F43000D52F89 /* YTGabMessageDeliveryOperation.m */,
+				3EF2FDC117C5027800D52F89 /* YTGabPostOperation.h */,
+				3EF2FDC217C5027800D52F89 /* YTGabPostOperation.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1946,7 +1961,6 @@
 				B24CB2C01702057D00813B2C /* UIBubbleTableViewCell.m in Sources */,
 				B24CB2C11702057D00813B2C /* UIBubbleTypingTableViewCell.m in Sources */,
 				B24CB2C91703136A00813B2C /* YTGabClueHelper.m in Sources */,
-				B24CB2CC1703198200813B2C /* YTGabSendHelper.m in Sources */,
 				B24CB2D317046DF300813B2C /* YTPhotoViewController.m in Sources */,
 				B291102D170B057100A8508D /* YTLoginButton.m in Sources */,
 				B2EF84631715392A00EECBE7 /* YTGPPHelper.m in Sources */,
@@ -1963,7 +1977,6 @@
 				B2A37BB5174FE8CB006EAA5B /* YTNotificationSettingsViewController.m in Sources */,
 				B2D83FFE1752A89D00FAB33C /* YTNotifHelper.m in Sources */,
 				B2D8400E175F410000FAB33C /* YTSocialHelper.m in Sources */,
-				3E9F69161761407D00374616 /* YTGabMessage.m in Sources */,
 				B29B6AEF17881E5C00E9E197 /* YTNewGabViewController.m in Sources */,
 				B29B6AF21788268F00E9E197 /* YTMainViewHelper.m in Sources */,
 				B2C6199217A312FF0081EF03 /* YTRateHelper.m in Sources */,
@@ -1976,6 +1989,11 @@
 				3EC93C8C17B0B20B007A29B2 /* YTInviteContactComposeViewController.m in Sources */,
 				3EC93C8D17B0B20B007A29B2 /* YTInviteContactViewController.m in Sources */,
 				3E02287917B960AC00BE05AF /* YTFriendNotifHelper.m in Sources */,
+				3E9F221717C30D610035589A /* YTGab.m in Sources */,
+				3E9F222917C30E3A0035589A /* YTGabs.m in Sources */,
+				3E9F222C17C3F3430035589A /* YTGabMessage.m in Sources */,
+				3EF2FDB117C4F43000D52F89 /* YTGabMessageDeliveryOperation.m in Sources */,
+				3EF2FDC317C5027900D52F89 /* YTGabPostOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

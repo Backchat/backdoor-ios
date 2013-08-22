@@ -137,7 +137,7 @@
     NSData *data = UIImageJPEGRepresentation(self.image, 0.85);
     NSString* imageText = [data base64String];
 
-    [self.gabView queueMessage:imageText ofKind:YTMessageKindPhoto];
+    [self.gabView postNewMessage:imageText ofKind:YTMessageKindPhoto];
 }
 
 - (UIImage *)scaleImage:(UIImage*)image

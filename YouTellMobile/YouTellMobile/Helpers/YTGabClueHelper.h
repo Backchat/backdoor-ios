@@ -20,7 +20,7 @@
 
 
 - (id)initWithGabView:(YTGabViewController*)gabView;
-- (void)setupClueButton;
+- (UIBarButtonItem*)setupClueButton;
 
 - (void)requestClueButtonWasPressed:(id)sender;
 - (void)buyCluesButtonWasPressed;

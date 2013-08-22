@@ -41,10 +41,10 @@
     return self;
 }
 
-- (void)setupClueButton
+- (UIBarButtonItem*)setupClueButton
 {
     self.button = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Clue", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(actionButtonWasPressed:)];
-    self.gabView.navigationItem.rightBarButtonItems = @[self.button];
+    return self.button;
 }
 
 # pragma mark Button handler methods
@@ -96,8 +96,6 @@
     [self.activityIndicator startAnimating];
     
     [YTApiHelper requestClue:[self.gabView.gab valueForKey:@"id"] number:number success:^(id JSON) {
-        [YTViewHelper refreshViews];
-        
         [self.activityIndicator stopAnimating];
         //TODO improve this so we only update the right button...jeez        
         [self updateClues];

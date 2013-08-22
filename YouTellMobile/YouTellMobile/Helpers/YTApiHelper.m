@@ -30,6 +30,7 @@
 #import "YTFBHelper.h"
 #import "YTContact.h"
 #import "YTSocialHelper.h"
+#import "YTGabs.h"
 
 @implementation YTApiHelper
 
@@ -115,47 +116,43 @@
     NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
         
     [request setTimeoutInterval:CONFIG_TIMEOUT];
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
+                                                                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                                                                            [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
+                                                                                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                                                                                                           ^{
+                                                                                                               [NSThread sleepForTimeInterval:2.0];
+                                                                                                               [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 
-        [NSThread sleepForTimeInterval:2.0];
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            
-            [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
-            
-            if(![JSON[@"status"] isEqualToString:@"ok"]) {
-                if (failure != nil) {
-                    failure(JSON);
-                }
-                return;
-            }
-            
-            if (success != nil) {
-                success(JSON[@"response"]);
-            } else {
-                [YTViewHelper refreshViews];
-            }
-            
-        }];
-        
-        });
-        
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
-
-            if (response.statusCode == 503) {
-                [YTApiHelper showMaintenanceModeAlert];
-            } else {
-                //[YTApiHelper showNetworkErrorAlert]; TODO...
-                NSLog(@"%@", [error debugDescription]);
-            }
-            
-            if (failure != nil) {
-                failure(JSON);
-            }
-        }];
-    }];
+                                                                                                               if(![JSON[@"status"] isEqualToString:@"ok"]) {
+                                                                                                                   if (failure != nil) {
+                                                                                                                       failure(JSON);
+                                                                                                                   }
+                                                                                                                   return;
+                                                                                                               }
+                                                                                                               
+                                                                                                               if (success != nil) {
+                                                                                                                   success(JSON[@"response"]);
+                                                                                                               }
+                                                                                                               }];
+                                                                                                           });
+                                                                                        }
+                                                                                        failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                                                                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                                                                                [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
+                                                                                                
+                                                                                                if (response.statusCode == 503) {
+                                                                                                    [YTApiHelper showMaintenanceModeAlert];
+                                                                                                } else {
+                                                                                                    //[YTApiHelper showNetworkErrorAlert]; TODO...
+                                                                                                    NSLog(@"%@", [error debugDescription]);
+                                                                                                }
+                                                                                                
+                                                                                                if (failure != nil) {
+                                                                                                    failure(JSON);
+                                                                                                }
+                                                                                            }];
+                                                                                        }];
     
     [YTApiHelper toggleNetworkActivityIndicatorVisible:YES];
     
@@ -217,16 +214,10 @@
 
     if(launch_on_login) {
         NSLog(@"launch on login: %@", launch_on_login);
-            
-        if ([YTModelHelper gabForId:launch_on_login]) {
-            [YTViewHelper showGabWithId:launch_on_login];
-        }
-        [YTApiHelper syncGabWithId:launch_on_login];
+
+        [YTViewHelper showGabWithGabId:launch_on_login];
 
         [[YTAppDelegate current].userInfo removeObjectForKey:@"launch_on_active_token"];
-    }
-    else {
-        [YTViewHelper showGabs];
     }
 }
 
@@ -256,7 +247,6 @@ static bool loggedIn;
     [YTApiHelper resetUserInfo];
     
     [YTViewHelper showLoginWithButtons];
-    [YTViewHelper refreshViews];
 }
 
 + (bool)attemptCachedLogin
@@ -382,107 +372,6 @@ static bool new_user = false;
     [[Mixpanel sharedInstance] track:@"Sent Abuse Report"];
 }
 
-
-+ (void)syncGabs
-{
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    
-    if ([delegate.autoSyncLock tryLock] == NO) {
-        return;
-    }
-          
-    [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"GET" params:nil
-                               success:^(id JSON) {
-                                   id gabs = JSON[@"gabs"];
-                                   for(id gab in gabs) {
-                                       [YTModelHelper createOrUpdateGab:gab];
-                                   }
-                                   //sync'ed all gabs, therefore unread count is up to date; refresh
-                                   [YTModelHelper updateUnreadCount];
-                                   
-                                   [delegate.autoSyncLock unlock];
-                                   [YTViewHelper refreshViews];
-                                   [YTViewHelper endRefreshing];
-                               }
-     
-                               failure:^(id JSON) {
-                                   [delegate.autoSyncLock unlock];
-                                   [YTViewHelper endRefreshing];
-                               }];
-}
-
-+ (void)syncGabWithId:(NSNumber *)gab_id
-{
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    
-    if ([delegate.autoSyncLock tryLock] == NO) {
-        return;
-    }
-    
-    [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@", gab_id]
-                                method:@"GET" params:@{@"extended":@true}
-                               success:^(id JSON) {
-                                   [YTModelHelper createOrUpdateGab:JSON[@"gab"]];
-
-                                   [delegate.autoSyncLock unlock];
-                                   [YTViewHelper refreshViews];
-                                   [YTViewHelper endRefreshing];                                   
-                               }
-     
-                               failure:^(id JSON) {
-                                   [delegate.autoSyncLock unlock];
-                                   [YTViewHelper endRefreshing];
-                               }];
-}
-
-+ (void)deleteGab:(NSNumber*)gabId success:(void(^)(id JSON))success
-{
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [YTModelHelper clearGab:gabId];
-        [YTViewHelper refreshViews];
-
-        if(gabId.integerValue >= 0) {
-            [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@", gabId]
-                                        method:@"DELETE" params:nil success:success failure:nil];
-            
-            [Flurry logEvent:@"Deleted_Thread"];
-            [[Mixpanel sharedInstance] track:@"Deleted Thread"];
-        }
-    }];
-
-}
-
-+ (void)clearUnread:(NSNumber*)gabId
-{
-    NSManagedObject* gab = [YTModelHelper gabForId:gabId];
-    NSNumber* current = [gab valueForKey:@"unread_count"];
-    if(current.integerValue != 0) {
-        [gab setValue:[NSNumber numberWithInt:0] forKey:@"unread_count"];
-
-        [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@", gabId]
-                                    method:@"POST"
-                                    params:@{@"unread_count": @0, @"total_unread_count": @true}
-                                   success:^(id JSON) {
-                                       int new_unread = [JSON[@"total_unread_count"] integerValue];
-                                       [[UIApplication sharedApplication] setApplicationIconBadgeNumber:new_unread];
-                                   }
-                                   failure:nil];
-        
-    }
-}
-
-+ (void)tagGab:(NSNumber*)gabId tag:(NSString*)tag success:(void(^)(id JSON))success
-{
-    [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Updating thread", nil)
-                                                 path:[NSString stringWithFormat:@"/gabs/%@", gabId]
-                                               method:@"POST"
-                                               params:@{@"related_user_name": tag}
-                                              success:success
-                                              failure:nil];
-    [Flurry logEvent:@"Tagged_Thread"];
-    [[Mixpanel sharedInstance] track:@"Tagged Thread"];
-}
-
 + (void)getCluesForGab:(NSNumber*)gab_id success:(void(^)(id JSON))success
 {
     [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@/clues/", gab_id]
@@ -558,32 +447,6 @@ static bool new_user = false;
                               [NSString stringWithFormat:NSLocalizedString(@"You received %1$d free clues! Now you have %2$d available clues to use in all incoming threads", nil), count, total] delegate:nil cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil];
         [alert show];
         
-    } failure:nil];
-}
-
-+ (void)getFeaturedUsers
-{
-    if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"] && !CONFIG_DEBUG_FEATURED) {
-        return;
-    }
-    
-    [YTApiHelper sendJSONRequestToPath:@"/featured-users" method:@"GET" params:nil success:^(id JSON) {
-        NSDictionary* users = JSON[@"users"];
-        if(!users)
-            return;
-        
-        [YTFriends parseFriendsOfType:YTFeaturedFriendType withJSON:users];
-    } failure:nil];
-}
-
-+ (void)getFriends
-{
-    [YTApiHelper sendJSONRequestToPath:@"/friends" method:@"GET" params:nil success:^(id JSON) {
-        NSDictionary* friends = JSON[@"friends"];
-        if(!friends)
-            return;
-        
-        [YTFriends parseFriendsOfType:YTFriendType withJSON:friends];
     } failure:nil];
 }
 

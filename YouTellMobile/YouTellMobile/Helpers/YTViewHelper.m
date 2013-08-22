@@ -59,15 +59,6 @@
     [delegate.window makeKeyAndVisible];
 }
 
-+ (void)refreshViews
-{
-    
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    
-    [delegate.currentMainViewController reloadData];
-    [delegate.currentGabViewController reloadData];
-}
-
 + (void)endRefreshing
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
@@ -128,11 +119,12 @@
     } else {
         if ([delegate.navController.topViewController isKindOfClass:[YTGabViewController class]]) {
             YTGabViewController *gabView = (YTGabViewController*)delegate.navController.topViewController;
-            if (gabView.gab && controller.gab && [[gabView.gab valueForKey:@"id"] isEqualToNumber:[controller.gab valueForKey:@"id"]]) {
-                return;
+            if (gabView.gab && controller.gab && [gabView.gab.id isEqualToNumber:controller.gab.id]) {
+                NSLog(@"Eh...we should stop this gabID identical");
+                return;                
             }
         }
-        
+
         if (![delegate.navController.topViewController isKindOfClass:[YTMainViewController class]] && ![delegate.navController.topViewController isKindOfClass:[YTNewGabViewController class]]) {
             [delegate.navController popToRootViewControllerAnimated:NO];
         }
@@ -143,9 +135,16 @@
     delegate.currentGabViewController = controller;
 }
 
-+ (void)showGabWithId:(NSNumber*)gabId
++ (void)showGabWithGabId:(NSNumber*)gab_id
 {
-    YTGabViewController *controller = [[YTGabViewController alloc] initWithGab:gabId];
+    YTGab* gab = [YTGab gabForId:gab_id];
+    gab.needs_update = @true;
+    [YTViewHelper showGab:gab];
+}
+
++ (void)showGab:(YTGab*)gab
+{
+    YTGabViewController *controller = [[YTGabViewController alloc] initWithGab:gab];
     [YTViewHelper makeGabViewControllerTop:controller];
 }
 
@@ -154,11 +153,6 @@
     YTGabViewController* controller = [[YTGabViewController alloc] initWithFriend:f];
     [YTViewHelper makeGabViewControllerTop:controller];
  
-}
-
-+ (void)showGab
-{
-    [YTViewHelper showGabWithId:nil];
 }
 
 + (void)loadSettingsController:(UIViewController*)controller
@@ -206,11 +200,7 @@
         delegate.detailsController.viewControllers = @[blank];
         delegate.navController.viewControllers = @[controller];
         delegate.currentMainViewController = controller;
-
     }
-    
-    delegate.currentMainViewController.tableView.contentOffset = CGPointMake(0, delegate.currentMainViewController.searchBar.frame.size.height);
-    
 }
 
 + (void)showSettings

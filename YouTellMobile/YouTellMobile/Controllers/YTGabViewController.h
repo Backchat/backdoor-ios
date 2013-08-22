@@ -14,29 +14,19 @@
 #import "YTStoreHelper.h"
 #import "YTGabPhotoHelper.h"
 #import "YTGabClueHelper.h"
-#import "YTGabSendHelper.h"
 #import "YTGabTagHelper.h"
 #import <CoreData/CoreData.h>
 #import "YTFriend.h"
+#import "YTGab.h"
 
 @interface YTGabViewController : JSMessagesViewController <UINavigationControllerDelegate, UIBubbleTableViewDataSource>
-
-@property (strong, nonatomic) YTGabPhotoHelper *photoHelper;
-@property (strong, nonatomic) YTGabClueHelper *clueHelper;
-@property (strong, nonatomic) YTGabSendHelper *sendHelper;
-@property (strong, nonatomic) YTGabTagHelper *tagHelper;
+@property (nonatomic, retain) YTGab* gab;
 @property (strong, nonatomic) UIPopoverController *popover;
+@property (strong, nonatomic) YTGabClueHelper *clueHelper;
 
-//TODO
-@property (nonatomic, retain) NSManagedObject* gab;
-
-- (id) initWithGab:(NSNumber*)gab_id;
+- (id) initWithGab:(YTGab*)gab;
 - (id) initWithFriend:(YTFriend*)f;
 
-- (void)reloadData;
-- (void)dismiss;
-
-//LINREVIEW this is ugly we need to refactor the send queue code into a different helper
-- (void)queueMessage:(NSString*)text ofKind:(NSInteger)kind;
-
+//TODO get rid of ytgabphotohelper
+- (void)postNewMessage:(NSString*)content ofKind:(int)kind;
 @end

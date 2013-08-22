@@ -19,7 +19,7 @@
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Gabs" syncable="YES">
+    <entity name="Gabs" representedClassName="YTGab" syncable="YES">
         <attribute name="clue_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="content_cache" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="content_summary" optional="YES" attributeType="String" syncable="YES"/>
@@ -32,7 +32,7 @@
         <attribute name="unread_count" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="updated_at" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
-    <entity name="Messages" syncable="YES">
+    <entity name="Messages" representedClassName="YTGabMessage" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="created_at" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="deleted" optional="YES" attributeType="Boolean" syncable="YES"/>

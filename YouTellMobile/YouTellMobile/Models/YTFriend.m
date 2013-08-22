@@ -34,10 +34,12 @@
     return [self.source isEqualToString:YTFriendType];
 }
 
-+ (YTFriend*)addFriend:(id)friendJSON
++ (YTFriend*)updateFriend:(id)friendJSON
 {
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
-    YTFriend *friend = [NSEntityDescription insertNewObjectForEntityForName:@"Contacts" inManagedObjectContext:context];
+    YTFriend *friend = [YTFriend findByID:friendJSON[@"id"]];
+    if(friend == nil)
+        friend = [NSEntityDescription insertNewObjectForEntityForName:@"Contacts" inManagedObjectContext:context];
 
     [friend setValue:friendJSON[@"first_name"] forKey:@"first_name"];
     [friend setValue:friendJSON[@"last_name"] forKey:@"last_name"];

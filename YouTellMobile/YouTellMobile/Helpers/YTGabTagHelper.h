@@ -12,9 +12,10 @@
 @interface YTGabTagHelper : NSObject <UIAlertViewDelegate>
 
 @property (weak, nonatomic) YTGabViewController *gabView;
+@property (strong, nonatomic) UIAlertView* alertView;
 
 - (id)initWithGabView:(YTGabViewController*)gabView;
-- (void)setupTagButton:(BOOL)visible;
+- (UIBarButtonItem*)setupTagButton;
 - (void)tagButtonWasPressed:(id)sender;
 
 @end

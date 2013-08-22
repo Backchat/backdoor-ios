@@ -170,4 +170,24 @@
     }
 }
 
+- (UITableViewCell*) cellWithGab:(YTGab*)gab andTableView:(UITableView*)tableView;
+{
+    
+    BOOL read = [gab.unread_count isEqualToNumber:@0];
+    NSString *title = [gab gabTitle];
+    NSString *subtitle = gab.content_summary;
+    NSString *time = [YTHelper formatDate:gab.updated_at];
+    NSString *image = read ? nil : @"newgab2";
+    NSString* avatar = gab.related_avatar;
+    
+    return [self cellWithTableView:tableView
+                             title:title
+                          subtitle:subtitle
+                              time:time
+                             image:image
+                            avatar:avatar
+                  placeHolderImage:[YTHelper imageNamed:@"avatar6"]
+                   backgroundColor:[UIColor whiteColor]];
+}
+
 @end

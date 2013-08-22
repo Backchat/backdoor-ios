@@ -72,7 +72,7 @@
     
     self.notifiedFriendship = friendship_id;
     
-    [YTApiHelper getFriends];
+    [YTFriends updateFriendsOfType:YTFriendType];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
