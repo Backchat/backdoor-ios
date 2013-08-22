@@ -116,43 +116,48 @@
     NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
         
     [request setTimeoutInterval:CONFIG_TIMEOUT];
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
-                                                                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                                                            [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
-                                                                                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-                                                                                                           ^{
-                                                                                                               [NSThread sleepForTimeInterval:2.0];
-                                                                                                               [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-
-                                                                                                               if(![JSON[@"status"] isEqualToString:@"ok"]) {
-                                                                                                                   if (failure != nil) {
-                                                                                                                       failure(JSON);
-                                                                                                                   }
-                                                                                                                   return;
-                                                                                                               }
-                                                                                                               
-                                                                                                               if (success != nil) {
-                                                                                                                   success(JSON[@"response"]);
-                                                                                                               }
-                                                                                                               }];
-                                                                                                           });
-                                                                                        }
-                                                                                        failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-                                                                                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                                                                                [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
-                                                                                                
-                                                                                                if (response.statusCode == 503) {
-                                                                                                    [YTApiHelper showMaintenanceModeAlert];
-                                                                                                } else {
-                                                                                                    //[YTApiHelper showNetworkErrorAlert]; TODO...
-                                                                                                    NSLog(@"%@", [error debugDescription]);
-                                                                                                }
-                                                                                                
-                                                                                                if (failure != nil) {
-                                                                                                    failure(JSON);
-                                                                                                }
-                                                                                            }];
-                                                                                        }];
+    AFJSONRequestOperation *operation =
+    [AFJSONRequestOperation JSONRequestOperationWithRequest:request
+                                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                                        [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
+#if CONFIG_TEST_SLOW_API
+                                                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                                                                       ^{
+                                                                           [NSThread sleepForTimeInterval:2.0];
+                                                                           [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+#endif
+                                                                               if(![JSON[@"status"] isEqualToString:@"ok"]) {
+                                                                                   if (failure != nil) {
+                                                                                       failure(JSON);
+                                                                                   }
+                                                                                   return;
+                                                                               }
+                                                                               
+                                                                               if (success != nil) {
+                                                                                   success(JSON[@"response"]);
+                                                                               }
+#if CONFIG_TEST_SLOW_API
+                                                                               
+                                                                           }];
+                                                                       });
+#endif
+                                                    }
+                                                    failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                                            [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
+                                                            
+                                                            if (response.statusCode == 503) {
+                                                                [YTApiHelper showMaintenanceModeAlert];
+                                                            } else {
+                                                                //[YTApiHelper showNetworkErrorAlert]; TODO...
+                                                                NSLog(@"%@", [error debugDescription]);
+                                                            }
+                                                            
+                                                            if (failure != nil) {
+                                                                failure(JSON);
+                                                            }
+                                                        }];
+                                                    }];
     
     [YTApiHelper toggleNetworkActivityIndicatorVisible:YES];
     
