@@ -17,12 +17,20 @@
 #import "YTGPPHelper.h"
 #import "YTTourViewController.h"
 
+@interface YTModelHelper ()
++ (NSURL*)modelURL;
++ (NSURL*)storeURLForUser:(YTUser*)user;
+@end
+
 @implementation YTModelHelper
 
-
-+ (void)setup
++ (void)createContextForUser: (YTUser*)user
 {
-    NSURL *storeURL = [YTModelHelper storeURL];
+    if([YTAppDelegate current].managedObjectContext) {
+        [YTAppDelegate current].managedObjectContext = nil;
+    }
+    
+    NSURL *storeURL = [YTModelHelper storeURLForUser:user];
     //[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
     
     NSError *error = nil;
@@ -52,6 +60,7 @@
     NSError *error;
     [[YTAppDelegate current].managedObjectContext save:&error];
 }
+
 
 + (NSString*)settingsForKey:(NSString*)key
 {
@@ -84,6 +93,7 @@
     
     if ([objects count] > 0) {
         [context deleteObject:objects[0]];
+        [context save:&error];
     }
 }
 
@@ -242,26 +252,17 @@
     return [[NSBundle mainBundle] URLForResource:CONFIG_MODEL withExtension:@"momd"];
 }
 
-+ (NSURL*)storeURL
++ (NSURL*)storeURLForUser:(YTUser*)user
 {
     NSString *prefix = CONFIG_MODEL;
     NSString *ext = @"sqlite";
-    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    NSString *storeId = [defs stringForKey:@"storeId"];
+    NSString *storeId = [NSString stringWithFormat:@"%d", user.id];
     NSString *md5 = [YTHelper md5FromString:storeId];
     NSString *filename = [NSString stringWithFormat:@"%@_%@.%@", prefix, md5, ext];
     NSURL *dir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSURL *ret = [dir URLByAppendingPathComponent:filename];
     
     return ret;
-}
-
-+ (void)changeStoreId:(NSString *)storeId
-{
-    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    [defs setObject:storeId forKey:@"storeId"];
-    [defs synchronize];
-    [YTModelHelper setup];
 }
 
 static int available_clues;
@@ -274,11 +275,6 @@ static int available_clues;
 + (void)setUserAvailableClues:(NSNumber*) value
 {
     available_clues = value.integerValue;
-}
-
-+ (BOOL)userHasShared
-{
-    return [[YTAppDelegate current].userInfo[@"settings"][@"has_shared"] boolValue];
 }
 
 + (NSString*)phoneForUid:(NSString*)uid

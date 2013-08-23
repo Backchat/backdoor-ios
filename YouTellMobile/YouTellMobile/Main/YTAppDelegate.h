@@ -12,6 +12,7 @@
 #import "YTMainViewController.h"
 #import "YTGabViewController.h"
 #import "YTStoreHelper.h"
+#import "YTUser.h"
 
 @class YTViewController;
 
@@ -28,17 +29,14 @@
 @property (weak, nonatomic) YTGabViewController *currentGabViewController;
 
 @property (assign) BOOL usesSplitView;
-@property (strong, nonatomic) NSData *deviceToken;
 
-@property (strong, nonatomic) NSMutableDictionary *userInfo;
 @property (strong, nonatomic) NSMutableDictionary *sentInfo;
 @property (strong, nonatomic) NSMutableDictionary *deliveredMessages;
 
-
 @property (strong, nonatomic) YTStoreHelper *storeHelper;
+
+@property (strong, nonatomic) YTUser* currentUser;
 
 + (YTAppDelegate*)current;
 
 @end
-
-extern NSString* const YTDeviceTokenAcquired;

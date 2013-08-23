@@ -171,6 +171,10 @@ const NSTimeInterval BUTTON_FADE_INTERVAL = 1.0;
 
 - (void) showLoginButtons
 {
+    //do nothing if the buttons are already visible.
+    if(!self.button.hidden || !self.gppButton.hidden)
+        return;
+    
     self.button.hidden = !CONFIG_FB_ENABLED;
     self.gppButton.hidden = !CONFIG_GPP_ENABLED;
     self.button.alpha = 0;

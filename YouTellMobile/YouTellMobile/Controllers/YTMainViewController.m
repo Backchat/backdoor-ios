@@ -25,6 +25,7 @@
 #import "YTTourViewController.h"
 #import "YTFriends.h"
 #import "YTGabs.h"
+#import "YTConfig.h"
 
 #define SECTION_FEATURED 0
 #define SECTION_GABS 1
@@ -88,8 +89,8 @@
     
     [self doRefresh];
 
-    if([YTApiHelper isNewUser]) {
-        [YTApiHelper setNewUser:FALSE];
+    if(YTAppDelegate.current.currentUser.newUser || CONFIG_DEBUG_TOUR) {
+        YTAppDelegate.current.currentUser.newUser = FALSE;
         [YTTourViewController show];
     }
 }

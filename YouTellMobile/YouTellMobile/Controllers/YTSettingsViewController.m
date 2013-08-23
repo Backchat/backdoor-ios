@@ -22,6 +22,7 @@
 #import "YTApiHelper.h"
 #import "YTModelHelper.h"
 #import "YTNotificationSettingsViewController.h"
+#import "YTSocialHelper.h"
 
 @implementation YTSettingsViewController
 
@@ -29,7 +30,7 @@
 
 - (void)viewDidLoad
 {
-    NSString *freeCluesTitle = ([YTModelHelper userHasShared]) ? NSLocalizedString(@"Share with Friends", nil) : NSLocalizedString(@"Free Clues", nil);
+    NSString *freeCluesTitle = (YTAppDelegate.current.currentUser.userHasShared) ? NSLocalizedString(@"Share with Friends", nil) : NSLocalizedString(@"Free Clues", nil);
 
     self.tableData = @[
         @[
@@ -38,13 +39,8 @@
         @[
             @[@"icon_facebook3", freeCluesTitle, @"showInvite"]
         ], @[
-            /*@[@"icon_account2.png", NSLocalizedString(@"Your Account", nil), @"showYourAccount"],*/
             @[@"icon_privacy3", NSLocalizedString(@"Privacy & Abuse", nil), @"showPrivacy"]
-        ],  /*@[
-            @[@"icon_chat2.png", NSLocalizedString(@"Chat Settings", nil), @"showChatSettings"]
-        ] @[
-            @[@"icon_lang2.png", NSLocalizedString(@"Language", nil), @"showLanguage"]
-        ], */ @[
+        ], @[
             @[@"icon_help3", NSLocalizedString(@"Help & About Us", nil), @"showHelp"]
         ]
     ];
@@ -81,7 +77,9 @@
 
 - (void)signOut
 {
-    [YTApiHelper logout];
+    [YTAppDelegate.current.currentUser logout];
+    YTAppDelegate.current.currentUser = nil;
+    [YTViewHelper showLoginWithButtons];
 }
 
 - (void)showNotifications
@@ -127,12 +125,8 @@
 
 - (void)shareButtonWasClicked
 {
-    if ([[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"]) {
-        [YTFBHelper presentFeedDialog];
-    } else {
-        [[YTGPPHelper sharedInstance] presentShareDialog];
-    }
-    
+    [[YTSocialHelper sharedInstance] presentShareDialog];
+
     [[Mixpanel sharedInstance] track:@"Tapped Share Button"];
 }
 

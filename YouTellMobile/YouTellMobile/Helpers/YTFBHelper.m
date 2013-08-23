@@ -20,31 +20,71 @@
 #import "YTModelHelper.h"
 #import "YTHelper.h"
 #import "YTConfig.h"
+#import "YTSocialHelper.h"
 
 @interface YTFBHelper ()
 + (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error;
 + (void)createSession;
-+ (void)fetchUserData;
 + (NSArray*) perms;
 @end
 
 @implementation YTFBHelper
++ (void) fireFailedLogin
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialLoginFailed
+                                                        object:nil];
+}
 
++ (void) fireLoginSuccess:(FBSession*) session
+{
+    FBAccessTokenData* token_data = FBSession.activeSession.accessTokenData;
+    if(!token_data) {
+        [YTFBHelper fireFailedLogin];
+        return;
+    }
+    
+    [Flurry logEvent:@"Signed_In_With_Facebook"];
+    [[Mixpanel sharedInstance] track:@"Signed In With Facebook"];
+    
+    NSString* accessToken = token_data.accessToken;
+    
+    NSDictionary* dict = 
+    @{YTSocialLoggedInAccessTokenKey: accessToken,
+      YTSocialLoggedInProviderKey: [NSNumber numberWithInteger:YTSocialProviderFacebook]};
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialLoggedIn
+                                                        object:nil
+                                                      userInfo:dict];
+}
+
+
+/* simply reauthenticate. we KNOW they must have authed before. any failure here we kick to the
+ not logged in state. */
 + (void)reauth {
     [YTFBHelper createSession];
     [FBSession openActiveSessionWithReadPermissions:[YTFBHelper perms]
                                        allowLoginUI:NO
-                                  completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-                                      //do not call sessionState, because sessionOpened resets user info
-                                      //we should actually also update FB information here
-                                      //do NOT call fetchUserData until we refactor out the postLogin and the
-                                      //changestoreID
-                                      //we need to actually call POST / to get our entire user state ... later
-                                      [YTAppDelegate current].userInfo[@"provider"] = @"facebook";
+                                  completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
+                                      switch(state) {
+                                          case FBSessionStateOpen:
+                                              //nothing, yo
+                                              break;
+                                          case FBSessionStateClosed:
+                                              //nothing, yo
+                                              break;
+                                          case FBSessionStateClosedLoginFailed:
+                                              //login failed; show the login page just in case
+                                              [FBSession.activeSession closeAndClearTokenInformation];
+                                              [YTFBHelper fireFailedLogin];
+                                              break;
+                                          default:
+                                              break;
+                                      }
                                   }];
 
 }
 
+/* Try to silently authenticate. if we succeed, fire off the login state. */
 + (bool)trySilentAuth{
     [YTFBHelper createSession];
     return [FBSession openActiveSessionWithReadPermissions:[YTFBHelper perms]
@@ -53,7 +93,8 @@
                                              [YTFBHelper sessionStateChanged:session state:status error:error];
                                          }];
 }
-    
+
+/* Do a full authentication, including UI. */
 + (void)requestAuth
 {
     [YTFBHelper createSession];
@@ -65,31 +106,12 @@
               }];
 }
 
-+ (void)sessionOpened
-{
-    [YTApiHelper resetUserInfo];
-    
-    [Flurry logEvent:@"Signed_In_With_Facebook"];
-    [[Mixpanel sharedInstance] track:@"Signed In With Facebook"];
-    
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    delegate.userInfo[@"provider"] = @"facebook";
-    FBAccessTokenData* token_data = FBSession.activeSession.accessTokenData;
-    if(!token_data) {
-        NSLog(@"What the hell");
-        return;
-    }
-    
-    delegate.userInfo[@"access_token"] = token_data.accessToken;
-    
-    [YTApiHelper login];
-}
-
+/* only called in the full open states */
 + (void)sessionStateChanged:(FBSession*)session state:(FBSessionState)state error:(NSError*)error
 {
     switch(state) {
         case FBSessionStateOpen:
-            [YTFBHelper sessionOpened];
+            [YTFBHelper fireLoginSuccess:session];
             break;
         case FBSessionStateClosed:
             break; //do nothing; signOut in AppDelegate handles all of this
@@ -109,66 +131,19 @@
     }
 }
 
-+ (void)fetchUserData
++ (void)fetchUserData:(void(^)(NSDictionary* data))success
 {
     FBRequest *request = [FBRequest requestForGraphPath:@"/me"];
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    //TODO need to keep on throwing up that message
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        
         if (error || !result) {
             NSLog(@"%@", error.debugDescription);
             return;
         }
-
-        NSString *uid = result[@"id"];
-
-        if (!uid) {
-            // FIXME: is it possible?
-            NSLog(@"Facebook returned no user id");
-        }
-
-        NSString *email = result[@"email"] ? result[@"email"] : [NSString stringWithFormat:@"%@@facebook.com", uid];
-
-        [[Mixpanel sharedInstance] identify:email];
-        [Instabug setUserDataString:email];
         
-        if (delegate.deviceToken) {
-            [[Mixpanel sharedInstance].people addPushDeviceToken:delegate.deviceToken];
-        }
-        
-        if ([result[@"gender"] isEqualToString:@"male"]) {
-            [Flurry setGender:@"m"];
-            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
-            
-        } else if ([result[@"gender"] isEqualToString:@"female"]) {
-            [Flurry setGender:@"f"];
-            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
-        }
-        
-        NSInteger age = [YTHelper ageWithBirthdayString:result[@"birthday"] format:@"MM/dd/yyyy"];
-        
-        if (age > 0) {
-            [Flurry setAge:age];
-            [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
-        }
-
-        NSString *firstName = result[@"first_name"] ? result[@"first_name"] : @"";
-        NSString *lastName = result[@"last_name"] ? result[@"last_name"] : @"";
-        NSDictionary *userData = @{@"$email": email, @"$first_name": firstName, @"$last_name": lastName, @"Facebook Id": uid};
-        [[Mixpanel sharedInstance].people set:userData];
-        [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
-
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            NSLog(@"Logged in as %@", result[@"name"]);
-            delegate.userInfo[@"fb_data"] = [NSMutableDictionary dictionaryWithDictionary:result];
-            [YTModelHelper changeStoreId:email];
-            [YTFBHelper fetchFamily];
-            [YTFBHelper fetchInterests];
-            [YTFBHelper fetchLikes];
-            //actually logged in : important changestore ID above...
-            [YTApiHelper postLogin];
-        }];
+        NSMutableDictionary* data = [NSMutableDictionary dictionaryWithDictionary:result];
+        [YTFBHelper fetchFamily:data success:success];
+        [YTFBHelper fetchInterests:data success:success];
+        [YTFBHelper fetchLikes:data success:success];
     }];
 }
 
@@ -208,9 +183,8 @@
     }];
 }
 
-+ (void)fetchFamily
++ (void)fetchFamily:(NSMutableDictionary*)data success:(void(^)(NSDictionary* data))success
 {
-    YTAppDelegate *delegate = [YTAppDelegate current];
     FBRequest *request = [FBRequest requestForGraphPath:@"/me/family"];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         if (error) {
@@ -219,15 +193,14 @@
         }
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            delegate.userInfo[@"fb_data"][@"family"] = result[@"data"];
-            [YTFBHelper uploadIfDone];
+            data[@"family"] = result[@"data"];
+            [YTFBHelper fireIfDone:data success:success];
         }];
     }];
 }
 
-+ (void)fetchInterests
++ (void)fetchInterests:(NSMutableDictionary*)data success:(void(^)(NSDictionary* data))success
 {
-    YTAppDelegate *delegate = [YTAppDelegate current];
     FBRequest *request = [FBRequest requestForGraphPath:@"/me/interests"];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         if (error) {
@@ -236,15 +209,14 @@
         }
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            delegate.userInfo[@"fb_data"][@"interests"] = result[@"data"];
-            [YTFBHelper uploadIfDone];        
+            data[@"interests"] = result[@"data"];
+            [YTFBHelper fireIfDone:data success:success];
         }];
     }];
 }
 
-+ (void)fetchLikes
++ (void)fetchLikes:(NSMutableDictionary*)data success:(void(^)(NSDictionary* data))success
 {
-    YTAppDelegate *delegate = [YTAppDelegate current];
     FBRequest *request = [FBRequest requestForGraphPath:@"/me/likes"];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         if (error) {
@@ -253,22 +225,20 @@
         }
         
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            delegate.userInfo[@"fb_data"][@"likes"] = result[@"data"];
-            [YTFBHelper uploadIfDone];            
+            data[@"likes"] = result[@"data"];
+            [YTFBHelper fireIfDone:data success:success];
         }];
     }];
 }
 
-+ (void)uploadIfDone
++ (void)fireIfDone:(NSMutableDictionary*)data success:(void(^)(NSDictionary* data))success
 {
-    YTAppDelegate *delegate = [YTAppDelegate current];
-
-    id likes = delegate.userInfo[@"fb_data"][@"likes"];
-    id interest = delegate.userInfo[@"fb_data"][@"interests"];
-    id family = delegate.userInfo[@"fb_data"][@"family"];
+    id likes = data[@"likes"];
+    id interest = data[@"interests"];
+    id family = data[@"family"];
     
     if(likes && interest && family) {
-        [YTApiHelper updateUserInfo:nil];
+        success(data);
     }
 }
 
@@ -368,12 +338,6 @@
 
 + (void)presentFeedDialog
 {
-    /*
-    if (![[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"]) {
-        return;
-    }
-     */
-    
     if (!FBSession.activeSession.isOpen) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"You need to log in with Facebook to use this feature", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [alert show];

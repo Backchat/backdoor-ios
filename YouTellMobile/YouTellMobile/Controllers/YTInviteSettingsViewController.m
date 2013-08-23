@@ -27,11 +27,13 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+
     NSString *title;
     NSString *labelText;
     NSInteger labelSize;
     
-    if ([YTModelHelper userHasShared]) {
+    if (YTAppDelegate.current.currentUser.userHasShared) {
         title = NSLocalizedString(@"Share with Friends", nil);
         labelText = NSLocalizedString(@"Share with Friends", nil);
         labelSize = 16;
@@ -42,28 +44,7 @@
     }
     
     self.title = title;
-    
-    //YTAppDelegate *delegate = [YTAppDelegate current];
-    
-    /*
-    if ([delegate.userInfo[@"provider"] isEqualToString:@"facebook"]) {
-        self.tableData = @[
-            @[
-                @[@"icon_facebook2.png", NSLocalizedString(@"Share on Facebook", nil), @"showFBShare"],
-                @[@"icon_facebook2.png", NSLocalizedString(@"Invite on Facebook", nil), @"showFBInvite"],
-            ]
-        ];
-    } else {
-        self.tableData = @[
-            @[
-                @[@"", NSLocalizedString(@"Share on Google+", nil), @"showGPPShare"],
-            ]
-        ];
-    }
-     */
-    
-    [super viewDidLoad];
-    
+        
     CGFloat width = [YTAppDelegate current].window.bounds.size.width;
     CGFloat base_y = 0;
     
@@ -98,48 +79,6 @@
     frame.origin.x = (width - frame.size.width) / 2;
     shareButton.frame = frame;
     
-    /*
-    UILabel *label3 = [[UILabel alloc] init];
-    label3.text = NSLocalizedString(@"- OR -", nil);
-    label3.font = [UIFont systemFontOfSize:13];
-    label3.textColor = [UIColor blackColor];
-    label3.backgroundColor = [UIColor clearColor];
-    [label3 sizeToFit];
-    frame = label3.frame;
-    frame.origin.y = (base_y += 55);
-    frame.origin.x = (width - frame.size.width) / 2;
-    label3.frame = frame;
-     */
-    
-    /*
-    base_y += 55;
-    YTFBLikeButton *likeButton = [YTFBLikeButton new];
-    frame.size.height = 34;
-    frame.size.width = 150;
-    frame.origin.x = (width - frame.size.width) / 2;
-    frame.origin.y = (base_y);
-    likeButton.frame = frame;
-    likeButton.layer.borderColor = [[UIColor grayColor] CGColor];
-    likeButton.layer.borderWidth = 1;
-    likeButton.layer.cornerRadius = 5;
-    likeButton.layer.masksToBounds = YES;
-    [likeButton load];
-    */
-
-    /*
-    UILabel *label2 = [[UILabel alloc] init];
-    label2.text = NSLocalizedString(@"- OR -", nil);
-    label2.font = [UIFont systemFontOfSize:13];
-    label2.textColor = [UIColor blackColor];
-    label2.backgroundColor = [UIColor clearColor];
-    [label2 sizeToFit];
-    frame = label2.frame;
-    frame.origin.y = (base_y += 43);
-    frame.origin.x = (width - frame.size.width) / 2;
-    label2.frame = frame;
-      */
-    
-    
     UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [tweetButton setTitle:NSLocalizedString(@"Tweet about Backdoor", nil) forState:UIControlStateNormal];
     [tweetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -172,9 +111,6 @@
     
     [self.view addSubview:label1];
     [self.view addSubview:shareButton];
-    //[self.view addSubview:label3];
-    //[self.view addSubview:likeButton];
-    //[self.view addSubview:label2];
     [self.view addSubview:tweetButton];
     [self.view addSubview:gppButton];
 

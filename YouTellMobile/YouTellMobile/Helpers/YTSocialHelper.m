@@ -25,12 +25,12 @@
 
 - (BOOL)isGPP
 {
-    return [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"gpp"];
+    return YTAppDelegate.current.currentUser.socialProvider == YTSocialProviderGPP;
 }
 
 - (BOOL)isFacebook
 {
-    return [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"];
+    return YTAppDelegate.current.currentUser.socialProvider == YTSocialProviderFacebook;
 }
 
 - (void)presentShareDialog
@@ -42,23 +42,14 @@
     }
 }
 
-- (void)fetchUserData
+- (void)fetchUserData:(void(^)(NSDictionary* data))success;
 {
     if([self isGPP]) {
-        [[YTGPPHelper sharedInstance] fetchUserData];
+        [[YTGPPHelper sharedInstance] fetchUserData:success];
     }
     else {
-        [YTFBHelper fetchUserData];
+        [YTFBHelper fetchUserData:success];
     }
-}
-
-- (void)reauthProviders
-{
-    NSString* whichProvider = [YTModelHelper settingsForKey:@"logged_in_provider"];
-    if([whichProvider isEqualToString:@"facebook"])
-        [YTFBHelper reauth];
-    else
-        [[YTGPPHelper sharedInstance] reauth];
 }
 
 - (void)logoutProviders
@@ -68,3 +59,8 @@
 }
 
 @end
+
+NSString* const YTSocialLoggedIn = @"YTSocialLoggedIn";
+NSString* const YTSocialLoginFailed = @"YTSocialLoginFailed";
+NSString* const YTSocialLoggedInAccessTokenKey = @"YTSocialLoggedInAccessTokenKey";
+NSString* const YTSocialLoggedInProviderKey = @"YTSocialLoggedInProviderKey";

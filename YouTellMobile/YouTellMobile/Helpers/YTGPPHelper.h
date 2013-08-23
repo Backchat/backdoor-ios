@@ -20,6 +20,6 @@
 - (void)requestAuth;
 - (void)presentShareDialog;
 - (void)reauth;
-- (void)fetchUserData;
+- (void)fetchUserData:(void(^)(NSDictionary* data))success;
 
 @end

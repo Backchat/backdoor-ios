@@ -25,6 +25,7 @@
 		3EC93C8C17B0B20B007A29B2 /* YTInviteContactComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C8817B0B20B007A29B2 /* YTInviteContactComposeViewController.m */; };
 		3EC93C8D17B0B20B007A29B2 /* YTInviteContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EC93C8A17B0B20B007A29B2 /* YTInviteContactViewController.m */; };
 		3EC93C8E17B0B20B007A29B2 /* YTInviteContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EC93C8B17B0B20B007A29B2 /* YTInviteContactViewController.xib */; };
+		3ED5C9E017C6AB3B00178B6B /* YTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ED5C9DF17C6AB3B00178B6B /* YTUser.m */; };
 		3EE9159A176815AE0090371C /* gpp_tableitem3.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EE91598176815AE0090371C /* gpp_tableitem3.png */; };
 		3EE9159B176815AE0090371C /* gpp_tableitem3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EE91599176815AE0090371C /* gpp_tableitem3@2x.png */; };
 		3EEC6FEE176BC7880045AF63 /* icon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EEC6FEB176BC7880045AF63 /* icon_57x57.png */; };
@@ -462,6 +463,8 @@
 		3EC93C8917B0B20B007A29B2 /* YTInviteContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTInviteContactViewController.h; sourceTree = "<group>"; };
 		3EC93C8A17B0B20B007A29B2 /* YTInviteContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTInviteContactViewController.m; sourceTree = "<group>"; };
 		3EC93C8B17B0B20B007A29B2 /* YTInviteContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YTInviteContactViewController.xib; sourceTree = "<group>"; };
+		3ED5C9DE17C6AB3B00178B6B /* YTUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTUser.h; sourceTree = "<group>"; };
+		3ED5C9DF17C6AB3B00178B6B /* YTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTUser.m; sourceTree = "<group>"; };
 		3EE91598176815AE0090371C /* gpp_tableitem3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gpp_tableitem3.png; sourceTree = "<group>"; };
 		3EE91599176815AE0090371C /* gpp_tableitem3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gpp_tableitem3@2x.png"; sourceTree = "<group>"; };
 		3EEC6FEB176BC7880045AF63 /* icon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_57x57.png; sourceTree = SOURCE_ROOT; };
@@ -878,6 +881,8 @@
 				3E9F221617C30D610035589A /* YTGab.m */,
 				3E9F222717C30E3A0035589A /* YTGabs.h */,
 				3E9F222817C30E3A0035589A /* YTGabs.m */,
+				3ED5C9DE17C6AB3B00178B6B /* YTUser.h */,
+				3ED5C9DF17C6AB3B00178B6B /* YTUser.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1994,6 +1999,7 @@
 				3E9F222C17C3F3430035589A /* YTGabMessage.m in Sources */,
 				3EF2FDB117C4F43000D52F89 /* YTGabMessageDeliveryOperation.m in Sources */,
 				3EF2FDC317C5027900D52F89 /* YTGabPostOperation.m in Sources */,
+				3ED5C9E017C6AB3B00178B6B /* YTUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

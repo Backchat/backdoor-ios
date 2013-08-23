@@ -13,7 +13,12 @@
 - (BOOL)isGPP;
 - (BOOL)isFacebook;
 - (void)presentShareDialog;
-- (void)fetchUserData;
-- (void)reauthProviders;
+- (void)fetchUserData:(void(^)(NSDictionary* data))success;
+
 - (void)logoutProviders;
 @end
+
+extern NSString* const YTSocialLoggedInAccessTokenKey;
+extern NSString* const YTSocialLoggedInProviderKey;
+extern NSString* const YTSocialLoggedIn;
+extern NSString* const YTSocialLoginFailed;

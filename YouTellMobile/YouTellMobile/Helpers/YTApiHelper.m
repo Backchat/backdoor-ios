@@ -36,55 +36,7 @@
 
 + (void)setup
 {
-    [YTApiHelper resetUserInfo];
     [YTAppDelegate current].deliveredMessages = [NSMutableDictionary new];
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:YTDeviceTokenAcquired
-                                                      object:nil
-                                                       queue:nil
-                                                  usingBlock:^(NSNotification *note) {
-                                                      NSLog(@"device token -> try login again");
-                                                      if([YTAppDelegate current].userInfo[@"access_token"]) {
-                                                          NSLog(@"has access_token-> trying again");
-                                                          [YTApiHelper login];
-                                                      }
-                                                  }];
-}
-
-+ (void)resetUserInfo
-{
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    
-    NSString *deviceToken = delegate.userInfo ? delegate.userInfo[@"device_token"] : @"";
-    NSNumber* launch_on_active_token = delegate.userInfo ? delegate.userInfo[@"launch_on_active_token"] : nil;
-    delegate.sentInfo = [NSMutableDictionary new];
-    delegate.userInfo = [NSMutableDictionary new];
-    delegate.userInfo[@"device_token"] = deviceToken;
-    delegate.userInfo[@"fb_data"] = [NSMutableDictionary new];
-    delegate.userInfo[@"gpp_data"] = [NSMutableDictionary new];
-    delegate.userInfo[@"settings"] = [NSMutableDictionary new];
-    if(launch_on_active_token)
-        delegate.userInfo[@"launch_on_active_token"] = launch_on_active_token;
-}
-
-+ (NSDictionary*)userParams
-{
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    NSMutableDictionary *userInfo = delegate.userInfo;
-    NSMutableDictionary *result = [NSMutableDictionary new];
-    NSData *data;
-        
-    result[@"access_token"] = userInfo[@"access_token"];
-    result[@"provider"] = userInfo[@"provider"];
-    
-    data = [NSJSONSerialization dataWithJSONObject:[NSDictionary dictionaryWithDictionary:userInfo[@"fb_data"]] options:NSJSONWritingPrettyPrinted error:nil];
-    result[@"fb_data"] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    
-    data = [NSJSONSerialization dataWithJSONObject:[NSDictionary dictionaryWithDictionary:userInfo[@"gpp_data"]] options:NSJSONWritingPrettyPrinted error:nil];
-    result[@"gpp_data"] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-
-    result[@"device_token"] = userInfo[@"device_token"];
-    return result;
 }
 
 + (NSURL*)baseUrl
@@ -102,14 +54,19 @@
 }
 
 + (void) sendJSONRequestToPath:(NSString*)path method:(NSString*)method params:(NSDictionary*)params success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure
-{
-    
+{   
     AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[YTApiHelper baseUrl]];
     
     NSMutableDictionary *myParams = [[NSMutableDictionary alloc] initWithDictionary:params];
     if([myParams valueForKey:@"access_token"] == nil) {
-        NSString* access_token = [YTAppDelegate current].userInfo[@"access_token"];
-        [myParams setValue:access_token forKey:@"access_token"];
+        //TODO fix this to have separate auth / non-auth...
+        if(!YTAppDelegate.current.currentUser)
+        {
+            NSLog(@"JSON logged out");
+            return;
+        }
+
+        [myParams setValue:YTAppDelegate.current.currentUser.accessToken forKey:@"access_token"];
     }
     
     NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
@@ -119,6 +76,11 @@
     [AFJSONRequestOperation JSONRequestOperationWithRequest:request
                                                     success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                                                         [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
+                                                        //TODO fix this
+                                                        if(![request.URL.path isEqualToString:@"/login"] && !YTAppDelegate.current.currentUser) {
+                                                            NSLog(@"JSON response logged out");
+                                                            return;
+                                                        }
 #if CONFIG_TEST_SLOW_API
                                                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                                                                        ^{
@@ -204,165 +166,6 @@
     [[Mixpanel sharedInstance] track:@"Sent Feedback" properties:@{@"rating": rating}];
 }
 
-+ (void)postLogin
-{
-    //set the access_token locally so we know we're good:
-    NSString* access_token = [YTAppDelegate current].userInfo[@"access_token"];
-    
-    [YTModelHelper setSettingsForKey:@"logged_in_access_token" value:access_token];
-    [YTModelHelper setSettingsForKey:@"logged_in_provider" value:[YTAppDelegate current].userInfo[@"provider"]];
-    
-    [YTViewHelper hideLogin];
-
-    NSNumber* launch_on_login = [YTAppDelegate current].userInfo[@"launch_on_active_token"];
-
-    if(launch_on_login) {
-        NSLog(@"launch on login: %@", launch_on_login);
-
-        [YTViewHelper showGabWithGabId:launch_on_login];
-
-        [[YTAppDelegate current].userInfo removeObjectForKey:@"launch_on_active_token"];
-    }
-}
-
-//refactor these stupid static bools out soon
-static bool loggedIn;
-+ (bool)loggedIn
-{
-    return loggedIn;
-}
-
-+ (void)logout
-{
-    loggedIn = false;
-    [YTModelHelper removeSettingsForKey:@"logged_in_acccess_token"];
-    [YTModelHelper removeSettingsForKey:@"logged_in_provider"];
-    
-    //TODO better?
-    [[YTAppDelegate current].storeHelper disable];
-    [YTAppDelegate current].storeHelper = nil;
-    
-    [[Mixpanel sharedInstance] track:@"Signed Out"];
-    
-    [[YTSocialHelper sharedInstance] logoutProviders];
-    
-    [YTModelHelper changeStoreId:nil];
-    
-    [YTApiHelper resetUserInfo];
-    
-    [YTViewHelper showLoginWithButtons];
-}
-
-+ (bool)attemptCachedLogin
-{
-    NSString* local_access_token = [YTModelHelper settingsForKey:@"logged_in_access_token"];
-    NSString* logged_in_provider = [YTModelHelper settingsForKey:@"logged_in_provider"];
-    
-    if(local_access_token && local_access_token.length > 0 &&
-       logged_in_provider && logged_in_provider.length > 0)
-    {
-        [YTAppDelegate current].userInfo[@"access_token"] = local_access_token;
-        loggedIn = true;
-        /* we do, but we still need to reauth our social media. */
-        [[YTSocialHelper sharedInstance] reauthProviders];
-        [YTApiHelper postLogin];
-        //TODO do full fireLogin once we get the fetchUserData to work right
-        return true;
-    }
-    else
-        return false;
-}
-
-+ (void)fireLoginSuccess
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:YTLoginSuccess object:nil];
-}
-
-/* Login can be called by two things:
- * device token acquired -> login
- * social provider:authed -> login
- */
-+ (void)login
-{
-    if([YTApiHelper loggedIn]) {
-        NSLog(@"already loggedin ");
-        return;
-    }
-    
-    if([YTApiHelper attemptCachedLogin]) {
-        NSLog(@"logged in via cached access token");
-        return;
-    }    
-    
-    NSDictionary* params = [self userParams];
-    NSString* device_token= [params valueForKey:@"device_token"];
-    if(device_token == nil || device_token.length == 0) {
-        //this might only occur if login is called so fast that didRegister... didn't get called yet
-        //it will, at some point, get called since we call registerFor... in the main appdelegate.
-        //we listen to the YTDeviceTokenAcquired so we will recall ourselves
-        NSLog(@"login before devicetoken");
-        return;
-    }
-
-    [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Logging in", nil)
-                                                 path:@"/login"
-                                               method:@"POST" params:params
-                                              success:^(id JSON) {
-                                                  loggedIn = true;
-                                                  //we must have successfully logged in = we must be ok with server
-                                                  [YTApiHelper hideNetworkErrorAlert];
-                                                  //are we a new user? then show the tour:
-                                                  NSNumber* num = JSON[@"user"][@"new_user"];
-                                                  //we got settings!
-                                                  [YTAppDelegate current].userInfo[@"settings"] =
-                                                  [NSMutableDictionary dictionaryWithDictionary:JSON[@"user"][@"settings"]];
-                                                   
-                                                  if(num)
-                                                      [YTApiHelper setNewUser:((num.integerValue == 1) || CONFIG_DEBUG_TOUR)];
-                                                  
-                                                  [YTApiHelper fireLoginSuccess];
-                                              }
-                                              failure:nil];
-
-}
-
-static bool new_user = false;
-+ (void)setNewUser:(bool)user
-{
-    new_user = user;
-}
-
-+ (bool)isNewUser
-{
-    return new_user;
-}
-
-//NOTE: currentyl unused we get info from login and go from there
-+ (void)getUserInfo:(void(^)(id JSON))success
-{
-    return;
-    
-    [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Please wait...", nil)
-                                                 path:@"/"
-                                               method:@"GET" params:nil
-                                              success:^(id JSON) {
-                                                  [YTModelHelper setUserAvailableClues:JSON[@"available_clues"]];
-                                                  if(success)
-                                                      success(JSON);
-                                              }
-                                              failure:nil];
-}
-
-+ (void)updateUserInfo:(void(^)(id JSON))success
-{
-    NSDictionary* params = [self userParams]; //TODO better?
-    
-    [YTApiHelper sendJSONRequestToPath:@"/"
-                                method:@"POST" params:params
-                               success:success
-                               failure:nil];
-}
-
 + (void)sendAbuseReport:(NSString*)content success:(void(^)(id JSON))success
 {
     NSDictionary *params = @{@"content": content};
@@ -414,9 +217,8 @@ static bool new_user = false;
 + (void)buyCluesWithReceipt:(NSString *)receipt success:(void(^)(id JSON))success
 {
     // Delay the request until user is properly signed in
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    NSString *accessToken = delegate.userInfo[@"access_token"];
-    if (!accessToken) {
+    if (!YTAppDelegate.current.currentUser) {
+        //TODO fix this with a notification...scared to touch bceause of IAP
         double delayInSeconds = 1;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -439,7 +241,7 @@ static bool new_user = false;
         
         NSInteger count = [JSON[@"count"] integerValue];
         [YTModelHelper setUserAvailableClues:JSON[@"available_clues"]];
-        [YTAppDelegate current].userInfo[@"settings"][@"has_shared"] = [NSNumber numberWithBool:true];
+        YTAppDelegate.current.currentUser.userHasShared = @true;
 
         NSInteger total = [YTModelHelper userAvailableClues];
         
@@ -452,15 +254,6 @@ static bool new_user = false;
         [alert show];
         
     } failure:nil];
-}
-
-+ (void)updateSettingsWithKey:(NSString*)key value:(id)value
-{
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:@{@"value":value} options:0 error:&error];
-    NSString *json = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
-    [YTApiHelper sendJSONRequestToPath:@"/update-settings" method:@"POST" params:@{@"key":key,@"value":json} success:nil failure:nil];
 }
 
 + (void)checkUpdates
@@ -521,5 +314,3 @@ static bool new_user = false;
 }
 
 @end
-
-NSString* const YTLoginSuccess = @"YTLoginSuccess";

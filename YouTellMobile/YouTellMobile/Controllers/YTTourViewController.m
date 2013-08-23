@@ -7,8 +7,7 @@
 
 #import "YTTourViewController.h"
 #import "YTAppDelegate.h"
-#import "YTFBHelper.h"
-#import "YTGPPHelper.h"
+#import "YTSocialHelper.h"
 #import "YTHelper.h"
 
 
@@ -33,7 +32,7 @@
     
     CGRect frame = self.view.bounds;
     frame.origin.x = frame.size.width * page;
-    BOOL isfb = [[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"];
+    BOOL isfb = YTAppDelegate.current.currentUser.socialProvider == YTSocialProviderFacebook;
     
     if (page == 0) {
         imageName = @"tour12";
@@ -185,11 +184,7 @@
 - (void)shareButtonWasClicked
 {
     [[YTAppDelegate current].currentMainViewController dismissViewControllerAnimated:YES completion:^{
-        if ([[YTAppDelegate current].userInfo[@"provider"] isEqualToString:@"facebook"]) {
-            [YTFBHelper presentFeedDialog];
-        } else {
-            [[YTGPPHelper sharedInstance] presentShareDialog];
-        }
+        [[YTSocialHelper sharedInstance] presentShareDialog];
     }];
 }
 

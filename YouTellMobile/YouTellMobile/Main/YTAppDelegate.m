@@ -34,9 +34,23 @@ void uncaughtExceptionHandler(NSException *exception)
 }
 
 @interface YTAppDelegate ()
+@property (nonatomic, retain) NSNumber* launchGabOnLogin;
 @end
 
 @implementation YTAppDelegate
+- (id) init
+{
+    if(self = [super init]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(loginSuccess:)
+                                                     name:YTLoginSuccess object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(loginFailure:)
+                                                     name:YTLoginFailure
+                                                   object:nil];
+    }
+    return self;
+}
 
 # pragma mark Custom methods
 
@@ -45,12 +59,44 @@ void uncaughtExceptionHandler(NSException *exception)
     return (YTAppDelegate*)[UIApplication sharedApplication].delegate;
 }
 
-- (id) init {
-    if(self = [super init]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loggedIn:) name:YTLoginSuccess
-                                                   object:nil];
+- (void)loginSuccess:(NSNotification*)note
+{
+    self.currentUser = note.object;
+    
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
+    
+    if(self.launchGabOnLogin) {
+        [YTViewHelper showGabWithGabId:self.launchGabOnLogin];
+        self.launchGabOnLogin = nil;
     }
-    return self;
+    else {
+        [YTViewHelper hideLogin];
+    }
+}
+
+- (void)loginFailure:(NSNotification*)note
+{
+    NSString* message;
+    if(note.object == YTLoginFailureServer)
+        message = NSLocalizedString(@"Sorry about this. Our servers are overloaded. Please wait a second to try again.", nil);
+    else if(note.object == YTLoginFailureReasonSocial)
+        message = NSLocalizedString(@"Sorry, your social network didn't authenticate correctly. Please try again", nil);
+    else
+        message = NSLocalizedString(@"Sorry about this. Please wait a second to try again", nil);
+    
+    UIAlertView* view = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Login failed", nil)
+                                                   message:message
+                                                  delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    
+    [view show];
+    
+    if(self.currentUser) {
+        //we may have tried to login using cached tokens. If so, logout and clear
+        //everything to force the user to login again:
+        [self.currentUser logout];
+    }
+    
+    [YTViewHelper showLoginWithButtons];
 }
 
 + (void)initialize
@@ -61,11 +107,6 @@ void uncaughtExceptionHandler(NSException *exception)
     [iVersion sharedInstance].checkAtLaunch = NO;
 #endif
     [[YTRateHelper sharedInstance] setup];
-}
-
-- (void)loggedIn:(NSNotification*)note
-{
-    [[YTSocialHelper sharedInstance] fetchUserData];
 }
 
 # pragma mark UISplitViewControllerDelegate methods
@@ -95,8 +136,10 @@ void uncaughtExceptionHandler(NSException *exception)
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
         
     [YTApiHelper setup];
-    [YTModelHelper setup];    
     [YTViewHelper setup];
+    
+    [YTUser initalizeSocialHandlers];
+    
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
 
     [manager configureWithIdentifier:CONFIG_HOCKEY_ID delegate:self];
@@ -122,38 +165,22 @@ void uncaughtExceptionHandler(NSException *exception)
     [[Mixpanel sharedInstance] track:@"Launched Application"];
 
     [Instabug KickOffWithToken:CONFIG_INSTABUG_TOKEN CaptureSource:InstabugCaptureSourceUIKit FeedbackEvent:InstabugFeedbackEventShake IsTrackingLocation:YES];
-    
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
-    
-    if([YTHelper simulatedEnvironment]) {
-        [YTAppDelegate current].userInfo[@"device_token"] = @"1"; //not like you can run multiple simulators...
-    }
-    
+            
     [YTNotifHelper handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
 
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
+    self.launchGabOnLogin = gab_id;
 
     //we have a cached login token?
-    if(![YTApiHelper attemptCachedLogin]) {
+    if(![YTUser attemptCachedLogin]) {
+
         //we do not, but we may have been authorized via FB/GPP.
         //throw up the login window but without buttons, so the user
         //sees something:
         [YTViewHelper showLogin];
 
-        if(gab_id) {//do we need to launch a gab after logging in?
-            [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
-        }
-
-        bool logged_in = [YTFBHelper trySilentAuth];
-        if(!logged_in)
-            logged_in = [[YTGPPHelper sharedInstance] trySilentAuth];
-        
-        if(!logged_in)
+        if(![YTUser attemptCachedSocialLogin]) {
             [YTViewHelper showLoginWithButtons];
-    }
-    else {
-        if(gab_id) {
-            [YTViewHelper showGabWithGabId:gab_id];
         }
     }
     
@@ -163,7 +190,10 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     [[FBSession activeSession] handleDidBecomeActive];
-    [[YTRateHelper sharedInstance] run];
+    if(self.currentUser) {
+        //if we are logged in, go ahead, show the rate helper:
+        [[YTRateHelper sharedInstance] run];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -192,16 +222,26 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    self.userInfo[@"device_token"] = [YTHelper hexStringFromData:deviceToken];
-    NSLog(@"device token %@", self.userInfo[@"device_token"]);
-    self.deviceToken = deviceToken;
-    [[NSNotificationCenter defaultCenter] postNotificationName:YTDeviceTokenAcquired object:nil];
+    if([YTAppDelegate current].currentUser)
+        [YTAppDelegate.current.currentUser setDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    if(![YTHelper simulatedEnvironment]) {
-        self.userInfo[@"device_token"] = @"";
+    if([YTHelper simulatedEnvironment]) {
+        return;
+    }
+    
+    static bool alertedThisRun = false;
+    
+    if(!alertedThisRun) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Push notifications", nil)
+                                                        message:NSLocalizedString(@"With push notifications on, Backdoor will alert you when you receive messages and when your friends join Backdoor. Consider turning notifications on by going to\nSettings | Notifications | Backdoor\nand then logging out and in again.", nil)
+                                                       delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    
+        [alert show];
+        alertedThisRun = true;
+        [[Mixpanel sharedInstance] track:@"User declined APN"];
     }
 }
 
@@ -224,7 +264,7 @@ void uncaughtExceptionHandler(NSException *exception)
     
     id gab_id = userInfo[@"gab_id"];
 
-    if([YTApiHelper loggedIn]) {
+    if(self.currentUser) {
         [YTNotifHelper handleNotification:userInfo];
         YTGab* gab = [YTGab gabForId:gab_id];
         //we absolutely know we need to update, irregardless of state
@@ -235,12 +275,10 @@ void uncaughtExceptionHandler(NSException *exception)
         }
     }
     else {
-        [YTAppDelegate current].userInfo[@"launch_on_active_token"] = gab_id;
+        self.launchGabOnLogin = gab_id;
     }
 }
 
 #pragma mark - Core Data stack
 
 @end
-
-NSString* const YTDeviceTokenAcquired = @"YTDeviceTokenAcquired";

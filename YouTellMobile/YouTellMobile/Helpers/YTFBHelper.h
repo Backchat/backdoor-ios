@@ -22,5 +22,5 @@
 + (void)presentFeedDialog;
 + (void)presentRequestDialogWithContact:(NSString*)contact complete:(void(^)())complete;
 + (void)fetchFriends:(void(^)(YTContacts* c))success;
-+ (void)fetchUserData;
++ (void)fetchUserData:(void(^)(NSDictionary* data))success;
 @end
