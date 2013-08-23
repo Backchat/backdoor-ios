@@ -86,9 +86,11 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
                                                       self.newUser = (num.integerValue == 1);
                                                   
                                                   num = JSON[@"user"][@"available_clues"];
-                                                  if(num)
+                                                  if(num) {
                                                       self.availableClues = num.integerValue;
-                                                                                                    
+                                                      [YTModelHelper setUserAvailableClues:[NSNumber numberWithInt:self.availableClues]];
+                                                  }
+                                                  
                                                   [self fireLoginSuccess];
                                               }
                                               failure:^(id JSON) {
