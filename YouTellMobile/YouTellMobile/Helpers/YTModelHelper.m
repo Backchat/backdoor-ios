@@ -302,16 +302,4 @@ static int available_clues;
     available_clues = value.integerValue;
 }
 
-+ (NSString*)phoneForUid:(NSString*)uid
-{
-    NSString *key = [NSString stringWithFormat:@"facebook_%@", uid];
-    return [YTModelHelper settingsForKey:key];
-}
-
-+ (void)setPhoneForUid:(NSString*)uid phone:(NSString*)phone
-{
-    NSString *key = [NSString stringWithFormat:@"facebook_%@", uid];
-    return [YTModelHelper setSettingsForKey:key value:phone];
-}
-
 @end

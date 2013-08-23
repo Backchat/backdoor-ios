@@ -30,8 +30,4 @@
 + (NSInteger)userAvailableClues;
 + (void)setUserAvailableClues:(NSNumber*)value;
 
-
-+ (NSString*)phoneForUid:(NSString*)uid;
-+ (void)setPhoneForUid:(NSString*)uid phone:(NSString*)phone;
-
 @end
