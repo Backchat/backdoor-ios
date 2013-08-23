@@ -131,6 +131,48 @@
     }
 }
 
++ (void) sendUserInfo:(id)result
+{
+    @try {
+        NSString *uid = result[@"id"];
+        
+        if (!uid) {
+            return;
+        }
+        
+        NSString *email = result[@"email"] ? result[@"email"] : [NSString stringWithFormat:@"%@@facebook.com", uid];
+        
+        [[Mixpanel sharedInstance] identify:email];
+        [Instabug setUserDataString:email];
+
+        if ([result[@"gender"] isEqualToString:@"male"]) {
+            [Flurry setGender:@"m"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
+            
+        } else if ([result[@"gender"] isEqualToString:@"female"]) {
+            [Flurry setGender:@"f"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
+        }
+        
+        NSInteger age = [YTHelper ageWithBirthdayString:result[@"birthday"] format:@"MM/dd/yyyy"];
+        
+        if (age > 0) {
+            [Flurry setAge:age];
+            [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
+        }
+        
+        NSString *firstName = result[@"first_name"] ? result[@"first_name"] : @"";
+        NSString *lastName = result[@"last_name"] ? result[@"last_name"] : @"";
+        NSDictionary *userData = @{@"$email": email, @"$first_name": firstName, @"$last_name": lastName, @"Facebook Id": uid};
+        
+        [[Mixpanel sharedInstance].people set:userData];
+        [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
+
+    }
+    @finally {
+    }
+}
+
 + (void)fetchUserData:(void(^)(NSDictionary* data))success
 {
     FBRequest *request = [FBRequest requestForGraphPath:@"/me"];
@@ -139,6 +181,8 @@
             NSLog(@"%@", error.debugDescription);
             return;
         }
+        
+        [YTFBHelper sendUserInfo:result];
         
         NSMutableDictionary* data = [NSMutableDictionary dictionaryWithDictionary:result];
         [YTFBHelper fetchFamily:data success:success];

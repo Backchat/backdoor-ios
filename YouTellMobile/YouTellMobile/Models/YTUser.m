@@ -13,6 +13,7 @@
 #import "YTApiHelper.h"
 #import "YTHelper.h"
 #import "YTModelHelper.h"
+#import <Mixpanel.h>
 
 @interface YTUser ()
 @property (nonatomic, retain) NSString* accessToken;
@@ -34,6 +35,9 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
 {    
     NSString* deviceTokenAsString = [YTHelper hexStringFromData:deviceToken];
     NSDictionary* params = @{@"device_token": deviceTokenAsString};
+
+    [[Mixpanel sharedInstance].people addPushDeviceToken:deviceToken];
+
     [YTApiHelper sendJSONRequestToPath:@"/devices"
                                 method:@"POST" params:params
                                success:^(id JSON) {

@@ -84,6 +84,41 @@
                                                         object:nil];
 }
 
+- (void)sendUserData:(GTLPlusPerson*)person
+{
+    @try {
+        [[Mixpanel sharedInstance] identify:self.email];
+        [Instabug setUserDataString:self.email];
+        
+        if ([person.gender isEqualToString:@"male"]) {
+            [Flurry setGender:@"m"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
+        } else if ([person.gender isEqualToString:@"female"]) {
+            [Flurry setGender:@"f"];
+            [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
+        }
+        
+        NSInteger age = [YTHelper ageWithBirthdayString:person.birthday format:@"yyyy-MM-dd"];
+        
+        if (age > 0) {
+            [Flurry setAge:age];
+            [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
+        }
+        
+        NSString* fname = person.name.givenName ? person.name.givenName : @"";
+        NSString* lname = person.name.familyName ? person.name.familyName : @"";
+        NSDictionary *userData = @{@"$first_name": fname,
+                                   @"$last_name": lname,
+                                   @"$email": self.email,
+                                   @"Google+ Id": person.identifier};
+        
+        [[Mixpanel sharedInstance].people set:userData];
+        [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
+    }
+    @finally {
+    }
+}
+
 - (void)finishedWithAuth:(GTMOAuth2Authentication *)auth error:(NSError *)error
 {
     if (error) {
@@ -103,7 +138,7 @@
     
     [Flurry logEvent:@"Signed_In_With_Google+"];
     [[Mixpanel sharedInstance] track:@"Signed In With Google+"];
-
+    
     NSDictionary* dict =
     @{YTSocialLoggedInAccessTokenKey: auth.accessToken,
       YTSocialLoggedInProviderKey: [NSNumber numberWithInteger:YTSocialProviderGPP]};
@@ -130,6 +165,8 @@
             return;
         }
         
+        [self sendUserData:person];
+
         NSMutableDictionary* data = [NSMutableDictionary new];
         [data addEntriesFromDictionary:[person JSON]];
         data[@"email"] = self.email;
