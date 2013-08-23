@@ -146,6 +146,7 @@ void uncaughtExceptionHandler(NSException *exception)
         [[Mixpanel sharedInstance] track:@"Upgraded Application"];
         [def setValue:thisVersion forKey:YTVERSIONKEY];
         [def synchronize];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];        
     }
 }
 
@@ -291,7 +292,8 @@ void uncaughtExceptionHandler(NSException *exception)
         //we absolutely know we need to update, irregardless of state
         [gab update:YES];
         NSLog(@"updating %@", gab);
-        if (application.applicationState != UIApplicationStateActive) {
+        if (application.applicationState != UIApplicationStateActive)
+        {
             [YTViewHelper showGab:gab];
         }
     }
