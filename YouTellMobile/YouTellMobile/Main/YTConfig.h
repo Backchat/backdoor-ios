@@ -30,7 +30,7 @@
 #define CONFIG_CRASH_BUTTON 0
 #define CONFIG_CLUES_BUTTON 0
 #define CONFIG_DEBUG_FEATURED 1
-#define CONFIG_TEST_SLOW_API 1
+#define CONFIG_TEST_SLOW_API 0
 
 //api identification
 #define CONFIG_HOCKEY_ID @"bedb756bb2c16d161fcff11b35a35a11"
