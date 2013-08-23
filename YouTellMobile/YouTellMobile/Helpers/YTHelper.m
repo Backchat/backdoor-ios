@@ -102,14 +102,6 @@
     return ret;
 }
 
-+ (NSNumber *)parseBool:(id)boolString
-{
-    BOOL cond = NO;
-    if(boolString)
-        cond = [boolString isEqualToString:@"t"];
-    return [NSNumber numberWithBool:cond];
-}
-
 + (NSNumber *)parseNumber:(id)numberString
 {
     return [NSNumber numberWithInteger:[numberString integerValue]];
@@ -142,12 +134,6 @@
         [res appendFormat:@"%02x", buf[i]];
     }
     return res;
-}
-
-+ (void)simpleAlertWithTitle:(NSString*)title message:(NSString*)message
-{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"Close", nil) otherButtonTitles:nil];
-    [alert show];
 }
 
 + (BOOL)appStoreEnvironment

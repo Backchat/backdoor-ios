@@ -19,7 +19,6 @@
 
 + (NSInteger)ageWithBirthdayString:(NSString*)string format:(NSString*)format;
 + (NSDate *)parseDate:(NSString*)dateString;
-+ (NSNumber *)parseBool:(id)boolString;
 + (NSNumber *)parseNumber:(id)numberString;
 
 + (NSString *)hexStringFromData:(NSData*)data;
@@ -27,7 +26,6 @@
 + (NSString*)randString:(NSInteger)length;
 
 + (UIImage *)imageNamed:(NSString *)imageName;
-+ (void)simpleAlertWithTitle:(NSString*)title message:(NSString*)message;
 + (BOOL)appStoreEnvironment;
 + (BOOL)simulatedEnvironment;
 + (bool)isPhone5;
