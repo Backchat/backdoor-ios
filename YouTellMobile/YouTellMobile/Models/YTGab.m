@@ -189,7 +189,7 @@
     message.gab_id = self.id;
     message.key = [YTHelper randString:12];
     message.created_at = [YTHelper localDateInUtcDate:[NSDate date]];
-    message.status = [NSNumber numberWithInt:MESSAGE_STATUS_DELIVERING];
+    message.status = [NSNumber numberWithInt:YTGabMessageStatusDelivering];
     
     message.read = [NSNumber numberWithBool:YES];
     message.deleted = [NSNumber numberWithBool:NO];

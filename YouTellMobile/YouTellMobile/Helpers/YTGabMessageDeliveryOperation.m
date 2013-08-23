@@ -61,7 +61,10 @@
                                }
                                failure:^(id JSON) {
                                    dispatch_semaphore_signal(wait);
-                                   //[YTModelHelper failMessage:key];
+                                   self.message.status = [NSNumber numberWithInt:YTGabMessageStatusFailed];
+                                   [[NSNotificationCenter defaultCenter] postNotificationName:YTGabMessageUpdated
+                                                                                       object:[YTGab gabForId:self.message.gab_id]];
+                                   
                                }];
     
     dispatch_semaphore_wait(wait, DISPATCH_TIME_FOREVER);

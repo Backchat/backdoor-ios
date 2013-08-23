@@ -24,4 +24,10 @@
 - (UIImage*) image;
 
 + (YTGabMessage*) parse:(id)JSON;
+- (void) repostMessage;
+
 @end
+
+static const int YTGabMessageStatusReady = 0;
+static const int YTGabMessageStatusDelivering = 1;
+static const int YTGabMessageStatusFailed = 2;

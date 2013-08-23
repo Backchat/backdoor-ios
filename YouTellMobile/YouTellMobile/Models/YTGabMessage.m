@@ -11,6 +11,10 @@
 #import "YTAppDelegate.h"
 #import "YTHelper.h"
 
+@interface YTGab ()
+- (void) postMessage:(YTGabMessage*)message;
+@end
+
 @implementation YTGabMessage
 @dynamic content;
 @dynamic kind;
@@ -70,5 +74,17 @@
     return message;
 }
 
-
+- (void) repostMessage
+{
+    if(self.status.integerValue != YTGabMessageStatusFailed)
+        return;
+    
+    self.status = [NSNumber numberWithInt:YTGabMessageStatusDelivering];
+    
+    YTGab* gab = [YTGab gabForId:self.gab_id];
+    [[NSNotificationCenter defaultCenter] postNotificationName:YTGabMessageUpdated
+                                                        object:gab];
+    
+    [gab postMessage:self];
+}
 @end

@@ -217,7 +217,7 @@
     }
     
     NSInteger status = message.status.integerValue;
-    if (status == MESSAGE_STATUS_READY) {
+    if (status == YTGabMessageStatusReady) {
         NSString *key = message.key;
         //TODO wtf is this deliveredmessage 
         NSDate *deliveredAt = [YTAppDelegate current].deliveredMessages[key];
@@ -233,10 +233,14 @@
         } else {
             data.status = @"";
         }
-    } else if (status == MESSAGE_STATUS_DELIVERING) {
+    } else if (status == YTGabMessageStatusDelivering) {
         data.status = NSLocalizedString(@"Delivering", nil);
-    } else if (status == MESSAGE_STATUS_FAILED) {
-        data.status = NSLocalizedString(@"Failed", nil);
+    } else if (status == YTGabMessageStatusFailed) {
+        data.status = NSLocalizedString(@"Failed. Tap to resend", nil);
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+        [data.view addGestureRecognizer:singleTap];
+        [data.view setUserInteractionEnabled:YES];
+        data.view.tag = row;
     }
     
 
@@ -252,14 +256,19 @@
 {
     UIView *view = [gesture.view hitTest:[gesture locationInView:gesture.view] withEvent:nil];
     NSInteger row = view.tag;
-    NSManagedObject *object = [self.gab messageAtIndex:row];
-    NSString *secret = [object valueForKey:@"secret"];
-    NSURL *baseUrl = [YTApiHelper baseUrl];
-    NSString *urlString = [NSString stringWithFormat:@"%@images?secret=%@", baseUrl, secret];
-    NSURL *url = [NSURL URLWithString:urlString];
-    
-    YTPhotoViewController *photoView = [[YTPhotoViewController alloc] initWithGabView:self url:url];
-    [self presentViewController:photoView animated:YES completion:nil];
+    YTGabMessage *object = [self.gab messageAtIndex:row];
+    if(object.status.integerValue == YTGabMessageStatusFailed) {
+        [object repostMessage];
+    }
+    else {
+        NSString *secret = [object valueForKey:@"secret"];
+        NSURL *baseUrl = [YTApiHelper baseUrl];
+        NSString *urlString = [NSString stringWithFormat:@"%@images?secret=%@", baseUrl, secret];
+        NSURL *url = [NSURL URLWithString:urlString];
+        
+        YTPhotoViewController *photoView = [[YTPhotoViewController alloc] initWithGabView:self url:url];
+        [self presentViewController:photoView animated:YES completion:nil];
+    }
 }
 
 

@@ -9,10 +9,6 @@
 #import <CoreData/CoreData.h>
 #import "YTUser.h"
 
-#define MESSAGE_STATUS_READY 0
-#define MESSAGE_STATUS_DELIVERING 1
-#define MESSAGE_STATUS_FAILED 2
-
 @interface YTModelHelper : NSObject
 
 + (void)createContextForUser: (YTUser*)user;
