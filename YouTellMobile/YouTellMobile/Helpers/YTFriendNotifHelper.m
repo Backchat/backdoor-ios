@@ -54,7 +54,7 @@
     
     [[Mixpanel sharedInstance] track:@"Received A New Friend Notification"];
     
-    NSString *messageFormat = NSLocalizedString(@"%@ just joined Backdoor! Send him a message!", nil);
+    NSString *messageFormat = NSLocalizedString(@"%@ just joined Backdoor! Send them a message!", nil);
     NSString *name = self.friend.name;
     NSString *message = [NSString stringWithFormat:messageFormat, name];
     
