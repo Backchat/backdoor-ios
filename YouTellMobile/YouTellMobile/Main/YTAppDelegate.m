@@ -10,7 +10,6 @@
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
 #import <Instabug/Instabug.h>
-#import <iRate/iRate.h>
 #import <iVersion.h>
 
 #import "YTAppDelegate.h"
@@ -130,15 +129,40 @@ void uncaughtExceptionHandler(NSException *exception)
 }
 
 #pragma mark UIApplicationDelegate methods
+- (void) checkVersion
+{
+    bool versionDifferent = false;
+    NSString* thisVersion = [iVersion sharedInstance].applicationVersion;
+    NSUserDefaults* def = [NSUserDefaults standardUserDefaults];
+    NSString* YTVERSIONKEY = @"YTVERSIONKEY";
+    NSString* lastVersion = [def stringForKey:YTVERSIONKEY];
+    versionDifferent = !lastVersion || ![thisVersion isEqualToString:lastVersion];
+    
+    if(versionDifferent) {
+        //new version; destroy ALL THE THINGS
+        [YTUser clearCachedTokens];
+        [YTModelHelper removeAllStores];
+        [[YTRateHelper sharedInstance] reset];
+        [[Mixpanel sharedInstance] track:@"Upgraded Application"];
+        [def setValue:thisVersion forKey:YTVERSIONKEY];
+        [def synchronize];
+    }
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-        
-    [YTApiHelper setup];
-    [YTViewHelper setup];
     
-    [YTUser initalizeSocialHandlers];
+    if (CONFIG_DEBUG_FLURRY) {
+        [Flurry setDebugLogEnabled:YES];
+        [Flurry setEventLoggingEnabled:YES];
+    }
+    
+    [Flurry setCrashReportingEnabled:YES];
+    [Flurry startSession:CONFIG_FLURRY_APP_TOKEN];
+    
+    [Mixpanel sharedInstanceWithToken:CONFIG_MIXPANEL_TOKEN];
+    [[Mixpanel sharedInstance] track:@"Launched Application"];
     
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
 
@@ -153,18 +177,15 @@ void uncaughtExceptionHandler(NSException *exception)
     [manager startManager];
     [[BITHockeyManager sharedHockeyManager] startManager];
     
-    if (CONFIG_DEBUG_FLURRY) {
-        [Flurry setDebugLogEnabled:YES];
-        [Flurry setEventLoggingEnabled:YES];
-    }
+    [YTApiHelper setup];
+    [YTViewHelper setup];
+    [YTUser initalizeSocialHandlers];
     
-    [Flurry setCrashReportingEnabled:YES];
-    [Flurry startSession:CONFIG_FLURRY_APP_TOKEN];
-    
-    [Mixpanel sharedInstanceWithToken:CONFIG_MIXPANEL_TOKEN];
-    [[Mixpanel sharedInstance] track:@"Launched Application"];
+    [self checkVersion];
 
-    [Instabug KickOffWithToken:CONFIG_INSTABUG_TOKEN CaptureSource:InstabugCaptureSourceUIKit FeedbackEvent:InstabugFeedbackEventShake IsTrackingLocation:YES];
+    [Instabug KickOffWithToken:CONFIG_INSTABUG_TOKEN CaptureSource:InstabugCaptureSourceUIKit
+                 FeedbackEvent:InstabugFeedbackEventShake
+            IsTrackingLocation:YES];
             
     [YTNotifHelper handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
 

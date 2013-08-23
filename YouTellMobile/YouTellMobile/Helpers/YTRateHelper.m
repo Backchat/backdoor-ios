@@ -12,6 +12,8 @@
 #import <Mixpanel.h>
 #import <iRate.h>
 
+NSString * const YTRATEKEY = @"rate_remaining_uses";
+
 @implementation YTRateHelper
 
 + (YTRateHelper*)sharedInstance
@@ -31,16 +33,20 @@
     [iRate sharedInstance].delegate = self;
 }
 
+- (void)reset
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:CONFIG_RATING_USES forKey:YTRATEKEY];
+}
+
 - (void)run
 {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    NSString *key = @"rate_remaining_uses";
     
-    if (![defs objectForKey:key]) {
-        [defs setInteger:CONFIG_RATING_USES forKey:key];
+    if (![defs objectForKey:YTRATEKEY]) {
+        [defs setInteger:CONFIG_RATING_USES forKey:YTRATEKEY];
     }
     
-    NSInteger uses = [defs integerForKey:key];
+    NSInteger uses = [defs integerForKey:YTRATEKEY];
     
     if(uses == CONFIG_RATING_USES_CANCELLED)
         return;
@@ -51,7 +57,7 @@
         [[iRate sharedInstance] promptForRating];
     }
     else {
-        [defs setInteger:uses forKey:key];
+        [defs setInteger:uses forKey:YTRATEKEY];
         [defs synchronize];
     }
 }
@@ -59,16 +65,14 @@
 - (void)iRateCouldNotConnectToAppStore:(NSError *)error
 {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    NSString *key = @"rate_remaining_uses";
-    [defs setInteger:1 forKey:key];
+    [defs setInteger:1 forKey:YTRATEKEY];
     [defs synchronize];
 }
 
 - (void)iRateUserDidDeclineToRateApp
 {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    NSString *key = @"rate_remaining_uses";
-    [defs setInteger:CONFIG_RATING_USES_CANCELLED forKey:key];
+    [defs setInteger:CONFIG_RATING_USES_CANCELLED forKey:YTRATEKEY];
     [[Mixpanel sharedInstance] track:@"Declined Rate Request"];
     [defs synchronize];
 
@@ -77,8 +81,7 @@
 - (void)iRateUserDidRequestReminderToRateApp
 {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    NSString *key = @"rate_remaining_uses";
-    [defs setInteger:CONFIG_RATING_USES_DELAYED forKey:key];
+    [defs setInteger:CONFIG_RATING_USES_DELAYED forKey:YTRATEKEY];
     [[Mixpanel sharedInstance] track:@"Delayed Rate Request"];
     [defs synchronize];
 
@@ -87,8 +90,7 @@
 - (void)iRateUserDidAttemptToRateApp
 {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    NSString *key = @"rate_remaining_uses";
-    [defs setInteger:CONFIG_RATING_USES_CANCELLED forKey:key];
+    [defs setInteger:CONFIG_RATING_USES_CANCELLED forKey:YTRATEKEY];
     [[Mixpanel sharedInstance] track:@"Accepted Rate Request"];
     [defs synchronize];
     

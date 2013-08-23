@@ -17,6 +17,7 @@
 
 + (void)createContextForUser: (YTUser*)user;
 + (void)save;
++ (void)removeAllStores;
 
 + (NSString*)settingsForKey:(NSString*)key;
 + (void)setSettingsForKey:(NSString*)key value:(id)value;

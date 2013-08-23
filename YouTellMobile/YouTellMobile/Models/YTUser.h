@@ -36,7 +36,7 @@ enum {
 + (void) initalizeSocialHandlers;
 + (bool) attemptCachedLogin;
 + (bool) attemptCachedSocialLogin;
-
++ (void) clearCachedTokens;
 
 @end
 

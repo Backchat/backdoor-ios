@@ -31,7 +31,6 @@
     }
     
     NSURL *storeURL = [YTModelHelper storeURLForUser:user];
-    //[[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
     
     NSError *error = nil;
     
@@ -40,7 +39,7 @@
     NSPersistentStoreCoordinator *coord = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
     
     if (![coord addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-        
+        NSLog(@"removing store and refreshing");
         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil];
         
         if (![coord addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
@@ -54,6 +53,32 @@
     
     [YTAppDelegate current].managedObjectContext = context;
 }
+
++ (void)removeAllStores
+{
+    NSString *prefix = CONFIG_MODEL;
+    NSString *ext = @"sqlite";
+    NSURL *dir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"^%@.*\%@$", prefix, ext]
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:nil];
+    NSDirectoryEnumerator *filesEnumerator = [[NSFileManager defaultManager] enumeratorAtPath:dir.path];
+    
+    NSString *file;
+    NSError *error;
+    
+    while (file = [filesEnumerator nextObject]) {
+        NSUInteger match = [regex numberOfMatchesInString:file
+                                                  options:0
+                                                    range:NSMakeRange(0, [file length])];
+        
+        if (match) {
+            NSURL *ret = [dir URLByAppendingPathComponent:file];
+            [[NSFileManager defaultManager] removeItemAtPath:ret.path error:&error];
+        }
+    }
+}
+
 
 + (void)save
 {

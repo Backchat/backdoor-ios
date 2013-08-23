@@ -15,5 +15,5 @@
 + (YTRateHelper*)sharedInstance;
 - (void)setup;
 - (void)run;
-
+- (void)reset;
 @end
