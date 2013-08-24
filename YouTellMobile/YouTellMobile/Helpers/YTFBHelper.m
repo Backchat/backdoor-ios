@@ -118,16 +118,10 @@
         case FBSessionStateClosedLoginFailed:
             //login failed; show the login page just in case
             [FBSession.activeSession closeAndClearTokenInformation];
-            [YTViewHelper showLogin];
+            [YTFBHelper fireFailedLogin];
             break;
         default:
             break;
-    }
-    
-    if (error) {
-        NSLog(@"Facebook session error: %@", error.localizedDescription);
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Facebook login error", nil) message:NSLocalizedString(@"Unexpected error happened. Try again later.", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-        [alert show];
     }
 }
 
