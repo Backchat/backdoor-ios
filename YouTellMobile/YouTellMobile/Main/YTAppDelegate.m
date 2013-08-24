@@ -270,11 +270,31 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     if ([userInfo[@"kind"] isEqualToNumber:@1]) {
-        [[YTFriendNotifHelper sharedInstance] handleNotification:userInfo];
-        return;
+        if(self.currentUser) {
+            [[YTFriendNotifHelper sharedInstance] handleNotification:userInfo];
+            return;
+        }
     }
-    
-    if (!userInfo[@"gab_id"]) {
+    else if([userInfo[@"kind"] isEqualToNumber:@0]) {
+        id gab_id = userInfo[@"gab_id"];
+
+        if(self.currentUser) {
+            [YTNotifHelper handleNotification:userInfo];
+
+            YTGab* gab = [YTGab gabForId:gab_id];
+            //we absolutely know we need to update, irregardless of state
+            [gab update:YES];
+            NSLog(@"updating %@", gab);
+            if (application.applicationState != UIApplicationStateActive)
+            {
+                [YTViewHelper showGab:gab];
+            }
+        }
+        else {
+            self.launchGabOnLogin = gab_id;
+        }
+    }
+    else {
         NSString *message = userInfo[@"aps"][@"alert"];
         if (!message) {
             return;
@@ -282,23 +302,6 @@ void uncaughtExceptionHandler(NSException *exception)
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
         [alert show];
         return;
-    }
-    
-    id gab_id = userInfo[@"gab_id"];
-
-    if(self.currentUser) {
-        [YTNotifHelper handleNotification:userInfo];
-        YTGab* gab = [YTGab gabForId:gab_id];
-        //we absolutely know we need to update, irregardless of state
-        [gab update:YES];
-        NSLog(@"updating %@", gab);
-        if (application.applicationState != UIApplicationStateActive)
-        {
-            [YTViewHelper showGab:gab];
-        }
-    }
-    else {
-        self.launchGabOnLogin = gab_id;
     }
 }
 

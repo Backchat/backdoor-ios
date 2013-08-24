@@ -17,6 +17,7 @@
 @interface YTFriendNotifHelper ()
 @property (strong, nonatomic) YTFriend *friend;
 @property (strong, nonatomic) NSString* notifiedFriendship;
+@property (strong, nonatomic) UIAlertView* alert;
 @end
 
 @implementation YTFriendNotifHelper
@@ -41,26 +42,30 @@
 
 - (void)updateFriends:(NSNotification*)note
 {
-    self.friend = nil;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        if(self.alert) //showing an alert? do nothing
+            return;
     
-    if (self.notifiedFriendship) {
+        if (!self.notifiedFriendship) //we aren't interested a specific friend, just an update from main gab etc.
+            return;
+        
+        
         self.friend = [YTFriend findByID:self.notifiedFriendship];
-        self.notifiedFriendship = nil;
-    }
     
-    if (!self.friend) {
-        return;
-    }
+        if (!self.friend) { //lost the friend, or  wrong user
+            return;
+        }
     
-    [[Mixpanel sharedInstance] track:@"Received A New Friend Notification"];
+        [[Mixpanel sharedInstance] track:@"Received A New Friend Notification"];
     
-    NSString *messageFormat = NSLocalizedString(@"%@ just joined Backdoor! Send them a message!", nil);
-    NSString *name = self.friend.name;
-    NSString *message = [NSString stringWithFormat:messageFormat, name];
+        NSString *messageFormat = NSLocalizedString(@"%@ just joined Backdoor! Send them a message!", nil);
+        NSString *name = self.friend.name;
+        NSString *message = [NSString stringWithFormat:messageFormat, name];
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles: NSLocalizedString(@"OK", nil), nil];
-    alert.delegate = self;
-    [alert show];
+        self.alert = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles: NSLocalizedString(@"OK", nil), nil];
+        self.alert.delegate = self;
+        [self.alert show]; //let the user decide. alert = true && self.notifiedFrendship = true
+    }];
 }
 
 - (void)handleNotification:(NSDictionary *)data
@@ -70,13 +75,24 @@
         return;
     }
     
-    self.notifiedFriendship = friendship_id;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        if(self.alert) //if we are currently showing an alert about friends..do nothing.
+            return;
+        
+        if(self.notifiedFriendship) //if we are currently waiting to get friend info..do nothing.
+            return;
     
-    [YTFriends updateFriendsOfType:YTFriendType];
+        self.notifiedFriendship = friendship_id;
+    
+        [YTFriends updateFriendsOfType:YTFriendType]; //kick off friend info. self.alert = nil BUT self.notifiedFriendship != nil
+    }];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    self.alert = nil;
+    self.notifiedFriendship = nil;
+    
     if (buttonIndex == alertView.cancelButtonIndex) {
         [[Mixpanel sharedInstance] track:@"Declined To Send A Message To A New Friend"];
         return;
