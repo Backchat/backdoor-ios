@@ -43,7 +43,7 @@
 @property (strong, nonatomic) UITapGestureRecognizer* tapTableGesture;
 - (void)refreshWasRequested;
 - (void)composeButtonWasClicked;
-- (void)doRefresh;
+- (void)doRefreshFromServer;
 @end
 
 @implementation YTMainViewController
@@ -52,10 +52,18 @@
 
 - (void)refreshWasRequested
 {
-    [self doRefresh];
+    [self doRefreshFromServer];
 }
 
-- (void)doRefresh
+- (void)refresh
+{
+    self.gabs = [[YTGabs alloc] initWithSearchString:self.searchBar.text];
+    self.friends = [[YTFriends alloc] initWithSearchStringRandomized:@""];
+    self.featuredUsers = [[YTFriends alloc] initWithFeaturedUsers];
+    [self.tableView reloadData];
+}
+
+- (void)doRefreshFromServer
 {
     [YTGabs updateGabs];
     [YTFriends updateFriendsOfType:YTFriendType];
@@ -79,15 +87,17 @@
 {
     [super viewWillAppear:animated];
 
-    //the order of shit could have changed while we were on a gab.
-    [self updateGabs:nil];
+    /* because the maingab view is NEVER destroyed / recreated, we must
+     recreate everything and reload the entire tableview */
+    [self refresh];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    [self doRefresh];
+    /* this actually hits endpoints, as opposed to refreshLocally */
+    [self doRefreshFromServer];
 
     if(YTAppDelegate.current.currentUser.newUser || CONFIG_DEBUG_TOUR) {
         YTAppDelegate.current.currentUser.newUser = FALSE;
@@ -152,7 +162,7 @@
 - (void)appActivated:(NSNotification*)note
 {
     if(self.view.window)
-        [self doRefresh];
+        [self doRefreshFromServer];
 }
 
 - (void)cancelSearch:(UITapGestureRecognizer *)recognizer
