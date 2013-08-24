@@ -23,6 +23,7 @@
 #import "YTModelHelper.h"
 #import "YTNotificationSettingsViewController.h"
 #import "YTSocialHelper.h"
+#import <iVersion.h>
 
 @implementation YTSettingsViewController
 
@@ -32,6 +33,8 @@
 {
     NSString *freeCluesTitle = (YTAppDelegate.current.currentUser.userHasShared) ? NSLocalizedString(@"Share with Friends", nil) : NSLocalizedString(@"Free Clues", nil);
 
+    NSString* versionString = [NSString stringWithFormat:NSLocalizedString(@"Version %@", nil), [iVersion sharedInstance].applicationVersion];
+    
     self.tableData = @[
         @[
             @[@"icon_notifications3", NSLocalizedString(@"Notifications", nil), @"showNotifications"]
@@ -42,7 +45,9 @@
             @[@"icon_privacy3", NSLocalizedString(@"Privacy & Abuse", nil), @"showPrivacy"]
         ], @[
             @[@"icon_help3", NSLocalizedString(@"Help & About Us", nil), @"showHelp"]
-        ]
+        ], @[
+            @[@"", versionString, @""]
+            ]
     ];
     
     [super viewDidLoad];

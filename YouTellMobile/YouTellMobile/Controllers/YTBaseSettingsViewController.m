@@ -72,9 +72,17 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     cell.textLabel.text =  item[1];
-    cell.imageView.image = [YTHelper imageNamed:item[0]];
+    if([item[0] length] > 0)
+        cell.imageView.image = [YTHelper imageNamed:item[0]];
+    else
+        cell.imageView.image = nil;
+    
     cell.backgroundColor = [UIColor clearColor];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    if([item[2] length] > 0)
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    else
+        cell.accessoryType = UITableViewCellAccessoryNone;
     
     return cell;
 }
@@ -105,6 +113,16 @@
         [self performSelector:selector];
 #pragma clang diagnostic pop
     }
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSArray *item = self.tableData[indexPath.section][indexPath.row];
+
+    if([item[2] length] == 0)
+        return nil;
+    else
+        return indexPath;
 }
 
 @end
