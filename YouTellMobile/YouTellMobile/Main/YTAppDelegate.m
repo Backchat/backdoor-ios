@@ -206,6 +206,8 @@ void uncaughtExceptionHandler(NSException *exception)
         }
     }
     
+    [YTAppDelegate.current.window makeKeyAndVisible];
+
     return YES;
 }
 

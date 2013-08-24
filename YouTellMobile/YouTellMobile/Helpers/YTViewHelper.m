@@ -57,7 +57,6 @@
     YTMainViewController* mainController = [YTMainViewController new];
     delegate.currentMainViewController = mainController;
     [delegate.navController pushViewController:mainController animated:NO];
-    [delegate.window makeKeyAndVisible];
 }
 
 + (void)endRefreshing
