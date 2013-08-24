@@ -126,6 +126,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGabs:)
                                                  name:YTGabsUpdatedNotification object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAGab:)
+                                                 name:YTGabUpdated object:nil];
+
     //the other actions on gabs happen while on other pages: this is an assumption that will change
     //if SPLITCODE is on again...
     
@@ -167,6 +170,13 @@
     [self.tableView reloadData];
     if(note)
         [self.refreshControl endRefreshing];
+}
+
+- (void)updateAGab:(NSNotification*)note
+{
+    //we only really care if a gab was updated and we're visible:
+    if(self.view.window)
+        [self.tableView reloadData];
 }
 
 - (void)updateFriends:(NSNotification*)note
