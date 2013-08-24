@@ -108,7 +108,7 @@
         self.navigationItem.hidesBackButton = NO;
     }
     else {
-        self.title = NSLocalizedString(@"New Message", nil);
+        self.title = self.friend.name;
         
         // Remove New Gab view from the stack, so the back button points to the Main view again
         NSMutableArray *views = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
