@@ -19,6 +19,7 @@
 #import "YTViewController.h"
 #import "YTWebViewController.h"
 #import "YTNewGabViewController.h"
+#import "YTSheetViewController.h"
 
 #import <WBErrorNoticeView.h>
 #import <Mixpanel.h>
@@ -65,8 +66,17 @@
     [delegate.currentMainViewController.refreshControl endRefreshing];
 }
 
++ (void)closeSheetViewIfAny
+{
+    if([YTAppDelegate current].sheetView) {
+        [[YTAppDelegate current].sheetView dismiss];
+    }
+}
+
 + (YTLoginViewController*) getOrCreateLoginView
 {
+    [YTViewHelper closeSheetViewIfAny];
+    
     YTAppDelegate *delegate = [YTAppDelegate current];
     
     UIViewController *topViewController = [delegate.navController topViewController];
@@ -112,28 +122,19 @@
 
 + (void)makeGabViewControllerTop: (YTGabViewController*) controller
 {
+    [YTViewHelper closeSheetViewIfAny];
+
     YTAppDelegate *delegate = [YTAppDelegate current];
     
     if (delegate.usesSplitView) {
         [YTViewHelper loadDetailsController:controller];
     } else {
-        if ([delegate.navController.topViewController isKindOfClass:[YTGabViewController class]]) {
-            YTGabViewController *gabView = (YTGabViewController*)delegate.navController.topViewController;
-            if (gabView.gab && controller.gab && [gabView.gab.id isEqualToNumber:controller.gab.id]) {
-                NSLog(@"Eh...we should stop this gabID identical");
-                return;                
-            }
-        }
-
-        if (![delegate.navController.topViewController isKindOfClass:[YTMainViewController class]] && ![delegate.navController.topViewController isKindOfClass:[YTNewGabViewController class]]) {
-            [delegate.navController popToRootViewControllerAnimated:NO];
-        }
-        
+        [delegate.navController popToRootViewControllerAnimated:NO];
         [delegate.navController pushViewController:controller animated:YES];
     }
     
     delegate.currentGabViewController = controller;
-}
+}   
 
 + (void)showGabWithGabId:(NSNumber*)gab_id
 {
@@ -157,6 +158,8 @@
 
 + (void)loadSettingsController:(UIViewController*)controller
 {
+    [YTViewHelper closeSheetViewIfAny];
+
     YTAppDelegate *delegate = [YTAppDelegate current];
 
     if (!delegate.usesSplitView) {
@@ -189,6 +192,8 @@
 
 + (void)showGabs
 {
+    [YTViewHelper closeSheetViewIfAny];
+
     YTAppDelegate *delegate = [YTAppDelegate current];
     
     if (!delegate.usesSplitView) {
@@ -205,6 +210,8 @@
 
 + (void)showSettings
 {
+    [YTViewHelper closeSheetViewIfAny];
+
     YTAppDelegate *delegate = [YTAppDelegate current];
     YTSettingsViewController *controller = [YTSettingsViewController new];
 

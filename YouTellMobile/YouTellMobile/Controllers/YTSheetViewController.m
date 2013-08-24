@@ -6,6 +6,7 @@
 //
 
 #import "YTSheetViewController.h"
+#import "YTAppDelegate.h"
 
 @interface YTSheetViewController ()
 
@@ -33,11 +34,15 @@
     [self.view setBackgroundColor:[UIColor clearColor]];
 }
 
-- (void)presentFromView:(UIView *)view
+- (void)present
 {
+    UIView* view = [YTAppDelegate current].navController.view;
+    
     self.overlay.backgroundColor = [UIColor blackColor];
     self.overlay.alpha = 0;
     self.overlay.frame = CGRectMake(0,20,view.frame.size.width,view.frame.size.height-20);
+    
+    [YTAppDelegate current].sheetView = self;
     
     [view addSubview:self.overlay];
     
@@ -62,7 +67,7 @@
         frame.origin.y = self.view.bounds.size.height - self.sheetView.frame.size.height;
         self.sheetView.frame = frame;
         self.overlay.alpha = 0.85;
-    }];   
+    }];
 }
 
 - (void)dismiss
@@ -75,6 +80,7 @@
     } completion:^(BOOL finished) {
         [self.overlay removeFromSuperview];
         [self.view removeFromSuperview];
+        [YTAppDelegate current].sheetView = nil;
     }];
 }
 

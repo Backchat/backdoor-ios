@@ -13,5 +13,5 @@
 @property (strong, nonatomic) UIView *overlay;
 
 - (void)dismiss;
-- (void)presentFromView:(UIView *)view;
+- (void)present;
 @end

@@ -110,7 +110,7 @@
 }
 
 - (void)buyCluesButtonWasPressed
-{
+{   
     [self.sheet dismiss];
     if(![YTAppDelegate current].storeHelper) {
         [YTAppDelegate current].storeHelper = [YTStoreHelper new];
@@ -280,7 +280,7 @@
     [self updateClues];
 
     
-    [self.sheet presentFromView:[YTAppDelegate current].navController.view];
+    [self.sheet present];
 
 }
 

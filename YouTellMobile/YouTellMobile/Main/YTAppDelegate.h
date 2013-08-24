@@ -15,6 +15,7 @@
 #import "YTUser.h"
 
 @class YTViewController;
+@class YTSheetViewController;
 
 @interface YTAppDelegate : UIResponder <UIApplicationDelegate, UISplitViewControllerDelegate, BITCrashManagerDelegate, BITUpdateManagerDelegate, BITHockeyManagerDelegate>
 
@@ -36,6 +37,9 @@
 @property (strong, nonatomic) YTStoreHelper *storeHelper;
 
 @property (strong, nonatomic) YTUser* currentUser;
+
+
+@property (weak, nonatomic) YTSheetViewController* sheetView;
 
 + (YTAppDelegate*)current;
 
