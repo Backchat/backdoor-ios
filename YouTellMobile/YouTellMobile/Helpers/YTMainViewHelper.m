@@ -27,20 +27,19 @@
     NSString *ident = @"cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ident];
     
-    if (cell) {
-        return cell;
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ident];
+        cell.textLabel.hidden = YES;
+        cell.detailTextLabel.hidden = YES;
+        
+        [self addCellSubViewsToView:cell.contentView];
+        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        cell.backgroundView = [UIView new];
+        cell.backgroundView.backgroundColor = [UIColor clearColor];
     }
     
-    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ident];
-    cell.textLabel.hidden = YES;
-    cell.detailTextLabel.hidden = YES;
-    
-    [self addCellSubViewsToView:cell.contentView];
-        
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
-    cell.backgroundView = [UIView new];
-    cell.backgroundView.backgroundColor = [UIColor clearColor];
     
     return cell;
 }
@@ -54,13 +53,6 @@
     avatarView.frame = CGRectMake(26, 7, 45, 45);
     [view addSubview:avatarView];
     
-    UILabel *textLabel = [[UILabel alloc] init];
-    textLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    textLabel.font = [UIFont boldSystemFontOfSize:17];
-    textLabel.tag = 2;
-    textLabel.backgroundColor = [UIColor clearColor];
-    [view addSubview:textLabel];
-    
     UILabel *timeLabel = [[UILabel alloc] init];
     timeLabel.font = [UIFont systemFontOfSize:12];
     timeLabel.textColor = [UIColor blueColor];
@@ -70,6 +62,13 @@
     timeLabel.tag = 1;
     
     [view addSubview:timeLabel];
+    
+    UILabel *textLabel = [[UILabel alloc] init];
+    textLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    textLabel.font = [UIFont boldSystemFontOfSize:17];
+    textLabel.tag = 2;
+    textLabel.backgroundColor = [UIColor clearColor];
+    [view addSubview:textLabel];
     
     UILabel *detTextLabel = [[UILabel alloc] init];
     detTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -82,6 +81,11 @@
     UIImageView *imageView = [[UIImageView alloc] init];
     imageView.tag = 4;
     [view addSubview:imageView];
+    
+    
+    detTextLabel.frame= CGRectMake(78, 23, view.frame.size.width - 30 -  78, 32);
+    
+    imageView.frame = CGRectMake(5, (view.frame.size.height - 18) / 2, 18, 18);
 
 }
 
@@ -116,7 +120,7 @@
     
     CGFloat timeWidth = 0;
 
-    if(time) {
+    if(time && time.length > 0) {
         CGSize timeSize;
 
         if ([[[UIDevice currentDevice] systemVersion] floatValue] < 6.0) {
@@ -128,9 +132,16 @@
             timeSize = [timeAttString size];
             timeSize.width = timeSize.width + 2;
         }
+        
         timeWidth = timeSize.width + 5;
-        timeLabel.frame = CGRectMake(cell.bounds.size.width - timeWidth - 30, 5, timeWidth, timeSize.height);
+        
+        timeLabel.frame = CGRectMake(78, 5, cell.frame.size.width - 30 - 78, timeSize.height);
+//        timeLabel.frame = CGRectMake(cell.frame.size.width - timeWidth - 30, 5, timeWidth, timeSize.height);
+        timeLabel.hidden = NO;
     }
+    else
+        timeLabel.hidden = YES;
+
     // Update title label
     
     textLabel.frame= CGRectMake(78, 2, cell.frame.size.width - timeWidth - 30 - 10 - 78, 21);
@@ -138,10 +149,8 @@
     
     // Update subtitle label
     
-    detTextLabel.frame= CGRectMake(78, 23, cell.frame.size.width - 30 -  78, 32);
     detTextLabel.text = [NSString stringWithFormat:@"%@\n ", subtitle];
-        
-    imageView.frame = CGRectMake(5, (cell.frame.size.height - 18) / 2, 18, 18);
+    
     if (image && image.length > 0) {
         imageView.image = [YTHelper imageNamed:image];
         imageView.hidden = NO;
@@ -168,6 +177,7 @@
             avatarView.hidden = YES;
         }
     }
+    
 }
 
 - (UITableViewCell*) cellWithGab:(YTGab*)gab andTableView:(UITableView*)tableView;
