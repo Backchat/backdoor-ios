@@ -120,7 +120,7 @@
     [self showGabs];
 }
 
-+ (void)makeGabViewControllerTop: (YTGabViewController*) controller
++ (void)makeGabViewControllerTop: (YTGabViewController*) controller animated:(BOOL)animated
 {
     [YTViewHelper closeSheetViewIfAny];
 
@@ -130,7 +130,7 @@
         [YTViewHelper loadDetailsController:controller];
     } else {
         [delegate.navController popToRootViewControllerAnimated:NO];
-        [delegate.navController pushViewController:controller animated:YES];
+        [delegate.navController pushViewController:controller animated:animated];
     }
     
     delegate.currentGabViewController = controller;
@@ -145,14 +145,19 @@
 
 + (void)showGab:(YTGab*)gab
 {
+    [YTViewHelper showGab:gab animated:YES];
+}
+
++ (void)showGab:(YTGab*)gab animated:(BOOL)animated
+{
     YTGabViewController *controller = [[YTGabViewController alloc] initWithGab:gab];
-    [YTViewHelper makeGabViewControllerTop:controller];
+    [YTViewHelper makeGabViewControllerTop:controller animated:animated];
 }
 
 + (void)showGabWithFriend:(YTFriend*)f
 {
     YTGabViewController* controller = [[YTGabViewController alloc] initWithFriend:f];
-    [YTViewHelper makeGabViewControllerTop:controller];
+    [YTViewHelper makeGabViewControllerTop:controller animated:YES];
  
 }
 

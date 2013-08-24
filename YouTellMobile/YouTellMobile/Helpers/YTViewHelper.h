@@ -20,6 +20,7 @@
 + (void)showTerms;
 + (void)showPrivacy;
 + (void)showGab:(YTGab*)gab;
++ (void)showGab:(YTGab*)gab animated:(BOOL)animated;
 + (void)showGabWithGabId:(NSNumber*)gab_id;
 + (void)showGabWithFriend:(YTFriend*)f;
 + (void)showFeedback;

@@ -187,9 +187,9 @@ void uncaughtExceptionHandler(NSException *exception)
     [Instabug KickOffWithToken:CONFIG_INSTABUG_TOKEN CaptureSource:InstabugCaptureSourceUIKit
                  FeedbackEvent:InstabugFeedbackEventShake
             IsTrackingLocation:YES];
-            
-    [YTNotifHelper handleNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]];
-
+    
+    //there is no need to play vibration if we do indeed have a gab APN, because
+    //iOS vibrates for us.
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
     self.launchGabOnLogin = gab_id;
 
@@ -279,16 +279,23 @@ void uncaughtExceptionHandler(NSException *exception)
         id gab_id = userInfo[@"gab_id"];
 
         if(self.currentUser) {
-            [YTNotifHelper handleNotification:userInfo];
 
             YTGab* gab = [YTGab gabForId:gab_id];
             //we absolutely know we need to update, irregardless of state
             [gab update:YES];
             NSLog(@"updating %@", gab);
+            //if we are NOT active, then when we COME IN, iOS vibrates for us:
             if (application.applicationState != UIApplicationStateActive)
             {
-                [YTViewHelper showGab:gab];
+                //show the gab view without any annimatino
+                [YTViewHelper showGab:gab animated:NO];
             }
+            else {
+                //make it rain-vibrate i mean.
+                [YTNotifHelper handleNotification:userInfo];
+                
+            }
+            
         }
         else {
             self.launchGabOnLogin = gab_id;
