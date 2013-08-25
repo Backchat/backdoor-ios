@@ -111,16 +111,6 @@
     else {
         self.title = self.friend.name;
         
-        // Remove New Gab view from the stack, so the back button points to the Main view again
-        NSMutableArray *views = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
-        for (UIViewController *c in views) {
-            if ([c isKindOfClass:[YTNewGabViewController class]]) {
-                [views removeObject:c];
-                break;
-            }
-        }
-        self.navigationController.viewControllers = views;
-
         /* TODO SPLIT if (![[YTAppDelegate current] usesSplitView]) */
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
         self.navigationItem.hidesBackButton = YES;

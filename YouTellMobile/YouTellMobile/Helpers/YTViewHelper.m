@@ -100,7 +100,6 @@
         [delegate.navController popToViewController:delegate.currentMainViewController animated:NO];
     }
     
-    //we must let viewdidload etc. actually complete
     [delegate.navController pushViewController:controller animated:animated];
     delegate.currentGabViewController = controller;
 }
