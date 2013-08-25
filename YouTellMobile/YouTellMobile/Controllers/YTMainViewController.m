@@ -121,7 +121,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-     
+    
+    [self setupNavBar];
+    
     self.searchBar = [UISearchBar new];
     [self.searchBar sizeToFit];
     self.searchBar.delegate = self;
