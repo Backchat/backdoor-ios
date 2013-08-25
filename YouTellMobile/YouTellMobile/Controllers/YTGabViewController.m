@@ -332,22 +332,23 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-        
+    
     if(self.gab) {
         [self showSpinner];
         
         [self.gab update:YES];
-    
+        
         if(self.gab.messageCount != 0) {
             [self.tableView reloadData];
             [self scrollToFooter];
         }
-
+        
         [self.gab clearUnread];
     }
     else {
         [self.inputView.textView becomeFirstResponder];
     }
+
 }
 
 - (void) showSpinner
@@ -450,8 +451,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Messages", nil) style:UIBarButtonItemStyleBordered target:nil action:nil];
 
     [YTAppDelegate current].currentGabViewController = self;
 }
