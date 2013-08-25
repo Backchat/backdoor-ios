@@ -11,6 +11,7 @@
 #import "YTApiHelper.h"
 #import <Flurry.h>
 #import <Mixpanel.h>
+#import "YTModelHelper.h"
 
 @interface YTGabs ()
 {
@@ -79,6 +80,9 @@
                                     for (NSDictionary *u in gabs) {
                                         [YTGab updateGab:u];
                                     }
+                                    
+                                    //we got all gabs with content so update the unread count:
+                                    [YTModelHelper updateUnreadCount];
                                     
                                     [[NSNotificationCenter defaultCenter] postNotificationName:YTGabsUpdatedNotification
                                                                                         object:nil];
