@@ -11,5 +11,5 @@
 
 
 @interface YTLoginViewController : YTViewController
-- (void) showLoginButtons;
+- (void) showLoginButtons:(BOOL)animated;
 @end

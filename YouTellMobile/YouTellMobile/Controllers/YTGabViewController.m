@@ -104,7 +104,8 @@
          [YTAppDelegate current].currentMainViewController.selectedGabId = [self.gab valueForKey:@"id"];
          }*/
         
-        
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Messages", nil) style:UIBarButtonItemStyleBordered target:nil action:nil];
+
         self.navigationItem.hidesBackButton = NO;
     }
     else {
@@ -321,6 +322,7 @@
     self.navigationItem.rightBarButtonItems = nil;
     self.title = nil;
     
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appActivated:) name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
     [self setupView];
@@ -399,7 +401,7 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    [self.inputView.textView resignFirstResponder];
+    //[self.inputView.textView resignFirstResponder];
 
 }
 
@@ -458,6 +460,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Messages", nil) style:UIBarButtonItemStyleBordered target:nil action:nil];
+
     [YTAppDelegate current].currentGabViewController = self;
 }
 

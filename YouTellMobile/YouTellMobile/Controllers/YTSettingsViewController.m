@@ -24,6 +24,7 @@
 #import "YTNotificationSettingsViewController.h"
 #import "YTSocialHelper.h"
 #import <iVersion.h>
+#import "YTLoginViewController.h"
 
 @implementation YTSettingsViewController
 
@@ -52,7 +53,7 @@
     
     [super viewDidLoad];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", nil) style:UIBarButtonItemStyleDone target:[YTViewHelper class] action:@selector(showGabs)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", nil) style:UIBarButtonItemStyleDone target:self action:@selector(showGabsWithAnimation)];
 
     UIBarButtonItem *logoutItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Logout", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(signOut)];
     
@@ -80,33 +81,36 @@
     self.navigationItem.rightBarButtonItems = items;
 }
 
+- (void)showGabsWithAnimation
+{
+    [YTViewHelper showGabs:YES];
+}
+
 - (void)signOut
 {
     [YTAppDelegate.current.currentUser logout];
-    YTAppDelegate.current.currentUser = nil;
-    [YTViewHelper showLoginWithButtons];
+    [[YTViewHelper showLogin:YES] showLoginButtons:NO];
 }
 
 - (void)showNotifications
 {
-    [YTViewHelper loadSettingsController:[[YTNotificationSettingsViewController alloc]init]];
+    [YTAppDelegate.current.navController pushViewController:[[YTNotificationSettingsViewController alloc]init] animated:YES];
 }
 
 - (void)showInvite
 {
     [[Mixpanel sharedInstance] track:@"Tapped Share With Friends (Free Clues) Settings Button"];
-
-    [YTViewHelper loadSettingsController:[[YTInviteSettingsViewController alloc]init]];
+    [YTAppDelegate.current.navController pushViewController:[[YTInviteSettingsViewController alloc]init] animated:YES];
 }
 
 - (void)showPrivacy
 {
-    [YTViewHelper loadSettingsController:[[YTPrivacySettingsViewController alloc]init]];
+    [YTAppDelegate.current.navController pushViewController:[[YTPrivacySettingsViewController alloc]init] animated:YES];
 }
 
 - (void)showHelp
 {
-    [YTViewHelper loadSettingsController:[[YTHelpSettingsViewController alloc] init]];
+    [YTAppDelegate.current.navController pushViewController:[[YTHelpSettingsViewController alloc]init] animated:YES];
 }
 
 - (void)cluesButtonWasClicked

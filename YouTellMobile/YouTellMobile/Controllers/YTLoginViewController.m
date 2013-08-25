@@ -82,7 +82,9 @@
 }
 
 - (void)viewDidLoad
-{    
+{
+    [super viewDidLoad];
+    
     CGRect frame;
     frame.size = self.view.frame.size;
     frame.origin = CGPointMake(0, 0);
@@ -157,19 +159,40 @@
     self.button.hidden = YES;
     self.gppButton.hidden = YES;
     
+    
     [self.view addSubview:self.imageView];
     [self.view addSubview:self.logoView];
     [self.view addSubview:self.label];
 
     [self.view addSubview:self.button];
     [self.view addSubview:self.gppButton];
+
+    
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
 
 const NSTimeInterval BUTTON_FADE_INTERVAL = 1.0;
 
-- (void) showLoginButtons
+- (void) showLoginButtons:(BOOL)animated;
+{
+    /* showLoginButtons might be called in didFinishLaunching...
+     therefore, let that finish and UI to come up so that viewDidLoad
+     is called so we can change button state */
+    [self performSelector:@selector(doShowLoginButtons:)
+               withObject:[NSNumber numberWithBool:animated] afterDelay:0];
+}
+
+- (void) doShowLoginButtons:(NSObject*)animated
 {
     //do nothing if the buttons are already visible.
     if(!self.button.hidden || !self.gppButton.hidden)
@@ -180,17 +203,24 @@ const NSTimeInterval BUTTON_FADE_INTERVAL = 1.0;
     self.button.alpha = 0;
     self.gppButton.alpha = 0;
     
-    [UIView animateWithDuration:BUTTON_FADE_INTERVAL animations:^{
+    if([(NSNumber*)animated boolValue]) {
+        [UIView animateWithDuration:BUTTON_FADE_INTERVAL animations:^{
+            [self updateLoginToTop];
+        }];
+        [UIView animateWithDuration:BUTTON_FADE_INTERVAL delay:BUTTON_FADE_INTERVAL/2.0
+                            options:UIViewAnimationOptionAllowUserInteraction
+                         animations:^{
+                             self.button.alpha = 1;
+                             self.gppButton.alpha = 1;
+                         }
+                         completion:^(BOOL finished) {
+                         }];
+    }
+    else {
         [self updateLoginToTop];
-    }];
-    [UIView animateWithDuration:BUTTON_FADE_INTERVAL delay:BUTTON_FADE_INTERVAL/2.0
-                        options:UIViewAnimationOptionAllowUserInteraction
-                     animations:^{
-                            self.button.alpha = 1;
-                            self.gppButton.alpha = 1;
-                        }
-                     completion:^(BOOL finished) {
-                        }];
+        self.button.alpha = 1;
+        self.gppButton.alpha = 1;
+    }
 }
 
 @end

@@ -100,7 +100,7 @@
     
     [[Mixpanel sharedInstance] track:@"Agreed To Send A Message To A New Friend"];
 
-    [YTViewHelper showGabWithFriend:self.friend];
+    [YTViewHelper showGabWithFriend:self.friend animated:YES];
 }
 
 @end

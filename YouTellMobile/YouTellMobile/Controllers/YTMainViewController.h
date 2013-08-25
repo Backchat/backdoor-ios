@@ -10,4 +10,5 @@
 #import "YTViewController.h"
 
 @interface YTMainViewController : UITableViewController  <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
+- (void)setupNavBar;
 @end

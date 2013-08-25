@@ -25,6 +25,7 @@
 #import "YTConfig.h"
 #import "YTFriendNotifHelper.h"
 #import "YTSocialHelper.h"
+#import "YTLoginViewController.h"
 
 void uncaughtExceptionHandler(NSException *exception)
 {
@@ -64,12 +65,16 @@ void uncaughtExceptionHandler(NSException *exception)
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
     
+    bool isCachedLogin = YTAppDelegate.current.currentUser.isCachedLogin;
     if(self.launchGabOnLogin) {
-        [YTViewHelper showGabWithGabId:self.launchGabOnLogin];
+        YTGab* gab = [YTGab gabForId:self.launchGabOnLogin];
+        gab.needs_update = @true;
+        [YTViewHelper showGab:gab animated:!isCachedLogin];
         self.launchGabOnLogin = nil;
     }
     else {
-        [YTViewHelper hideLogin];
+        //only do showGab with animation if we don't have a navController e.g. this is a cachedlogin
+        [YTViewHelper showGabs:!isCachedLogin];
     }
 }
 
@@ -95,7 +100,10 @@ void uncaughtExceptionHandler(NSException *exception)
         [self.currentUser logout];
     }
     
-    [YTViewHelper showLoginWithButtons];
+    //the login flow only happens if we didn't do a cached login therefore
+    //we must have the login view controller already top.
+    //therefore we don't need to animate (it doesn't matter here)
+    [[YTViewHelper showLogin:NO] showLoginButtons:YES];
 }
 
 + (void)initialize
@@ -138,7 +146,7 @@ void uncaughtExceptionHandler(NSException *exception)
     NSString* lastVersion = [def stringForKey:YTVERSIONKEY];
     versionDifferent = !lastVersion || ![thisVersion isEqualToString:lastVersion];
     
-    if(versionDifferent) {
+    if(versionDifferent || CONFIG_PRETEND_UPGRADE) {
         //new version; destroy ALL THE THINGS
         [YTUser clearCachedTokens];
         [YTModelHelper removeAllStores];
@@ -199,15 +207,13 @@ void uncaughtExceptionHandler(NSException *exception)
         //we do not, but we may have been authorized via FB/GPP.
         //throw up the login window but without buttons, so the user
         //sees something:
-        [YTViewHelper showLogin];
+        YTLoginViewController* login = [YTViewHelper showLogin:NO];
 
         if(![YTUser attemptCachedSocialLogin]) {
-            [YTViewHelper showLoginWithButtons];
+            [login showLoginButtons:YES];
         }
     }
     
-    [YTAppDelegate.current.window makeKeyAndVisible];
-
     return YES;
 }
 
@@ -289,13 +295,13 @@ void uncaughtExceptionHandler(NSException *exception)
             //if we are NOT active, then when we COME IN, iOS vibrates for us:
             if (application.applicationState != UIApplicationStateActive)
             {
-                //show the gab view without any annimatino
+                //show the gab view without any annimation since we are
+                //arelady animating into the app
                 [YTViewHelper showGab:gab animated:NO];
             }
             else {
                 //make it rain-vibrate i mean.
-                [YTNotifHelper handleNotification:userInfo];
-                
+                [YTNotifHelper handleNotification:userInfo];                
             }
             
         }

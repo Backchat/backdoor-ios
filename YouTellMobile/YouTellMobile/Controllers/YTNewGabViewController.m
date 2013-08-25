@@ -225,7 +225,7 @@
     switch(indexPath.section) {
         case 0:
             [[Mixpanel sharedInstance] track:@"Tapped New Gab View / Friend Item"];
-            [YTViewHelper showGabWithFriend:[self.friends friendAtIndex:indexPath.row]];
+            [YTViewHelper showGabWithFriend:[self.friends friendAtIndex:indexPath.row] animated:YES];
             return;
         case 1:
         {

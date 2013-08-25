@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSDictionary* socialData;
 @property (nonatomic, assign) int availableClues;
 @property (nonatomic, assign) int id;
+@property (nonatomic, assign) bool isCachedLogin;
 
 - (void)login;
 - (void)fireLoginSuccess;
@@ -78,6 +79,7 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
                                                   }
                                                   
                                                   self.id = [JSON[@"user"][@"id"] integerValue];
+                                                  self.isCachedLogin = false;
                                                   
                                                   [self parseUserSettings:JSON[@"user"][@"settings"]];
                                                   
@@ -122,6 +124,9 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
 
     [YTModelHelper save];
     YTAppDelegate.current.managedObjectContext = nil;
+    
+    NSLog(@"Logging out");
+    YTAppDelegate.current.currentUser = nil;
 }
 
 - (void) postSettings
@@ -176,7 +181,7 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
             [[YTGPPHelper sharedInstance] reauth];
 
         user.id = [def integerForKey:LOGGED_IN_BD_ID];
-        
+        user.isCachedLogin = true;
         [user fireLoginSuccess];
         
         return true;

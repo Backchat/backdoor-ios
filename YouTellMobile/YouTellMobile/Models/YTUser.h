@@ -32,6 +32,7 @@ enum {
 
 @property (nonatomic, assign, readonly) int availableClues;
 @property (nonatomic, assign, readonly) int id;
+@property (nonatomic, assign, readonly) bool isCachedLogin;
 
 + (void) initalizeSocialHandlers;
 + (bool) attemptCachedLogin;

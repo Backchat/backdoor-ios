@@ -110,7 +110,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [YTViewHelper showGabs]; //pop back to main screen
+    [YTViewHelper showGabs:YES]; //pop back to main screen
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -85,17 +85,19 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
 
-    /* because the maingab view is NEVER destroyed / recreated, we must
-     recreate everything and reload the entire tableview */
+    [super viewWillAppear:animated];
+    
     [self refresh];
 }
+
+
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
     /* this actually hits endpoints, as opposed to refreshLocally */
     [self doRefreshFromServer];
 
@@ -103,18 +105,23 @@
         YTAppDelegate.current.currentUser.newUser = FALSE;
         [YTTourViewController show];
     }
+    
+    
+}
+
+- (void)setupNavBar
+{
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[YTHelper imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:[YTViewHelper class] action:@selector(showSettings)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonWasClicked)];
+    
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Messages", nil) style:UIBarButtonItemStyleBordered target:nil action:nil];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
- 
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[YTHelper imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:[YTViewHelper class] action:@selector(showSettings)];
-
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonWasClicked)];
-    
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Messages", nil) style:UIBarButtonItemStyleBordered target:nil action:nil];
-    
+     
     self.searchBar = [UISearchBar new];
     [self.searchBar sizeToFit];
     self.searchBar.delegate = self;
@@ -394,11 +401,11 @@
 
     if (indexPath.section == SECTION_GABS) {
         YTGab *gab = [self.gabs gabAtIndex:indexPath.row];
-        [YTViewHelper showGab:gab];
+        [YTViewHelper showGab:gab animated:YES];
     }
     else if (indexPath.section == SECTION_FRIENDS) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Friend Item"];
-        [YTViewHelper showGabWithFriend:[self.friends friendAtIndex:indexPath.row]];
+        [YTViewHelper showGabWithFriend:[self.friends friendAtIndex:indexPath.row] animated:YES];
     }
     else if (indexPath.section == SECTION_MORE) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / More Item"];
@@ -420,7 +427,7 @@
     }
     else if (indexPath.section == SECTION_FEATURED) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Featured Users Item"];
-        [YTViewHelper showGabWithFriend:[self.featuredUsers friendAtIndex:indexPath.row]];
+        [YTViewHelper showGabWithFriend:[self.featuredUsers friendAtIndex:indexPath.row] animated:YES];
     }
 
 }

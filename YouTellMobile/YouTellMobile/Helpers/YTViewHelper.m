@@ -35,6 +35,7 @@
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[[YTHelper imageNamed:@"backbaritem4"] resizableImageWithCapInsets:UIEdgeInsetsMake(15,15,15,5)] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [[UIBarButtonItem appearance] setTintColor:[UIColor clearColor]];
     
+    
     delegate.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     delegate.usesSplitView = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
     delegate.navController = [UINavigationController new];
@@ -53,16 +54,12 @@
     } else {
         delegate.window.rootViewController = delegate.navController;
     }
+    
+    YTLoginViewController *loginViewController;
+    loginViewController = [YTLoginViewController new];
+    [delegate.navController pushViewController:loginViewController animated:NO];
 
-    YTMainViewController* mainController = [YTMainViewController new];
-    delegate.currentMainViewController = mainController;
-    [delegate.navController pushViewController:mainController animated:NO];
-}
-
-+ (void)endRefreshing
-{
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    [delegate.currentMainViewController.refreshControl endRefreshing];
+    [delegate.window makeKeyAndVisible];
 }
 
 + (void)closeSheetViewIfAny
@@ -72,51 +69,20 @@
     }
 }
 
-+ (YTLoginViewController*) getOrCreateLoginView
-{
-    [YTViewHelper closeSheetViewIfAny];
-    
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    
-    UIViewController *topViewController = [delegate.navController topViewController];
-    UIViewController *viewController = [topViewController presentedViewController];
-    YTLoginViewController *loginViewController;
-    
-    if (![viewController isKindOfClass:[YTLoginViewController class]]) {
-        loginViewController = [YTLoginViewController new];
-        [topViewController presentViewController:loginViewController animated:NO completion:nil];
-    }
-    else
-    {
-        loginViewController = (YTLoginViewController*)viewController;
-
-    }
-    
-    return loginViewController;
-}
-
-+ (void)showLogin
-{
-    [self getOrCreateLoginView];
-}
-
-+ (void)showLoginWithButtons
-{
-    [[self getOrCreateLoginView] showLoginButtons];
-}
-
-+ (void)hideLogin
++ (YTLoginViewController*)showLogin:(BOOL)animated
 {
     YTAppDelegate *delegate = [YTAppDelegate current];
-    UIViewController *topViewController = [delegate.navController topViewController];
-    UIViewController *login = (UIViewController*)[topViewController presentedViewController];
-    if ([login isKindOfClass:[YTLoginViewController class]]) {
-        login.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        login.providesPresentationContextTransitionStyle = YES;
-        
-        [topViewController dismissViewControllerAnimated:YES completion:nil];
-    }
-    [self showGabs];
+
+    [delegate.navController popToRootViewControllerAnimated:animated];
+
+    return (YTLoginViewController*)delegate.navController.topViewController;
+}
+
++ (void)hideLogin:(BOOL)animated
+{
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    YTMainViewController *mainGabController = [YTMainViewController new];
+    [delegate.navController pushViewController:mainGabController animated:animated];
 }
 
 + (void)makeGabViewControllerTop: (YTGabViewController*) controller animated:(BOOL)animated
@@ -124,27 +90,25 @@
     [YTViewHelper closeSheetViewIfAny];
 
     YTAppDelegate *delegate = [YTAppDelegate current];
-    
-    if (delegate.usesSplitView) {
-        [YTViewHelper loadDetailsController:controller];
-    } else {
-        [delegate.navController popToRootViewControllerAnimated:NO];
-        [delegate.navController pushViewController:controller animated:animated];
+
+    if([delegate.navController.topViewController isKindOfClass:[YTLoginViewController class]]) {
+        delegate.currentMainViewController = [YTMainViewController new];
+        [delegate.navController pushViewController:delegate.currentMainViewController animated:NO];
+        [delegate.currentMainViewController setupNavBar];
+    }
+    else {
+        [delegate.navController popToViewController:delegate.currentMainViewController animated:NO];
     }
     
+    //we must let viewdidload etc. actually complete
+    [delegate.navController pushViewController:controller animated:animated];
     delegate.currentGabViewController = controller;
-}   
-
-+ (void)showGabWithGabId:(NSNumber*)gab_id
-{
-    YTGab* gab = [YTGab gabForId:gab_id];
-    gab.needs_update = @true;
-    [YTViewHelper showGab:gab];
 }
 
-+ (void)showGab:(YTGab*)gab
++ (void)showGabWithGabId:(NSNumber*)gab_id animated:(BOOL)animated
 {
-    [YTViewHelper showGab:gab animated:YES];
+    YTGab* gab = [YTGab gabForId:gab_id];
+    [YTViewHelper showGab:gab animated:animated];
 }
 
 + (void)showGab:(YTGab*)gab animated:(BOOL)animated
@@ -153,62 +117,24 @@
     [YTViewHelper makeGabViewControllerTop:controller animated:animated];
 }
 
-+ (void)showGabWithFriend:(YTFriend*)f
++ (void)showGabWithFriend:(YTFriend*)f animated:(BOOL)animated
 {
     YTGabViewController* controller = [[YTGabViewController alloc] initWithFriend:f];
-    [YTViewHelper makeGabViewControllerTop:controller animated:YES];
- 
+    [YTViewHelper makeGabViewControllerTop:controller animated:animated];
 }
 
-+ (void)loadSettingsController:(UIViewController*)controller
-{
-    [YTViewHelper closeSheetViewIfAny];
-
-    YTAppDelegate *delegate = [YTAppDelegate current];
-
-    if (!delegate.usesSplitView) {
-        [delegate.navController pushViewController:controller animated:YES];
-    } else {
-        [YTViewHelper loadDetailsController:controller];       
-    }    
-}
-
-+ (void)loadDetailsController:(UIViewController*)controller
-{
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    delegate.detailsController.viewControllers = @[controller];
-}
-
-+ (void)showTerms
-{
-    [YTViewHelper loadSettingsController:[[YTWebViewController alloc] initWithPage:@"terms"]];
-}
-
-+ (void)showPrivacy
-{
-    [YTViewHelper loadSettingsController:[[YTWebViewController alloc] initWithPage:@"privacy"]];
-}
-
-+ (void)showFeedback
-{
-    [YTViewHelper loadSettingsController:[YTFeedbackViewController new]];
-}
-
-+ (void)showGabs
++ (void)showGabs:(BOOL)animated
 {
     [YTViewHelper closeSheetViewIfAny];
 
     YTAppDelegate *delegate = [YTAppDelegate current];
     
-    if (!delegate.usesSplitView) {
-        [delegate.navController popToRootViewControllerAnimated:YES];
+    if([delegate.navController.topViewController isKindOfClass:[YTLoginViewController class]]) {
+        delegate.currentMainViewController = [YTMainViewController new];
+        [delegate.navController pushViewController:delegate.currentMainViewController animated:animated];
     }
     else {
-        YTViewController *blank = [YTViewController new];
-        YTMainViewController *controller = [YTMainViewController new];
-        delegate.detailsController.viewControllers = @[blank];
-        delegate.navController.viewControllers = @[controller];
-        delegate.currentMainViewController = controller;
+        [delegate.navController popToViewController:delegate.currentMainViewController animated:animated];
     }
 }
 
@@ -219,14 +145,12 @@
     YTAppDelegate *delegate = [YTAppDelegate current];
     YTSettingsViewController *controller = [YTSettingsViewController new];
 
-    if (!delegate.usesSplitView) {
-        [delegate.navController pushViewController:controller animated:YES];
-    } else {
+    [delegate.navController pushViewController:controller animated:YES];
+    /*TODO SPLITVIEW } else {
         delegate.navController.viewControllers = @[controller];
         
         [YTViewHelper showFeedback];
-    }
-
+    }*/
 }
 
 static WBErrorNoticeView *notice = nil;

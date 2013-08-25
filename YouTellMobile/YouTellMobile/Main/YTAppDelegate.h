@@ -26,7 +26,7 @@
 @property (strong, nonatomic) UINavigationController *navController;
 @property (strong, nonatomic) UINavigationController *detailsController;
 
-@property (weak, nonatomic) YTMainViewController *currentMainViewController;
+@property (strong, nonatomic) YTMainViewController *currentMainViewController;
 @property (weak, nonatomic) YTGabViewController *currentGabViewController;
 
 @property (assign) BOOL usesSplitView;
