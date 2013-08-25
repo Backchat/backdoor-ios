@@ -75,18 +75,22 @@
     AFJSONRequestOperation *operation =
     [AFJSONRequestOperation JSONRequestOperationWithRequest:request
                                                     success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                        [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
-                                                        //TODO fix this
-                                                        if(![request.URL.path isEqualToString:@"/login"] && !YTAppDelegate.current.currentUser) {
-                                                            NSLog(@"JSON response logged out");
-                                                            return;
-                                                        }
-#if CONFIG_TEST_SLOW_API
+                                                        #if CONFIG_TEST_SLOW_API
                                                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                                                                        ^{
-                                                                           [NSThread sleepForTimeInterval:2.0];
+                                                                           [NSThread sleepForTimeInterval:3.0];
                                                                            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
 #endif
+                                                                               [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
+                                                                               
+                                                                               //TODO fix this
+                                                                               bool loginRequest = [request.URL.path isEqualToString:@"/login"];
+                                                                               if(!loginRequest && YTAppDelegate.current.currentUser == nil) {
+                                                                                   [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
+                                                                                   NSLog(@"JSON response logged out");
+                                                                                   return;
+                                                                               }
+                                                                               
                                                                                if(![JSON[@"status"] isEqualToString:@"ok"]) {
                                                                                    if (failure != nil) {
                                                                                        failure(JSON);
