@@ -176,7 +176,9 @@
                                        [YTGab updateGab:JSON[@"gab"]];
                                        [[NSNotificationCenter defaultCenter] postNotificationName:YTGabUpdated object:self];
                                    }
-                                   failure:nil];
+                                   failure:^(id JSON) {
+                                       [self update:force];
+                                   }];
     }
     else
         [[NSNotificationCenter defaultCenter] postNotificationName:YTGabUpdated object:self];
