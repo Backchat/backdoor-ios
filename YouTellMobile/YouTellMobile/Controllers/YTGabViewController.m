@@ -98,7 +98,8 @@
                                                             forState:UIControlStateNormal];
                 [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
                                                             forState:UIControlStateDisabled];
-   
+                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                            forState:UIControlStateHighlighted];
             }
             else {
                 self.navigationItem.rightBarButtonItems = nil;
@@ -107,6 +108,8 @@
                                                             forState:UIControlStateNormal];
                 [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
                                                             forState:UIControlStateDisabled];
+                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                            forState:UIControlStateHighlighted];
                 
                 UIColor *titleShadow = [UIColor colorWithRed:0.3f green:0.3f blue:0.3f alpha:1.0f];
                 [self.inputToolBarView.sendButton setTitleShadowColor:titleShadow forState:UIControlStateNormal];
@@ -326,7 +329,6 @@
     [self.rowSpinner setColor:[UIColor grayColor]];
 
     self.tableView.backgroundView = [UIView new];
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
     
     [self repositionBackgroundSpinner];
     [self.view addSubview:self.backgroundSpinner];
