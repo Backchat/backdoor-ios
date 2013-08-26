@@ -26,6 +26,7 @@
 #import "YTFriendNotifHelper.h"
 #import "YTSocialHelper.h"
 #import "YTLoginViewController.h"
+#import <Reachability.h>
 
 void uncaughtExceptionHandler(NSException *exception)
 {
@@ -195,6 +196,10 @@ void uncaughtExceptionHandler(NSException *exception)
                  FeedbackEvent:InstabugFeedbackEventShake
             IsTrackingLocation:YES];
     
+    self.reachability = [Reachability reachabilityWithHostname:CONFIG_URL];
+    
+    [self.reachability startNotifier];
+    
     //there is no need to play vibration if we do indeed have a gab APN, because
     //iOS vibrates for us.
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
@@ -286,10 +291,14 @@ void uncaughtExceptionHandler(NSException *exception)
         id gab_id = userInfo[@"gab_id"];
 
         if(self.currentUser) {
-
             YTGab* gab = [YTGab gabForId:gab_id];
             //we absolutely know we need to update, irregardless of state
-            [gab update:YES];
+            [gab update:YES failure:^(id JSON) {
+                //retry unless there is no internet...
+                if(YTAppDelegate.current.reachability.isReachable)
+                    [self application:application didReceiveRemoteNotification:userInfo];
+            }];
+            
             NSLog(@"updating %@", gab);
             //if we are NOT active, then when we COME IN, iOS vibrates for us:
             if (application.applicationState != UIApplicationStateActive)

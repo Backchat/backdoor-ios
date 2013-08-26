@@ -45,8 +45,8 @@
 // JSMessagesViewController
 #define COCOAPODS_POD_AVAILABLE_JSMessagesViewController
 #define COCOAPODS_VERSION_MAJOR_JSMessagesViewController 2
-#define COCOAPODS_VERSION_MINOR_JSMessagesViewController 0
-#define COCOAPODS_VERSION_PATCH_JSMessagesViewController 2
+#define COCOAPODS_VERSION_MINOR_JSMessagesViewController 1
+#define COCOAPODS_VERSION_PATCH_JSMessagesViewController 0
 
 // Mixpanel
 #define COCOAPODS_POD_AVAILABLE_Mixpanel
@@ -59,6 +59,12 @@
 #define COCOAPODS_VERSION_MAJOR_NoticeView 3
 #define COCOAPODS_VERSION_MINOR_NoticeView 0
 #define COCOAPODS_VERSION_PATCH_NoticeView 7
+
+// Reachability
+#define COCOAPODS_POD_AVAILABLE_Reachability
+#define COCOAPODS_VERSION_MAJOR_Reachability 3
+#define COCOAPODS_VERSION_MINOR_Reachability 1
+#define COCOAPODS_VERSION_PATCH_Reachability 1
 
 // SDWebImage
 #define COCOAPODS_POD_AVAILABLE_SDWebImage

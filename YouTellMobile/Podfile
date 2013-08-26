@@ -2,6 +2,7 @@ platform :ios, '5'
 
 xcodeproj 'Backdoor.xcodeproj'
 
+pod 'Reachability'
 pod 'AFNetworking'
 pod 'SVProgressHUD'
 pod 'Facebook-iOS-SDK'

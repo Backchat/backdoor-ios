@@ -13,6 +13,7 @@
 #import "YTGabViewController.h"
 #import "YTStoreHelper.h"
 #import "YTUser.h"
+#import <Reachability.h>
 
 @class YTViewController;
 @class YTSheetViewController;
@@ -35,6 +36,7 @@
 
 @property (strong, nonatomic) YTUser* currentUser;
 
+@property (strong, nonatomic) Reachability* reachability;
 
 @property (weak, nonatomic) YTSheetViewController* sheetView;
 

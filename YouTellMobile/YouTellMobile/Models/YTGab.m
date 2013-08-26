@@ -167,7 +167,7 @@
     return gab;
 }
 
-- (void) update:(BOOL)force
+- (void) update:(BOOL)force failure:(void(^)(id JSON))failure
 {
     if(![self isFakeGab] && (force || self.needs_update.boolValue)) {
         [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@", self.id]
@@ -177,7 +177,8 @@
                                        [[NSNotificationCenter defaultCenter] postNotificationName:YTGabUpdated object:self];
                                    }
                                    failure:^(id JSON) {
-                                       [self update:force];
+                                       if(failure)
+                                           failure(JSON);
                                    }];
     }
     else

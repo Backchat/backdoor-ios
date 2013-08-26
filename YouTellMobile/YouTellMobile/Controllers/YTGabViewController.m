@@ -12,6 +12,7 @@
 
 #import <Flurry.h>
 #import <Mixpanel.h>
+#import <Reachability.h>
 
 #import "YTGabViewController.h"
 #import "YTApiHelper.h"
@@ -146,7 +147,6 @@
                                    andMessage:content ofKind:kind];
         //remove the friend object.
         self.friend = nil;
-        //we should now remove the cancel button, and also 
         
         [self setupView];
         [self.tableView reloadData];
@@ -326,6 +326,8 @@
     [self.rowSpinner setColor:[UIColor grayColor]];
 
     self.tableView.backgroundView = [UIView new];
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
+    
     [self repositionBackgroundSpinner];
     [self.view addSubview:self.backgroundSpinner];
 
@@ -340,21 +342,43 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appActivated:) name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name:kReachabilityChangedNotification
+                                               object:nil];
     
     self.inputToolBarView.textView.keyboardDelegate = self;
     
     [self setupView];
 }
 
+- (void)reachabilityChanged:(NSNotification*)note
+{
+}
+
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)updateGab
+{
+    [self.gab update:YES failure:^(id JSON) {
+        if(!YTAppDelegate.current.reachability.isReachable) {
+            [self stopSpinner];
+        }
+        else
+            [self updateGab];
+    }];
+}
+
+
 - (void)appActivated:(NSNotification*)note
 {
     if(self.view.window && !self.friend)
-        [self.gab update:YES];
+        [self updateGab];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -364,7 +388,7 @@
     if(self.gab) {
         [self showSpinner];
         
-        [self.gab update:YES];
+        [self updateGab];
         
         if(self.gab.messageCount != 0) {
             [self.tableView reloadData];
@@ -491,9 +515,11 @@
 {
     NSLog(@"gab updated");
     [self setupView];
+    bool firstLoad = self.spinner == self.backgroundSpinner;
+
     [self.tableView reloadData];
+    [self scrollToBottomAnimated:!firstLoad];    
     [self stopSpinner];
-    [self scrollToBottomAnimated:YES];
 }
 
 - (void)gabMessagesUpdated:(NSNotification*)note
