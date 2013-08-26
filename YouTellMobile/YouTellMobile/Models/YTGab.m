@@ -198,6 +198,8 @@
     message.deleted = [NSNumber numberWithBool:NO];
     message.sent = [NSNumber numberWithBool:YES];
     
+    [self rebuildMessageArray];
+
     return message;
 }
 
@@ -207,8 +209,6 @@
     YTGabMessage* message = [self createNewMessage:content ofKind:kind];
     
     [[YTAppDelegate current].managedObjectContext processPendingChanges];
-    
-    [self rebuildMessageArray];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:YTGabMessageUpdated
                                                         object:self];
