@@ -41,6 +41,8 @@
 @property (nonatomic, retain) YTGabs* gabs;
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) UITapGestureRecognizer* tapTableGesture;
+@property (assign, nonatomic) BOOL visible;
+
 - (void)refreshWasRequested;
 - (void)composeButtonWasClicked;
 - (void)doRefreshFromServer;
@@ -87,12 +89,19 @@
 {
     [self.navigationController setNavigationBarHidden:NO animated:animated];
 
+    self.visible = TRUE;
+    
     [super viewWillAppear:animated];
     
     [self refresh];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
 
+{
+    [super viewWillDisappear:animated];
+    self.visible = false;
+}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -170,7 +179,7 @@
 
 - (void)appActivated:(NSNotification*)note
 {
-    if(self.view.window)
+    if(self.visible)
         [self doRefreshFromServer];
 }
 
@@ -194,8 +203,11 @@
 - (void)updateAGab:(NSNotification*)note
 {
     //we only really care if a gab was updated and we're visible:
-    if(self.view.window)
+    if(self.visible) {
+        //a gab might have been created, or the name changed, etc.
+        self.gabs = [[YTGabs alloc] initWithSearchString:self.searchBar.text];
         [self.tableView reloadData];
+    }
 }
 
 - (void)updateFriends:(NSNotification*)note
