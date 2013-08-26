@@ -186,7 +186,6 @@ void uncaughtExceptionHandler(NSException *exception)
     [manager startManager];
     [[BITHockeyManager sharedHockeyManager] startManager];
     
-    [YTApiHelper setup];
     [YTViewHelper setup];
     [YTUser initalizeSocialHandlers];
     

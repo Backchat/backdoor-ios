@@ -34,11 +34,6 @@
 
 @implementation YTApiHelper
 
-+ (void)setup
-{
-    [YTAppDelegate current].deliveredMessages = [NSMutableDictionary new];
-}
-
 + (NSURL*)baseUrl
 {
     return [NSURL URLWithString:CONFIG_URL];

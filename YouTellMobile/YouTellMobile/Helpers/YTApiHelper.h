@@ -11,7 +11,6 @@
 
 @interface YTApiHelper : NSObject
 
-+ (void)setup;
 + (NSURL*)baseUrl;
 
 + (void)toggleNetworkActivityIndicatorVisible:(BOOL)visible;

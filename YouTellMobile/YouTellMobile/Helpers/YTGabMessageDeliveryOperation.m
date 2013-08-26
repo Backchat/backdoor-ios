@@ -35,9 +35,6 @@
     [YTApiHelper sendJSONRequestToPath:[NSString stringWithFormat:@"/gabs/%@/messages", self.message.gab_id]
                                 method:@"POST" params:params
                                success:^(id JSON) {
-                                   //TODO get rid of this...
-                                   [YTAppDelegate current].deliveredMessages[self.message.key] = [NSDate date];
-                                   
                                    YTGabMessage* msg = [YTGabMessage parse:JSON[@"message"]];
                                    YTGab* gab = [YTGab gabForId:msg.gab_id];
 

@@ -31,9 +31,6 @@
 
 @property (assign) BOOL usesSplitView;
 
-@property (strong, nonatomic) NSMutableDictionary *sentInfo;
-@property (strong, nonatomic) NSMutableDictionary *deliveredMessages;
-
 @property (strong, nonatomic) YTStoreHelper *storeHelper;
 
 @property (strong, nonatomic) YTUser* currentUser;
