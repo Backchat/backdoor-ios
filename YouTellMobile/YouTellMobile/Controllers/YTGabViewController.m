@@ -93,11 +93,11 @@
 
             if (!self.gab.sent.boolValue) {
                 self.navigationItem.rightBarButtonItems = @[[self.clueHelper setupClueButton],[self.tagHelper setupTagButton]];
+                [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateNormal];
+                [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateDisabled];
             }
             else {
                 self.navigationItem.rightBarButtonItems = nil;
-                [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateNormal];
-                [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateDisabled];
             }
         }
         /*TODO SPLIT if ([YTAppDelegate current].usesSplitView) {
