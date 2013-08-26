@@ -18,6 +18,7 @@ PODS:
   - libwebp/webp (0.3.0-rc7)
   - Mixpanel (2.0.0)
   - NoticeView (3.0.7)
+  - Reachability (3.1.1)
   - SDWebImage (3.3):
     - libwebp
     - SDWebImage/MapKit
@@ -37,6 +38,7 @@ DEPENDENCIES:
   - iRate
   - Mixpanel
   - NoticeView
+  - Reachability
   - SDWebImage
   - SVProgressHUD
   - UIImage-Categories
@@ -51,10 +53,11 @@ SPEC CHECKSUMS:
   HockeySDK: 286d86c6e89a35de7f3e4f3c2879a07185ee0918
   iRate: 8de5eaeca627c7708c8aec279eeb8daf2551c774
   libwebp: 40517fa1fd3716eded73b4696c45fc0b66e4b414
-  Mixpanel: d456c27f7520e22784a15d0bcd9d5c287080b0cd
+  Mixpanel: e4af97adb60a10541b7869929a83d734025058a6
   NoticeView: f885ce90b53dacce3b19f2d5e95c6db68fe4e45d
+  Reachability: 2be6bc2fd2bd31d97f5db33e75e4b29c79e95883
   SDWebImage: 79a8bac9ccf85b269100b294f7b43684dab8bf8a
   SVProgressHUD: 03d4845ec8e64591726428a08236c6a5489d45f8
   UIImage-Categories: d9f10e0afb9b281b35a3c2b0c7d16d1ca251d824
 
-COCOAPODS: 0.21.0
+COCOAPODS: 0.23.0

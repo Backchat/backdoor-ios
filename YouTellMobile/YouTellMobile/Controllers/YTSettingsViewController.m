@@ -23,7 +23,7 @@
 #import "YTModelHelper.h"
 #import "YTNotificationSettingsViewController.h"
 #import "YTSocialHelper.h"
-#import <iVersion.h>
+#import "iVersion.h"
 #import "YTLoginViewController.h"
 
 @implementation YTSettingsViewController

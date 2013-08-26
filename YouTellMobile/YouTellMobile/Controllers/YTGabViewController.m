@@ -323,10 +323,21 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+-(void)updateGab
+{
+    [self.gab update:YES failure:^(id JSON) {
+        if(!YTAppDelegate.current.reachability.isReachable) {
+            [self stopSpinner];
+        }
+        else
+            [self updateGab];
+    }];
+}
+
 - (void)appActivated:(NSNotification*)note
 {
     if(self.view.window && !self.friend)
-        [self.gab update:YES];
+        [self updateGab];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -336,7 +347,7 @@
     if(self.gab) {
         [self showSpinner];
         
-        [self.gab update:YES];
+        [self updateGab];
         
         if(self.gab.messageCount != 0) {
             [self.tableView reloadData];

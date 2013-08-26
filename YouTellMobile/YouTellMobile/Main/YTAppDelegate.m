@@ -10,7 +10,7 @@
 #import <FlurrySDK/Flurry.h>
 #import <Mixpanel.h>
 #import <Instabug/Instabug.h>
-#import <iVersion.h>
+#import "iVersion.h"
 
 #import "YTAppDelegate.h"
 #import "YTGabViewController.h"
@@ -195,7 +195,11 @@ void uncaughtExceptionHandler(NSException *exception)
     [Instabug KickOffWithToken:CONFIG_INSTABUG_TOKEN CaptureSource:InstabugCaptureSourceUIKit
                  FeedbackEvent:InstabugFeedbackEventShake
             IsTrackingLocation:YES];
+
+    self.reachability = [Reachability reachabilityWithHostname:CONFIG_URL];
     
+    [self.reachability startNotifier];
+
     //there is no need to play vibration if we do indeed have a gab APN, because
     //iOS vibrates for us.
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];
@@ -290,7 +294,7 @@ void uncaughtExceptionHandler(NSException *exception)
 
             YTGab* gab = [YTGab gabForId:gab_id];
             //we absolutely know we need to update, irregardless of state
-            [gab update:YES];
+            [gab update:YES failure:nil];
             NSLog(@"updating %@", gab);
             //if we are NOT active, then when we COME IN, iOS vibrates for us:
             if (application.applicationState != UIApplicationStateActive)

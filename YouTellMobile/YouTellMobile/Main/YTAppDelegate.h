@@ -13,6 +13,7 @@
 #import "YTGabViewController.h"
 #import "YTStoreHelper.h"
 #import "YTUser.h"
+#import <Reachability.h>
 
 @class YTViewController;
 @class YTSheetViewController;
@@ -35,7 +36,7 @@
 @property (strong, nonatomic) NSMutableDictionary *deliveredMessages;
 
 @property (strong, nonatomic) YTStoreHelper *storeHelper;
-
+@property (strong, nonatomic) Reachability* reachability;
 @property (strong, nonatomic) YTUser* currentUser;
 
 
