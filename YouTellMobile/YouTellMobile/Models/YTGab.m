@@ -20,8 +20,8 @@
 @property (nonatomic, retain) NSString* related_user_name;
 @property (nonatomic, retain) NSNumber* clue_count;
 @property (nonatomic, retain) NSString* content_cache;
-
-- (void) postMessage:(YTGabMessage*)message; 
+@property (nonatomic, retain) NSArray* messages;
+- (void) postMessage:(YTGabMessage*)message;
 @end
 
 @implementation YTGab
@@ -36,6 +36,7 @@
 @dynamic unread_count;
 @dynamic sent;
 @dynamic content_cache;
+@synthesize messages;
 
 + (NSNumber*)nextFakeGabId
 {
@@ -143,6 +144,8 @@
             [YTGabMessage parse:message];
         }
 
+        [gab rebuildMessageArray];
+
         [[NSNotificationCenter defaultCenter] postNotificationName:YTGabMessageUpdated
                                                             object:self];
 
@@ -160,7 +163,7 @@
                 gab.needs_update = [NSNumber numberWithBool:![old_update isEqualToDate:new_date]];
         }
     }
-    
+        
     return gab;
 }
 
@@ -205,39 +208,36 @@
     
     [[YTAppDelegate current].managedObjectContext processPendingChanges];
     
+    [self rebuildMessageArray];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:YTGabMessageUpdated
                                                         object:self];
 
     [self postMessage:message];
 }
 
-- (NSFetchRequest*) fetchRequestForMessages
+- (void)rebuildMessageArray
 {
+    YTAppDelegate *delegate = [YTAppDelegate current];
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+    NSError *error;
+    
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Messages"];
     request.sortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"created_at" ascending:YES]];
     request.predicate = [NSPredicate predicateWithFormat:@"(gab_id = %@ && deleted = false)", self.id];
-    
-    return request;
+
+    NSArray *objects = [context executeFetchRequest:request error:&error];
+    self.messages = objects;
 }
 
 - (int)messageCount
 {
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    NSManagedObjectContext *context = [delegate managedObjectContext];
-    NSError *error;
-    
-    NSArray *objects = [context executeFetchRequest:[self fetchRequestForMessages] error:&error];
-    return [objects count];
+    return self.messages.count;
 }
 
 - (YTGabMessage*) messageAtIndex:(int)index
 {
-    YTAppDelegate *delegate = [YTAppDelegate current];
-    NSManagedObjectContext *context = [delegate managedObjectContext];
-    NSError *error;
-
-    NSArray *objects = [context executeFetchRequest:[self fetchRequestForMessages] error:&error];
-    return [objects objectAtIndex:index];
+    return [self.messages objectAtIndex:index];
 }
 
 - (bool)isFakeGab
@@ -319,6 +319,11 @@
     });
     
     return messageOperationQueue;
+}
+
+- (void)awakeFromFetch
+{
+    [self rebuildMessageArray];
 }
 
 @end

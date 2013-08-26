@@ -13,10 +13,6 @@
 #import <Flurry.h>
 #import <Mixpanel.h>
 
-#import "JSMessagesViewController.h"
-#import "JSMessageInputView.h"
-#import "NSString+JSMessagesView.h"
-
 #import "YTGabViewController.h"
 #import "YTApiHelper.h"
 #import "YTAppDelegate.h"
@@ -62,7 +58,7 @@
 
 - (id) initWithGab:(YTGab*) gab
 {
-    if(self = [super initWithNibName:nil bundle:nil]) {
+    if(self = [self initWithNibName:nil bundle:nil]) {
         self.gab = gab;
     }
     return self;
@@ -70,7 +66,7 @@
 
 - (id) initWithFriend:(YTFriend*)f
 {
-    if(self = [super initWithNibName:nil bundle:nil]) {
+    if(self = [self initWithNibName:nil bundle:nil]) {
         self.friend = f;
     }
     return self;
@@ -79,6 +75,9 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     if(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.photoHelper = [[YTGabPhotoHelper alloc] initWithGabView:self];
+        self.clueHelper = [[YTGabClueHelper alloc] initWithGabView:self];
+        self.tagHelper = [[YTGabTagHelper alloc] initWithGabView:self];
     }
     return self;
 }
@@ -93,11 +92,25 @@
 
             if (!self.gab.sent.boolValue) {
                 self.navigationItem.rightBarButtonItems = @[[self.clueHelper setupClueButton],[self.tagHelper setupTagButton]];
+                
+                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                            forState:UIControlStateNormal];
+                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                            forState:UIControlStateDisabled];
+   
             }
             else {
                 self.navigationItem.rightBarButtonItems = nil;
-                [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateNormal];
-                [self.inputView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]                                    forState:UIControlStateDisabled];
+                
+                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                            forState:UIControlStateNormal];
+                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                            forState:UIControlStateDisabled];
+                
+                UIColor *titleShadow = [UIColor colorWithRed:0.3f green:0.3f blue:0.3f alpha:1.0f];
+                [self.inputToolBarView.sendButton setTitleShadowColor:titleShadow forState:UIControlStateNormal];
+                [self.inputToolBarView.sendButton setTitleShadowColor:titleShadow forState:UIControlStateHighlighted];
+                self.inputToolBarView.sendButton.titleLabel.shadowOffset = CGSizeMake(0.0f, -1.0f);
             }
         }
         /*TODO SPLIT if ([YTAppDelegate current].usesSplitView) {
@@ -123,20 +136,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)updateSendButton
-{
-    self.inputView.sendButton.enabled = ([self.inputView.textView.text trimWhitespace].length > 0);
-    self.inputView.cameraButton.enabled = true;
-}
-
-- (void)sendPressed:(UIButton *)sender withText:(NSString *)text
-{
-    [self.inputView.textView setText:nil];
-    [self textViewDidChange:self.inputView.textView];
-    
-    [self postNewMessage:text ofKind:YTMessageKindText];
-}
-    
 - (void)postNewMessage:(NSString*)content ofKind:(int)kind
 {
     if(self.gab) {
@@ -154,105 +153,31 @@
     }
 }
 
-#pragma mark UIBubbleTableViewDataSource
-
-- (NSInteger)rowsForBubbleTable:(UIBubbleTableView *)tableView
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(self.gab)
-        return self.gab.messageCount;
-    else
-        return 0;
+    return [self.gab messageCount];
 }
 
-- (NSBubbleData*)bubbleTableView:(UIBubbleTableView *)tableView dataForRow:(NSInteger)row
+- (UIButton *)leftAccessoryButton
 {
-    YTGabMessage *message = [self.gab messageAtIndex:row];
-    BOOL sent = message.sent.boolValue;
-    BOOL gabSent = self.gab.sent.boolValue;
-    NSBubbleType type;
-    
-    if (sent && gabSent) {
-        type = BubbleTypeMine2;
-    } else if (sent && !gabSent) {
-        type = BubbleTypeMine;
-    } else if (!sent && gabSent) {
-        type = BubbleTypeSomeoneElse2;
-    } else if (!sent && !gabSent) {
-        type = BubbleTypeSomeoneElse;
-    }
-
-    NSDate *localDate = [YTHelper localDateFromUtcDate:message.created_at];
-    NSString *text;
-    NSBubbleData *data;
-    
-    if (message.kind.integerValue == YTMessageKindText) {
-        //is this ever used? TODO
-        NSDictionary *messages = @{
-            @"ERROR_SMS_DELIVERY": NSLocalizedString(@"Sorry, we couldn't deliver your message. Please make sure to enter correct phone number", nil),
-            @"ERROR_SMS_PHOTO_DELIVERY": NSLocalizedString(@"Sorry, We couldn't deliver your message. Photo messages to unregistered users are not supported yet", nil)
-        };
-        
-        text = message.content;
-        if (messages[text] != nil) { text = messages[text]; }
-        data = [NSBubbleData dataWithTextView:text date:localDate type:type];
-    } else if (message.kind.integerValue == YTMessageKindPhoto) {
-        data = [NSBubbleData dataWithImage:message.image date:localDate type:type];
-        
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
-        [data.view addGestureRecognizer:singleTap];
-        [data.view setUserInteractionEnabled:YES];
-        data.view.tag = row;
-        
-    } else {
-        data = [NSBubbleData dataWithTextView:@"" date:localDate type:type];
-    }
-    
-    NSInteger status = message.status.integerValue;
-    if (status == YTGabMessageStatusReady) {
-        NSString *key = message.key;
-        //TODO wtf is this deliveredmessage 
-        NSDate *deliveredAt = [YTAppDelegate current].deliveredMessages[key];
-        
-        if (deliveredAt != nil) {
-            NSInteger interval = [[NSDate date] timeIntervalSinceDate:deliveredAt];
-            if (interval < 3) {
-                data.status = NSLocalizedString(@"Delivered", nil);                
-            } else {
-                data.status = @"";
-                [[YTAppDelegate current].deliveredMessages removeObjectForKey:key];
-            }
-        } else {
-            data.status = @"";
-        }
-    } else if (status == YTGabMessageStatusDelivering) {
-        data.status = NSLocalizedString(@"Delivering", nil);
-    } else if (status == YTGabMessageStatusFailed) {
-        data.status = NSLocalizedString(@"Failed. Tap to resend", nil);
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
-        [data.view addGestureRecognizer:singleTap];
-        [data.view setUserInteractionEnabled:YES];
-        data.view.tag = row;
-    }
-    
-
-    return data;
+    return self.photoHelper.cameraButton;
 }
 
-- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)sendPressed:(UIButton *)sender withText:(NSString *)text
 {
-    return [self.tableView tableView:self.tableView heightForRowAtIndexPath:indexPath];
+    [self postNewMessage:text ofKind:YTMessageKindText];
+    [self finishSend];
 }
 
-- (void)singleTap:(UITapGestureRecognizer*)gesture
+- (void)messageTappedAtIndexPath:(NSIndexPath*)indexPath
 {
-    UIView *view = [gesture.view hitTest:[gesture locationInView:gesture.view] withEvent:nil];
-    NSInteger row = view.tag;
-    YTGabMessage *object = [self.gab messageAtIndex:row];
-    if(object.status.integerValue == YTGabMessageStatusFailed) {
-        [object repostMessage];
+    YTGabMessage* message = [self.gab messageAtIndex:indexPath.row];
+    if(message.status.integerValue == YTGabMessageStatusFailed)
+    {
+        [message repostMessage];
     }
-    else {
-        NSString *secret = [object valueForKey:@"secret"];
+    else if(message.kind.integerValue == YTMessageKindPhoto) {
+        NSString *secret = message.secret;
         NSURL *baseUrl = [YTApiHelper baseUrl];
         NSString *urlString = [NSString stringWithFormat:@"%@images?secret=%@", baseUrl, secret];
         NSURL *url = [NSURL URLWithString:urlString];
@@ -262,6 +187,126 @@
     }
 }
 
+- (JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    YTGabMessage* message = [self.gab messageAtIndex:indexPath.row];
+    BOOL messageSent = message.sent.boolValue;
+
+    return messageSent ? JSBubbleMessageTypeOutgoing : JSBubbleMessageTypeIncoming;
+}
+
+- (JSMessagesViewTimestampPolicy)timestampPolicy
+{
+    return JSMessagesViewTimestampPolicyCustom;
+}
+
+- (JSMessagesViewAvatarPolicy)avatarPolicy
+{
+    return JSMessagesViewAvatarPolicyNone;
+}
+
+- (JSAvatarStyle)avatarStyle
+{
+    return JSAvatarStyleNone;
+}
+
+- (JSBubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return JSBubbleMessageStyleCustom;
+}
+
+- (NSString *)textForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    YTGabMessage* message = [self.gab messageAtIndex:indexPath.row];
+
+    return message.content;
+}
+
+- (UIView *)viewForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    YTGabMessage* message = [self.gab messageAtIndex:indexPath.row];
+    if(message.kind.integerValue == YTMessageKindPhoto)
+    {
+        UIImageView* view = [[UIImageView alloc] initWithImage:message.image];
+        view.contentMode = UIViewContentModeScaleAspectFill;
+        view.frame = CGRectMake(0,0, 190, 190);
+        return view;
+    }
+    else
+        return nil;
+}
+
+    
+- (NSDate *)timestampForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    YTGabMessage* message = [self.gab messageAtIndex:indexPath.row];
+    NSDate *localDate = [YTHelper localDateFromUtcDate:message.created_at];
+
+    return localDate;
+}
+
+- (BOOL)hasSubtitleForRowAtIndexPath:(NSIndexPath*)indexPath {
+    YTGabMessage* message = [self.gab messageAtIndex:indexPath.row];
+
+    NSInteger status = message.status.integerValue;
+    return  status == YTGabMessageStatusFailed || status == YTGabMessageStatusDelivering;
+}
+
+- (NSString*)subtitleForRowAtIndexPath:(NSIndexPath*)indexPath {
+    YTGabMessage* message = [self.gab messageAtIndex:indexPath.row];
+    
+    NSInteger status = message.status.integerValue;
+    if(status == YTGabMessageStatusDelivering)
+        return NSLocalizedString(@"Delivering", nil);
+    else
+        return NSLocalizedString(@"Failed. Tap to resend", nil);
+}
+
+- (BOOL)hasTimestampForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.row == 0)
+        return true;
+    else {
+        //get the one before
+        YTGabMessage* before = [self.gab messageAtIndex:indexPath.row-1];
+        YTGabMessage* thisOne = [self.gab messageAtIndex:indexPath.row];
+        NSTimeInterval diff = [thisOne.created_at timeIntervalSinceDate:before.created_at];
+        if(diff < 120) //2 minutes
+            return false;
+        else
+            return true;
+    }
+}
+
+- (UIImage*)bubbleImageForIncomingMessageAtIndexPath:(NSIndexPath *)path withSelection:(BOOL)selected
+{
+    bool sendingToAnonymous = self.gab.sent.boolValue;
+    UIImage* image;
+    if(sendingToAnonymous)
+        image = [YTHelper imageNamed:@"bubble_someone_2_2"];
+    else
+        image = [YTHelper imageNamed:@"bubble_someone_2_1"];
+    
+    return [image resizableImageWithCapInsets:UIEdgeInsetsMake(15,15,17,15)];
+}
+
+- (UIImage*)bubbleImageForOutgoingMessageAtIndexPath:(NSIndexPath *)path withSelection:(BOOL)selected
+{
+    bool sendingToAnonymous = self.gab.sent.boolValue;
+    UIImage* image = nil;
+    if(sendingToAnonymous)
+        image = [YTHelper imageNamed:@"bubble_me_2_2"];
+    else
+        image = [YTHelper imageNamed:@"bubble_me_2_1"];
+    
+    return [image resizableImageWithCapInsets:UIEdgeInsetsMake(15,15,17,15)];
+
+}
+
+- (UIColor*)textColorForMessageAtIndexPath:(NSIndexPath *)path
+{
+    return [UIColor whiteColor];
+}
 
 # pragma mark UIViewController methods
 
@@ -270,51 +315,34 @@
     [super viewDidLoad];
     
     [self setBackgroundColor:[UIColor colorWithRed:0xed/255.0 green:0xec/255.0 blue:0xec/255.0 alpha:1]];
-    
-    self.inputView.image = [[YTHelper imageNamed:@"inputview3"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
-    self.inputView.textView.layer.cornerRadius = 10;
-    self.inputView.textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-    self.inputView.textView.layer.borderWidth = 1;  
-    
-    self.photoHelper = [[YTGabPhotoHelper alloc] initWithGabView:self];
-    self.clueHelper = [[YTGabClueHelper alloc] initWithGabView:self];
-    self.tagHelper = [[YTGabTagHelper alloc] initWithGabView:self];
  
-    self.tableView.bubbleDataSource = self;
-    self.tableView.snapInterval = 120;
-    self.tableView.typingBubble = NSBubbleTypingTypeNobody;
-    self.tableView.delegate = self;
+    self.delegate = self;
+    self.dataSource = self;
     
     self.backgroundSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [self.backgroundSpinner setColor:[UIColor grayColor]];
     
     self.rowSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.rowSpinner setColor:[UIColor grayColor]];
-    
-    int spinnerSize = self.backgroundSpinner.bounds.size.height;
-    int height = self.view.frame.size.height - spinnerSize - self.inputView.frame.size.height;
-    self.backgroundSpinner.frame = CGRectMake((self.view.frame.size.width - spinnerSize)/2.0,
-                                    height/2.0 - self.view.frame.origin.y, spinnerSize, spinnerSize);
+
+    self.tableView.backgroundView = [UIView new];
+    [self repositionBackgroundSpinner];
     [self.view addSubview:self.backgroundSpinner];
-    
-    spinnerSize = self.rowSpinner.bounds.size.height;
+
+    int spinnerSize = self.rowSpinner.bounds.size.height;
     self.footerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width, spinnerSize + 7)];
     self.rowSpinner.frame = CGRectMake((self.view.frame.size.width - spinnerSize)/2.0,
                                     0, spinnerSize, spinnerSize);
     [self.footerView addSubview:self.rowSpinner];
-
-    UITapGestureRecognizer *rec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
-    UISwipeGestureRecognizer *rec2 = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tapped)];
-    rec2.direction = UISwipeGestureRecognizerDirectionDown;
-    [self.tableView addGestureRecognizer:rec];
-    [self.tableView addGestureRecognizer:rec2];
     
     self.navigationItem.rightBarButtonItems = nil;
     self.title = nil;
-    
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appActivated:) name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
+    
+    self.inputToolBarView.textView.keyboardDelegate = self;
+    
     [self setupView];
 }
 
@@ -346,7 +374,7 @@
         [self.gab clearUnread];
     }
     else {
-        [self.inputView.textView becomeFirstResponder];
+        [self.inputToolBarView.textView becomeFirstResponder];
     }
 
 }
@@ -385,60 +413,59 @@
     [self.tableView setContentOffset:newContentOffset animated:YES];
 }
 
-- (void)tapped
+//overide for background spinner
+- (void)keyboardWillShowHide:(NSNotification *)notification
 {
-    [self.inputView.textView resignFirstResponder];
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    //[self.inputView.textView resignFirstResponder];
-
-}
-
-- (void)keyboardWillShowHide:(NSNotification *)notification hide:(BOOL)hide
-{
+    [super keyboardWillShowHide:notification];
     /* copied from parent so we can animate the background spinner as needed*/
     /* also, don't animate anything if we are showing the tag helper */
     if(self.tagHelper.alertView.visible)
         return;
     
-    CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-	//UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-	double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
     [UIView animateWithDuration:duration
                           delay:0.0f
                         options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         CGFloat keyboardY = [self.view convertRect:keyboardRect fromView:nil].origin.y;
-                         if (hide) {
-                             keyboardY = self.view.frame.size.height;
-                             //  keyboardY += keyboardRect.size.height;
-                         }
-                         
-                         CGRect inputViewFrame = self.inputView.frame;
-                         self.inputView.frame = CGRectMake(inputViewFrame.origin.x,
-                                                           keyboardY - inputViewFrame.size.height,
-                                                           inputViewFrame.size.width,
-                                                           inputViewFrame.size.height);
-                         
-                         UIEdgeInsets insets = UIEdgeInsetsMake(0.0f,
-                                                                0.0f,
-                                                                self.view.frame.size.height - self.inputView.frame.origin.y - self.inputView.bounds.size.height,
-                                                                0.0f);
-                         
-                         self.tableView.contentInset = insets;
-                         self.tableView.scrollIndicatorInsets = insets;
-                         
-                         int spinnerSize = self.backgroundSpinner.bounds.size.height;
-                         int height = keyboardY - spinnerSize - self.inputView.frame.size.height;
-                         self.backgroundSpinner.frame = CGRectMake((self.view.frame.size.width - spinnerSize)/2.0,
-                                                                   height/2.0 - self.view.frame.origin.y, spinnerSize, spinnerSize);
-
+                         [self repositionBackgroundSpinner];
                      }
                      completion:^(BOOL finished) {
                      }];
+}
+
+//overide for background spinner
+- (void)repositionBackgroundSpinner
+{
+    CGRect inputViewFrame = self.inputToolBarView.frame;
+    self.backgroundSpinner.center = CGPointMake(self.tableView.backgroundView.frame.size.width/2,
+                                                inputViewFrame.origin.y/2);
+}
+
+//TODO c&p from JSMessagesViewController.m
+- (void)keyboardDidScrollToPoint:(CGPoint)pt
+{
+    CGRect inputViewFrame = self.inputToolBarView.frame;
+    CGPoint keyboardOrigin = [self.view convertPoint:pt fromView:nil];
+    inputViewFrame.origin.y = keyboardOrigin.y - inputViewFrame.size.height;
+    self.inputToolBarView.frame = inputViewFrame;
+    [self repositionBackgroundSpinner];
+}
+
+- (void)keyboardWillBeDismissed
+{
+    CGRect inputViewFrame = self.inputToolBarView.frame;
+    inputViewFrame.origin.y = self.view.bounds.size.height - inputViewFrame.size.height;
+    self.inputToolBarView.frame = inputViewFrame;
+    [self repositionBackgroundSpinner];
+}
+
+- (void)keyboardWillSnapBackToPoint:(CGPoint)pt
+{
+    CGRect inputViewFrame = self.inputToolBarView.frame;
+    CGPoint keyboardOrigin = [self.view convertPoint:pt fromView:nil];
+    inputViewFrame.origin.y = keyboardOrigin.y - inputViewFrame.size.height;
+    [self repositionBackgroundSpinner];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

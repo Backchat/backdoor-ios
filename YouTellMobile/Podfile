@@ -15,6 +15,8 @@ pod 'FlurrySDK'
 pod 'NoticeView'
 pod 'Mixpanel'
 pod 'iRate'
+pod 'JSMessagesViewController', :path => "../../MessagesTableViewController/JSMessagesViewController.podspec"
+#pod 'JSMessagesViewController', :git => 'git@github.com:lastquestion/MessagesTableViewController.git'
 
 post_install do |installer|
   installer.project.targets.each do |target|

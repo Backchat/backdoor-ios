@@ -39,7 +39,8 @@
                                    [YTAppDelegate current].deliveredMessages[self.message.key] = [NSDate date];
                                    
                                    YTGabMessage* msg = [YTGabMessage parse:JSON[@"message"]];
-                                   
+                                   YTGab* gab = [YTGab gabForId:msg.gab_id];
+
                                    if(JSON[@"gab"]) {
                                        //we may be hitting an old server, in which case we degrade to 'slow update'
                                        //since we just parsed this message, we know that we are "up to date" as of the message
@@ -48,6 +49,10 @@
                                        gab.updated_at = msg.created_at;
                                        gab = [YTGab updateGab:JSON[@"gab"]];
                                    }
+                                   else {
+                                       //we did a fast update; but we do need to update the message array:
+                                       [gab rebuildMessageArray];
+                                   }
                                    
                                    NSNumber *gabSent = [NSNumber numberWithBool:![msg.sent isEqualToNumber:@0]];
                                    
@@ -55,7 +60,7 @@
                                    [[Mixpanel sharedInstance] track:@"Sent Message" properties:@{@"Anonymous": gabSent}];
                                    
                                    [[NSNotificationCenter defaultCenter] postNotificationName:YTGabMessageUpdated
-                                                                                       object:[YTGab gabForId:msg.gab_id]];
+                                                                                       object:gab];
                                    
                                    dispatch_semaphore_signal(wait);
                                }

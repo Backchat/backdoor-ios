@@ -13,12 +13,8 @@
 
 @property (weak, nonatomic) YTGabViewController *gabView;
 
-@property (assign, nonatomic) NSInteger cameraPhotoButtonIndex;
-@property (assign, nonatomic) NSInteger libraryPhotoButtonIndex;
-@property (assign, nonatomic) NSInteger savedPhotoButtonIndex;
+@property (strong, nonatomic) UIButton* cameraButton;
 
-@property (strong, nonatomic) UIPopoverController *popover;
-@property (strong, nonatomic) UIImagePickerController *imagePicker;
 @property (strong, nonatomic) UIImage *image;
 
 - (id)initWithGabView:(YTGabViewController*)gabView;

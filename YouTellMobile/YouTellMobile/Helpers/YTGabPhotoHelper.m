@@ -5,6 +5,8 @@
 //  Copyright (c) 2013 Backdoor LLC. All rights reserved.
 //
 
+//TODO refactor this into a controller...
+
 #import <UIImage+Resize.h>
 #import <Mixpanel.h>
 #import <Base64/MF_Base64Additions.h>
@@ -13,6 +15,18 @@
 #import "YTGabViewController.h"
 #import "YTAppDelegate.h"
 #import "YTPhotoSendViewController.h"
+#import "YTHelper.h"
+
+@interface YTGabPhotoHelper ()
+
+@property (assign, nonatomic) NSInteger cameraPhotoButtonIndex;
+@property (assign, nonatomic) NSInteger libraryPhotoButtonIndex;
+@property (assign, nonatomic) NSInteger savedPhotoButtonIndex;
+
+@property (strong, nonatomic) UIPopoverController *popover;
+@property (strong, nonatomic) UIImagePickerController *imagePicker;
+
+@end
 
 @implementation YTGabPhotoHelper
 
@@ -22,10 +36,20 @@
     if (!self) {
         return self;
     }
+    
+    self.cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    [self.cameraButton setBackgroundImage:[YTHelper imageNamed:@"cambtn.png"] forState:UIControlStateNormal];
+    [self.cameraButton setBackgroundImage:[YTHelper imageNamed:@"cambtn3.png"] forState:UIControlStateHighlighted];
+    
+    [self.cameraButton sizeToFit];
+    
+    [self.cameraButton addTarget:self
+                   action:@selector(cameraButtonWasPressed)
+         forControlEvents:UIControlEventTouchUpInside];
+    
     self.gabView = gabView;
     
-    [self.gabView.inputView.cameraButton addTarget:self action:@selector(cameraButtonWasPressed) forControlEvents:UIControlEventTouchUpInside];
-
     return self;
 }
 
@@ -55,7 +79,7 @@
     
     sheet.cancelButtonIndex = [sheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     
-    [sheet showFromRect:self.gabView.inputView.cameraButton.frame inView:self.gabView.inputView animated:YES];
+    [sheet showFromRect:self.cameraButton.frame inView:self.gabView.inputToolBarView animated:YES];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -82,15 +106,14 @@
     
     self.imagePicker = imagePicker;
     
-    if ([YTAppDelegate current].usesSplitView && (buttonIndex == self.savedPhotoButtonIndex || buttonIndex == self.libraryPhotoButtonIndex)) {
+    /*TODO SPLIT if ([YTAppDelegate current].usesSplitView && (buttonIndex == self.savedPhotoButtonIndex || buttonIndex == self.libraryPhotoButtonIndex)) {
         self.popover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
         [self.popover presentPopoverFromRect:self.gabView.inputView.cameraButton.frame inView:self.gabView.inputView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-    } else {
+    } else {*/
         if ([self.popover isPopoverVisible]) {
             [self.popover dismissPopoverAnimated:YES];
         }
         [self.gabView presentViewController:imagePicker animated:YES completion:nil];
-    }
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -103,7 +126,7 @@
     } else if ([YTAppDelegate current].usesSplitView) {
         [picker dismissViewControllerAnimated:YES completion:nil];
         self.popover = [[UIPopoverController alloc] initWithContentViewController:photoView];
-        [self.popover presentPopoverFromRect:self.gabView.inputView.cameraButton.frame inView:self.gabView.inputView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        [self.popover presentPopoverFromRect:self.cameraButton.frame inView:self.gabView.inputView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     } else {
         [self.gabView dismissViewControllerAnimated:NO completion:nil];
         [self.gabView presentViewController:photoView animated:YES completion:nil];

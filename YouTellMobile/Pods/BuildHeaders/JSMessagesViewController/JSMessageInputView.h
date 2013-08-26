@@ -1,0 +1,1 @@
+../../../../../MessagesTableViewController/JSMessagesTableViewController/JSMessageInputView.h

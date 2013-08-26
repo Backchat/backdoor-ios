@@ -7,8 +7,6 @@
 
 #import "JSMessagesViewController.h"
 
-#import "UIBubbleTableView.h"
-
 #import "YTViewController.h"
 #import "YTGabViewController.h"
 #import "YTStoreHelper.h"
@@ -19,7 +17,7 @@
 #import "YTFriend.h"
 #import "YTGab.h"
 
-@interface YTGabViewController : JSMessagesViewController <UINavigationControllerDelegate, UIBubbleTableViewDataSource>
+@interface YTGabViewController : JSMessagesViewController <UINavigationControllerDelegate, JSMessagesViewDelegate, JSMessagesViewDataSource, JSDismissiveTextViewDelegate>
 @property (nonatomic, retain) YTGab* gab;
 @property (strong, nonatomic) UIPopoverController *popover;
 @property (strong, nonatomic) YTGabClueHelper *clueHelper;

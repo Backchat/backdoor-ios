@@ -42,6 +42,12 @@
 #define COCOAPODS_VERSION_MINOR_HockeySDK 0
 #define COCOAPODS_VERSION_PATCH_HockeySDK 0
 
+// JSMessagesViewController
+#define COCOAPODS_POD_AVAILABLE_JSMessagesViewController
+#define COCOAPODS_VERSION_MAJOR_JSMessagesViewController 2
+#define COCOAPODS_VERSION_MINOR_JSMessagesViewController 0
+#define COCOAPODS_VERSION_PATCH_JSMessagesViewController 2
+
 // Mixpanel
 #define COCOAPODS_POD_AVAILABLE_Mixpanel
 #define COCOAPODS_VERSION_MAJOR_Mixpanel 2

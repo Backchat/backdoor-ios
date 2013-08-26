@@ -1,0 +1,1 @@
+../../../../../MessagesTableViewController/JSMessagesTableViewController/UIImage+JSMessagesView.h
