@@ -95,13 +95,16 @@
         delegate.currentMainViewController = [YTMainViewController new];
         [delegate.navController pushViewController:delegate.currentMainViewController animated:NO];
         [delegate.currentMainViewController setupNavBar];
+        [delegate.navController setNavigationBarHidden:NO animated:NO];
     }
     else {
         [delegate.navController popToViewController:delegate.currentMainViewController animated:NO];
     }
     
     [delegate.navController pushViewController:controller animated:animated];
+
     delegate.currentGabViewController = controller;
+    
 }
 
 + (void)showGabWithGabId:(NSNumber*)gab_id animated:(BOOL)animated
