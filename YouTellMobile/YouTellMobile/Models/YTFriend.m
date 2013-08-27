@@ -37,7 +37,12 @@
 + (YTFriend*)updateFriend:(id)friendJSON
 {
     NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
-    YTFriend *friend = [YTFriend findByID:friendJSON[@"id"]];
+    
+    NSNumber* idNum = friendJSON[@"id"];
+    if(!idNum)
+        idNum = friendJSON[@"featured_id"];
+    
+    YTFriend *friend = [YTFriend findByID:idNum];
     if(friend == nil)
         friend = [NSEntityDescription insertNewObjectForEntityForName:@"Contacts" inManagedObjectContext:context];
 
