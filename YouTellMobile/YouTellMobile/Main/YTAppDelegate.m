@@ -234,6 +234,7 @@ void uncaughtExceptionHandler(NSException *exception)
 {
     [[Mixpanel sharedInstance] track:@"Deactivated Application"];
     [[Mixpanel sharedInstance] flush];
+    [YTModelHelper save];
 }
 
 
