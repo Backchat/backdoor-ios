@@ -319,6 +319,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3E92BDD217CC0CB1005B4ECA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B24CB2D71707333F00813B2C /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7C0ADA1CEC0F49CB991C6BBC;
+			remoteInfo = "Pods-Reachability";
+		};
 		B240392B16F080FA000632AA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B24038F516F080F9000632AA /* Project object */;
@@ -1030,6 +1037,7 @@
 				B29B6AC21782CCEE00E9E197 /* libPods-HockeySDK.a */,
 				B29B6AC41782CCEE00E9E197 /* libPods-Mixpanel.a */,
 				B29B6AC61782CCEE00E9E197 /* libPods-NoticeView.a */,
+				3E92BDD317CC0CB1005B4ECA /* libPods-Reachability.a */,
 				B29B6AC81782CCEE00E9E197 /* libPods-SDWebImage.a */,
 				B29B6ACA1782CCEE00E9E197 /* libPods-SVProgressHUD.a */,
 				B29B6ACC1782CCEE00E9E197 /* libPods-UIImage-Categories.a */,
@@ -1558,6 +1566,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		3E92BDD317CC0CB1005B4ECA /* libPods-Reachability.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-Reachability.a";
+			remoteRef = 3E92BDD217CC0CB1005B4ECA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		B24CB2DC1707333F00813B2C /* libPods.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
