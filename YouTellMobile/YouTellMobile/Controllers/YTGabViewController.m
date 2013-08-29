@@ -30,11 +30,9 @@
 @interface YTGabViewController ()
 @property (nonatomic, retain) YTFriend* friend;
 @property (strong, nonatomic) UIActivityIndicatorView* backgroundSpinner;
-@property (strong, nonatomic) UIActivityIndicatorView* rowSpinner;
 
 @property (strong, nonatomic) YTGabPhotoHelper *photoHelper;
 @property (strong, nonatomic) YTGabTagHelper *tagHelper;
-@property (weak, nonatomic) UIActivityIndicatorView* spinner;
 @property (strong, nonatomic) UIView* footerView;
 @end
 
@@ -323,21 +321,12 @@
     self.dataSource = self;
     
     self.backgroundSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    [self.backgroundSpinner setColor:[UIColor grayColor]];
-    
-    self.rowSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [self.rowSpinner setColor:[UIColor grayColor]];
+    [self.backgroundSpinner setColor:[UIColor grayColor]];    
 
     self.tableView.backgroundView = [UIView new];
     
     [self repositionBackgroundSpinner];
     [self.view addSubview:self.backgroundSpinner];
-
-    int spinnerSize = self.rowSpinner.bounds.size.height;
-    self.footerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width, spinnerSize + 7)];
-    self.rowSpinner.frame = CGRectMake((self.view.frame.size.width - spinnerSize)/2.0,
-                                    0, spinnerSize, spinnerSize);
-    [self.footerView addSubview:self.rowSpinner];
     
     self.navigationItem.rightBarButtonItems = nil;
     self.title = nil;
@@ -407,29 +396,15 @@
 
 - (void) showSpinner
 {
-    if(self.gab.messageCount != 0)
-    {
-        self.spinner = self.rowSpinner;
-    }
-    else {
-        self.spinner = self.backgroundSpinner;
-    }
-
-    if(self.spinner == self.rowSpinner) {
-        //we have to show the row spinny
-        self.tableView.tableFooterView = self.footerView;
-    }
-    
-    [self.spinner startAnimating];
+    if(self.gab && self.gab.messageCount > 0)
+        return;
+    else
+        [self.backgroundSpinner startAnimating];
 }
 
 - (void) stopSpinner
 {
-    [self.spinner stopAnimating];
-
-    if(self.spinner == self.rowSpinner) {
-        self.tableView.tableFooterView = nil;
-    }
+    [self.backgroundSpinner stopAnimating];
 }
 
 - (void) scrollToFooter
@@ -517,7 +492,7 @@
 {
     NSLog(@"gab updated");
     [self setupView];
-    bool firstLoad = self.spinner == self.backgroundSpinner;
+    bool firstLoad = self.backgroundSpinner.isAnimating;
 
     [self.tableView reloadData];
     [self scrollToBottomAnimated:!firstLoad];    
