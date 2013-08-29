@@ -19,8 +19,6 @@
 + (void)setSettingsForKey:(NSString*)key value:(id)value;
 + (void)removeSettingsForKey:(NSString*)key;
 
-+ (void)updateUnreadCount;
-
 + (NSDictionary*)cluesForGab:(NSNumber*)gabId;
 + (NSManagedObject*)createOrUpdateClue:(NSDictionary*)data;
 + (NSInteger)userAvailableClues;

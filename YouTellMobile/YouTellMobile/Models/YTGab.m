@@ -94,8 +94,7 @@
                                         params:@{@"unread_count": @0, @"total_unread_count": @true}
                                        success:^(id JSON) {
                                            self.unread_count = @0;
-                                           int new_unread = [JSON[@"total_unread_count"] integerValue];
-                                           [[UIApplication sharedApplication] setApplicationIconBadgeNumber:new_unread];
+                                           [YTAppDelegate.current.currentUser setUnreadCount:[JSON[@"total_unread_count"] integerValue]];
                                            [[NSNotificationCenter defaultCenter] postNotificationName:YTGabUpdated
                                                                                                object:self];
                                        }

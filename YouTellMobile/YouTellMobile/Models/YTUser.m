@@ -251,6 +251,12 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
         self.userHasShared = [JSON[@"has_shared"] boolValue];
 }
 
+- (void)setUnreadCount:(int)new_unread
+{
+    _unreadCount = new_unread;
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:new_unread];
+}
+
 @end
 
 NSString* const YTLoginSuccess = @"YTLoginSuccess";

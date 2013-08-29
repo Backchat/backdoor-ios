@@ -72,6 +72,25 @@
     return [context countForFetchRequest:request error:&error];
 }
 
++ (int)sumUnreadCounts
+{
+    NSManagedObjectContext *context = [YTAppDelegate current].managedObjectContext;
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Gabs"];
+    
+    NSError *error;
+    
+    int unread = 0;
+    NSArray *objects = [context executeFetchRequest:request error:&error];
+    for(NSManagedObject* object in objects) {
+        NSNumber* u_count = [object valueForKey:@"unread_count"];
+        if(u_count)
+            unread += u_count.integerValue;
+    }
+    
+    return unread;
+}
+
 + (void)updateGabs
 {
     [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"GET" params:nil
@@ -82,7 +101,8 @@
                                     }
                                     
                                     //we got all gabs with content so update the unread count:
-                                    [YTModelHelper updateUnreadCount];
+                                    int newUnreadCount = [YTGabs sumUnreadCounts];
+                                    YTAppDelegate.current.currentUser.unreadCount = newUnreadCount;
                                     
                                     [[NSNotificationCenter defaultCenter] postNotificationName:YTGabsUpdatedNotification
                                                                                         object:nil];

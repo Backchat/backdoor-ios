@@ -34,6 +34,8 @@ enum {
 @property (nonatomic, assign, readonly) int id;
 @property (nonatomic, assign, readonly) bool isCachedLogin;
 
+@property (nonatomic, assign) int unreadCount;
+
 + (void) initalizeSocialHandlers;
 + (bool) attemptCachedLogin;
 + (bool) attemptCachedSocialLogin;
