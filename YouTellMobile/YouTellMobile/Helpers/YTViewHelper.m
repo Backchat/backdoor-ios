@@ -115,6 +115,13 @@
 
 + (void)showGab:(YTGab*)gab animated:(BOOL)animated
 {
+    UIViewController* top = YTAppDelegate.current.navController.topViewController;
+    if([top isKindOfClass:[YTGabViewController class]]) {
+        YTGabViewController* gabController = (YTGabViewController*)top;
+        if(gabController.gab.id.integerValue == gab.id.integerValue)
+            return;
+    }
+    
     YTGabViewController *controller = [[YTGabViewController alloc] initWithGab:gab];
     [YTViewHelper makeGabViewControllerTop:controller animated:animated];
 }
