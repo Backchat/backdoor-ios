@@ -26,4 +26,7 @@
 
 + (void)showAlertWithTitle:(NSString*)title message:(NSString*)message;
 + (void)hideAlert;
+
++ (void)invalidSessionLogout;
+
 @end

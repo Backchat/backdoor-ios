@@ -23,14 +23,9 @@
 #import "YTApiHelper.h"
 #import "YTModelHelper.h"
 #import "YTViewHelper.h"
-#import "YTFriends.h"
-#import "YTViewHelper.h"
-#import "YTTourViewController.h"
-#import "YTGPPHelper.h"
-#import "YTFBHelper.h"
 #import "YTContact.h"
 #import "YTSocialHelper.h"
-#import "YTGabs.h"
+#import "YTLoginViewController.h"
 
 @implementation YTApiHelper
 
@@ -108,7 +103,12 @@
                                                             
                                                             if (response.statusCode == 503) {
                                                                 [YTApiHelper showMaintenanceModeAlert];
-                                                            } else {
+                                                            } else if(response.statusCode == 401) {
+                                                                [YTViewHelper invalidSessionLogout];
+                                                                
+                                                                return;
+                                                            }
+                                                            else {
                                                                 //[YTApiHelper showNetworkErrorAlert]; TODO...
                                                                 NSLog(@"%@", [error debugDescription]);
                                                             }

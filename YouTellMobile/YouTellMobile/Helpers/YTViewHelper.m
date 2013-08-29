@@ -191,4 +191,20 @@ static WBErrorNoticeView *notice = nil;
     }
 }
 
++ (void)invalidSessionLogout
+{
+    if([YTAppDelegate.current.navController.topViewController isKindOfClass:[YTLoginViewController class]])
+        return;
+    
+    UIAlertView* alert;
+    alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sorry, your session has ended", nil)
+                                       message:NSLocalizedString(@"Please login again", nil)
+                                      delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+
+    //we need to log out
+    [YTAppDelegate.current.currentUser logout];
+    [[YTViewHelper showLogin:YES] showLoginButtons:NO];
+    
+    [alert show];
+}
 @end
