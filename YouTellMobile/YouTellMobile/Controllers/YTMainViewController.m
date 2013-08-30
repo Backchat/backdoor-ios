@@ -26,14 +26,16 @@
 #import "YTFriends.h"
 #import "YTGabs.h"
 #import "YTConfig.h"
+#import "YTInviteFriendViewController.h"
 
-#define SECTION_FEATURED 0
-#define SECTION_GABS 1
-#define SECTION_FRIENDS 2
-#define SECTION_MORE 3
-#define SECTION_SHARE 4
-#define SECTION_CLUES 5
-#define SECTION_COUNT 6
+#define SECTION_INVITE 0
+#define SECTION_FEATURED 1
+#define SECTION_GABS 2
+#define SECTION_FRIENDS 3
+#define SECTION_MORE 4
+#define SECTION_SHARE 5
+#define SECTION_CLUES 6
+#define SECTION_COUNT 7
 
 @interface YTMainViewController ()
 @property (nonatomic, retain) YTFriends* friends;
@@ -237,6 +239,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch(section) {
+        case SECTION_INVITE: return 1;
         case SECTION_GABS: return [self numberOfGabRows];
         case SECTION_FRIENDS: return [self numberOfFriendRows];
         case SECTION_MORE: return [self numberOfMoreRows];
@@ -299,12 +302,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
+        case SECTION_INVITE: return [[YTMainViewHelper sharedInstance] cellForInvite:tableView];
         case SECTION_GABS: return [self tableView:tableView cellForGabAtRow:indexPath.row];
         case SECTION_FRIENDS: return [self tableView:tableView cellForFriendAtRow:indexPath.row];
         case SECTION_MORE: return [self tableView:tableView cellForMoreAtRow:indexPath.row];
-        case SECTION_SHARE: return [self tableView:tableView cellForShareAtRow:indexPath.row];
+        case SECTION_SHARE: return [[YTMainViewHelper sharedInstance] cellForShare:tableView];
         case SECTION_CLUES: return [self tableView:tableView cellForCluesAtRow:indexPath.row];
-
         case SECTION_FEATURED: return [self tableView:tableView cellForUserAtRow:indexPath.row];
         default: return nil;
     }
@@ -356,20 +359,6 @@
 {
     YTFriend* c = [self.featuredUsers friendAtIndex:row];
     return [self tableView:tableView cellForUser:c];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForShareAtRow:(NSInteger)row
-{
-    NSString *title = NSLocalizedString(@"Share", nil);
-    NSString *subtitle = NSLocalizedString(@"Tap me to get more BD friends.", nil);
-    NSString *time = @"";
-    NSString *image = @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png";;
-    
-    UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:@""
-                                                                          avatar:image placeHolderImage:nil
-                                                                 backgroundColor:[UIColor whiteColor]];
-    
-    return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForCluesAtRow:(NSInteger)row
@@ -442,6 +431,10 @@
     else if (indexPath.section == SECTION_FEATURED) {
         [[Mixpanel sharedInstance] track:@"Tapped Main View / Featured Users Item"];
         [YTViewHelper showGabWithFriend:[self.featuredUsers friendAtIndex:indexPath.row] animated:YES];
+    }
+    else if(indexPath.section == SECTION_INVITE) {
+        [[Mixpanel sharedInstance] track:@"Tapped Main View / Invite Friends"];
+        [[YTAppDelegate current].navController pushViewController:[YTInviteFriendViewController new] animated:YES];
     }
 
 }

@@ -19,4 +19,7 @@ image:(NSString*)image avatar:(NSString*)avatar placeHolderImage:(UIImage*)place
                       image:(NSString*)image avatar:(NSString*)avatar placeHolderImage:(UIImage*)placeHolderImage;
 
 - (UITableViewCell*) cellWithGab:(YTGab*)gab andTableView:(UITableView*)tableView;
+
+- (UITableViewCell*) cellForInvite:(UITableView*)tableView;
+- (UITableViewCell *)cellForShare:(UITableView *)tableView;
 @end
