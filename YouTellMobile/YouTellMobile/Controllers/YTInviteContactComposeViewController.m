@@ -91,7 +91,7 @@
 
 - (void)cancelButtonWasClicked
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [YTViewHelper showGabs:YES]; //pop back back
 }
 
 - (void)sendPressed:(UIButton*)sender
