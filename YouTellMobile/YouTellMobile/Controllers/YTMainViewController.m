@@ -69,9 +69,14 @@
 
 - (void)doRefreshFromServer
 {
-    [YTGabs updateGabs];
-    [YTFriends updateFriendsOfType:YTFriendType];
-    [YTFriends updateFriendsOfType:YTFeaturedFriendType];
+    [[AFHTTPClient clientWithBaseURL:[YTApiHelper baseUrl]]
+     enqueueBatchOfHTTPRequestOperations:@[[YTGabs updateGabNetworkingOperation],
+     [YTFriends updateFriendsOfTypeNetworkingOperation:YTFriendType],
+     [YTFriends updateFriendsOfTypeNetworkingOperation:YTFeaturedFriendType]]
+     progressBlock:^(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations) {
+     } completionBlock:^(NSArray *operations) {
+         [self.refreshControl endRefreshing];
+     }];
 }
 
 - (void)composeButtonWasClicked

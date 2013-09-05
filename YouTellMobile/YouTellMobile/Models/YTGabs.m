@@ -91,23 +91,28 @@
     return unread;
 }
 
++ (AFHTTPRequestOperation*)updateGabNetworkingOperation
+{
+    return [YTApiHelper networkingOperationForSONRequestToPath:@"/gabs" method:@"GET" params:nil
+                                                       success:^(id JSON) {
+                                                           id gabs = JSON[@"gabs"];
+                                                           for (NSDictionary *u in gabs) {
+                                                               [YTGab updateGab:u];
+                                                           }
+                                                           
+                                                           //we got all gabs with content so update the unread count:
+                                                           int newUnreadCount = [YTGabs sumUnreadCounts];
+                                                           YTAppDelegate.current.currentUser.unreadCount = newUnreadCount;
+                                                           
+                                                           [[NSNotificationCenter defaultCenter] postNotificationName:YTGabsUpdatedNotification
+                                                                                                               object:nil];
+                                                       }
+                                                       failure:nil];
+}
+
 + (void)updateGabs
 {
-    [YTApiHelper sendJSONRequestToPath:@"/gabs" method:@"GET" params:nil
-                                success:^(id JSON) {
-                                    id gabs = JSON[@"gabs"];
-                                    for (NSDictionary *u in gabs) {
-                                        [YTGab updateGab:u];
-                                    }
-                                    
-                                    //we got all gabs with content so update the unread count:
-                                    int newUnreadCount = [YTGabs sumUnreadCounts];
-                                    YTAppDelegate.current.currentUser.unreadCount = newUnreadCount;
-                                    
-                                    [[NSNotificationCenter defaultCenter] postNotificationName:YTGabsUpdatedNotification
-                                                                                        object:nil];
-                                }
-                                failure:nil];
+    [[YTGabs updateGabNetworkingOperation] start];
 }
 
 + (void) deleteGab:(YTGab *)gab

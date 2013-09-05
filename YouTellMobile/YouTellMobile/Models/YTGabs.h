@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "YTGab.h"
+#import <AFNetworking.h>
 
 @interface YTGabs : NSObject
 
@@ -22,6 +23,7 @@
 @property (assign, readonly) int count;
 
 + (void)updateGabs;
++ (AFHTTPRequestOperation*)updateGabNetworkingOperation;
 
 @end
 extern NSString* const YTGabsUpdatedNotification;

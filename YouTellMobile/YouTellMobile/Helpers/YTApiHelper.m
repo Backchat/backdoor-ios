@@ -43,8 +43,12 @@
     }
 }
 
-+ (void) sendJSONRequestToPath:(NSString*)path method:(NSString*)method params:(NSDictionary*)params success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure
-{   
++ (AFHTTPRequestOperation*)networkingOperationForSONRequestToPath:(NSString*)path
+                                                           method:(NSString*)method
+                                                           params:(NSDictionary*)params
+                                                          success:(void(^)(id JSON))success
+                                                          failure:(void(^)(id JSON))failure
+{
     AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[YTApiHelper baseUrl]];
     
     NSMutableDictionary *myParams = [[NSMutableDictionary alloc] initWithDictionary:params];
@@ -53,19 +57,19 @@
         if(!YTAppDelegate.current.currentUser)
         {
             NSLog(@"JSON logged out");
-            return;
+            return nil;
         }
-
+        
         [myParams setValue:YTAppDelegate.current.currentUser.accessToken forKey:@"access_token"];
     }
     
     NSMutableURLRequest *request = [client requestWithMethod:method path:path parameters:myParams];
-        
+    
     [request setTimeoutInterval:CONFIG_TIMEOUT];
     AFJSONRequestOperation *operation =
     [AFJSONRequestOperation JSONRequestOperationWithRequest:request
                                                     success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                        #if CONFIG_TEST_SLOW_API
+#if CONFIG_TEST_SLOW_API
                                                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                                                                        ^{
                                                                            [NSThread sleepForTimeInterval:3.0];
@@ -118,9 +122,15 @@
                                                             }
                                                         }];
                                                     }];
+
+    return operation;
+}
+
++ (void) sendJSONRequestToPath:(NSString*)path method:(NSString*)method params:(NSDictionary*)params success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure
+{   
     
     [YTApiHelper toggleNetworkActivityIndicatorVisible:YES];
-    
+    AFHTTPRequestOperation* operation = [YTApiHelper networkingOperationForSONRequestToPath:path method:method params:params success:success failure:failure];
     [operation start];
 }
 

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/NSManagedObject.h>
 #import "YTFriend.h"
+#import <AFNetworking.h>
 
 @interface YTFriends : NSObject
 - (id)initWithSearchString:(NSString*)search;
@@ -20,6 +21,7 @@
 - (YTFriend*) findFriendByValue:(NSString*)value;
 + (bool)hasValidData;
 + (void)updateFriendsOfType:(NSString*)type;
++ (AFHTTPRequestOperation*)updateFriendsOfTypeNetworkingOperation:(NSString*)type;
 @end
 
 extern NSString* const YTFriendNotification;

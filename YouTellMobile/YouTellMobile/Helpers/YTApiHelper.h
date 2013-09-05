@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AFNetworking.h>
 
 @class YTContact;
 
@@ -14,6 +15,12 @@
 + (NSURL*)baseUrl;
 
 + (void)toggleNetworkActivityIndicatorVisible:(BOOL)visible;
+
++ (AFHTTPRequestOperation*)networkingOperationForSONRequestToPath:(NSString*)path
+                                                          method:(NSString*)method
+                                                          params:(NSDictionary*)params
+                                                         success:(void(^)(id JSON))success
+                                                         failure:(void(^)(id JSON))failure;
 
 + (void) sendJSONRequestToPath:(NSString*)path
                         method:(NSString*)method

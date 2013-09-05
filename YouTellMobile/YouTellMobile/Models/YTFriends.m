@@ -109,6 +109,11 @@ static bool validData = false;
 
 + (void)updateFriendsOfType:(NSString *)type
 {
+    [[YTFriends updateFriendsOfTypeNetworkingOperation:type] start];
+}
+
++ (AFHTTPRequestOperation*)updateFriendsOfTypeNetworkingOperation:(NSString*)type
+{
     NSString* path, *object;
     
     if(type == YTFriendType) {
@@ -117,18 +122,18 @@ static bool validData = false;
     }
     else {
         if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"] && !CONFIG_DEBUG_FEATURED) {
-            return;
+            return nil;
         }
         
         path = @"/featured-users";
         object = @"users";
     }
     
-    [YTApiHelper sendJSONRequestToPath:path method:@"GET" params:nil success:^(id JSON) {
+    return [YTApiHelper networkingOperationForSONRequestToPath:path method:@"GET" params:nil success:^(id JSON) {
         NSDictionary* fs = JSON[object];
         if(!fs)
             return;
-            
+        
         if(type == YTFriendType)
             validData = true;
         
@@ -139,7 +144,7 @@ static bool validData = false;
         
         NSError *error;
         NSMutableArray* allFriends = [NSMutableArray arrayWithArray:[context executeFetchRequest:request error:&error]];
-
+        
         for (NSDictionary *u in fs) {
             YTFriend* f = [YTFriend updateFriend:u];
             [allFriends removeObject:f];
