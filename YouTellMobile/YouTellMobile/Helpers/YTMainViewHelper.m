@@ -31,10 +31,12 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ident];
         cell.textLabel.hidden = YES;
         cell.detailTextLabel.hidden = YES;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+        NSLog(@"%@", NSStringFromCGRect(cell.frame));
         
         [self addCellSubViewsToView:cell.contentView];
         
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
         cell.backgroundView = [UIView new];
         cell.backgroundView.backgroundColor = [UIColor clearColor];
@@ -50,7 +52,6 @@
     avatarView.tag = 5;
     avatarView.layer.cornerRadius = 5;
     avatarView.layer.masksToBounds = YES;
-    avatarView.frame = CGRectMake(26, 7, 45, 45);
     [view addSubview:avatarView];
     
     UILabel *timeLabel = [[UILabel alloc] init];
@@ -60,7 +61,7 @@
     timeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     timeLabel.textAlignment = NSTextAlignmentRight;
     timeLabel.tag = 1;
-    
+
     [view addSubview:timeLabel];
     
     UILabel *textLabel = [[UILabel alloc] init];
@@ -82,8 +83,13 @@
     imageView.tag = 4;
     [view addSubview:imageView];
     
+    int width = view.frame.size.width;
     
-    detTextLabel.frame= CGRectMake(78, 23, view.frame.size.width - 30 -  78, 32);
+    avatarView.frame = CGRectMake(26, 7, 45, 45);
+    
+    timeLabel.frame = CGRectMake(78, 5, width - 78 - 12, 16);
+
+    detTextLabel.frame= CGRectMake(78, 23, width - 78 - 12, 32);
     
     imageView.frame = CGRectMake(5, (view.frame.size.height - 18) / 2, 18, 18);
 
@@ -135,8 +141,6 @@
         
         timeWidth = timeSize.width + 5;
         
-        timeLabel.frame = CGRectMake(78, 5, cell.frame.size.width - 30 - 78, timeSize.height);
-//        timeLabel.frame = CGRectMake(cell.frame.size.width - timeWidth - 30, 5, timeWidth, timeSize.height);
         timeLabel.hidden = NO;
     }
     else
