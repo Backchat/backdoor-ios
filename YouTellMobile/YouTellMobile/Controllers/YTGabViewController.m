@@ -331,6 +331,16 @@
     self.navigationItem.rightBarButtonItems = nil;
     self.title = nil;
 
+    self.inputToolBarView.image = [[YTHelper imageNamed:@"inputview3"] stretchableImageWithLeftCapWidth:0 topCapHeight:0];
+    self.inputToolBarView.textView.layer.cornerRadius = 10;
+    self.inputToolBarView.textView.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.inputToolBarView.textView.layer.borderWidth = 1;
+    CGRect frame = self.inputToolBarView.textView.frame;
+    int height = frame.size.height;
+    self.inputToolBarView.textView.frame = CGRectMake(frame.origin.x, (self.inputToolBarView.frame.size.height - height)/2.0,
+                                             frame.size.width, height);
+    self.inputToolBarView.inputFieldBack.hidden = YES;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appActivated:) name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
 
