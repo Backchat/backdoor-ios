@@ -6,7 +6,8 @@
 //
 
 #import "YTViewController.h"
+#import "YTTableViewController.h"
 
-@interface YTNewGabViewController : YTViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
+@interface YTNewGabViewController : YTTableViewController
 
 @end
