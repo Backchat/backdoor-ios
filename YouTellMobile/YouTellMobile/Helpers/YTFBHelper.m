@@ -200,7 +200,7 @@
                 YTContact* c = [YTContact new];
                 c.first_name = friend[@"first_name"];
                 c.last_name = friend[@"last_name"];
-                c.value = friend[@"id"];
+                c.socialID = friend[@"id"];
                 c.type = @"facebook";
 
                 [f addObject: c];

@@ -49,9 +49,8 @@
 
 - (void) friendsUpdated:(NSNotification*)note
 {
-    YTFriends* friends = [[YTFriends alloc] init];
     [YTFBHelper fetchFriends:^(YTContacts *c) {
-        self.contacts = [[YTContacts alloc] initWithContacts:c excludingFriends:friends];
+        self.contacts = c;
         self.filteredContacts = [[YTContacts alloc] initWithContacts:self.contacts withFilter:self.searchBar.text];
         [self hideSpinner];
         [self.tableView reloadData];
