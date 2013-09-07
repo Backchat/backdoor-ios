@@ -9,9 +9,10 @@
 "Tap me to get more clues." = "Clique aqui para comprar creditos de pistas.";
 
 /* SMS stuff */
-"Send anonymous text to invite" = "Enviar mensagens anônimas para convidar";
+"Send text to invite" = "Enviar mensagens para convidar";
 
 "Someone you know wants you to try Backdoor! Anonymously message your friends." = "Alguém que você conhece esta te convidando para experimentar o Backdoor. Envie menssagens anonimas para seus amigos!";
+"Your friend %@ wants you to try Backdoor! Anonymously message your friends." = "Your friend %@ wants you to try Backdoor! Anonymously message your friends.";
 
 "Choose from my address book" = "Escolher entre os contatos";
 

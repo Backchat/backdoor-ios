@@ -19,4 +19,6 @@
 
 - (void) setupNavBar;
 - (void) cancelButtonWasClicked;
+
+- (UITableViewStyle) tableViewStyle;
 @end

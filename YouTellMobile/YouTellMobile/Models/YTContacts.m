@@ -40,21 +40,6 @@
     return self;
 }
 
-- (id)initWithContacts:(YTContacts*)contacts excludingFriends:(YTFriends*)friends
-{
-    if(self = [super init]) {
-        self.contacts = [NSMutableArray new];
-        if(contacts) {
-            for(YTContact* c in contacts.contacts) {
-                if(![friends findFriendByValue:c.value])
-                    [self.contacts addObject:c];
-            }
-        }
-    }
-    
-    return self;
-}
-
 - (id)initWithContacts:(YTContacts*)contacts withFilter:(NSString*)filter
 {
     if(self = [super init]) {
@@ -73,4 +58,8 @@
     return self;
 }
 
+- (NSArray*) array
+{
+    return [self.contacts copy];
+}
 @end

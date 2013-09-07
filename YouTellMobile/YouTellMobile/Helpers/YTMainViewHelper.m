@@ -31,13 +31,12 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ident];
         cell.textLabel.hidden = YES;
         cell.detailTextLabel.hidden = YES;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
         NSLog(@"%@", NSStringFromCGRect(cell.frame));
         
         [self addCellSubViewsToView:cell.contentView];
         
-        
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.backgroundView = [UIView new];
         cell.backgroundView.backgroundColor = [UIColor clearColor];
     }
@@ -83,7 +82,7 @@
     imageView.tag = 4;
     [view addSubview:imageView];
     
-    int width = view.frame.size.width;
+    int width = 320;
     
     avatarView.frame = CGRectMake(26, 7, 45, 45);
     
@@ -91,7 +90,7 @@
 
     detTextLabel.frame= CGRectMake(78, 23, width - 78 - 12, 32);
     
-    imageView.frame = CGRectMake(5, (view.frame.size.height - 18) / 2, 18, 18);
+    imageView.frame = CGRectMake(5, (60 - 18) / 2, 18, 18);
 
 }
 
@@ -147,8 +146,7 @@
         timeLabel.hidden = YES;
 
     // Update title label
-    
-    textLabel.frame= CGRectMake(78, 2, cell.frame.size.width - timeWidth - 30 - 10 - 78, 21);
+    textLabel.frame= CGRectMake(78, 2, 320 - timeWidth - 12 - 78, 21);
     textLabel.text = title;
     
     // Update subtitle label

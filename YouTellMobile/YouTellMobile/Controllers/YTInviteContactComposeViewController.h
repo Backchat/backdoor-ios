@@ -10,5 +10,5 @@
 #import "YTContact.h"
 
 @interface YTInviteContactComposeViewController : UIViewController<UIAlertViewDelegate>
-@property (nonatomic, retain) YTContact* contact;
+@property (nonatomic, retain) NSArray* contacts;
 @end

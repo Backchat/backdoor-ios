@@ -19,7 +19,7 @@
 
 @synthesize first_name;
 @synthesize last_name;
-@synthesize value;
+@synthesize socialID;
 @synthesize phone_number;
 @synthesize type;
 
@@ -37,7 +37,7 @@
     if (copy) {
         copy.first_name = [self.first_name copyWithZone:zone];
         copy.last_name = [self.last_name copyWithZone:zone];
-        copy.value = [self.value copyWithZone:zone];
+        copy.socialID = [self.socialID copyWithZone:zone];
         copy.type = [self.type copyWithZone:zone];
         copy.phone_number = [self.phone_number copyWithZone:zone];
         copy->_image  = [_image copy];
@@ -59,18 +59,6 @@
         return @"";
 }
 
-//TODO we really should merge this with YTFriend
-- (NSString*) avatarUrl
-{
-    if ([self.type isEqualToString:@"facebook"]) {
-        return [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=90&height=90", self.value];
-    }
-    else if([self.type isEqualToString:@"gpp"]) {
-        return [NSString stringWithFormat:@"https://profiles.google.com/s2/photos/profile/%@?sz=90", self.value];
-    }
-    else
-        return nil;
-}
 
 - (UIImage*) image {
     if(_image)
