@@ -164,7 +164,7 @@
     self.selectedContactIDs = [[NSMutableArray alloc] init];
     self.contacts = nil;
     self.allSelected = false;
-    [self.tableView reloadData];
+    self.tableView.hidden = YES;
     [self updateStatusBar:NO];
 }
 
@@ -175,6 +175,8 @@
         self.contacts = c;
         self.filteredContacts = [[YTContacts alloc] initWithContacts:self.contacts withFilter:self.searchBar.text];
         [self buildIndexedList];
+        [self selectAll:YES updateCells:NO animated:NO];
+        self.tableView.hidden = NO;
         [self.tableView reloadData];
 
     }];
@@ -220,6 +222,27 @@
     return [[self.alphaByIndex objectForKey:[NSNumber numberWithInt:section-1]] count];
 }
 
+- (void)selectAll:(bool)state updateCells:(bool)updateCells animated:(BOOL)animated
+{
+    if(state) {
+        self.selectedContactIDs = [[NSMutableArray alloc] initWithCapacity:self.contacts.count];
+        for(int i=0;i<self.contacts.count;i++) {
+            [self.selectedContactIDs addObject:[self.contacts contactAtIndex:i].socialID];
+        }
+    }
+    else {
+        self.selectedContactIDs = [[NSMutableArray alloc] init];
+    }
+    
+    if(updateCells) {
+        for(UITableViewCell* cell in self.tableView.visibleCells) {
+            [self updateCellInPlace:cell selected:state];
+        }
+    }
+    
+    [self updateStatusBar:animated];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *title = @"";
@@ -234,12 +257,12 @@
         avatarUrl = @"invite_gab_cell_icon";
 
         if(self.allSelected) {
-            title = @"Unselect All";
-            subtitle = @"Tap me to unselect all your contacts";
+            title = NSLocalizedString(@"Unselect All", nil);
+            subtitle = NSLocalizedString(@"Tap me to unselect all your contacts", nil);
         }
         else {
-            title = @"Select All";
-            subtitle = @"Tap me to select all your contacts";
+            title = NSLocalizedString(@"Select All", nil);
+            subtitle = NSLocalizedString(@"Tap me to select all your contacts", nil);
         }
     }
     else {
@@ -319,6 +342,34 @@
 
         }];
     }
+    
+    //check all state
+    bool newState;
+    if(self.selectedContactIDs && self.selectedContactIDs.count == self.contacts.count) {
+        newState = YES;
+    }
+    else {
+        newState = NO;
+    }
+    
+    if(newState != self.allSelected) {
+        self.allSelected = newState;
+        if(!self.isSearching) {
+            UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            
+            UILabel* subtitle = (UILabel*)[cell viewWithTag:3];
+            UILabel* title = (UILabel*)[cell viewWithTag:2];
+            
+            if(self.allSelected) {
+                [title setText:NSLocalizedString(@"Unselect All", nil)];
+                [subtitle setText:NSLocalizedString(@"Tap me to unselect all your contacts", nil)];
+            }
+            else {
+                [title setText:NSLocalizedString(@"Select All", nil)];
+                [subtitle setText:NSLocalizedString(@"Tap me to select all your contacts", nil)];
+            }
+        }        
+    }
 }
 
 - (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -336,10 +387,10 @@
     UIImageView *imageView = (UIImageView*)[cell viewWithTag:4];
 
     if(selected) {
-        [imageView setImage:[YTHelper imageNamed:@"unselected-invite-circle"]];
+        [imageView setImage:[YTHelper imageNamed:@"selected-invite-circle"]];
     }
     else {
-        [imageView setImage:[YTHelper imageNamed:@"selected-invite-circle"]];
+        [imageView setImage:[YTHelper imageNamed:@"unselected-invite-circle"]];
     }
 }
 
@@ -348,23 +399,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if(!self.isSearching) {
         if(indexPath.section == 0) {
-            if(!self.allSelected) {
-                self.selectedContactIDs = [[NSMutableArray alloc] initWithCapacity:self.contacts.count];
-                for(int i=0;i<self.contacts.count;i++) {
-                    [self.selectedContactIDs addObject:[self.contacts contactAtIndex:i].socialID];
-                }
-            }
-            else {
-                self.selectedContactIDs = [[NSMutableArray alloc] init];
-            }
-                        
-            for(UITableViewCell* cell in self.tableView.visibleCells) {
-                [self updateCellInPlace:cell selected:self.allSelected];
-            }
-
-            self.allSelected = !self.allSelected;
-
-            [self updateStatusBar:YES];
+            [self selectAll:!self.allSelected updateCells:YES animated:YES];
             
             return;
         }
@@ -380,7 +415,7 @@
     else {
         [self.selectedContactIDs addObject:c.socialID];
     }
-    [self updateCellInPlace:cell selected:selected];
+    [self updateCellInPlace:cell selected:!selected];
     
     [self updateStatusBar:YES];
 }
