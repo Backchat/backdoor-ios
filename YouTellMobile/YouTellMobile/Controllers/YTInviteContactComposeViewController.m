@@ -44,7 +44,7 @@
     //cancel please
     self.navigationItem.backBarButtonItem = nil;
     self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonWasClicked)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonWasClicked)];
     
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(30,105,self.view.frame.size.width-60, 90)];
     [self.view addSubview:self.textView];

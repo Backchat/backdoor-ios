@@ -127,7 +127,7 @@
         self.title = self.friend.name;
         
         /* TODO SPLIT if (![[YTAppDelegate current] usesSplitView]) */
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
         self.navigationItem.hidesBackButton = YES;
     }
 }

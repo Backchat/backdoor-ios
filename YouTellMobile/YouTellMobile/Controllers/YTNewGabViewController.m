@@ -32,6 +32,18 @@
     return self;
 }
 
+- (void)setupNavBar
+{
+    [super setupNavBar];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[YTHelper imageNamed:@"invite-nav-bar-icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(showInvite)];
+
+}
+
+- (void)showInvite
+{
+    [self.navigationController pushViewController:[YTInviteFriendViewController new] animated:YES];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
