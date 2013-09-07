@@ -67,7 +67,7 @@
     self.miniBar = [[UIImageView alloc]initWithFrame:CGRectMake(0,0,self.view.frame.size.width, 0)];
     self.miniBar.image = [YTHelper imageNamed:@"minibar"];
     self.statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,5,self.view.frame.size.width, 20)];
-    self.statusLabel.font = [UIFont systemFontOfSize:20];
+    self.statusLabel.font = [UIFont systemFontOfSize:18];
     self.statusLabel.textColor = [UIColor whiteColor];
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.backgroundColor = [UIColor clearColor];
