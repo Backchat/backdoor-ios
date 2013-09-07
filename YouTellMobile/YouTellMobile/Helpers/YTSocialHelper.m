@@ -63,4 +63,5 @@
 NSString* const YTSocialLoggedIn = @"YTSocialLoggedIn";
 NSString* const YTSocialLoginFailed = @"YTSocialLoginFailed";
 NSString* const YTSocialLoggedInAccessTokenKey = @"YTSocialLoggedInAccessTokenKey";
+NSString* const YTSocialLoggedInNameKey = @"YTSocialLoggedInNameKey";
 NSString* const YTSocialLoggedInProviderKey = @"YTSocialLoggedInProviderKey";

@@ -15,11 +15,13 @@
 #import "YTApiHelper.h"
 #import "YTHelper.h"
 #import "YTMainViewHelper.h"
+#import "YTAppDelegate.h"
 
 @interface YTInviteContactComposeViewController ()
 @property (nonatomic, retain) UITextView* textView;
 @property (nonatomic, retain) UIButton* sendButton;
 @property (nonatomic, retain) UIScrollView* contactView;
+@property (nonatomic, retain) UIView* anonView;
 @end
 
 @implementation YTInviteContactComposeViewController
@@ -44,16 +46,34 @@
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonWasClicked)];
     
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(30,65,self.view.frame.size.width-60, 90)];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(30,105,self.view.frame.size.width-60, 90)];
     [self.view addSubview:self.textView];
     self.textView.layer.cornerRadius = 10;
     self.textView.layer.borderColor = [[UIColor colorWithRed:170/255.0f green:170/255.0f blue:170/255.0f alpha:1.0] CGColor];
     self.textView.layer.borderWidth = 2;
     self.textView.font = [UIFont systemFontOfSize:16.0f];
     self.textView.textColor = [UIColor colorWithRed:111/255.0f green:111/255.0f blue:111/255.0f alpha:1.0];
-       
+    
+    self.anonView = [[UIView alloc] initWithFrame:CGRectMake(0, 60, self.view.frame.size.width, 36)];
+    self.anonView.backgroundColor = [UIColor whiteColor];
+    self.anonView.clipsToBounds = YES;
+    UISwitch *sw = [[UISwitch alloc] init];
+    sw.frame = CGRectMake(210, 3, 79, 27);
+    sw.onImage = [YTHelper imageNamed:@"toggle-yes"];
+    sw.offImage = [YTHelper imageNamed:@"toggle-no"];
+    [sw addTarget:self action:@selector(toggleAnon:) forControlEvents:UIControlEventValueChanged];
+    
+    [self.anonView addSubview:sw];
+
+    UILabel* textLabel = [[UILabel alloc] initWithFrame:CGRectMake(30,5,170,20)];
+    textLabel.text = @"Send anonymously";
+    textLabel.backgroundColor = [UIColor clearColor];
+    [self.anonView addSubview:textLabel];
+
+    [self.view addSubview:self.anonView];
+    
     self.sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.sendButton.frame = CGRectMake(30,207,self.view.frame.size.width-60, 30);
+    self.sendButton.frame = CGRectMake(30,247,self.view.frame.size.width-60, 30);
     
     self.sendButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin);
     [self.sendButton addTarget:self action:@selector(sendPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -88,6 +108,55 @@
     self.contactView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.contactView];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChange:) name:UIKeyboardWillShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChange:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)buildText:(BOOL)anon
+{
+    NSString* personalizedURL = @"http://bkdr.me";
+    NSString* msg = nil;
+    if(anon)
+        msg = NSLocalizedString(@"Someone you know wants you to try Backdoor! Anonymously message your friends.", nil);
+    else
+        msg = NSLocalizedString(@"Your friend %@ wants you to try Backdoor! Anonymously message your friends.", nil);
+    
+    NSString* msgText = [NSString stringWithFormat:@"%@ %@",
+                         [NSString stringWithFormat:msg, YTAppDelegate.current.currentUser.name],
+                         personalizedURL];
+    
+    self.textView.text = msgText;
+}
+
+- (void)toggleAnon:(UISwitch*)sw
+{
+    [self buildText:[sw isOn]];
+}
+
+- (void)viewDidUnload {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super viewDidUnload];
+}
+
+- (void)keyboardWillChange:(NSNotification*)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSTimeInterval duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    [UIView animateWithDuration:duration animations:^{
+        if([notification name] == UIKeyboardWillShowNotification) {
+            self.anonView.frame = CGRectMake(0, 60, self.view.frame.size.width, 0);
+            self.textView.frame = CGRectMake(30,65,self.view.frame.size.width-60, 90);
+            self.sendButton.frame = CGRectMake(30,160,self.view.frame.size.width-60, 30);
+
+        }
+        else {
+            self.anonView.frame = CGRectMake(0, 60, self.view.frame.size.width, 36);
+            self.textView.frame = CGRectMake(30,100,self.view.frame.size.width-60, 90);
+            self.sendButton.frame = CGRectMake(30,247,self.view.frame.size.width-60, 30);
+
+        }
+    }];
 }
 
 - (void)cancelButtonWasClicked
@@ -117,11 +186,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSString* personalizedURL = @"http://bkdr.me";
-    NSString* msgText = [NSString stringWithFormat:@"%@ %@",
-                         NSLocalizedString(@"Someone you know wants you to try Backdoor! Anonymously message your friends.", nil),
-                         personalizedURL];
-    self.textView.text = msgText;
+    [self buildText:NO];
     
     [[self.contactView subviews] makeObjectsPerformSelector: @selector(removeFromSuperview)];    
     

@@ -28,6 +28,7 @@
     bool reauthenticating;
 }
 @property (nonatomic, retain) NSString* email;
+@property (nonatomic, retain) GTLPlusPerson* person;
 @end
 
 @implementation YTGPPHelper
@@ -46,6 +47,7 @@
 {
     [[GPPSignIn sharedInstance] signOut];
     self.email = nil;
+    self.person = nil;
 }
 
 - (GPPSignIn*) getSignIn
@@ -84,33 +86,33 @@
                                                         object:nil];
 }
 
-- (void)sendUserData:(GTLPlusPerson*)person
+- (void)sendUserData
 {
     @try {
         [[Mixpanel sharedInstance] identify:self.email];
         [Instabug setUserDataString:self.email];
         
-        if ([person.gender isEqualToString:@"male"]) {
+        if ([self.person.gender isEqualToString:@"male"]) {
             [Flurry setGender:@"m"];
             [[Mixpanel sharedInstance].people set:@"Gender" to:@"Male"];
-        } else if ([person.gender isEqualToString:@"female"]) {
+        } else if ([self.person.gender isEqualToString:@"female"]) {
             [Flurry setGender:@"f"];
             [[Mixpanel sharedInstance].people set:@"Gender" to:@"Female"];
         }
         
-        NSInteger age = [YTHelper ageWithBirthdayString:person.birthday format:@"yyyy-MM-dd"];
+        NSInteger age = [YTHelper ageWithBirthdayString:self.person.birthday format:@"yyyy-MM-dd"];
         
         if (age > 0) {
             [Flurry setAge:age];
             [[Mixpanel sharedInstance].people set:@"Age" to:[NSNumber numberWithInt:age]];
         }
         
-        NSString* fname = person.name.givenName ? person.name.givenName : @"";
-        NSString* lname = person.name.familyName ? person.name.familyName : @"";
+        NSString* fname = self.person.name.givenName ? self.person.name.givenName : @"";
+        NSString* lname = self.person.name.familyName ? self.person.name.familyName : @"";
         NSDictionary *userData = @{@"$first_name": fname,
                                    @"$last_name": lname,
                                    @"$email": self.email,
-                                   @"Google+ Id": person.identifier};
+                                   @"Google+ Id": self.person.identifier};
         
         [[Mixpanel sharedInstance].people set:userData];
         [[Mixpanel sharedInstance].people setOnce:@{@"$created": [NSDate date]}];
@@ -136,42 +138,50 @@
         return;
     }
     
-    [Flurry logEvent:@"Signed_In_With_Google+"];
-    [[Mixpanel sharedInstance] track:@"Signed In With Google+"];
-    
-    NSDictionary* dict =
-    @{YTSocialLoggedInAccessTokenKey: auth.accessToken,
-      YTSocialLoggedInProviderKey: [NSNumber numberWithInteger:YTSocialProviderGPP]};
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialLoggedIn
-                                                        object:nil
-                                                      userInfo:dict];
-
-    self.email = auth.userEmail;
-}
-
-- (void)fetchUserData:(void(^)(NSDictionary* data))success;
-{
     GTLServicePlus *service = [GTLServicePlus new];
     service.retryEnabled = YES;
     service.authorizer = [GPPSignIn sharedInstance].authentication;
     
     GTLQueryPlus *query = [GTLQueryPlus queryForPeopleGetWithUserId:@"me"];
     
+    self.email = auth.userEmail;
+    
     [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLPlusPerson *person, NSError *error) {
         
         if (error || !person) {
             NSLog(@"%@", error.debugDescription);
+            [self fireFailedLogin];
             return;
         }
-        
-        [self sendUserData:person];
 
-        NSMutableDictionary* data = [NSMutableDictionary new];
-        [data addEntriesFromDictionary:[person JSON]];
-        data[@"email"] = self.email;
-        success(data);
+        self.person = person;
+        
+        [Flurry logEvent:@"Signed_In_With_Google+"];
+        [[Mixpanel sharedInstance] track:@"Signed In With Google+"];
+        
+        NSString* fname = self.person.name.givenName ? self.person.name.givenName : @"";
+        NSString* lname = self.person.name.familyName ? self.person.name.familyName : @"";
+        NSString* fullName = [NSString stringWithFormat:@"%@ %@", fname, lname];
+        
+        NSDictionary* dict =
+        @{YTSocialLoggedInAccessTokenKey: auth.accessToken,
+          YTSocialLoggedInProviderKey: [NSNumber numberWithInteger:YTSocialProviderGPP],
+          YTSocialLoggedInNameKey: fullName};
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialLoggedIn
+                                                            object:nil
+                                                          userInfo:dict];
     }];
+}
+
+- (void)fetchUserData:(void(^)(NSDictionary* data))success;
+{
+    [self sendUserData];
+    
+    NSMutableDictionary* data = [NSMutableDictionary new];
+    [data addEntriesFromDictionary:[self.person JSON]];
+    data[@"email"] = self.email;
+    success(data);
 }
 
 /* TODO: this is not used yet */

@@ -34,6 +34,8 @@ enum {
 @property (nonatomic, assign, readonly) int id;
 @property (nonatomic, assign, readonly) bool isCachedLogin;
 
+@property (nonatomic, retain) NSString* name;
+
 @property (nonatomic, assign) int unreadCount;
 
 + (void) initalizeSocialHandlers;
