@@ -11,4 +11,5 @@
 
 @interface YTAddressBookHelper : NSObject
 + (void) fetchContactsFromAddressBookByContact:(YTContact*)contact success:(void(^)(YTContacts* c))success;
++ (void)fetchContacts:(void(^)(YTContacts* c))success;
 @end

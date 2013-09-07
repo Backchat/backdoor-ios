@@ -43,18 +43,33 @@
         return;
     }
     
-    [Flurry logEvent:@"Signed_In_With_Facebook"];
-    [[Mixpanel sharedInstance] track:@"Signed In With Facebook"];
-    
-    NSString* accessToken = token_data.accessToken;
-    
-    NSDictionary* dict = 
-    @{YTSocialLoggedInAccessTokenKey: accessToken,
-      YTSocialLoggedInProviderKey: [NSNumber numberWithInteger:YTSocialProviderFacebook]};
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialLoggedIn
-                                                        object:nil
-                                                      userInfo:dict];
+    FBRequest *request = [FBRequest requestForGraphPath:@"/me"];
+    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        if (error || !result) {
+            NSLog(@"%@", error.debugDescription);
+            [YTFBHelper fireFailedLogin];
+            return;
+        }
+     
+        [Flurry logEvent:@"Signed_In_With_Facebook"];
+        [[Mixpanel sharedInstance] track:@"Signed In With Facebook"];
+        
+        NSString* accessToken = token_data.accessToken;
+        
+        NSString *firstName = result[@"first_name"] ? result[@"first_name"] : @"";
+        NSString *lastName = result[@"last_name"] ? result[@"last_name"] : @"";
+        NSString* name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+        
+        NSDictionary* dict =
+        @{YTSocialLoggedInAccessTokenKey: accessToken,
+          YTSocialLoggedInProviderKey: [NSNumber numberWithInteger:YTSocialProviderFacebook],
+          YTSocialLoggedInNameKey: name};
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialLoggedIn
+                                                            object:nil
+                                                          userInfo:dict];
+        
+    }];
 }
 
 
@@ -200,7 +215,7 @@
                 YTContact* c = [YTContact new];
                 c.first_name = friend[@"first_name"];
                 c.last_name = friend[@"last_name"];
-                c.value = friend[@"id"];
+                c.socialID = friend[@"id"];
                 c.type = @"facebook";
 
                 [f addObject: c];

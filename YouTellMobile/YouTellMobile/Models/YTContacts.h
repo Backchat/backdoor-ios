@@ -13,8 +13,8 @@
 @interface YTContacts : NSObject
 @property (assign, readonly) int count;
 - (YTContact*) contactAtIndex:(int)index;
+- (NSArray*) array;
 - (id)init;
 - (id)initWithArray:(NSArray*)array;
-- (id)initWithContacts:(YTContacts*)contacts excludingFriends:(YTFriends*)friends;
 - (id)initWithContacts:(YTContacts*)contacts withFilter:(NSString*)filter;
 @end

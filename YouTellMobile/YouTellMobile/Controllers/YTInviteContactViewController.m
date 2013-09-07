@@ -329,7 +329,7 @@
 
 - (void)showInviteViewForContact:(YTContact*)c
 {
-    self.compose.contact = c;
+    self.compose.contacts = @[c];
     [[YTAppDelegate current].navController pushViewController:self.compose animated:YES];
 }
 

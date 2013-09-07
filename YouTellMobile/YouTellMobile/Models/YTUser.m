@@ -30,6 +30,7 @@
 NSString* const LOGGED_IN_ACCESS_TOKEN = @"LOGGED_IN_ACCESS_TOKEN";
 NSString* const LOGGED_IN_SOCIAL_PROVIDER = @"LOGGED_IN_SOCIAL_PROVIDER";
 NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
+NSString* const LOGGED_IN_NAME = @"LOGGED_IN_NAME";
 
 @implementation YTUser
 - (void)setDeviceToken:(NSData *)deviceToken
@@ -110,6 +111,7 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
     [def removeObjectForKey:LOGGED_IN_ACCESS_TOKEN];
     [def removeObjectForKey:LOGGED_IN_SOCIAL_PROVIDER];
     [def removeObjectForKey:LOGGED_IN_BD_ID];
+    [def removeObjectForKey:LOGGED_IN_NAME];
     [def synchronize];
 }
 
@@ -181,6 +183,7 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
             [[YTGPPHelper sharedInstance] reauth];
 
         user.id = [def integerForKey:LOGGED_IN_BD_ID];
+        user.name = [def stringForKey:LOGGED_IN_NAME];
         user.isCachedLogin = true;
         [user fireLoginSuccess];
         
@@ -205,7 +208,7 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
                                                       YTUser* newUser = [[YTUser alloc] init];
                                                       newUser.accessToken = [note.userInfo valueForKey:YTSocialLoggedInAccessTokenKey];
                                                       newUser.socialProvider = [[note.userInfo valueForKey:YTSocialLoggedInProviderKey] integerValue];
-                                                      
+                                                      newUser.name = [note.userInfo valueForKey:YTSocialLoggedInNameKey];
                                                       [newUser login];
                                                   }];
     
@@ -229,6 +232,7 @@ NSString* const LOGGED_IN_BD_ID  = @"LOGGED_IN_BD_ID";
     [def setValue:self.accessToken forKey:LOGGED_IN_ACCESS_TOKEN];
     [def setInteger:self.socialProvider forKey:LOGGED_IN_SOCIAL_PROVIDER];
     [def setInteger:self.id forKey:LOGGED_IN_BD_ID];
+    [def setValue:self.name forKey:LOGGED_IN_NAME];
     [def synchronize];
     
     /* setup the store */

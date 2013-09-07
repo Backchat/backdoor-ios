@@ -45,5 +45,5 @@
 
 + (void)checkUpdates;
 
-+ (void)sendInviteText:(YTContact*)contact body:(NSString*)body success:(void(^)(id JSON))success;
++ (void)sendInviteText:(NSArray*)contacts body:(NSString*)body success:(void(^)(id JSON))success;
 @end

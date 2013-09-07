@@ -11,7 +11,7 @@
 @interface YTContact : NSObject <NSCopying>
 @property (nonatomic, retain) NSString* first_name;
 @property (nonatomic, retain) NSString* last_name;
-@property (nonatomic, retain) NSString* value;
+@property (nonatomic, retain) NSString* socialID;
 @property (nonatomic, retain) NSString* type;
 @property (nonatomic, retain) NSString* phone_number;
 @property (nonatomic, retain) UIImage* image;
