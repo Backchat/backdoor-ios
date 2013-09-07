@@ -127,11 +127,20 @@
 
 - (void)setupNavBar
 {
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[YTHelper imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:[YTViewHelper class] action:@selector(showSettings)];
+    self.navigationItem.leftBarButtonItems = @[
+                                               [[UIBarButtonItem alloc] initWithImage:[YTHelper imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:[YTViewHelper class] action:@selector(showSettings)],
+                                               [[UIBarButtonItem alloc] initWithImage:[YTHelper imageNamed:@"invite-nav-bar-icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(showInvite)],
+                                                ];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonWasClicked)];
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Messages", nil) style:UIBarButtonItemStyleBordered target:nil action:nil];
+}
+
+- (void)showInvite
+{
+    [[Mixpanel sharedInstance] track:@"Tapped Main View / Invite Friends"];
+    [[YTAppDelegate current].navController pushViewController:[YTInviteFriendViewController new] animated:YES];
 }
 
 - (void)viewDidLoad
