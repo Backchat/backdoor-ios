@@ -73,7 +73,7 @@
     self.statusLabel.backgroundColor = [UIColor clearColor];
     self.miniBar.clipsToBounds = YES;
     self.tableView.tableHeaderView = self.miniBar;
-    
+
     [self.miniBar addSubview:self.statusLabel];
         
     [self updateStatusBar:NO];
@@ -378,8 +378,31 @@
         [self.searchBar resignFirstResponder];
         return nil;
     }
-    else
-        return indexPath;
+    else {
+        if(!self.isSearching) {
+            if(indexPath.section == 0) {
+                [self selectAll:!self.allSelected updateCells:YES animated:YES];
+                
+                return nil;
+            }
+        }
+        
+        UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        
+        YTContact* c = [self contactAtIndexPath:indexPath];
+        bool selected = [self.selectedContactIDs indexOfObject:c.socialID] != NSNotFound;
+        if(selected) {
+            [self.selectedContactIDs removeObject:c.socialID];
+        }
+        else {
+            [self.selectedContactIDs addObject:c.socialID];
+        }
+        [self updateCellInPlace:cell selected:!selected];
+        
+        [self updateStatusBar:YES];
+        
+        return nil;
+    }
 }
 
 - (void)updateCellInPlace:(UITableViewCell*) cell selected:(bool)selected
@@ -392,32 +415,6 @@
     else {
         [imageView setImage:[YTHelper imageNamed:@"unselected-invite-circle"]];
     }
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if(!self.isSearching) {
-        if(indexPath.section == 0) {
-            [self selectAll:!self.allSelected updateCells:YES animated:YES];
-            
-            return;
-        }
-    }
-    
-    UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    
-    YTContact* c = [self contactAtIndexPath:indexPath];
-    bool selected = [self.selectedContactIDs indexOfObject:c.socialID] != NSNotFound;
-    if(selected) {
-        [self.selectedContactIDs removeObject:c.socialID];
-    }
-    else {
-        [self.selectedContactIDs addObject:c.socialID];
-    }
-    [self updateCellInPlace:cell selected:!selected];
-    
-    [self updateStatusBar:YES];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText

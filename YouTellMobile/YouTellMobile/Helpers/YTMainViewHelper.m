@@ -109,6 +109,10 @@
     else
         cell.backgroundView.backgroundColor = [UIColor clearColor];
     
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
     return cell;
 }
 
@@ -179,7 +183,7 @@
             avatarView.hidden = YES;
         }
     }
-    
+        
 }
 
 - (UITableViewCell*) cellWithGab:(YTGab*)gab andTableView:(UITableView*)tableView;
