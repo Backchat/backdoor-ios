@@ -28,11 +28,11 @@
 #import "YTConfig.h"
 #import "YTInviteFriendViewController.h"
 
-#define SECTION_INVITE 0
-#define SECTION_FEATURED 1
-#define SECTION_GABS 2
-#define SECTION_FRIENDS 3
-#define SECTION_MORE 4
+#define SECTION_FEATURED 0
+#define SECTION_GABS 1
+#define SECTION_FRIENDS 2
+#define SECTION_MORE 3
+#define SECTION_INVITE 4
 #define SECTION_SHARE 5
 #define SECTION_CLUES 6
 #define SECTION_COUNT 7
