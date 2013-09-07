@@ -39,7 +39,7 @@
     
     self.cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    [self.cameraButton setBackgroundImage:[YTHelper imageNamed:@"cambtn.png"] forState:UIControlStateNormal];
+    [self.cameraButton setBackgroundImage:[YTHelper imageNamed:@"cambtn2.png"] forState:UIControlStateNormal];
     [self.cameraButton setBackgroundImage:[YTHelper imageNamed:@"cambtn3.png"] forState:UIControlStateHighlighted];
     
     [self.cameraButton sizeToFit];
