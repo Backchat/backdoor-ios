@@ -307,13 +307,18 @@
     [YTViewHelper showAlertWithTitle:title message:message];
 }
 
-+ (void)sendInviteText:(YTContact*)contact body:(NSString*)body success:(void(^)(id JSON))success
++ (void)sendInviteText:(NSArray*)contacts body:(NSString*)body success:(void(^)(id JSON))success
 {
+    NSMutableArray* contact_phones = [[NSMutableArray alloc] initWithCapacity:contacts.count];
+    for(YTContact* c in contacts) {
+        [contact_phones addObject:c.phone_number];
+    }
+    
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Sending invite", nil)
                                                  path:@"/invites" method:@"POST"
                                                params:
      @{@"invite": @{@"body": body},
-     @"contact": @{@"phone_number": contact.phone_number}}
+     @"contact": @{@"phone_numbers": contact_phones}}
                                               success:^(id JSON) {
                                                   if(success)
                                                       success(JSON);

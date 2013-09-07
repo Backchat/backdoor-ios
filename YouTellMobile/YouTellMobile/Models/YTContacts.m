@@ -58,4 +58,8 @@
     return self;
 }
 
+- (NSArray*) array
+{
+    return [self.contacts copy];
+}
 @end

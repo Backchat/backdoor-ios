@@ -77,14 +77,24 @@
             image = [UIImage imageWithData:imageData];
         }
         
+        NSMutableSet* set = [[NSMutableSet alloc] init];
+        
         for (CFIndex i = 0; i < ABMultiValueGetCount(phoneNumbers); i++) {
             NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, i);
-            YTContact* c = [YTContact new];
-            c.first_name = first_name ? first_name : @"";
-            c.last_name = last_name ? last_name : @"";
-            c.phone_number = phoneNumber;
-            c.image = [image copy];
-            [contacts addObject:c];
+
+            if(![set containsObject:phoneNumber]) {
+                YTContact* c = [YTContact new];
+                c.first_name = first_name ? first_name : @"";
+                c.last_name = last_name ? last_name : @"";
+                c.phone_number = phoneNumber;
+                c.image = [image copy];
+                c.socialID = [NSString stringWithFormat:@"AD:%d/%d", ABRecordGetRecordID(person), (int)i];
+                
+                [set addObject:phoneNumber];
+                
+                NSLog(@"%@ %@ %@", first_name, phoneNumber, c.socialID);
+                [contacts addObject:c];
+            }
         }
         
         CFRelease(phoneNumbers);

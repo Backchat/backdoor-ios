@@ -19,7 +19,7 @@
 @interface YTInviteContactComposeViewController ()
 @property (nonatomic, retain) UITextView* textView;
 @property (nonatomic, retain) UIButton* sendButton;
-@property (nonatomic, retain) UIView* contactView;
+@property (nonatomic, retain) UIScrollView* contactView;
 @end
 
 @implementation YTInviteContactComposeViewController
@@ -52,20 +52,6 @@
     self.textView.font = [UIFont systemFontOfSize:16.0f];
     self.textView.textColor = [UIColor colorWithRed:111/255.0f green:111/255.0f blue:111/255.0f alpha:1.0];
        
-    self.contactView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 60)];
-    self.contactView.backgroundColor = [UIColor whiteColor];
-    
-    UIView* subContactView = [[UIView alloc] initWithFrame:CGRectMake(60,0,self.view.frame.size.width-60,60)];
-    [[YTMainViewHelper sharedInstance] addCellSubViewsToView:subContactView];
-    [self.contactView addSubview:subContactView];
-    [self.view addSubview:self.contactView];
-    
-    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(30,10, 80, 17)];
-    label.backgroundColor = [UIColor clearColor];
-    label.text = NSLocalizedString(@"To", nil);
-    label.textColor = [UIColor colorWithRed:0.435 green:0.435 blue:0.435 alpha:1];
-    [self.contactView addSubview:label];
-
     self.sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.sendButton.frame = CGRectMake(30,207,self.view.frame.size.width-60, 30);
     
@@ -87,18 +73,33 @@
     self.sendButton.enabled = YES;
     [self.view addSubview:self.sendButton];
 
+    UIView* contactBack = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width, 60)];
+    contactBack.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:contactBack];
+    
+    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(30,10, 80, 17)];
+    label.backgroundColor = [UIColor clearColor];
+    label.text = NSLocalizedString(@"To", nil);
+    label.textColor = [UIColor colorWithRed:0.435 green:0.435 blue:0.435 alpha:1];
+    [self.view addSubview:label];
+    
+    self.contactView = [[UIScrollView alloc] initWithFrame:CGRectMake(65, 0, self.view.frame.size.width, 60)];
+    self.contactView.scrollEnabled = YES;
+    self.contactView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.contactView];
+
 }
 
 - (void)cancelButtonWasClicked
 {
-    [YTViewHelper showGabs:YES]; //pop back back
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)sendPressed:(UIButton*)sender
 {
     [[Mixpanel sharedInstance] track:@"Tapped Compose Invite View / Send Button"];
 
-    [YTApiHelper sendInviteText:self.contact body:self.textView.text success:^(id JSON) {
+    [YTApiHelper sendInviteText:self.contacts body:self.textView.text success:^(id JSON) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invite sent", nil)
                                                         message:NSLocalizedString(@"Your anonymous invite has been sent!", nil)
                                                        delegate:self
@@ -121,11 +122,36 @@
                          NSLocalizedString(@"Someone you know wants you to try Backdoor! Anonymously message your friends.", nil),
                          personalizedURL];
     self.textView.text = msgText;
-    [[YTMainViewHelper sharedInstance] setCellValuesInView:self.contactView
-                                                     title:self.contact.name
-                                                  subtitle:self.contact.phone_number
-                                                      time:nil image:nil avatar:nil
-                                          placeHolderImage:self.contact.image];
+    
+    [[self.contactView subviews] makeObjectsPerformSelector: @selector(removeFromSuperview)];    
+    
+    if(self.contacts.count == 1) {
+        UIView* subContactView = [[UIView alloc] initWithFrame:CGRectMake(-20,0,self.view.frame.size.width-60,60)];
+        YTContact* contact = self.contacts[0];
+        [[YTMainViewHelper sharedInstance] addCellSubViewsToView:subContactView];
+         [[YTMainViewHelper sharedInstance] setCellValuesInView:subContactView
+                                                          title:contact.name
+                                                       subtitle:contact.phone_number
+                                                           time:nil image:nil avatar:nil
+                                               placeHolderImage:contact.image];
+
+        [self.contactView addSubview:subContactView];
+        self.contactView.scrollEnabled = NO;
+    }
+    else {
+        int i=0;
+        int offset = 60;
+        
+        for(YTContact* c in self.contacts) {
+            UIImageView* imageView = [[UIImageView alloc] initWithImage:c.image];
+            imageView.frame = CGRectMake(i * offset, 5, 50, 50);
+            [self.contactView addSubview:imageView];
+            self.contactView.scrollEnabled = YES;
+            i++;
+        }
+        
+        self.contactView.contentSize = CGSizeMake(i * offset + 70, 60);
+    }
 }
 
 
