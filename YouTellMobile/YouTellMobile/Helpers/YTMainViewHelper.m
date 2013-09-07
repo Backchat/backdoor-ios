@@ -32,8 +32,6 @@
         cell.textLabel.hidden = YES;
         cell.detailTextLabel.hidden = YES;
 
-        NSLog(@"%@", NSStringFromCGRect(cell.frame));
-        
         [self addCellSubViewsToView:cell.contentView];
         
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

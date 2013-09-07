@@ -92,7 +92,6 @@
                 
                 [set addObject:phoneNumber];
                 
-                NSLog(@"%@ %@ %@", first_name, phoneNumber, c.socialID);
                 [contacts addObject:c];
             }
         }
