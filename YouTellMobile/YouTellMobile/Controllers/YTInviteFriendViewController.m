@@ -362,11 +362,11 @@
             
             if(self.allSelected) {
                 [title setText:NSLocalizedString(@"Unselect All", nil)];
-                [subtitle setText:NSLocalizedString(@"Tap me to unselect all your contacts", nil)];
+                [subtitle setText:[NSString stringWithFormat:@"%@\n ", NSLocalizedString(@"Tap me to unselect all your contacts", nil)]];
             }
             else {
                 [title setText:NSLocalizedString(@"Select All", nil)];
-                [subtitle setText:NSLocalizedString(@"Tap me to select all your contacts", nil)];
+                [subtitle setText:[NSString stringWithFormat:@"%@\n ", NSLocalizedString(@"Tap me to select all your contacts", nil)]];
             }
         }        
     }
