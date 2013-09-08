@@ -82,6 +82,31 @@
 }
 
 # pragma mark Interface initialization methods
+- (void)setupButtonBlue
+{
+    [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                forState:UIControlStateNormal];
+    [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                forState:UIControlStateDisabled];
+    [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                forState:UIControlStateHighlighted];
+}
+
+- (void)setupButtonBlack
+{
+    [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                forState:UIControlStateNormal];
+    [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                forState:UIControlStateDisabled];
+    [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
+                                                forState:UIControlStateHighlighted];
+    
+    UIColor *titleShadow = [UIColor colorWithRed:0.3f green:0.3f blue:0.3f alpha:1.0f];
+    [self.inputToolBarView.sendButton setTitleShadowColor:titleShadow forState:UIControlStateNormal];
+    [self.inputToolBarView.sendButton setTitleShadowColor:titleShadow forState:UIControlStateHighlighted];
+    self.inputToolBarView.sendButton.titleLabel.shadowOffset = CGSizeMake(0.0f, -1.0f);
+}
+
 - (void)setupView
 {
     if(!self.friend) {
@@ -91,28 +116,12 @@
 
             if (!self.gab.sent.boolValue) {
                 self.navigationItem.rightBarButtonItems = @[[self.clueHelper setupClueButton],[self.tagHelper setupTagButton]];
-                
-                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_active"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
-                                                            forState:UIControlStateNormal];
-                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
-                                                            forState:UIControlStateDisabled];
-                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn_blue_inactive"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
-                                                            forState:UIControlStateHighlighted];
+                [self setupButtonBlue];
             }
             else {
                 self.navigationItem.rightBarButtonItems = nil;
                 
-                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
-                                                            forState:UIControlStateNormal];
-                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
-                                                            forState:UIControlStateDisabled];
-                [self.inputToolBarView.sendButton setBackgroundImage:[[YTHelper imageNamed:@"sendbtn"] resizableImageWithCapInsets:UIEdgeInsetsMake(15, 15, 15, 15)]
-                                                            forState:UIControlStateHighlighted];
-                
-                UIColor *titleShadow = [UIColor colorWithRed:0.3f green:0.3f blue:0.3f alpha:1.0f];
-                [self.inputToolBarView.sendButton setTitleShadowColor:titleShadow forState:UIControlStateNormal];
-                [self.inputToolBarView.sendButton setTitleShadowColor:titleShadow forState:UIControlStateHighlighted];
-                self.inputToolBarView.sendButton.titleLabel.shadowOffset = CGSizeMake(0.0f, -1.0f);
+                [self setupButtonBlack];
             }
         }
         /*TODO SPLIT if ([YTAppDelegate current].usesSplitView) {
@@ -129,6 +138,8 @@
         /* TODO SPLIT if (![[YTAppDelegate current] usesSplitView]) */
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
         self.navigationItem.hidesBackButton = YES;
+        
+        [self setupButtonBlack];
     }
 }
 
