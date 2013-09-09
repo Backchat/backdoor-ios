@@ -148,18 +148,25 @@
 - (void)buildIndexedList
 {    
     self.alphaByIndex = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary* tmp = [[NSMutableDictionary alloc] init];
     
     for(int i=0;i<self.filteredContacts.count;i++) {
         YTContact* contact = [self.filteredContacts contactAtIndex:i];
         int sect = [[UILocalizedIndexedCollation currentCollation]
                     sectionForObject:contact collationStringSelector:@selector(first_name)];
-        NSMutableArray* ar = [self.alphaByIndex objectForKey:[NSNumber numberWithInt:sect]];
+        NSMutableArray* ar = [tmp objectForKey:[NSNumber numberWithInt:sect]];
         if(!ar) {
             ar = [[NSMutableArray alloc] init];
-            [self.alphaByIndex setObject:ar forKey:[NSNumber numberWithInt:sect]];
+            [tmp setObject:ar forKey:[NSNumber numberWithInt:sect]];
         }
         
         [ar addObject:contact];
+    }
+    
+    for(id key in tmp) {
+        NSMutableArray* val = tmp[key];
+        NSArray* real = [[UILocalizedIndexedCollation currentCollation] sortedArrayFromArray:val collationStringSelector:@selector(first_name)];
+        [self.alphaByIndex setObject:real forKey:key];
     }
 
 }
