@@ -63,8 +63,11 @@
     [self.navigationItem.rightBarButtonItem setBackgroundImage:image
                                                       forState:UIControlStateDisabled
                                                     barMetrics:UIBarMetricsDefault];
+        
+    self.tableView.tableHeaderView = nil;
+    self.searchBar.frame = CGRectMake(0,0,self.view.frame.size.width, self.searchBar.frame.size.height);
     
-    self.miniBar = [[UIImageView alloc]initWithFrame:CGRectMake(0,0,self.view.frame.size.width, 0)];
+    self.miniBar = [[UIImageView alloc]initWithFrame:CGRectMake(0,self.searchBar.frame.size.height,self.view.frame.size.width, 0)];
     self.miniBar.image = [YTHelper imageNamed:@"minibar"];
     self.statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,5,self.view.frame.size.width, 20)];
     self.statusLabel.font = [UIFont systemFontOfSize:18];
@@ -72,10 +75,12 @@
     self.statusLabel.textAlignment = NSTextAlignmentCenter;
     self.statusLabel.backgroundColor = [UIColor clearColor];
     self.miniBar.clipsToBounds = YES;
-    self.tableView.tableHeaderView = self.miniBar;
+
+    [self.view addSubview:self.miniBar];
+    [self.view addSubview:self.searchBar];
 
     [self.miniBar addSubview:self.statusLabel];
-        
+    
     [self updateStatusBar:NO];
 }
 
@@ -319,26 +324,30 @@
     
     if(!animated) {
         if(selectedOne) {
-            self.miniBar.frame = CGRectMake(0,0,self.view.frame.size.width, 30);
-            self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+            self.miniBar.frame = CGRectMake(0,self.searchBar.frame.size.height,self.view.frame.size.width, 30);
+            
         }
         else {
-            self.miniBar.frame = CGRectMake(0,0,self.view.frame.size.width, 0);
-            self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+            self.miniBar.frame = CGRectMake(0,self.searchBar.frame.size.height,self.view.frame.size.width, 0);
         }
+
+        int offHeight = self.searchBar.frame.size.height + self.miniBar.frame.size.height;
+        self.tableView.frame = CGRectMake(0, offHeight, self.view.frame.size.width, self.view.frame.size.height - offHeight);
     }
     else {
         CGFloat duration = 0.3;
 
         [UIView animateWithDuration:duration animations:^{
             if(selectedOne) {
-                self.miniBar.frame = CGRectMake(0,0,self.view.frame.size.width, 30);
-                self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+                self.miniBar.frame = CGRectMake(0,self.searchBar.frame.size.height,self.view.frame.size.width, 30);
             }
             else {
-                self.miniBar.frame = CGRectMake(0,0,self.view.frame.size.width, 0);
-                self.tableView.tableHeaderView = self.tableView.tableHeaderView;
+                self.miniBar.frame = CGRectMake(0,self.searchBar.frame.size.height,self.view.frame.size.width, 0);
             }
+            
+            
+            int offHeight = self.searchBar.frame.size.height + self.miniBar.frame.size.height;
+            self.tableView.frame = CGRectMake(0, offHeight, self.view.frame.size.width, self.view.frame.size.height - offHeight);
 
         }];
     }
