@@ -239,9 +239,25 @@
     YTGabMessage* message = [self.gab messageAtIndex:indexPath.row];
     if(message.kind.integerValue == YTMessageKindPhoto)
     {
-        UIImageView* view = [[UIImageView alloc] initWithImage:message.image];
-        view.contentMode = UIViewContentModeScaleAspectFill;
-        view.frame = CGRectMake(0,0, 190, 190);
+        UIImage* image = message.image;
+        UIImageView* view = [[UIImageView alloc] initWithImage:image];
+        view.contentMode = UIViewContentModeScaleAspectFit;
+        double target = 190;
+        double requiredWidth, requiredHeight;
+        double ratio;
+        if(image.size.width > image.size.height) {
+            ratio = target / image.size.width;
+        }
+        else {
+            ratio = target / image.size.height;
+        }
+        requiredHeight = image.size.height * ratio;
+        requiredWidth = image.size.width * ratio;
+        
+        NSLog(@"%f %f -> %f %f", image.size.width, image.size.height, requiredWidth, requiredHeight);
+        
+        view.frame = CGRectMake(0, 0, requiredWidth, requiredHeight);
+        
         return view;
     }
     else
