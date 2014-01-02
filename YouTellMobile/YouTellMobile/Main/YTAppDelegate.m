@@ -191,10 +191,13 @@ void uncaughtExceptionHandler(NSException *exception)
     [YTUser initalizeSocialHandlers];
     
     [self checkVersion];
+    
+#ifndef CONFIGURATION_Release
 
     [Instabug KickOffWithToken:CONFIG_INSTABUG_TOKEN CaptureSource:InstabugCaptureSourceUIKit
                  FeedbackEvent:InstabugFeedbackEventShake
             IsTrackingLocation:YES];
+#endif
     
     self.reachability = [Reachability reachabilityWithHostname:CONFIG_URL];
     
