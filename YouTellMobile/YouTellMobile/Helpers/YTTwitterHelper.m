@@ -29,7 +29,7 @@
     if ([TWTweetComposeViewController canSendTweet]) {
         TWTweetComposeViewController *sheet = [[TWTweetComposeViewController alloc] init];
         NSString* shortenedLink = CONFIG_SHARE_URL;
-        [sheet setInitialText:[NSString stringWithFormat:NSLocalizedString(@"Message me with Backdoor. %@ #backdoorme",
+        [sheet setInitialText:[NSString stringWithFormat:NSLocalizedString(@"Message me with Backchat. %@ #backchatme",
                                                                            nil), shortenedLink]];
         sheet.completionHandler = ^(TWTweetComposeViewControllerResult result) {
             [self completionHandler:result];
@@ -50,7 +50,7 @@
     }
     
     [YTApiHelper getFreeCluesWithReason:@"tweet"];
-    [[Mixpanel sharedInstance] track:@"Tweeted About Backdoor"];
+    [[Mixpanel sharedInstance] track:@"Tweeted About Backchat"];
 }
 
 @end

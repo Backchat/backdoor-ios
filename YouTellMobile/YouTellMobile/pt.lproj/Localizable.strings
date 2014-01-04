@@ -11,15 +11,15 @@
 /* SMS stuff */
 "Send text to invite" = "Enviar mensagens para convidar";
 
-"Someone you know wants you to try Backdoor! Anonymously message your friends." = "Alguém que você conhece esta te convidando para experimentar o Backdoor. Envie menssagens anonimas para seus amigos!";
-"Your friend %@ wants you to try Backdoor! Anonymously message your friends." = "Your friend %@ wants you to try Backdoor! Anonymously message your friends.";
+"Someone you know wants you to try Backchat! Anonymously message your friends." = "Alguém que você conhece esta te convidando para experimentar o Backchat. Envie menssagens anonimas para seus amigos!";
+"Your friend %@ wants you to try Backchat! Anonymously message your friends." = "Your friend %@ wants you to try Backchat! Anonymously message your friends.";
 
 "Choose from my address book" = "Escolher entre os contatos";
 
 /* Update Alert */
 
 "New in this version" = "Novo nesta versão";
-"New version available" = "Uma nova versão do Backdoor está disponível";
+"New version available" = "Uma nova versão do Backchat está disponível";
 "Version %@" = "Versão %@";
 "OK" = "OK";
 "Ignore" = "Ignorar";
@@ -42,10 +42,10 @@
 "Show More" = "Ver Todos";
 
 /* No comment provided by engineer. */
-"Show all of your Backdoor friends." = "Ver seus amigos do Backdoor.";
+"Show all of your Backchat friends." = "Ver seus amigos do Backchat.";
 
 /* No comment provided by engineer. */
-"Tap me to get more BD friends." = "Obter mais amigos para o Backdoor.";
+"Tap me to get more BD friends." = "Obter mais amigos para o Backchat.";
 
 /* No comment provided by engineer. */
 "- OR -" = "- OU -";
@@ -66,16 +66,16 @@
 "Back" = "Voltar";
 
 /* No comment provided by engineer. */
-"Backdoor" = "Backdoor";
+"Backchat" = "Backchat";
 
 /* No comment provided by engineer. */
-"Backdoor a friend" = "Backdoor seu amigo";
+"Backchat a friend" = "Backchat seu amigo";
 
 /* No comment provided by engineer. */
-"Backdoor is a new application for iOS that allows sending and receiving anonymous text and photo messages." = "Backdoor e o novo aplicação para iOS que deixa mandar e recebe mensagem do texto e photo de maneira anônima.";
+"Backchat is a new application for iOS that allows sending and receiving anonymous text and photo messages." = "Backchat e o novo aplicação para iOS que deixa mandar e recebe mensagem do texto e photo de maneira anônima.";
 
 /* No comment provided by engineer. */
-"Backdoor is fun" = "Backdoor is fun";
+"Backchat is fun" = "Backchat is fun";
 
 /* No comment provided by engineer. */
 "Buy" = "Comprar";
@@ -96,7 +96,7 @@
 "Chat Settings" = "Chat Settings";
 
 /* No comment provided by engineer. */
-"Message me with Backdoor. %@ #backdoorme" = "Me mande uma mensagem pelo Backdoor. %@ #backdoorme";
+"Message me with Backchat. %@ #Backchatme" = "Me mande uma mensagem pelo Backchat. %@ #Backchatme";
 
 /* No comment provided by engineer. */
 "Checking for updates" = "Checking for updates";
@@ -150,7 +150,7 @@
 "Done" = "Feito";
 
 /* No comment provided by engineer. */
-"Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor" = "Ganhe 9 pistas grátis postando \ncurtindo ou twittando sobre Backdoor";
+"Earn 9 additional free clues by posting, liking\nor tweeting about Backchat" = "Ganhe 9 pistas grátis postando \ncurtindo ou twittando sobre Backchat";
 
 /* No comment provided by engineer. */
 "Error" = "Erro";
@@ -347,25 +347,25 @@
 "Transaction" = "Transação";
 
 /* No comment provided by engineer. */
-"Try Backdoor" = "Try Backdoor";
+"Try Backchat" = "Try Backchat";
 
 /* No comment provided by engineer. */
-"Message me anything you want anonymously with Backdoor.  Backdoor Me!" = "Me mande qualquer mensagem que voce queira que seja anonima atraves do BACKDOOR - Me manda um Backdoor!";
+"Message me anything you want anonymously with Backchat.  Backchat Me!" = "Me mande qualquer mensagem que voce queira que seja anonima atraves do Backchat - Me manda um Backchat!";
 
 /* No comment provided by engineer. */
 "Try it!" = "Try it!";
 
 /* No comment provided by engineer. */
-"Tweet about Backdoor" = "Twittar sobre Backdoor";
+"Tweet about Backchat" = "Twittar sobre Backchat";
 
 /* No comment provided by engineer. */
-"Unable to connect with Backdoor server. Please check your data connection" =  "Não Conseguimos conectar com o servidor Backdoor. Por Favor checar seus dados de conexão";
+"Unable to connect with Backchat server. Please check your data connection" =  "Não Conseguimos conectar com o servidor Backchat. Por Favor checar seus dados de conexão";
 
 /* No comment provided by engineer. */
 "Unexpected error happened. Try again later." = "Unexpected error happened. Try again later.";
 
 /* No comment provided by engineer. */
-"Update Backdoor" = "Atualizar Backdoor";
+"Update Backchat" = "Atualizar Backchat";
 
 /* No comment provided by engineer. */
 "Update not available" = "Update not available";
@@ -380,10 +380,10 @@
 "Work" = "Work";
 
 /* No comment provided by engineer. */
-"You are running the current version of Backdoor. Good job!" = "You are running the current version of Backdoor. Good job!";
+"You are running the current version of Backchat. Good job!" = "You are running the current version of Backchat. Good job!";
 
 /* No comment provided by engineer. */
-"You can change this later in Settings > Privacy > Backdoor" = "Você pode trocar depois os definições : privacidade > Backdoor";
+"You can change this later in Settings > Privacy > Backchat" = "Você pode trocar depois os definições : privacidade > Backchat";
 
 /* No comment provided by engineer. */
 "You can't send a tweet. Make sure you have working internet connection and at least one Twitter account configured" = "You can't send a tweet. Make sure you have working internet connection and at least one Twitter account configured";
@@ -411,11 +411,11 @@
 "Your Account" = "Your Account";
 
 /* No comment provided by engineer. */
-"Your friend does not have a Backdoor account.  Would you like to send an invite?" = "Seu amigo não possui uma conta Backdoor.  Gostaria de enviar um convite?";
+"Your friend does not have a Backchat account.  Would you like to send an invite?" = "Seu amigo não possui uma conta Backchat.  Gostaria de enviar um convite?";
 
 /* No comment provided by engineer. */
 "Your invitation has been sent" = "Your invitation has been sent";
 
-"Want friends on Backdoor?\nNo worries, Share on Google+" = "Quer mais amigos no Backdoor?\nE fácil, compartilhe no Google+";
+"Want friends on Backchat?\nNo worries, Share on Google+" = "Quer mais amigos no Backchat?\nE fácil, compartilhe no Google+";
 
 

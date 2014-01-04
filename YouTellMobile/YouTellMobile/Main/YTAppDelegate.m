@@ -274,7 +274,7 @@ void uncaughtExceptionHandler(NSException *exception)
     
     if(!alertedThisRun) {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Push notifications", nil)
-                                                        message:NSLocalizedString(@"With push notifications on, Backdoor will alert you when you receive messages and when your friends join Backdoor. Consider turning notifications on by going to\nSettings | Notifications | Backdoor\nand then logging out and in again.", nil)
+                                                        message:NSLocalizedString(@"With push notifications on, Backchat will alert you when you receive messages and when your friends join Backchat. Consider turning notifications on by going to\nSettings | Notifications | Backchat\nand then logging out and in again.", nil)
                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     
         [alert show];

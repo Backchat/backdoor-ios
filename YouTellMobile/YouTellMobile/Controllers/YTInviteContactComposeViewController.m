@@ -118,9 +118,9 @@
     NSString* personalizedURL = @"http://bkdr.me";
     NSString* msg = nil;
     if(anon)
-        msg = NSLocalizedString(@"Someone you know wants you to try Backdoor! Anonymously message your friends.", nil);
+        msg = NSLocalizedString(@"Someone you know wants you to try Backchat! Anonymously message your friends.", nil);
     else
-        msg = NSLocalizedString(@"Your friend %@ wants you to try Backdoor! Anonymously message your friends.", nil);
+        msg = NSLocalizedString(@"Your friend %@ wants you to try Backchat! Anonymously message your friends.", nil);
     
     NSString* msgText = [NSString stringWithFormat:@"%@ %@",
                          [NSString stringWithFormat:msg, YTAppDelegate.current.currentUser.name],

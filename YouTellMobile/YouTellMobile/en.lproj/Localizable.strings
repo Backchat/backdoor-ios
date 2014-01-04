@@ -11,7 +11,7 @@
 /* SMS stuff */
 "Send text to invite" = "Send text to invite";
 
-"Someone you know wants you to try Backdoor! Anonymously message your friends." = "Someone you know wants you to try Backdoor! Anonymously message your friends.";
+"Someone you know wants you to try Backchat! Anonymously message your friends." = "Someone you know wants you to try Backchat! Anonymously message your friends.";
 
 "Choose from my address book" = "Choose from my address book";
 
@@ -38,7 +38,7 @@
 "Tap me to start a new conversation." = "Tap me to start a new conversation.";
 
 /* No comment provided by engineer. */
-"Show all of your Backdoor friends." = "Show all of your Backdoor friends.";
+"Show all of your Backchat friends." = "Show all of your Backchat friends.";
 
 /* No comment provided by engineer. */
 "Tap me to get more BD friends." = "Tap me to get more BD friends.";
@@ -62,16 +62,16 @@
 "Back" = "Back";
 
 /* No comment provided by engineer. */
-"Backdoor" = "Backdoor";
+"Backchat" = "Backchat";
 
 /* No comment provided by engineer. */
-"Backdoor a friend" = "Backdoor a friend";
+"Backchat a friend" = "Backchat a friend";
 
 /* No comment provided by engineer. */
-"Backdoor is a new application for iOS that allows sending and receiving anonymous text and photo messages." = "Backdoor is a new application for iOS that allows sending and receiving anonymous text and photo messages.";
+"Backchat is a new application for iOS that allows sending and receiving anonymous text and photo messages." = "Backchat is a new application for iOS that allows sending and receiving anonymous text and photo messages.";
 
 /* No comment provided by engineer. */
-"Backdoor is fun" = "Backdoor is fun";
+"Backchat is fun" = "Backchat is fun";
 
 /* No comment provided by engineer. */
 "Buy" = "Buy";
@@ -92,7 +92,7 @@
 "Chat Settings" = "Chat Settings";
 
 /* No comment provided by engineer. */
-"Message me with Backdoor. %@ #backdoorme" = "Message me with Backdoor. %@ #backdoorme";
+"Message me with Backchat. %@ #Backchatme" = "Message me with Backchat. %@ #Backchatme";
 
 /* No comment provided by engineer. */
 "Checking for updates" = "Checking for updates";
@@ -146,7 +146,7 @@
 "Done" = "Done";
 
 /* No comment provided by engineer. */
-"Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor" = "Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor";
+"Earn 9 additional free clues by posting, liking\nor tweeting about Backchat" = "Earn 9 additional free clues by posting, liking\nor tweeting about Backchat";
 
 /* No comment provided by engineer. */
 "Error" = "Error";
@@ -343,25 +343,25 @@
 "Transaction" = "Transaction";
 
 /* No comment provided by engineer. */
-"Try Backdoor" = "Try Backdoor";
+"Try Backchat" = "Try Backchat";
 
 /* No comment provided by engineer. */
-"Message me anything you want anonymously with Backdoor.  Backdoor Me!" = "Message me anything you want anonymously with Backdoor.  Backdoor Me!";
+"Message me anything you want anonymously with Backchat.  Backchat Me!" = "Message me anything you want anonymously with Backchat.  Backchat Me!";
 
 /* No comment provided by engineer. */
 "Try it!" = "Try it!";
 
 /* No comment provided by engineer. */
-"Tweet about Backdoor" = "Tweet about Backdoor";
+"Tweet about Backchat" = "Tweet about Backchat";
 
 /* No comment provided by engineer. */
-"Unable to connect with Backdoor server. Please check your data connection" = "Unable to connect with Backdoor server. Please check your data connection";
+"Unable to connect with Backchat server. Please check your data connection" = "Unable to connect with Backchat server. Please check your data connection";
 
 /* No comment provided by engineer. */
 "Unexpected error happened. Try again later." = "Unexpected error happened. Try again later.";
 
 /* No comment provided by engineer. */
-"Update Backdoor" = "Update Backdoor";
+"Update Backchat" = "Update Backchat";
 
 /* No comment provided by engineer. */
 "Update not available" = "Update not available";
@@ -376,10 +376,10 @@
 "Work" = "Work";
 
 /* No comment provided by engineer. */
-"You are running the current version of Backdoor. Good job!" = "You are running the current version of Backdoor. Good job!";
+"You are running the current version of Backchat. Good job!" = "You are running the current version of Backchat. Good job!";
 
 /* No comment provided by engineer. */
-"You can change this later in Settings > Privacy > Backdoor" = "You can change this later in Settings > Privacy > Backdoor";
+"You can change this later in Settings > Privacy > Backchat" = "You can change this later in Settings > Privacy > Backchat";
 
 /* No comment provided by engineer. */
 "You can't send a tweet. Make sure you have working internet connection and at least one Twitter account configured" = "You can't send a tweet. Make sure you have working internet connection and at least one Twitter account configured";
@@ -406,15 +406,15 @@
 "Your Account" = "Your Account";
 
 /* No comment provided by engineer. */
-"Your friend does not have a Backdoor account.  Would you like to send an invite?" = "Your friend does not have a Backdoor account.  Would you like to send an invite?";
+"Your friend does not have a Backchat account.  Would you like to send an invite?" = "Your friend does not have a Backchat account.  Would you like to send an invite?";
 
 /* No comment provided by engineer. */
 "Your invitation has been sent" = "Your invitation has been sent";
 
-"Want friends on Backdoor?\nNo worries, Share on Google+" = "Want friends on Backdoor?\nNo worries, Share on Google+";
+"Want friends on Backchat?\nNo worries, Share on Google+" = "Want friends on Backchat?\nNo worries, Share on Google+";
 
 "Sorry, your session has ended" = "Sorry, your session has ended";
 "Please login again" = "Please login again";
 "Invite" = "Invite";
 "Invite Friends" = "Invite Friends";
-"Invite your friends to Backdoor" = "Invite your friends to Backdoor";
+"Invite your friends to Backchat" = "Invite your friends to Backchat";

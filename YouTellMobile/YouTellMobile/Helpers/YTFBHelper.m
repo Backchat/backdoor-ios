@@ -335,11 +335,11 @@
 + (void)presentFeedDialogCallback
 {
     NSDictionary *params = @{
-        @"name": NSLocalizedString(@"Backdoor", nil),
+        @"name": NSLocalizedString(@"Backchat", nil),
         @"caption": NSLocalizedString(@"Send and receive anonymous messages", nil),
-        @"description": NSLocalizedString(@"Backdoor is a new application for iOS that allows sending and receiving anonymous text and photo messages.", nil),
+        @"description": NSLocalizedString(@"Backchat is a new application for iOS that allows sending and receiving anonymous text and photo messages.", nil),
         @"link": CONFIG_SHARE_URL,
-        @"picture": @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png"
+        @"picture": @"https://s3.amazonaws.com/backchat_images/icon_114x114.png" //TODO change?
     };
 
     FBShareDialogParams *fbparams = [[FBShareDialogParams alloc] init];
@@ -420,7 +420,7 @@
         params[@"to"] = contact;
     }
     
-    [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:NSLocalizedString(@"Message me anything you want anonymously with Backdoor.  Backdoor Me!", nil)  title:nil  parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {        
+    [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:NSLocalizedString(@"Message me anything you want anonymously with Backchat.  Backchat Me!", nil)  title:nil  parameters:params handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
         if (complete) {
             complete();
         }

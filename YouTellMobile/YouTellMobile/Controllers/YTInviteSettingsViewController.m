@@ -39,7 +39,7 @@
         labelSize = 16;
     } else {
         title = NSLocalizedString(@"Free Clues", nil);
-        labelText = NSLocalizedString(@"Earn 9 additional free clues by posting, liking\nor tweeting about Backdoor", nil);
+        labelText = NSLocalizedString(@"Earn 9 additional free clues by posting, liking\nor tweeting about Backchat", nil);
         labelSize = 14;
     }
     
@@ -80,7 +80,7 @@
     shareButton.frame = frame;
     
     UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [tweetButton setTitle:NSLocalizedString(@"Tweet about Backdoor", nil) forState:UIControlStateNormal];
+    [tweetButton setTitle:NSLocalizedString(@"Tweet about Backchat", nil) forState:UIControlStateNormal];
     [tweetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     tweetButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     [tweetButton sizeToFit];
@@ -135,7 +135,7 @@
 
 - (void)showTweetSheet
 {
-    [[Mixpanel sharedInstance] track:@"Tapped Tweet About Backdoor Button"];
+    [[Mixpanel sharedInstance] track:@"Tapped Tweet About Backchat Button"];
     [[YTTwitterHelper sharedInstance] showTweetSheet:self];
 }
 

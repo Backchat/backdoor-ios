@@ -291,7 +291,7 @@
 + (void)showNetworkErrorAlert
 {
     NSString *title = NSLocalizedString(@"Network error", nil);
-    NSString *message = NSLocalizedString(@"Unable to connect with Backdoor server. Please check your data connection", nil);
+    NSString *message = NSLocalizedString(@"Unable to connect with Backchat server. Please check your data connection", nil);
     [YTViewHelper showAlertWithTitle:title message:message];
 };
 

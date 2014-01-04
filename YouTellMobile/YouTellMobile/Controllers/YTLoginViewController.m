@@ -100,7 +100,7 @@
     self.label = [[UILabel alloc]init];
     self.label.font = [UIFont systemFontOfSize:25];
     self.label.textColor = [UIColor whiteColor];
-    self.label.text = NSLocalizedString(@"Backdoor", nil);
+    self.label.text = NSLocalizedString(@"Backchat", nil);
     self.label.backgroundColor = [UIColor clearColor];
     self.label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self.label sizeToFit];

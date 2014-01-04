@@ -121,15 +121,17 @@ static bool validData = false;
         object = @"friends";
     }
     else {
-        if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"] && !CONFIG_DEBUG_FEATURED) {
-            return nil;
-        }
-        
         path = @"/featured-users";
         object = @"users";
     }
     
     return [YTApiHelper networkingOperationForSONRequestToPath:path method:@"GET" params:nil success:^(id JSON) {
+        if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"]
+            && !CONFIG_DEBUG_FEATURED
+            && type == YTFeaturedFriendType) {
+            return;
+        }
+        
         NSDictionary* fs = JSON[object];
         if(!fs)
             return;

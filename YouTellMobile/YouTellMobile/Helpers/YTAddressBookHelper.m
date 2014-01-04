@@ -45,7 +45,7 @@
 + (void) askForPermissions
 {
     UIAlertView* view = [[UIAlertView alloc] initWithTitle:@""
-                                                   message:NSLocalizedString(@"Please allow Backdoor access to your address book. Settings -> Privacy -> Contacts", nil)
+                                                   message:NSLocalizedString(@"Please allow Backchat access to your address book. Settings -> Privacy -> Contacts", nil)
                                                   delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [view show];
 }

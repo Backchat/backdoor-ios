@@ -207,7 +207,7 @@
 - (UITableViewCell*) cellForInvite:(UITableView*)tableView
 {
     NSString *title = NSLocalizedString(@"Invite", nil);
-    NSString *subtitle = NSLocalizedString(@"Invite your friends to Backdoor", nil);
+    NSString *subtitle = NSLocalizedString(@"Invite your friends to Backchat", nil);
     NSString *time = @"";
     NSString *image = @"invite_gab_cell_icon";
     
@@ -223,7 +223,7 @@
     NSString *title = NSLocalizedString(@"Share", nil);
     NSString *subtitle = NSLocalizedString(@"Tap me to get more BD friends.", nil);
     NSString *time = @"";
-    NSString *image = @"https://s3.amazonaws.com/backdoor_images/icon_114x114.png";
+    NSString *image = @"https://s3.amazonaws.com/backchat_images/icon_114x114.png";
     
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView
                                                                            title:title

@@ -534,7 +534,7 @@
 		B240390216F080F9000632AA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B240390416F080F9000632AA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		B240390A16F080F9000632AA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		B240392616F080FA000632AA /* YouTellMobileTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = YouTellMobileTests.octest; path = BackdoorTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B240392616F080FA000632AA /* BackdoorTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BackdoorTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B240392716F080FA000632AA /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		B240392F16F080FA000632AA /* YouTellMobileTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "YouTellMobileTests-Info.plist"; sourceTree = "<group>"; };
 		B240393116F080FA000632AA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -853,7 +853,7 @@
 			isa = PBXGroup;
 			children = (
 				B24038FD16F080F9000632AA /* Backdoor.app */,
-				B240392616F080FA000632AA /* YouTellMobileTests.octest */,
+				B240392616F080FA000632AA /* BackdoorTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1365,7 +1365,7 @@
 			);
 			name = BackdoorTests;
 			productName = YouTellMobileTests;
-			productReference = B240392616F080FA000632AA /* YouTellMobileTests.octest */;
+			productReference = B240392616F080FA000632AA /* BackdoorTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -1976,7 +1976,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"_AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_=1",
 					CONFIGURATION_Release,
-					"CONFIG_URL=\\@\\\"https://backdoor-api.herokuapp.com/\\\"",
+					"CONFIG_URL=\\@\\\"https://api.getbackchatapp.com/\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"b773675a02695460a27af2b8c2d11d39\\\"",
 					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"\\\"",
@@ -2016,7 +2016,7 @@
 				ICON_SUFFIX = _dev;
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = Backdoor;
+				PRODUCT_NAME = Backchat;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2043,7 +2043,7 @@
 				ICON_SUFFIX = "";
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = Backdoor;
+				PRODUCT_NAME = Backchat;
 				PROVISIONING_PROFILE = "A43A62E7-B203-43F3-BAB9-AD40A32A2507";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A43A62E7-B203-43F3-BAB9-AD40A32A2507";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2107,7 +2107,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"_AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_=1",
 					CONFIGURATION_Stage,
-					"CONFIG_URL=\\@\\\"https://backdoor-stage.herokuapp.com/\\\"",
+					"CONFIG_URL=\\@\\\"https://backchat-stage.herokuapp.com/\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"964294341461-kiu3nt3onpdh8o89idagr66r1rgbh8k8.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"06e542f53ddbd2430aac9c4664e5903f\\\"",
 					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"_Stage\\\"",
@@ -2149,7 +2149,7 @@
 				ICON_SUFFIX = _stage;
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = Backdoor;
+				PRODUCT_NAME = Backchat;
 				PROVISIONING_PROFILE = "08336552-1B54-4D62-AE58-12383E1D9DE5";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08336552-1B54-4D62-AE58-12383E1D9DE5";
 				TARGETED_DEVICE_FAMILY = 1;

@@ -394,7 +394,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForMoreAtRow:(NSInteger)row
 {
     NSString *title = NSLocalizedString(@"Show More", nil);
-    NSString *subtitle = NSLocalizedString(@"Show all of your Backdoor friends.", nil);
+    NSString *subtitle = NSLocalizedString(@"Show all of your Backchat friends.", nil);
     NSString *time = @"";
     
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView title:title subtitle:subtitle time:time image:@""

@@ -33,7 +33,7 @@
 //            @[@"", NSLocalizedString(@"Help", nil), @"showHelp"]
 //        ],
         @[
-            @[@"", NSLocalizedString(@"Update Backdoor", nil), @"showUpdate"],
+            @[@"", NSLocalizedString(@"Update Backchat", nil), @"showUpdate"],
 //            @[@"", NSLocalizedString(@"Licenses", nil), @"showLicenses"],
             @[@"", NSLocalizedString(@"Legal", nil), @"showLegal"],
             @[@"", NSLocalizedString(@"About Us", nil), @"showAbout"]
@@ -56,8 +56,6 @@
         BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
         [manager.updateManager showUpdateView];
     }
-
-    //[self openURL:CONFIG_HELP_UPDATE_URL title:NSLocalizedString(@"Update Backdoor", nil)];
 }
 
 - (void)showLicenses
