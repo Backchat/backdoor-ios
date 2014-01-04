@@ -71,7 +71,7 @@
             source = YTFeaturedFriendType;
     }
     else {
-        if([friendJSON valueForKey:@"id"]) {
+        if([friendJSON valueForKey:@"id"] && ((NSNumber*)friendJSON[@"id"]).intValue > 0) {
             source = YTFriendType;
         }
         else if([friendJSON valueForKey:@"featured_id"]) {
