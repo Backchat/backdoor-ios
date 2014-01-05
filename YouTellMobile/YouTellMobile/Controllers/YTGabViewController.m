@@ -278,7 +278,10 @@
     YTGabMessage* message = [self.gab messageAtIndex:indexPath.row];
 
     NSInteger status = message.status.integerValue;
-    return  status == YTGabMessageStatusFailed || status == YTGabMessageStatusDelivering;
+    return
+        status == YTGabMessageStatusFailed ||
+        status == YTGabMessageStatusDelivering ||
+    (status == YTGabMessageStatusReady && indexPath.row == self.gab.messageCount - 1 && message.sent.boolValue);
 }
 
 - (NSString*)subtitleForRowAtIndexPath:(NSIndexPath*)indexPath {
@@ -287,6 +290,8 @@
     NSInteger status = message.status.integerValue;
     if(status == YTGabMessageStatusDelivering)
         return NSLocalizedString(@"Delivering", nil);
+    else if(status == YTGabMessageStatusReady)
+        return NSLocalizedString(@"Delivered", nil);
     else
         return NSLocalizedString(@"Failed. Tap to resend", nil);
 }
