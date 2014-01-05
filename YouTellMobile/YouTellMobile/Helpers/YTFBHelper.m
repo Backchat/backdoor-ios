@@ -339,7 +339,7 @@
         @"caption": NSLocalizedString(@"Send and receive anonymous messages", nil),
         @"description": NSLocalizedString(@"Backchat is a new application for iOS that allows sending and receiving anonymous text and photo messages.", nil),
         @"link": CONFIG_SHARE_URL,
-        @"picture": @"https://s3.amazonaws.com/backchat_images/icon_114x114.png" //TODO change?
+        @"picture": @"https://s3.amazonaws.com/backchat/Icon114.png"
     };
 
     FBShareDialogParams *fbparams = [[FBShareDialogParams alloc] init];

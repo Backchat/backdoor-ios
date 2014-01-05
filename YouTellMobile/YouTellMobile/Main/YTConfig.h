@@ -47,4 +47,4 @@
 #define CONFIG_HELP_ABOUT_URL @"http://getbackchat.com/about"
 #define CONFIG_FB_LIKE_URL @"http://facebook.com/YouTellSocial"
 
-#define CONFIG_SHARE_URL @"https://itun.es/us/Y_GvN.i"
+#define CONFIG_SHARE_URL @"http://bit.ly/1cQE2qd"
