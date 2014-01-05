@@ -223,7 +223,7 @@
     NSString *title = NSLocalizedString(@"Share", nil);
     NSString *subtitle = NSLocalizedString(@"Tap me to get more BD friends.", nil);
     NSString *time = @"";
-    NSString *image = @"https://s3.amazonaws.com/backchat_images/icon_114x114.png";
+    NSString *image = @"share_icon";
     
     UITableViewCell *cell = [[YTMainViewHelper sharedInstance] cellWithTableView:tableView
                                                                            title:title
