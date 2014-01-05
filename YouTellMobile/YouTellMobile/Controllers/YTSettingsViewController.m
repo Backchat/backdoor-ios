@@ -73,11 +73,12 @@
         [items addObject:inviteItem];
     }
     
-    if (CONFIG_CRASH_BUTTON) {
+/*    if (CONFIG_CRASH_BUTTON) {
         [items addObject:crashItem];
     } else {
         [items addObject:rateItem];
-    }
+    }*/
+    
     self.navigationItem.rightBarButtonItems = items;
 }
 
