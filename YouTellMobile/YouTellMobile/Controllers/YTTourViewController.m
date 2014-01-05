@@ -60,7 +60,12 @@
         imageView.frame = CGRectMake(frame.origin.x, frame.origin.y - 15, frame.size.width, frame.size.height);
     }
     else {
-        imageView.frame = CGRectMake(frame.origin.x, frame.origin.y + 10, frame.size.width, frame.size.height);
+        if(page == 0) {
+            imageView.frame = CGRectMake(frame.origin.x, frame.origin.y - 15, frame.size.width, frame.size.height);
+        }
+        else {
+            imageView.frame = CGRectMake(frame.origin.x, frame.origin.y + 10, frame.size.width, frame.size.height);
+        }
     }
         
     

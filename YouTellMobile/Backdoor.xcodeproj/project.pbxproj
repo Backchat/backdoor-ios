@@ -88,7 +88,22 @@
 		3EE1FABA1879145800990653 /* UIColor+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE1FA8D1879145800990653 /* UIColor+JSMessagesView.m */; };
 		3EE1FABB1879145800990653 /* UIImage+JSMessagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE1FA8F1879145800990653 /* UIImage+JSMessagesView.m */; };
 		3EE1FABC1879145800990653 /* UIView+AnimationOptionsForCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EE1FA911879145800990653 /* UIView+AnimationOptionsForCurve.m */; };
-		3EE1FAEE1879177800990653 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B24CB2DC1707333F00813B2C /* libPods.a */; };
+		3EE1FAF11879487900990653 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CDB64E179FDC38000758B3 /* GLKit.framework */; };
+		3EE1FB11187949F500990653 /* libPods-SDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB02187949F500990653 /* libPods-SDWebImage.a */; };
+		3EE1FB12187949F500990653 /* libPods-iRate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB03187949F500990653 /* libPods-iRate.a */; };
+		3EE1FB13187949F500990653 /* libPods-libwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB04187949F500990653 /* libPods-libwebp.a */; };
+		3EE1FB14187949F500990653 /* libPods-google-plus-ios-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB05187949F500990653 /* libPods-google-plus-ios-sdk.a */; };
+		3EE1FB15187949F500990653 /* libPods-Facebook-iOS-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB06187949F500990653 /* libPods-Facebook-iOS-SDK.a */; };
+		3EE1FB16187949F500990653 /* libPods-SVProgressHUD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB07187949F500990653 /* libPods-SVProgressHUD.a */; };
+		3EE1FB17187949F500990653 /* libPods-UIImage-Categories.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB08187949F500990653 /* libPods-UIImage-Categories.a */; };
+		3EE1FB18187949F500990653 /* libPods-HockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB09187949F500990653 /* libPods-HockeySDK.a */; };
+		3EE1FB19187949F500990653 /* libPods-Reachability.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB0A187949F500990653 /* libPods-Reachability.a */; };
+		3EE1FB1A187949F500990653 /* libPods-NoticeView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB0B187949F500990653 /* libPods-NoticeView.a */; };
+		3EE1FB1B187949F500990653 /* libPods-Mixpanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB0C187949F500990653 /* libPods-Mixpanel.a */; };
+		3EE1FB1C187949F500990653 /* libPods-FlurrySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB0D187949F500990653 /* libPods-FlurrySDK.a */; };
+		3EE1FB1D187949F500990653 /* libPods-AFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB0E187949F500990653 /* libPods-AFNetworking.a */; };
+		3EE1FB1E187949F500990653 /* libPods-Base64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB0F187949F500990653 /* libPods-Base64.a */; };
+		3EE1FB1F187949F500990653 /* libPods-CKRefreshControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE1FB10187949F500990653 /* libPods-CKRefreshControl.a */; };
 		3EE9159A176815AE0090371C /* gpp_tableitem3.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EE91598176815AE0090371C /* gpp_tableitem3.png */; };
 		3EE9159B176815AE0090371C /* gpp_tableitem3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EE91599176815AE0090371C /* gpp_tableitem3@2x.png */; };
 		3EEC6FEE176BC7880045AF63 /* icon_57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 3EEC6FEB176BC7880045AF63 /* icon_57x57.png */; };
@@ -243,7 +258,6 @@
 		B2CDB649179FDBFA000758B3 /* Instabug.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B2CDB648179FDBFA000758B3 /* Instabug.bundle */; };
 		B2CDB64B179FDC05000758B3 /* Instabug.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CDB64A179FDC05000758B3 /* Instabug.framework */; };
 		B2CDB64D179FDC32000758B3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CDB64C179FDC32000758B3 /* OpenGLES.framework */; };
-		B2CDB64F179FDC38000758B3 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CDB64E179FDC38000758B3 /* GLKit.framework */; };
 		B2CE75F817140E5900663168 /* navbar.png in Resources */ = {isa = PBXBuildFile; fileRef = B2CE75F617140E5700663168 /* navbar.png */; };
 		B2CE75F917140E5900663168 /* navbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2CE75F717140E5800663168 /* navbar@2x.png */; };
 		B2CE7606171415BD00663168 /* baritem2.png in Resources */ = {isa = PBXBuildFile; fileRef = B2CE7604171415BC00663168 /* baritem2.png */; };
@@ -658,6 +672,21 @@
 		3EE1FA8F1879145800990653 /* UIImage+JSMessagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+JSMessagesView.m"; sourceTree = "<group>"; };
 		3EE1FA901879145800990653 /* UIView+AnimationOptionsForCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AnimationOptionsForCurve.h"; sourceTree = "<group>"; };
 		3EE1FA911879145800990653 /* UIView+AnimationOptionsForCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AnimationOptionsForCurve.m"; sourceTree = "<group>"; };
+		3EE1FB02187949F500990653 /* libPods-SDWebImage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-SDWebImage.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-SDWebImage.a"; sourceTree = "<group>"; };
+		3EE1FB03187949F500990653 /* libPods-iRate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-iRate.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-iRate.a"; sourceTree = "<group>"; };
+		3EE1FB04187949F500990653 /* libPods-libwebp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-libwebp.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-libwebp.a"; sourceTree = "<group>"; };
+		3EE1FB05187949F500990653 /* libPods-google-plus-ios-sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-google-plus-ios-sdk.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-google-plus-ios-sdk.a"; sourceTree = "<group>"; };
+		3EE1FB06187949F500990653 /* libPods-Facebook-iOS-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Facebook-iOS-SDK.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-Facebook-iOS-SDK.a"; sourceTree = "<group>"; };
+		3EE1FB07187949F500990653 /* libPods-SVProgressHUD.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-SVProgressHUD.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-SVProgressHUD.a"; sourceTree = "<group>"; };
+		3EE1FB08187949F500990653 /* libPods-UIImage-Categories.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-UIImage-Categories.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-UIImage-Categories.a"; sourceTree = "<group>"; };
+		3EE1FB09187949F500990653 /* libPods-HockeySDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-HockeySDK.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-HockeySDK.a"; sourceTree = "<group>"; };
+		3EE1FB0A187949F500990653 /* libPods-Reachability.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Reachability.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-Reachability.a"; sourceTree = "<group>"; };
+		3EE1FB0B187949F500990653 /* libPods-NoticeView.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-NoticeView.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-NoticeView.a"; sourceTree = "<group>"; };
+		3EE1FB0C187949F500990653 /* libPods-Mixpanel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Mixpanel.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-Mixpanel.a"; sourceTree = "<group>"; };
+		3EE1FB0D187949F500990653 /* libPods-FlurrySDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-FlurrySDK.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-FlurrySDK.a"; sourceTree = "<group>"; };
+		3EE1FB0E187949F500990653 /* libPods-AFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-AFNetworking.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-AFNetworking.a"; sourceTree = "<group>"; };
+		3EE1FB0F187949F500990653 /* libPods-Base64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Base64.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-Base64.a"; sourceTree = "<group>"; };
+		3EE1FB10187949F500990653 /* libPods-CKRefreshControl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-CKRefreshControl.a"; path = "../../../../Library/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator/libPods-CKRefreshControl.a"; sourceTree = "<group>"; };
 		3EE91598176815AE0090371C /* gpp_tableitem3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gpp_tableitem3.png; sourceTree = "<group>"; };
 		3EE91599176815AE0090371C /* gpp_tableitem3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gpp_tableitem3@2x.png"; sourceTree = "<group>"; };
 		3EEC6FEB176BC7880045AF63 /* icon_57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_57x57.png; sourceTree = SOURCE_ROOT; };
@@ -961,8 +990,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EE1FAEE1879177800990653 /* libPods.a in Frameworks */,
-				B2CDB64F179FDC38000758B3 /* GLKit.framework in Frameworks */,
+				3EE1FB11187949F500990653 /* libPods-SDWebImage.a in Frameworks */,
+				3EE1FB12187949F500990653 /* libPods-iRate.a in Frameworks */,
+				3EE1FB13187949F500990653 /* libPods-libwebp.a in Frameworks */,
+				3EE1FB14187949F500990653 /* libPods-google-plus-ios-sdk.a in Frameworks */,
+				3EE1FB15187949F500990653 /* libPods-Facebook-iOS-SDK.a in Frameworks */,
+				3EE1FB16187949F500990653 /* libPods-SVProgressHUD.a in Frameworks */,
+				3EE1FB17187949F500990653 /* libPods-UIImage-Categories.a in Frameworks */,
+				3EE1FB18187949F500990653 /* libPods-HockeySDK.a in Frameworks */,
+				3EE1FB19187949F500990653 /* libPods-Reachability.a in Frameworks */,
+				3EE1FB1A187949F500990653 /* libPods-NoticeView.a in Frameworks */,
+				3EE1FB1B187949F500990653 /* libPods-Mixpanel.a in Frameworks */,
+				3EE1FB1C187949F500990653 /* libPods-FlurrySDK.a in Frameworks */,
+				3EE1FB1D187949F500990653 /* libPods-AFNetworking.a in Frameworks */,
+				3EE1FB1E187949F500990653 /* libPods-Base64.a in Frameworks */,
+				3EE1FB1F187949F500990653 /* libPods-CKRefreshControl.a in Frameworks */,
+				3EE1FAF11879487900990653 /* GLKit.framework in Frameworks */,
 				B2CDB64D179FDC32000758B3 /* OpenGLES.framework in Frameworks */,
 				B2CDB647179FDBEA000758B3 /* CoreLocation.framework in Frameworks */,
 				B2CDB645179FDBE1000758B3 /* CoreTelephony.framework in Frameworks */,
@@ -1120,6 +1163,21 @@
 		B24038FF16F080F9000632AA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3EE1FB02187949F500990653 /* libPods-SDWebImage.a */,
+				3EE1FB03187949F500990653 /* libPods-iRate.a */,
+				3EE1FB04187949F500990653 /* libPods-libwebp.a */,
+				3EE1FB05187949F500990653 /* libPods-google-plus-ios-sdk.a */,
+				3EE1FB06187949F500990653 /* libPods-Facebook-iOS-SDK.a */,
+				3EE1FB07187949F500990653 /* libPods-SVProgressHUD.a */,
+				3EE1FB08187949F500990653 /* libPods-UIImage-Categories.a */,
+				3EE1FB09187949F500990653 /* libPods-HockeySDK.a */,
+				3EE1FB0A187949F500990653 /* libPods-Reachability.a */,
+				3EE1FB0B187949F500990653 /* libPods-NoticeView.a */,
+				3EE1FB0C187949F500990653 /* libPods-Mixpanel.a */,
+				3EE1FB0D187949F500990653 /* libPods-FlurrySDK.a */,
+				3EE1FB0E187949F500990653 /* libPods-AFNetworking.a */,
+				3EE1FB0F187949F500990653 /* libPods-Base64.a */,
+				3EE1FB10187949F500990653 /* libPods-CKRefreshControl.a */,
 				8805C8C26C024483B1635E5F /* libPods.a */,
 				B2CDB648179FDBFA000758B3 /* Instabug.bundle */,
 				B2BA771116F0869F006C17F7 /* Accounts.framework */,
@@ -1635,7 +1693,7 @@
 				ORGANIZATIONNAME = 4WT;
 				TargetAttributes = {
 					B24038FC16F080F9000632AA = {
-						DevelopmentTeam = V2SUY5M868;
+						DevelopmentTeam = TABXHZCUMU;
 					};
 				};
 			};
@@ -2355,6 +2413,10 @@
 				ICON_SUFFIX = _dev;
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator",
+				);
 				PRODUCT_NAME = Backchat;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -2383,6 +2445,10 @@
 				ICON_SUFFIX = "";
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator",
+				);
 				PRODUCT_NAME = Backchat;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A43A62E7-B203-43F3-BAB9-AD40A32A2507";
@@ -2456,6 +2522,10 @@
 				ICON_SUFFIX = _stage;
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator",
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = Backchat;
 				PROVISIONING_PROFILE = "";

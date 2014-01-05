@@ -184,37 +184,6 @@
     success(data);
 }
 
-/* TODO: this is not used yet */
-- (void)fetchFriendsWithPageToken:(NSString*)pageToken
-{
-    GTLServicePlus *service = [GTLServicePlus new];
-    service.retryEnabled = YES;
-    service.authorizer = [GPPSignIn sharedInstance].authentication;
-    
-    GTLQueryPlus *query = [GTLQueryPlus queryForPeopleListWithUserId:@"me" collection:kGTLPlusCollectionVisible];
-    query.pageToken = pageToken;
-    
-    if (!pageToken) {
-        //self.friends = [NSMutableArray new];
-    }
-    
-    [service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, GTLPlusPeopleFeed *peopleFeed, NSError *error) {
-        if (error) {
-            NSLog(@"%@", error.debugDescription);
-            return;
-        }
-        //[self.friends addObjectsFromArray:[peopleFeed JSON][@"items"]];
-
-        if (peopleFeed.nextPageToken) {
-            [self fetchFriendsWithPageToken:peopleFeed.nextPageToken];
-        } else {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                //[[YTContactHelper sharedInstance] loadGPPFriends:self.friends];
-            }];
-        }
-    }];
-}
-
 - (BOOL)handleOpenURL:(NSURL*)url sourceApplication:(NSString*)sourceApplication annotation:(id)annotation
 {
     return [GPPURLHandler handleURL:url sourceApplication:sourceApplication annotation:annotation];
