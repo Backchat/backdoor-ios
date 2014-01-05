@@ -29,6 +29,7 @@
 + (BOOL)appStoreEnvironment;
 + (BOOL)simulatedEnvironment;
 + (bool)isPhone5;
++ (bool)isV7;
 
 + (NSTimeInterval)keyboardAnimationDurationForNotification:(NSNotification*)notification;
 @end

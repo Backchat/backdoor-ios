@@ -175,6 +175,11 @@
             ([UIScreen mainScreen].bounds.size.height > 480.0f));
 }
 
++ (bool)isV7
+{
+    return ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0);
+}
+
 + (UIImage *)imageNamed:(NSString *)imageName
 {    
     //are we on a iPhone5? if so, add the -568h

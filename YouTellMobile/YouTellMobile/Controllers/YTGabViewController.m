@@ -53,6 +53,7 @@
                                                  name:YTGabMessageUpdated
                                                object:gab];
     
+    self.inputToolBarView.textView.keyboardDelegate = self;
 }
 
 - (id) initWithGab:(YTGab*) gab
@@ -376,8 +377,6 @@
                                                  name:kReachabilityChangedNotification
                                                object:nil];
     
-    self.inputToolBarView.textView.keyboardDelegate = self;
-    
     [self setupView];
 }
 
@@ -447,8 +446,8 @@
 - (void) scrollToFooter
 {
     CGPoint newContentOffset = CGPointMake(0, MAX(0,[self.tableView contentSize].height - self.tableView.bounds.size.height));
-    
-    [self.tableView setContentOffset:newContentOffset animated:YES];
+    if(newContentOffset.y != 0)
+        [self.tableView setContentOffset:newContentOffset animated:YES];
 }
 
 //overide for background spinner
@@ -510,6 +509,8 @@
 {
     [super viewWillDisappear:animated];
     //TODO remove currentgabviewcontroller
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     [YTAppDelegate current].currentGabViewController = nil;
 }
 

@@ -127,14 +127,27 @@
 
 - (void)setupNavBar
 {
+    UIImage* invIcon = [YTHelper imageNamed:@"invite-nav-bar-icon"];
+    UIImage* settingsImage = [YTHelper imageNamed:@"settings"];
+    if([YTHelper isV7]) {
+        settingsImage = [settingsImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        invIcon = [invIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+    
     self.navigationItem.leftBarButtonItems = @[
-                                               [[UIBarButtonItem alloc] initWithImage:[YTHelper imageNamed:@"settings"] style:UIBarButtonItemStyleBordered target:[YTViewHelper class] action:@selector(showSettings)],
-                                               [[UIBarButtonItem alloc] initWithImage:[YTHelper imageNamed:@"invite-nav-bar-icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(showInvite)],
+                                               [[UIBarButtonItem alloc] initWithImage:settingsImage
+                                                                                style:UIBarButtonItemStyleBordered target:[YTViewHelper class] action:@selector(showSettings)],
+                                               [[UIBarButtonItem alloc] initWithImage:invIcon
+                                                                                style:UIBarButtonItemStyleBordered target:self action:@selector(showInvite)],
                                                 ];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(composeButtonWasClicked)];
     
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Messages", nil) style:UIBarButtonItemStyleBordered target:nil action:nil];
+    self.navigationItem.backBarButtonItem.title = NSLocalizedString(@"Messages", nil);
+    
+    if(![YTHelper isV7]) {
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Messages", nil) style:UIBarButtonItemStyleBordered target:nil action:nil];
+    }
 }
 
 - (void)showInvite
