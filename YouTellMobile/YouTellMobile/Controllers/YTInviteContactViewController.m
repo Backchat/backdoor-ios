@@ -42,6 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     self.view.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
 
     self.headerLabel.text = [NSString stringWithFormat:NSLocalizedString(@"What's %@'s number?", nil),
@@ -81,6 +82,7 @@
                                                      image:nil
                                                     avatar:nil
                                           placeHolderImage:[YTHelper imageNamed:@"enter_phone_number"]];
+    
     UILabel *textLabel = (UILabel*)[self.phoneCell viewWithTag:3];
     CGRect frame = CGRectMake(textLabel.frame.origin.x, 20,
                               self.view.frame.size.width - textLabel.frame.origin.x,

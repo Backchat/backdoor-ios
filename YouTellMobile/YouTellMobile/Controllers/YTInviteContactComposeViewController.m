@@ -39,7 +39,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
-
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     self.title = NSLocalizedString(@"Compose", nil);
     //cancel please
     self.navigationItem.backBarButtonItem = nil;
@@ -73,7 +73,12 @@
     [self.view addSubview:self.anonView];
     
     self.sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.sendButton.frame = CGRectMake(30,247,self.view.frame.size.width-60, 30);
+    if([YTHelper isV7]) {
+        self.sendButton.frame = CGRectMake(30,267,self.view.frame.size.width-60, 30);
+    }
+    else {
+        self.sendButton.frame = CGRectMake(30,247,self.view.frame.size.width-60, 30);
+    }
     
     self.sendButton.autoresizingMask = (UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin);
     [self.sendButton addTarget:self action:@selector(sendPressed:) forControlEvents:UIControlEventTouchUpInside];

@@ -47,6 +47,9 @@
 	// Do any additional setup after loading the view.
     self.title = NSLocalizedString(@"Invite Friends", nil);
     self.tableView.sectionHeaderHeight = 25;
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     /* we use contacts for now, and don't try to filter out the people we know.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendsUpdated:)
                                                  name:YTFriendNotification object:nil];*/
@@ -67,7 +70,8 @@
     self.tableView.tableHeaderView = nil;
     self.searchBar.frame = CGRectMake(0,0,self.view.frame.size.width, self.searchBar.frame.size.height);
     
-    self.miniBar = [[UIImageView alloc]initWithFrame:CGRectMake(0,self.searchBar.frame.size.height,self.view.frame.size.width, 0)];
+    self.miniBar = [[UIImageView alloc]initWithFrame:CGRectMake(0, self.searchBar.frame.size.height,
+                                                                self.view.frame.size.width, 0)];
     self.miniBar.image = [YTHelper imageNamed:@"minibar"];
     self.statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,5,self.view.frame.size.width, 20)];
     self.statusLabel.font = [UIFont systemFontOfSize:18];
