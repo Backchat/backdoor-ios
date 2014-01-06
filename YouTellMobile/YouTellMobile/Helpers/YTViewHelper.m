@@ -41,8 +41,8 @@
     }
     else {
         [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+        [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
         delegate.navController.navigationBar.tintColor = [UIColor whiteColor];
-        
     }
 
     delegate.window.backgroundColor = [UIColor colorWithRed:0x44/255.0 green:0x8d/255.0 blue:0x1f/255.0 alpha:1];
