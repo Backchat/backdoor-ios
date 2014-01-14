@@ -57,6 +57,7 @@
     signIn.scopes = @[kGTLAuthScopePlusLogin];
     signIn.delegate = self;
     signIn.shouldFetchGoogleUserEmail = YES;
+    signIn.shouldFetchGoogleUserID = YES;
 
     return signIn;
 }
@@ -133,11 +134,6 @@
         return;
     }
 
-    if(reauthenticating) {
-        reauthenticating = false;
-        return;
-    }
-    
     GTLServicePlus *service = [GTLServicePlus new];
     service.retryEnabled = YES;
     service.authorizer = [GPPSignIn sharedInstance].authentication;
@@ -168,9 +164,19 @@
           YTSocialLoggedInProviderKey: [NSNumber numberWithInteger:YTSocialProviderGPP],
           YTSocialLoggedInNameKey: fullName};
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialLoggedIn
-                                                            object:nil
-                                                          userInfo:dict];
+        if(!reauthenticating) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialLoggedIn
+                                                                object:nil
+                                                              userInfo:dict];
+        }
+        else {
+            reauthenticating = false;            
+            [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialReauthSuccess
+                                                                object:nil
+                                                              userInfo:dict];
+            
+        }
+        
     }];
 }
 

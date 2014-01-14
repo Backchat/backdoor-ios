@@ -88,9 +88,14 @@
         return;
     }
     
+    [[UIBarButtonItem appearance] setTintColor:[UIColor blackColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor blackColor]}];
+    
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
     imagePicker.allowsEditing = YES;
+    imagePicker.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    
     
     if (buttonIndex == self.cameraPhotoButtonIndex) {
         imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -114,6 +119,15 @@
             [self.popover dismissPopoverAnimated:YES];
         }
         [self.gabView presentViewController:imagePicker animated:YES completion:nil];
+    [self.gabView.inputToolBarView resignFirstResponder];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    self.gabView.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

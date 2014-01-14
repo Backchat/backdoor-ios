@@ -23,3 +23,4 @@ extern NSString* const YTSocialLoggedInProviderKey;
 extern NSString* const YTSocialLoggedIn;
 extern NSString* const YTSocialLoginFailed;
 extern NSString* const YTSocialLoggedInNameKey;
+extern NSString* const YTSocialReauthSuccess;

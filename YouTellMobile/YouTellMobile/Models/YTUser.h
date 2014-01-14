@@ -19,7 +19,7 @@ enum {
 - (void) logout;
 - (void) setDeviceToken:(NSData*)deviceToken;
 
-- (void) post;
+- (void) post:(id)socialData;
 - (void) postSettings;
 
 @property (nonatomic, assign) bool newUser;

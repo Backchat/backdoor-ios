@@ -49,6 +49,9 @@ void uncaughtExceptionHandler(NSException *exception)
                                                  selector:@selector(loginFailure:)
                                                      name:YTLoginFailure
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(socialLoginReauth:)
+                                                     name:YTSocialReauthSuccess object:nil];
     }
     return self;
 }
@@ -60,6 +63,15 @@ void uncaughtExceptionHandler(NSException *exception)
     return (YTAppDelegate*)[UIApplication sharedApplication].delegate;
 }
 
+- (void)socialLoginReauth:(NSNotification*)note
+{
+    [[YTSocialHelper sharedInstance] fetchUserData:^(NSDictionary* social) {
+        NSLog(@"user data: %@", social);
+        [self.currentUser post:social];
+    }];
+    
+}
+
 - (void)loginSuccess:(NSNotification*)note
 {
     self.currentUser = note.object;
@@ -67,6 +79,14 @@ void uncaughtExceptionHandler(NSException *exception)
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge)];
     
     bool isCachedLogin = YTAppDelegate.current.currentUser.isCachedLogin;
+    
+    if(!isCachedLogin) {
+        [[YTSocialHelper sharedInstance] fetchUserData:^(NSDictionary* social) {
+            NSLog(@"user data: %@", social);
+            [self.currentUser post:social];
+        }];
+    }
+    
     if(self.launchGabOnLogin) {
         YTGab* gab = [YTGab gabForId:self.launchGabOnLogin];
         gab.needs_update = @true;
@@ -202,7 +222,7 @@ void uncaughtExceptionHandler(NSException *exception)
     self.reachability = [Reachability reachabilityWithHostname:CONFIG_URL];
     
     [self.reachability startNotifier];
-    
+
     //there is no need to play vibration if we do indeed have a gab APN, because
     //iOS vibrates for us.
     NSNumber* gab_id = (NSNumber*)launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey][@"gab_id"];

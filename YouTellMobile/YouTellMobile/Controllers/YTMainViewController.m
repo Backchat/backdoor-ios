@@ -162,6 +162,8 @@
     
     [self setupNavBar];
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     self.searchBar = [UISearchBar new];
     [self.searchBar sizeToFit];
     self.searchBar.delegate = self;

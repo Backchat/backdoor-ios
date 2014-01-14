@@ -17,7 +17,6 @@
 
 @interface YTUser ()
 @property (nonatomic, retain) NSString* accessToken;
-@property (nonatomic, retain) NSDictionary* socialData;
 @property (nonatomic, assign) int availableClues;
 @property (nonatomic, assign) int id;
 @property (nonatomic, assign) bool isCachedLogin;
@@ -145,7 +144,7 @@ NSString* const LOGGED_IN_NAME = @"LOGGED_IN_NAME";
                                failure:nil];
 }
 
-- (void) post
+- (void) post:(id)socialData
 {
     NSString *socialKey;
     NSData *data;
@@ -157,7 +156,8 @@ NSString* const LOGGED_IN_NAME = @"LOGGED_IN_NAME";
         socialKey = @"gpp_data";
     }
 
-    data = [NSJSONSerialization dataWithJSONObject:self.socialData options:NSJSONWritingPrettyPrinted error:nil];
+
+    data = [NSJSONSerialization dataWithJSONObject:socialData options:NSJSONWritingPrettyPrinted error:nil];
 
     NSDictionary* params = @{socialKey: [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]};
     [YTApiHelper sendJSONRequestToPath:@"/"
@@ -237,12 +237,6 @@ NSString* const LOGGED_IN_NAME = @"LOGGED_IN_NAME";
     
     /* setup the store */
     [YTModelHelper createContextForUser:self];
-    
-    /* immediately try to get our social info and post it. */
-    [[YTSocialHelper sharedInstance] fetchUserData:^(NSDictionary* socialData) {
-        self.socialData = socialData;
-        [self post];
-    }];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:YTLoginSuccess object:self];
 }

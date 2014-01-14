@@ -35,7 +35,7 @@
                                                         object:nil];
 }
 
-+ (void) fireLoginSuccess:(FBSession*) session
++ (void) fireLoginSuccess:(FBSession*) session reauthenticating:(bool)reauthenticating
 {
     FBAccessTokenData* token_data = FBSession.activeSession.accessTokenData;
     if(!token_data) {
@@ -65,9 +65,14 @@
           YTSocialLoggedInProviderKey: [NSNumber numberWithInteger:YTSocialProviderFacebook],
           YTSocialLoggedInNameKey: name};
         
+        if(!reauthenticating)
         [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialLoggedIn
                                                             object:nil
                                                           userInfo:dict];
+        else
+            [[NSNotificationCenter defaultCenter] postNotificationName:YTSocialReauthSuccess
+                                                                object:nil
+                                                              userInfo:dict];
         
     }];
 }
@@ -82,7 +87,7 @@
                                   completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
                                       switch(state) {
                                           case FBSessionStateOpen:
-                                              //nothing, yo
+                                              [YTFBHelper fireLoginSuccess:session reauthenticating:true];
                                               break;
                                           case FBSessionStateClosed:
                                               //nothing, yo
@@ -126,7 +131,7 @@
 {
     switch(state) {
         case FBSessionStateOpen:
-            [YTFBHelper fireLoginSuccess:session];
+            [YTFBHelper fireLoginSuccess:session reauthenticating:false];
             break;
         case FBSessionStateClosed:
             break; //do nothing; signOut in AppDelegate handles all of this
