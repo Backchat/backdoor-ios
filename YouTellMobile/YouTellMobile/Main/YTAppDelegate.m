@@ -194,6 +194,8 @@ void uncaughtExceptionHandler(NSException *exception)
     [Mixpanel sharedInstanceWithToken:CONFIG_MIXPANEL_TOKEN];
     [[Mixpanel sharedInstance] track:@"Launched Application"];
     
+    NSLog(@"BUNDLE NAME: %@", [[NSBundle mainBundle] bundleIdentifier]);
+    
     BITHockeyManager *manager = [BITHockeyManager sharedHockeyManager];
 
     [manager configureWithIdentifier:CONFIG_HOCKEY_ID delegate:self];

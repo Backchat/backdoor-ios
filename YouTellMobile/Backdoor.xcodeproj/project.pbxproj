@@ -2482,7 +2482,7 @@
 					"_AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_=1",
 					CONFIGURATION_Stage,
 					"CONFIG_URL=\\@\\\"https://backchat-stage.herokuapp.com/\\\"",
-					"CONFIG_GPP_CLIENT_ID=\\@\\\"535388359184-bc8uqufn48q6t8fqkijof134mee2rjqo.apps.googleusercontent.com\\\"",
+					"CONFIG_GPP_CLIENT_ID=\\@\\\"535388359184-gk0v4hduc023omhtobgdb714got86cc7.apps.googleusercontent.com\\\"",
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"06e542f53ddbd2430aac9c4664e5903f\\\"",
 					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"_Stage\\\"",
 					"CONFIG_INSTABUG_TOKEN=\\@\\\"b4ecd67cdc36b9b646adbe69b8629acc\\\"",
