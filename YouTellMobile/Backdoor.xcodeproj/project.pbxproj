@@ -571,6 +571,7 @@
 		3E02287717B960AC00BE05AF /* YTFriendNotifHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YTFriendNotifHelper.h; path = Helpers/YTFriendNotifHelper.h; sourceTree = "<group>"; };
 		3E02287817B960AC00BE05AF /* YTFriendNotifHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YTFriendNotifHelper.m; path = Helpers/YTFriendNotifHelper.m; sourceTree = "<group>"; };
 		3E39E04F1878E56C00564234 /* share_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share_icon.png; sourceTree = "<group>"; };
+		3E519B5E1885E500005BC02D /* icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-120.png"; path = "../../icon-120.png"; sourceTree = "<group>"; };
 		3E9F221517C30D610035589A /* YTGab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTGab.h; sourceTree = "<group>"; };
 		3E9F221617C30D610035589A /* YTGab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTGab.m; sourceTree = "<group>"; };
 		3E9F222717C30E3A0035589A /* YTGabs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTGabs.h; sourceTree = "<group>"; };
@@ -1279,6 +1280,7 @@
 		B2A75AD516F1ED7E00F0CAB4 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				3E519B5E1885E500005BC02D /* icon-120.png */,
 				3E39E04F1878E56C00564234 /* share_icon.png */,
 				3EA8AB4E17DBE2F80064D8E3 /* invite-nav-bar-icon.png */,
 				3EA8AB4F17DBE2F80064D8E3 /* invite-nav-bar-icon@2x.png */,
