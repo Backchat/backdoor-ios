@@ -11,6 +11,7 @@
 		372FA912171C83E500E3BCB2 /* ipad-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 372FA911171C83E500E3BCB2 /* ipad-icon.png */; };
 		3E02287917B960AC00BE05AF /* YTFriendNotifHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E02287817B960AC00BE05AF /* YTFriendNotifHelper.m */; };
 		3E39E0501878E56C00564234 /* share_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E39E04F1878E56C00564234 /* share_icon.png */; };
+		3E519B5F1885FD10005BC02D /* icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E519B5E1885E500005BC02D /* icon-120.png */; };
 		3E9F221717C30D610035589A /* YTGab.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F221617C30D610035589A /* YTGab.m */; };
 		3E9F222917C30E3A0035589A /* YTGabs.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F222817C30E3A0035589A /* YTGabs.m */; };
 		3E9F222C17C3F3430035589A /* YTGabMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F222B17C3F3420035589A /* YTGabMessage.m */; };
@@ -2019,6 +2020,7 @@
 				B2A37BA21748D5B3006EAA5B /* tour_gpp_button.png in Resources */,
 				B2A37BA31748D5B3006EAA5B /* tour_gpp_button@2x.png in Resources */,
 				B2A37BA61748F346006EAA5B /* clue_blank.png in Resources */,
+				3E519B5F1885FD10005BC02D /* icon-120.png in Resources */,
 				3EE1FAAD1879145800990653 /* bubble-typing.png in Resources */,
 				B2A37BA71748F346006EAA5B /* clue_blank@2x.png in Resources */,
 				B2D83FF31752978600FAB33C /* tour32_gpp_pt.png in Resources */,
