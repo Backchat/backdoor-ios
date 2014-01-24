@@ -126,12 +126,6 @@ static bool validData = false;
     }
     
     return [YTApiHelper networkingOperationForSONRequestToPath:path method:@"GET" params:nil success:^(id JSON) {
-        if ([[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"]
-            && !CONFIG_DEBUG_FEATURED
-            && type == YTFeaturedFriendType) {
-            return;
-        }
-        
         NSDictionary* fs = JSON[object];
         if(!fs)
             return;
@@ -147,9 +141,18 @@ static bool validData = false;
         NSError *error;
         NSMutableArray* allFriends = [NSMutableArray arrayWithArray:[context executeFetchRequest:request error:&error]];
         
-        for (NSDictionary *u in fs) {
-            YTFriend* f = [YTFriend updateFriend:u];
-            [allFriends removeObject:f];
+        bool should_update = true;
+        
+        if(type == YTFeaturedFriendType) {
+            bool in_us = [[[NSLocale currentLocale] localeIdentifier] isEqualToString:@"en_US"];
+            should_update = !in_us || CONFIG_DEBUG_FEATURED;
+        }
+
+        if(should_update) {
+            for (NSDictionary *u in fs) {
+                YTFriend* f = [YTFriend updateFriend:u];
+                [allFriends removeObject:f];
+            }
         }
         
         for(YTFriend* f in allFriends) {
