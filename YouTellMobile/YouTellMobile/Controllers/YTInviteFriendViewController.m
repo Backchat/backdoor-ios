@@ -191,7 +191,7 @@
         self.contacts = c;
         self.filteredContacts = [[YTContacts alloc] initWithContacts:self.contacts withFilter:self.searchBar.text];
         [self buildIndexedList];
-        [self selectAll:YES updateCells:NO animated:NO];
+        [self selectAll:NO updateCells:NO animated:NO];
         self.tableView.hidden = NO;
         [self.tableView reloadData];
 
