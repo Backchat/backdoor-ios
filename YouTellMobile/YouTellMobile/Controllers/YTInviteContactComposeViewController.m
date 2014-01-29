@@ -39,7 +39,9 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithRed:237/255.0 green:237/255.0 blue:237/255.0 alpha:1];
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+    if([YTHelper isV7])
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     self.title = NSLocalizedString(@"Compose", nil);
     //cancel please
     self.navigationItem.backBarButtonItem = nil;

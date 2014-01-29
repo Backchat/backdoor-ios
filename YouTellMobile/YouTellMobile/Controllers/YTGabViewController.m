@@ -125,21 +125,25 @@
                 [self setupButtonBlack];
             }
         }
-        /*TODO SPLIT if ([YTAppDelegate current].usesSplitView) {
-         [YTAppDelegate current].currentMainViewController.selectedGabId = [self.gab valueForKey:@"id"];
-         }*/
         
-        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Messages", nil) style:UIBarButtonItemStyleBordered target:nil action:nil];
-
-        self.navigationItem.hidesBackButton = NO;
+        if([YTHelper isV7]) {
+            [YTAppDelegate current].currentMainViewController.navigationItem.title = NSLocalizedString(@"Back", nil);
+        }
+        else {
+            self.navigationItem.leftBarButtonItem = nil;
+            self.navigationItem.hidesBackButton = NO;
+        }
     }
     else {
         self.title = self.friend.name;
-        
-        /* TODO SPLIT if (![[YTAppDelegate current] usesSplitView]) */
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
-        self.navigationItem.hidesBackButton = YES;
-        
+        if([YTHelper isV7]) {
+            [YTAppDelegate current].currentMainViewController.navigationItem.title = NSLocalizedString(@"Cancel", nil);
+        }
+        else {
+            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(dismiss)];
+            self.navigationItem.hidesBackButton = YES;
+        }
+
         [self setupButtonBlack];
     }
 }
@@ -522,7 +526,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
     [YTAppDelegate current].currentGabViewController = self;
 }
 

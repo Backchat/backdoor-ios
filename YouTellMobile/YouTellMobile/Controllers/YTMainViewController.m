@@ -162,7 +162,8 @@
     
     [self setupNavBar];
     
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+    if([YTHelper isV7])
+        self.edgesForExtendedLayout = UIRectEdgeNone;
     
     self.searchBar = [UISearchBar new];
     [self.searchBar sizeToFit];

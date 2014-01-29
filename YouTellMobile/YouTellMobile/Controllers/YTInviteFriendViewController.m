@@ -48,8 +48,11 @@
     self.title = NSLocalizedString(@"Invite Friends", nil);
     self.tableView.sectionHeaderHeight = 25;
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.edgesForExtendedLayout = UIRectEdgeNone;
+    if([YTHelper isV7]) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    
     /* we use contacts for now, and don't try to filter out the people we know.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(friendsUpdated:)
                                                  name:YTFriendNotification object:nil];*/
