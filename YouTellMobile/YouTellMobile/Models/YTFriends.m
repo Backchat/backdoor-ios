@@ -125,7 +125,7 @@ static bool validData = false;
         object = @"users";
     }
     
-    return [YTApiHelper networkingOperationForSONRequestToPath:path method:@"GET" params:nil success:^(id JSON) {
+    return [YTApiHelper networkingOperationForJSONRequestToPath:path method:@"GET" params:nil success:^(id JSON) {
         NSDictionary* fs = JSON[object];
         if(!fs)
             return;

@@ -13,14 +13,22 @@
 @interface YTApiHelper : NSObject
 
 + (NSURL*)baseUrl;
++ (NSURL*)loginServerUrl;
 
 + (void)toggleNetworkActivityIndicatorVisible:(BOOL)visible;
 
-+ (AFHTTPRequestOperation*)networkingOperationForSONRequestToPath:(NSString*)path
-                                                          method:(NSString*)method
-                                                          params:(NSDictionary*)params
-                                                         success:(void(^)(id JSON))success
-                                                         failure:(void(^)(id JSON))failure;
++ (AFHTTPRequestOperation*)networkingOperationForJSONRequestToPath:(NSString*)path
+                                                            method:(NSString*)method
+                                                            params:(NSDictionary*)params
+                                                           success:(void(^)(id JSON))success
+                                                           failure:(void(^)(id JSON))failure;
+
++ (AFHTTPRequestOperation*)networkingOperationForJSONRequestToBase:(NSURL*)base
+                                                            ToPath:(NSString*)path
+                                                            method:(NSString*)method
+                                                            params:(NSDictionary*)params
+                                                           success:(void(^)(id JSON))success
+                                                           failure:(void(^)(id JSON))failure;
 
 + (void) sendJSONRequestToPath:(NSString*)path
                         method:(NSString*)method
@@ -29,6 +37,14 @@
                        failure:(void(^)(id JSON))failure;
 
 + (void) sendJSONRequestWithBlockingUIMessage:(NSString*)message
+                                         path:(NSString*)path
+                                       method:(NSString*)method
+                                       params:(NSDictionary*)params
+                                      success:(void(^)(id JSON))success
+                                      failure:(void(^)(id JSON))failure;
+
++ (void) sendJSONRequestWithBlockingUIMessage:(NSString*)message
+                                     toServer:(NSURL*)server
                                          path:(NSString*)path
                                        method:(NSString*)method
                                        params:(NSDictionary*)params

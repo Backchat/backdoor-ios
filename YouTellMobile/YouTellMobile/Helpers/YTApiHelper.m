@@ -34,6 +34,11 @@
     return [NSURL URLWithString:CONFIG_URL];
 }
 
++ (NSURL*)loginServerUrl
+{
+    return [NSURL URLWithString:CONFIG_LOGIN_URL];
+}
+
 + (void)toggleNetworkActivityIndicatorVisible:(BOOL)visible
 {
     static int count = 0;
@@ -43,13 +48,24 @@
     }
 }
 
-+ (AFHTTPRequestOperation*)networkingOperationForSONRequestToPath:(NSString*)path
++ (AFHTTPRequestOperation*)networkingOperationForJSONRequestToPath:(NSString*)path
                                                            method:(NSString*)method
                                                            params:(NSDictionary*)params
                                                           success:(void(^)(id JSON))success
                                                           failure:(void(^)(id JSON))failure
 {
-    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[YTApiHelper baseUrl]];
+    return [YTApiHelper networkingOperationForJSONRequestToBase:[YTApiHelper baseUrl]
+                                                        ToPath:path method:method params:params success:success failure:failure];
+}
+
++ (AFHTTPRequestOperation*)networkingOperationForJSONRequestToBase:(NSURL*)base
+                                                           ToPath:(NSString*)path
+                                                           method:(NSString*)method
+                                                           params:(NSDictionary*)params
+                                                          success:(void(^)(id JSON))success
+                                                          failure:(void(^)(id JSON))failure
+{
+    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:base];
     
     NSMutableDictionary *myParams = [[NSMutableDictionary alloc] initWithDictionary:params];
     if([myParams valueForKey:@"access_token"] == nil) {
@@ -78,7 +94,8 @@
                                                                                [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
                                                                                
                                                                                //TODO fix this
-                                                                               bool loginRequest = [request.URL.path isEqualToString:@"/login"];
+                                                                               bool loginRequest = [request.URL isEqual:[YTApiHelper loginServerUrl]];
+                                                                               
                                                                                if(!loginRequest && YTAppDelegate.current.currentUser == nil) {
                                                                                    [YTApiHelper toggleNetworkActivityIndicatorVisible:NO];
                                                                                    NSLog(@"JSON response logged out");
@@ -129,8 +146,19 @@
 + (void) sendJSONRequestToPath:(NSString*)path method:(NSString*)method params:(NSDictionary*)params success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure
 {   
     
+    [YTApiHelper sendJSONRequestToServer:[YTApiHelper baseUrl] withPath:path method:method params:params success:success failure:failure];
+}
+
++ (void) sendJSONRequestToServer:(NSURL*)server withPath:(NSString*)path method:(NSString*)method params:(NSDictionary*)params success:(void(^)(id JSON))success failure:(void(^)(id JSON))failure
+{
+    
     [YTApiHelper toggleNetworkActivityIndicatorVisible:YES];
-    AFHTTPRequestOperation* operation = [YTApiHelper networkingOperationForSONRequestToPath:path method:method params:params success:success failure:failure];
+    AFHTTPRequestOperation* operation = [YTApiHelper networkingOperationForJSONRequestToBase:server
+                                                                                      ToPath:path
+                                                                                      method:method
+                                                                                      params:params
+                                                                                     success:success
+                                                                                     failure:failure];
     [operation start];
 }
 
@@ -141,9 +169,22 @@
                                       success:(void(^)(id JSON))success
                                       failure:(void(^)(id JSON))failure
 {
+    [YTApiHelper sendJSONRequestWithBlockingUIMessage:message toServer:[YTApiHelper baseUrl]
+                                                 path:path method:method params:params
+                                              success:success failure:failure];
+}
+
++ (void) sendJSONRequestWithBlockingUIMessage:(NSString*)message
+                                     toServer:(NSURL*)server
+                                         path:(NSString*)path
+                                       method:(NSString*)method
+                                       params:(NSDictionary*)params
+                                      success:(void(^)(id JSON))success
+                                      failure:(void(^)(id JSON))failure
+{
     [SVProgressHUD showWithStatus:message maskType:SVProgressHUDMaskTypeClear];
     
-    [YTApiHelper sendJSONRequestToPath:path method:method params:params success:^(id JSON) {
+    [YTApiHelper sendJSONRequestToServer:server withPath:path method:method params:params success:^(id JSON) {
         [SVProgressHUD dismiss];
         if(success) {
             success(JSON);
@@ -155,7 +196,7 @@
             failure(JSON);
         }
     }];
-    
+
 }
 
 + (void)sendFeedback:(NSString*)content rating:(NSNumber*)rating success:(void(^)(id JSON))success

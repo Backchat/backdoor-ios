@@ -2381,6 +2381,7 @@
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"b773675a02695460a27af2b8c2d11d39\\\"",
 					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"\\\"",
 					"CONFIG_INSTABUG_TOKEN=\\@\\\"1d4d2d4d4e561eb4c46a6180135c48ff\\\"",
+					"CONFIG_LOGIN_URL=\\@\\\"https://login.getbackchat.com/\\\"",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -2488,6 +2489,7 @@
 					"CONFIG_MIXPANEL_TOKEN=\\@\\\"06e542f53ddbd2430aac9c4664e5903f\\\"",
 					"CONFIG_PRODUCT_ID_SUFFIX=\\@\\\"_Stage\\\"",
 					"CONFIG_INSTABUG_TOKEN=\\@\\\"b4ecd67cdc36b9b646adbe69b8629acc\\\"",
+					"CONFIG_LOGIN_URL=\\@\\\"https://backchat-login-stage.herokuapp.com/\\\"",
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;

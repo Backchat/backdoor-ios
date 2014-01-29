@@ -70,7 +70,8 @@ NSString* const LOGGED_IN_NAME = @"LOGGED_IN_NAME";
                              };
     
     [YTApiHelper sendJSONRequestWithBlockingUIMessage:NSLocalizedString(@"Logging in", nil)
-                                                 path:@"/login"
+                                             toServer:[YTApiHelper loginServerUrl]
+                                                 path:@""
                                                method:@"POST" params:params
                                               success:^(id JSON) {
                                                   if(!JSON[@"user"] || !JSON[@"user"][@"id"]) {

@@ -93,7 +93,7 @@
 
 + (AFHTTPRequestOperation*)updateGabNetworkingOperation
 {
-    return [YTApiHelper networkingOperationForSONRequestToPath:@"/gabs" method:@"GET" params:nil
+    return [YTApiHelper networkingOperationForJSONRequestToPath:@"/gabs" method:@"GET" params:nil
                                                        success:^(id JSON) {
                                                            id gabs = JSON[@"gabs"];
                                                            for (NSDictionary *u in gabs) {
