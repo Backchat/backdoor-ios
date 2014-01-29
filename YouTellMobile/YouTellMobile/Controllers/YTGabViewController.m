@@ -293,7 +293,7 @@
     
     NSInteger status = message.status.integerValue;
     if(status == YTGabMessageStatusDelivering)
-        return NSLocalizedString(@"Delivering", nil);
+        return NSLocalizedString(@"Delivering", nil); //actually "pending"
     else if(status == YTGabMessageStatusReady)
         return NSLocalizedString(@"Delivered", nil);
     else
@@ -520,12 +520,16 @@
     //TODO remove currentgabviewcontroller
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
+    
     [YTAppDelegate current].currentGabViewController = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if(self.gab)
+        self.gab = self.gab; //reassign observers
     
     [YTAppDelegate current].currentGabViewController = self;
 }

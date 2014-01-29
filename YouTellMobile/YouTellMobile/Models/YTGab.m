@@ -146,7 +146,7 @@
         [gab rebuildMessageArray];
 
         [[NSNotificationCenter defaultCenter] postNotificationName:YTGabMessageUpdated
-                                                            object:self];
+                                                            object:gab];
 
         gab.needs_update = [NSNumber numberWithBool:false];
     }
