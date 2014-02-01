@@ -2368,13 +2368,12 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACEBOOK_APP_ID = 122753474571987;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_=1",
 					CONFIGURATION_Release,
 					"CONFIG_URL=\\@\\\"https://api.getbackchat.com/\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"334350433648-dqo5onomr12sf5s4gikhmc9f7rn5u5c2.apps.googleusercontent.com\\\"",
@@ -2388,7 +2387,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "A43A62E7-B203-43F3-BAB9-AD40A32A2507";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -2434,19 +2433,20 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8A8F36B8198B40769F476A03 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouTellMobile/YouTellMobile-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"CONFIGURATION_$(CONFIGURATION)",
 					"$(inherited)",
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				ICON_SUFFIX = "";
 				INFOPLIST_FILE = "YouTellMobile/YouTellMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -2455,8 +2455,7 @@
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Backdoor-dnjvwswolmfkcxdrmbilztvsobhf/Build/Products/Release-iphonesimulator",
 				);
 				PRODUCT_NAME = Backchat;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A43A62E7-B203-43F3-BAB9-AD40A32A2507";
+				PROVISIONING_PROFILE = "A43A62E7-B203-43F3-BAB9-AD40A32A2507";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2476,13 +2475,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				COPY_PHASE_STRIP = YES;
 				FACEBOOK_APP_ID = 489124394513672;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"_AFNETWORKING_ALLOW_INVALID_SSL_CERTIFICATES_=1",
 					CONFIGURATION_Stage,
 					"CONFIG_URL=\\@\\\"https://backchat-stage.herokuapp.com/\\\"",
 					"CONFIG_GPP_CLIENT_ID=\\@\\\"535388359184-gk0v4hduc023omhtobgdb714got86cc7.apps.googleusercontent.com\\\"",
@@ -2496,8 +2493,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "D2914160-BB80-462A-9CC6-EEAFC1123293";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = "non-global";
@@ -2510,8 +2506,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8A8F36B8198B40769F476A03 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: YouTell, LLC (TABXHZCUMU)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Vendor\"",
@@ -2534,8 +2529,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = Backchat;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08336552-1B54-4D62-AE58-12383E1D9DE5";
+				PROVISIONING_PROFILE = "D2914160-BB80-462A-9CC6-EEAFC1123293";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
